@@ -1,6 +1,8 @@
 # praktikum_ss_26
 
+## GitLab Token für IDE Nutzung
 
+glpat-IkCQeZPpDcGwEnkG7dYQCm86MQp1OjN0Nwk.01.0z01ekrbd
 
 ## Getting started
 
