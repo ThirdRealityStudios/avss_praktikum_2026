@@ -1,6 +1,7 @@
-# Praktikum SS 2026 Termin 1 (Anwendung-Komponente)
+# Praktikum SS 2026 Termin 1 (Datenhaltung-Komponente)
 
-Contains the business logic and business data objects for run-time.
+Contains the persistent data access logic,
+including serialization.
 
 ## GitLab Token For IDE Use
 
