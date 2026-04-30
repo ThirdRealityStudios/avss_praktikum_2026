@@ -1,4 +1,4 @@
-# PraKtikum SS 2026 Termin 1 (Loan Management System)
+# Praktikum SS 2026 Termin 1 (Loan Management System)
 
 ## About
 
