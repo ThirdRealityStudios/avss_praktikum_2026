@@ -1,4 +1,6 @@
-# Praktikum SS 2026 Termin 1 (Darstellung-Komponente)
+# Praktikum SS 2026 Termin 1 (Anwendung-Komponente)
+
+Contains the business logic and business data objects for run-time.
 
 ## GitLab Token For IDE Use
 
