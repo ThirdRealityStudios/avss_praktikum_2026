@@ -1,7 +1,7 @@
-package de.fh_muenster.jp253163.avss.loanManagementSystem.Anwendung;
+package de.fhms.jp253163.avss.lms.application;
 
-import de.fh_muenster.jp253163.avss.loanManagementSystem.Anwendung.data.IBorrower;
-import de.fh_muenster.jp253163.avss.loanManagementSystem.Anwendung.data.ILoan;
+import de.fhms.jp253163.avss.lms.application.data.IBorrower;
+import de.fhms.jp253163.avss.lms.application.data.ILoan;
 
 public interface ILoanRepository
 {

@@ -1,4 +1,4 @@
-package de.fh_muenster.jp253163.avss.loanManagementSystem.Anwendung.data;
+package de.fhms.jp253163.avss.lms.application.data;
 
 public interface IResidentialAddress
 {
