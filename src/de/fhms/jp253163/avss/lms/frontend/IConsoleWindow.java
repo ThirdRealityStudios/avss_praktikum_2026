@@ -1,4 +1,4 @@
-package de.fh_muenster.jp253163.avss.loanManagementSystem.Darstellung;
+package de.fhms.jp253163.avss.lms.frontend;
 
 public interface IConsoleWindow
 {
