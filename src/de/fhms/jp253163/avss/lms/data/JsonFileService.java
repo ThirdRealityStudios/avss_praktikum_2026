@@ -1,4 +1,4 @@
-package de.fh_muenster.jp253163.avss.loanManagementSystem.Datenhaltung;
+package de.fhms.jp253163.avss.lms.data;
 
 public class JsonFileService implements IJsonFileService
 {
