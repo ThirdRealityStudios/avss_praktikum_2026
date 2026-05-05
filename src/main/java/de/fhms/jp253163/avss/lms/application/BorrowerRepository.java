@@ -88,6 +88,8 @@ public class BorrowerRepository implements IBorrowerRepository
         }
         catch(IllegalArgumentException e)
         {
+            System.out.println("Invalid arguments for borrower!");
+
             return null;
         }
 
