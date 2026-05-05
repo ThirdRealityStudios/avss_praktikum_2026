@@ -61,6 +61,13 @@ public class BorrowerRepository implements IBorrowerRepository
 
         int newBorrowerId = -1;
 
+        if(firstname == null || firstname.isEmpty() || lastname == null || lastname.isEmpty() || dateOfBirth == null || residentialAddress == null)
+        {
+            System.out.println("Internal error: stopped BEFORE borrower creation due to argument which is null or invalid");
+
+            return null;
+        }
+
         try
         {
             newBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
@@ -89,6 +96,18 @@ public class BorrowerRepository implements IBorrowerRepository
         catch(IllegalArgumentException e)
         {
             System.out.println("Invalid arguments for borrower!");
+            System.out.println("The following arguments have been transmitted:");
+            System.out.println();
+            System.out.println("ID: " + newBorrowerId);
+            System.out.println("Firstname: " + firstname);
+            System.out.println("Lastname: " + lastname);
+            System.out.println("Birthday: " + dateOfBirth);
+            System.out.println("SchufaScore: " + schufaScore);
+            System.out.println("Street: " + residentialAddress.getStreet());
+            System.out.println("No: " + residentialAddress.getNo());
+            System.out.println("Place: " + residentialAddress.getPlace());
+            System.out.println("Zip: " + residentialAddress.getZip());
+            System.out.println();
 
             return null;
         }
