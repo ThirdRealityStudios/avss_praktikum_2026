@@ -1,5 +1,9 @@
 package de.fhms.jp253163.avss.lms.application.data;
 
+import org.apache.commons.lang3.time.DateUtils;
+
+import javax.swing.text.DateFormatter;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
@@ -100,7 +104,21 @@ public class Borrower implements IBorrower
     @Override
     public boolean setDateOfBirth(Date birthday)
     {
-        Date tooOldToBeTrue = Date.from(Instant.parse("1910-01-01"));
+        Date tooOldToBeTrue = null;
+
+        try
+        {
+            tooOldToBeTrue = DateUtils.parseDate("1910-01-01", new String[] { "yyyy-MM-dd" });
+
+            if(tooOldToBeTrue == null)
+                return false;
+        }
+        catch(ParseException e)
+        {
+            e.printStackTrace();
+
+            return false;
+        }
 
         if(birthday == null || birthday.before(tooOldToBeTrue))
         {
