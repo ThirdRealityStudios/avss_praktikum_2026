@@ -24,7 +24,7 @@ public class Main
         GsonBuilder gsonBuilder = null;
 
         IBorrowerRepository borrowerRepository = null;
-        JsonFileService<Borrower> borrowerJsonFileService = null;
+        IJsonFileService<Borrower> borrowerJsonFileService = null;
 
         ILoanRepository loanRepository = null;
         IJsonFileService<Loan> loanJsonFileService = null;
@@ -44,12 +44,25 @@ public class Main
         try
         {
             borrowerJsonFileService = new JsonFileService<Borrower>(gsonBuilder);
-
             borrowerRepository = new BorrowerRepository(borrowerJsonFileService, exeutableDirectory);
         }
         catch(IOException e)
         {
             e.printStackTrace();
+
+            return;
+        }
+
+        try
+        {
+            loanJsonFileService = new JsonFileService<Loan>(gsonBuilder);
+            loanRepository = new LoanRepository(loanJsonFileService, exeutableDirectory);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+
+            return;
         }
 
         IConsoleWindow consoleWindow = new ConsoleWindow(loanRepository, borrowerRepository);

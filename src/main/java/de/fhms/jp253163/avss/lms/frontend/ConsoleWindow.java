@@ -4,6 +4,13 @@ import de.fhms.jp253163.avss.lms.application.IBorrowerRepository;
 import de.fhms.jp253163.avss.lms.application.ILoanRepository;
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Scanner;
 
 public class ConsoleWindow implements IConsoleWindow
 {
@@ -22,7 +29,20 @@ public class ConsoleWindow implements IConsoleWindow
     @Override
     public void showCommandInput()
     {
-        
+        String input = null;
+
+        Scanner scanner = new Scanner(System.in);
+
+        do
+        {
+            System.out.print("> ");
+            input = scanner.nextLine();
+        }
+        while(input != null && !input.equalsIgnoreCase("/exit"));
+
+        scanner.close();
+
+        System.out.println("Goodbye!");
     }
 
     @Override
