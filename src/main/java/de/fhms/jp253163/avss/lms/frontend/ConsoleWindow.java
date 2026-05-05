@@ -2,28 +2,50 @@ package de.fhms.jp253163.avss.lms.frontend;
 
 import de.fhms.jp253163.avss.lms.application.IBorrowerRepository;
 import de.fhms.jp253163.avss.lms.application.ILoanRepository;
+import de.fhms.jp253163.avss.lms.application.ISchufaRepository;
 import de.fhms.jp253163.avss.lms.application.data.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ConsoleWindow implements IConsoleWindow
 {
     private ILoanRepository loanRepository;
     private IBorrowerRepository borrowerRepository;
+    private ISchufaRepository schufaRepository;
 
-    public ConsoleWindow(ILoanRepository loanRepository, IBorrowerRepository borrowerRepository) throws IllegalArgumentException
+    public ConsoleWindow(ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
     {
-        if(loanRepository == null || borrowerRepository == null)
+        if(loanRepository == null || borrowerRepository == null || schufaRepository == null)
             throw new IllegalArgumentException("at least one argument is null!");
 
         this.loanRepository = loanRepository;
         this.borrowerRepository = borrowerRepository;
+        this.schufaRepository = schufaRepository;
     }
 
     private void commandExit()
     {
         System.out.println("Goodbye!");
+    }
+
+    private int genNewBorrowerId()
+    {
+        IBorrower[] borrowers =  borrowerRepository.readAllBorrowers();
+
+        int maxFoundId = 0;
+
+        for(IBorrower borrower : borrowers)
+        {
+            if(borrower.getId() > maxFoundId)
+            {
+                maxFoundId = borrower.getId();
+            }
+        }
+
+        return maxFoundId+1;
     }
 
     private void commandCreateBorrower(String[] parameters)
@@ -39,9 +61,19 @@ public class ConsoleWindow implements IConsoleWindow
         String street = null, no = null, place = null;
         int zip = 0;
 
+        double schufaScore = 0;
+
+        ILoan[] loans = null;
+
         if(parameters != null && parameters.length == 2)
         {
-            
+            residentialAddress = (IResidentialAddress) new ResidentialAddress(street, no, zip, place);
+
+            loans = new Loan[3];
+
+            borrower = new Borrower(genNewBorrowerId(), firstname, lastname, Date.from(Instant.parse(year+"-"+month+"-"+day)), residentialAddress, schufaScore, loans);
+
+            borrower.setSchufaScore(schufaRepository.readSchufaScore(borrower));
         }
     }
 

@@ -24,6 +24,8 @@ public class Main
         ILoanRepository loanRepository = null;
         IJsonFileService<Loan> loanJsonFileService = null;
 
+        ISchufaRepository schufaRepository = null;
+
         executableDirectoryString = System.getProperty("user.dir");
 
         if(executableDirectoryString == null)
@@ -60,7 +62,9 @@ public class Main
             return;
         }
 
-        IConsoleWindow consoleWindow = new ConsoleWindow(loanRepository, borrowerRepository);
+        schufaRepository = new SchufaRepository();
+
+        IConsoleWindow consoleWindow = new ConsoleWindow(loanRepository, borrowerRepository, schufaRepository);
 
         consoleWindow.showCommandInput();
     }
