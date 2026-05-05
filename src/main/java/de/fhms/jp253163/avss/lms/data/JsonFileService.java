@@ -3,14 +3,14 @@ package de.fhms.jp253163.avss.lms.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class JsonFileService<T> implements IJsonFileService<T>
 {
@@ -100,5 +100,101 @@ public class JsonFileService<T> implements IJsonFileService<T>
         }
 
         return deletetionSuccess;
+    }
+
+    /**
+     * @param file File to test the extension for.
+     * @param testableExtension File extension to test, ignoring case, without dot! (e.g. "JSON", "jpg", "jPeG" etc.)
+     * @return true if the given file has the given file extension, ignoring case. Otherwise, false.
+     */
+    private boolean hasExtensionIgnoreCase(File file, String testableExtension)
+    {
+        String extension = StringUtils.substringAfterLast(file.getName(), ".");
+
+        return extension.equalsIgnoreCase(testableExtension);
+    }
+
+    @Override
+    public File[] listNumericJsonFiles(File directory) throws IOException
+    {
+        IOException e = new IOException("cannot work in that file system environment. Are all files valid? Do they exist?");
+
+        if(directory == null || !directory.isDirectory() || !directory.exists())
+            throw e;
+
+        File[] directoryFiles = directory.listFiles();
+        String iteratedFilenameNaked = null;
+
+        ArrayList<File> jsonFilesFound = new ArrayList<>();
+
+        if(directoryFiles == null)
+            throw e;
+
+        for(File file : directoryFiles)
+        {
+            iteratedFilenameNaked = getNumberFromJsonName(file);
+
+            if(iteratedFilenameNaked == null)
+            {
+                continue; // skip (is directory, is no JSON file or is not numerically named)
+            }
+
+            jsonFilesFound.add(file);
+        }
+
+        return jsonFilesFound.toArray(new File[0]);
+    }
+
+    @Override
+    public String getNumberFromJsonName(File numericallyNamedJson)
+    {
+        String filenameNaked = null;
+
+        if(numericallyNamedJson.isDirectory() || !hasExtensionIgnoreCase(numericallyNamedJson, "json"))
+        {
+            return null; // not an expected file ending on .json
+        }
+
+        filenameNaked = StringUtils.substringBeforeLast(numericallyNamedJson.getName(), ".");
+
+        if(StringUtils.isNumeric(filenameNaked))
+        {
+            // Return the numeric filename.
+            return filenameNaked;
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getNewestNumberFromJsons(File numericJsonsDirectory) throws IOException
+    {
+        File[] numericJsonFiles = listNumericJsonFiles(numericJsonsDirectory);
+        String filenameNumber = null;
+
+        if(numericJsonFiles.length == 0)
+            return -1; // No JSON files do exist yet for any IBorrower object.
+
+        int highestIdFound = Integer.MIN_VALUE, newlyFoundId = Integer.MIN_VALUE;
+
+        for(File file : numericJsonFiles)
+        {
+            filenameNumber = getNumberFromJsonName(file);
+
+            if(filenameNumber == null)
+            {
+                throw new IOException("expected numerically named JSON file but got invalid instead");
+            }
+
+            // Remember the JSON filename.
+            newlyFoundId = Integer.getInteger(filenameNumber);
+
+            if(newlyFoundId > highestIdFound)
+            {
+                highestIdFound = newlyFoundId;
+            }
+        }
+
+        return highestIdFound;
     }
 }

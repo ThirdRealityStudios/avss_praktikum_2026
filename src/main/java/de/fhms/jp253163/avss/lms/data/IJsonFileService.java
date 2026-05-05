@@ -1,5 +1,8 @@
 package de.fhms.jp253163.avss.lms.data;
 
+import java.io.File;
+import java.io.IOException;
+
 public interface IJsonFileService<T>
 {
     /**
@@ -30,4 +33,34 @@ public interface IJsonFileService<T>
      * @return
      */
     public boolean delete(String jsonFilepath);
+
+    /**
+     * Returns all JSON files from that given directory.
+     * If there are no JSON files,
+     * then an empty File array is returned.
+     *
+     * @param directory
+     * @return
+     * @throws IOException E.g. the given directory is invalid.
+     */
+    public File[] listNumericJsonFiles(File directory) throws IOException;
+
+    /**
+     * Returns only the number contained in the filename of that given JSON file.
+     * If the given file does not represent a numeric filename or is invalid (e.g. null),
+     * then null will be returned.
+     *
+     * @param numericallyNamedJson
+     * @return Number contained in the JSON filename. Otherwise, null (file is not ending on .json, is not numerically named etc.)
+     */
+    public String getNumberFromJsonName(File numericallyNamedJson);
+
+    /**
+     * Returns the highest ID found for a Borrower object saved as a JSON file.
+     *
+     * @param numericJsonsDirectory The directory of all the JSON files being numerically named (e.g. "1.json", "12.json").
+     * @return Highest Borrower ID known to the system (judging by the JSON file name). If there is no Borrower object saved yet, then -1 is returned (you can freely choose ID).
+     * @throws IOException
+     */
+    public int getNewestNumberFromJsons(File numericJsonsDirectory) throws IOException;
 }
