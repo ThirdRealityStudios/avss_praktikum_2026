@@ -15,25 +15,30 @@ import java.util.Date;
 
 public class BorrowerRepository implements IBorrowerRepository
 {
-    private GsonBuilder gsonBuilder;
     private JsonFileService<Borrower> jsonFileService;
     private File borrowerDirectoryFile;
 
-    public BorrowerRepository(GsonBuilder gsonBuilder, String executableDirectory) throws IllegalArgumentException, IOException
+    /**
+     * Initializes the loan repository,
+     * including the creation of the "loan" folder in the executable path if not existing yet.
+     *
+     * @param jsonFileService
+     * @param executableDirectory
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
+    public BorrowerRepository(JsonFileService<Borrower> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
     {
-        if(gsonBuilder == null)
+        if(jsonFileService == null || executableDirectory == null)
             throw new IllegalArgumentException("argument must not be null!");
 
-        this.gsonBuilder = gsonBuilder;
-        this.jsonFileService = new JsonFileService<>(gsonBuilder);
+        this.jsonFileService = jsonFileService;
 
-        File executableDirectoryFile = new File(executableDirectory);
-
-        if(!executableDirectoryFile.exists() || !executableDirectoryFile.isDirectory())
+        if(!executableDirectory.exists() || !executableDirectory.isDirectory())
             throw new IllegalArgumentException("given executable path does not exist or is not a directory");
 
         // To locate the directory where all Borrower objects are stored.
-        String borrowerPath = executableDirectory+File.pathSeparator+"borrower";
+        String borrowerPath = executableDirectory.getAbsolutePath() + File.pathSeparator + "borrower";
 
         borrowerDirectoryFile = new File(borrowerPath);
 
@@ -44,7 +49,7 @@ public class BorrowerRepository implements IBorrowerRepository
         {
             if(!borrowerDirectoryFile.mkdir())
             {
-                throw new IOException("could not create the directory to store all borrowers");
+                throw new IOException("could not create the directory to store all JSON files");
             }
         }
     }
