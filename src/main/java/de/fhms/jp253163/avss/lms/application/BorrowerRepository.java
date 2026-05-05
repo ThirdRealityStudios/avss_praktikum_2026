@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class BorrowerRepository implements IBorrowerRepository
 {
-    private JsonFileService<Borrower> jsonFileService;
+    private IJsonFileService<Borrower> jsonFileService;
     private File borrowerDirectoryFile;
 
     /**
@@ -25,7 +25,7 @@ public class BorrowerRepository implements IBorrowerRepository
      * @throws IllegalArgumentException
      * @throws IOException
      */
-    public BorrowerRepository(JsonFileService<Borrower> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
+    public BorrowerRepository(IJsonFileService<Borrower> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
     {
         if(jsonFileService == null || executableDirectory == null)
             throw new IllegalArgumentException("argument must not be null!");
