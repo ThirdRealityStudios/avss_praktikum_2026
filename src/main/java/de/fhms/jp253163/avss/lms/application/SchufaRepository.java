@@ -2,7 +2,7 @@ package de.fhms.jp253163.avss.lms.application;
 
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 
-public class SchufaRepository implements iSchufaRepository
+public class SchufaRepository implements ISchufaRepository
 {
     @Override
     public double readSchufaScore(IBorrower borrower)
