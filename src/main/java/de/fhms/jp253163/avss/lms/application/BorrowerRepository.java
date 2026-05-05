@@ -89,6 +89,15 @@ public class BorrowerRepository implements IBorrowerRepository
         return null;
     }
 
+    /**
+     * Returns all JSON files from that given directory.
+     * If there are no JSON files,
+     * then an empty File array is returned.
+     *
+     * @param directory
+     * @return
+     * @throws IOException E.g. the given directory is invalid.
+     */
     private File[] listNumericJsonFiles(File directory) throws IOException
     {
         IOException e = new IOException("cannot work in that file system environment. Are all files valid? Do they exist?");
@@ -229,7 +238,35 @@ public class BorrowerRepository implements IBorrowerRepository
     @Override
     public IBorrower[] readAllBorrowers()
     {
-        return new IBorrower[0];
+        ArrayList<Borrower> borrowers = new ArrayList<>();
+
+        File[] numericJsonFiles = null;
+        Borrower borrower = null;
+
+        try
+        {
+            numericJsonFiles = listNumericJsonFiles(borrowerDirectoryFile);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+
+            return new IBorrower[0];
+        }
+
+        for(File jsonFile : numericJsonFiles)
+        {
+            borrower = jsonFileService.read(jsonFile.getAbsolutePath(), Borrower.class);
+
+            if(borrower == null)
+            {
+                continue;
+            }
+
+            borrowers.add(borrower);
+        }
+
+        return borrowers.toArray(new Borrower[0]);
     }
 
     @Override
