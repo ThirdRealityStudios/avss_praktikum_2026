@@ -4,6 +4,7 @@ import de.fhms.jp253163.avss.lms.application.data.Borrower;
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.lms.application.data.Loan;
+import de.fhms.jp253163.avss.lms.data.IJsonFileService;
 import de.fhms.jp253163.avss.lms.data.JsonFileService;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class LoanRepository implements ILoanRepository
 {
-    private JsonFileService<Loan> jsonFileService;
+    private IJsonFileService<Loan> jsonFileService;
     private File loanDirectoryFile;
 
     /**
@@ -24,7 +25,7 @@ public class LoanRepository implements ILoanRepository
      * @throws IllegalArgumentException
      * @throws IOException
      */
-    public LoanRepository(JsonFileService<Loan> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
+    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
     {
         if (jsonFileService == null || executableDirectory == null)
             throw new IllegalArgumentException("argument must not be null!");
