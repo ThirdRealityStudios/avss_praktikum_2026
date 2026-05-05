@@ -48,7 +48,7 @@ public class Borrower implements IBorrower
 
     private boolean isName(String name)
     {
-        return name == null || !name.matches("^[\\p{L} .'-]+$");
+        return name != null && name.matches("^[\\p{L} .'-]+$");
     }
 
     @Override
@@ -123,11 +123,7 @@ public class Borrower implements IBorrower
     @Override
     public boolean setResidentialAddress(IResidentialAddress residentialAddress)
     {
-        if(residentialAddress == null ||
-           residentialAddress.getZip() < 0 || residentialAddress.getZip() > 99999 ||
-           residentialAddress.getNo().isEmpty() || residentialAddress.getNo().length() > 4 ||
-           residentialAddress.getPlace().isEmpty() ||
-           residentialAddress.getStreet().isEmpty())
+        if(residentialAddress == null)
         {
             return false;
         }
