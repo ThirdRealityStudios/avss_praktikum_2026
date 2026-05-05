@@ -1,0 +1,13 @@
+package de.fhms.jp253163.avss.lms.application;
+
+import de.fhms.jp253163.avss.lms.application.data.IBorrower;
+
+public class SchufaRepository implements iSchufaRepository
+{
+    @Override
+    public double readSchufaScore(IBorrower borrower)
+    {
+        // TODO implemment query, e.g. via JSON file
+        return 0.9;
+    }
+}
