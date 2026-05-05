@@ -5,10 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,9 +14,6 @@ public class JsonFileService<T> implements IJsonFileService<T>
 {
     private GsonBuilder gsonBuilder;
     private Gson gson;
-    private FileWriter writer;
-    private FileReader reader;
-
     public JsonFileService(GsonBuilder gsonBuilder) throws IllegalArgumentException
     {
         if(gsonBuilder == null)
@@ -35,12 +29,31 @@ public class JsonFileService<T> implements IJsonFileService<T>
     public boolean save(String jsonFilepath, Object obj)
     {
         String json = null;
+        FileWriter writer = null;
+        File file = null;
 
         json = gson.toJson(obj);
 
         try
         {
+            file = new File(jsonFilepath);
+        }
+        catch(NullPointerException e)
+        {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        try
+        {
+            writer = new FileWriter(file);
+
             writer.write(json);
+
+            writer.flush();
+
+            writer.close();
         }
         catch(IOException e)
         {
@@ -55,12 +68,38 @@ public class JsonFileService<T> implements IJsonFileService<T>
     @Override
     public T read(String jsonFilepath, Class<T> className)
     {
+        FileReader reader = null;
+        File file = null;
         T obj = null;
         String json = null;
 
         try
         {
+            file = new File(jsonFilepath);
+        }
+        catch(NullPointerException e)
+        {
+            e.printStackTrace();
+
+            return null;
+        }
+
+        try
+        {
+            reader = new FileReader(file);
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+
+            return null;
+        }
+
+        try
+        {
             json = reader.readAllAsString();
+
+            reader.close();
         }
         catch(IOException e)
         {
