@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.lms.application.data;
 
-public class ResidentialAddress
+public class ResidentialAddress implements IResidentialAddress
 {
     private String street, no;
     private int zip;
@@ -17,6 +17,7 @@ public class ResidentialAddress
         }
     }
 
+    @Override
     public boolean setStreet(String street)
     {
         if(street == null || street.isEmpty())
@@ -29,11 +30,13 @@ public class ResidentialAddress
         return true;
     }
 
+    @Override
     public String getStreet()
     {
         return street;
     }
 
+    @Override
     public boolean setNo(String no)
     {
         if(no == null || no.isEmpty())
@@ -46,11 +49,13 @@ public class ResidentialAddress
         return true;
     }
 
+    @Override
     public String getNo()
     {
         return no;
     }
 
+    @Override
     public boolean setZip(int zip)
     {
         if(zip < 0 || zip > 99999)
@@ -63,11 +68,13 @@ public class ResidentialAddress
         return true;
     }
 
+    @Override
     public int getZip()
     {
         return zip;
     }
 
+    @Override
     public boolean setPlace(String place)
     {
         if(place == null || place.isEmpty())
@@ -78,5 +85,11 @@ public class ResidentialAddress
         this.place = place;
 
         return true;
+    }
+
+    @Override
+    public String getPlace()
+    {
+        return place;
     }
 }
