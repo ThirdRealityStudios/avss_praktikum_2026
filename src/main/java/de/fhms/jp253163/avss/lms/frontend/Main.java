@@ -64,7 +64,7 @@ public class Main
 
         schufaRepository = new SchufaRepository();
 
-        IConsoleWindow consoleWindow = new ConsoleWindow(loanRepository, borrowerRepository, schufaRepository);
+        IConsoleWindow consoleWindow = new ConsoleWindow(exeutableDirectory, loanRepository, borrowerRepository, schufaRepository);
 
         consoleWindow.showCommandInput();
     }
