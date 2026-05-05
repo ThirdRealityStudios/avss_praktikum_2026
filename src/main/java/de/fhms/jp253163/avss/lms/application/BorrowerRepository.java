@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.lms.application;
 
-import com.google.gson.GsonBuilder;
 import de.fhms.jp253163.avss.lms.application.data.Borrower;
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
@@ -71,19 +70,19 @@ public class BorrowerRepository implements IBorrowerRepository
      * If the given file does not represent a numeric filename or is invalid (e.g. null),
      * then null will be returned.
      *
-     * @param numericallyNamedFile
+     * @param numericallyNamedJson
      * @return Number contained in the JSON filename. Otherwise, null (file is not ending on .json, is not numerically named etc.)
      */
-    private String getJSONFilenameNumber(File numericallyNamedFile)
+    private String getNumberFromJsonNumber(File numericallyNamedJson)
     {
         String filenameNaked = null;
 
-        if(numericallyNamedFile.isDirectory() || !hasExtensionIgnoreCase(numericallyNamedFile, "json"))
+        if(numericallyNamedJson.isDirectory() || !hasExtensionIgnoreCase(numericallyNamedJson, "json"))
         {
             return null; // not an expected file ending on .json
         }
 
-        filenameNaked = StringUtils.substringBeforeLast(numericallyNamedFile.getName(), ".");
+        filenameNaked = StringUtils.substringBeforeLast(numericallyNamedJson.getName(), ".");
 
         if(StringUtils.isNumeric(filenameNaked))
         {
@@ -120,7 +119,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         for(File file : directoryFiles)
         {
-            iteratedFilenameNaked = getJSONFilenameNumber(file);
+            iteratedFilenameNaked = getNumberFromJsonNumber(file);
 
             if(iteratedFilenameNaked == null)
             {
@@ -140,7 +139,7 @@ public class BorrowerRepository implements IBorrowerRepository
      * @return Highest Borrower ID known to the system (judging by the JSON file name). If there is no Borrower object saved yet, then -1 is returned (you can freely choose ID).
      * @throws IOException
      */
-    private int getHighestId(File numericJsonsDirectory) throws IOException
+    private int getNewestNumberFromJsons(File numericJsonsDirectory) throws IOException
     {
         File[] numericJsonFiles = listNumericJsonFiles(numericJsonsDirectory);
         String filenameNumber = null;
@@ -152,7 +151,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         for(File file : numericJsonFiles)
         {
-            filenameNumber = getJSONFilenameNumber(file);
+            filenameNumber = getNumberFromJsonNumber(file);
 
             if(filenameNumber == null)
             {
@@ -183,7 +182,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            newBorrowerId = getHighestId(this.borrowerDirectoryFile) + 1;
+            newBorrowerId = getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
         }
         catch(IOException e)
         {
@@ -227,7 +226,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         for(File jsonFile : numericJsonFiles)
         {
-            filenameNumber = getJSONFilenameNumber(jsonFile);
+            filenameNumber = getNumberFromJsonNumber(jsonFile);
 
             if(filenameNumber.equalsIgnoreCase("" + id)) // Found that JSON file for the given Borrower.
             {
@@ -293,7 +292,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         for(File jsonFile : borrowerFiles)
         {
-            jsonFilename = getJSONFilenameNumber(jsonFile);
+            jsonFilename = getNumberFromJsonNumber(jsonFile);
 
             if(jsonFilename == null)
             {
