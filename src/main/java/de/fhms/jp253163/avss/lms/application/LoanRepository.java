@@ -9,6 +9,7 @@ import de.fhms.jp253163.avss.lms.data.JsonFileService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 
 public class LoanRepository implements ILoanRepository
@@ -33,7 +34,7 @@ public class LoanRepository implements ILoanRepository
         this.jsonFileService = jsonFileService;
 
         // To locate the directory where all Borrower objects are stored.
-        String loanPath = executableDirectory.getAbsolutePath() + File.pathSeparator + "loan";
+        String loanPath = executableDirectory.getAbsolutePath() + FileSystems.getDefault().getSeparator() + "loan";
 
         loanDirectoryFile = new File(loanPath);
 
@@ -69,7 +70,7 @@ public class LoanRepository implements ILoanRepository
         {
             loan = new Loan(newLoanId, amount, interestRate, term, borrower);
 
-            jsonFilepath = loanDirectoryFile.getAbsolutePath() + File.pathSeparator + newLoanId + ".json";
+            jsonFilepath = loanDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newLoanId + ".json";
 
             // Also save the created Loan as a JSON file (https://www.geeksforgeeks.org/java/file-getabsolutepath-method-in-java-with-examples/)
             jsonFileService.save(jsonFilepath, loan);
@@ -187,7 +188,7 @@ public class LoanRepository implements ILoanRepository
     @Override
     public boolean deleteLoan(int id)
     {
-        String filepath = loanDirectoryFile.getAbsolutePath() + File.pathSeparator + id + ".json";
+        String filepath = loanDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
 
         return jsonFileService.delete(filepath);
     }

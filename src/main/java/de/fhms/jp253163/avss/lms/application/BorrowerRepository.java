@@ -8,6 +8,7 @@ import de.fhms.jp253163.avss.lms.data.*; // in this line you can see how the bui
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,7 +37,7 @@ public class BorrowerRepository implements IBorrowerRepository
             throw new IllegalArgumentException("given executable path does not exist or is not a directory");
 
         // To locate the directory where all Borrower objects are stored.
-        String borrowerPath = executableDirectory.getAbsolutePath() + File.pathSeparator + "borrower";
+        String borrowerPath = executableDirectory.getAbsolutePath() + FileSystems.getDefault().getSeparator() + "borrower";
 
         borrowerDirectoryFile = new File(borrowerPath);
 
@@ -77,7 +78,7 @@ public class BorrowerRepository implements IBorrowerRepository
         {
             borrower = new Borrower(newBorrowerId, firstname, lastname, dateOfBirth, residentialAddress, schufaScore, new ILoan[]{});
 
-            jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + File.pathSeparator + newBorrowerId + ".json";
+            jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newBorrowerId + ".json";
 
             // Also save the created Borrower as a JSON file (https://www.geeksforgeeks.org/java/file-getabsolutepath-method-in-java-with-examples/)
             jsonFileService.save(jsonFilepath, borrower);
@@ -195,7 +196,7 @@ public class BorrowerRepository implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
-        String filepath = borrowerDirectoryFile.getAbsolutePath() + File.pathSeparator + id + ".json";
+        String filepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
 
         return jsonFileService.delete(filepath);
     }
