@@ -1,5 +1,9 @@
 package de.fhms.jp253163.avss.lms.application.data;
 
+/**
+ * For easier implementation it is assumed,
+ * you cannot pay the installments earlier in larger scales in order to pay your loan faster.
+ */
 public class Loan implements ILoan
 {
     private int id;
@@ -8,9 +12,24 @@ public class Loan implements ILoan
     private int term, remainingTerm;
     private IBorrower borrower;
 
-    public Loan(int id, double amount, double interestRate, int term, IBorrower borrower)
+    public Loan(int id, double amount, double interestRate, int term, IBorrower borrower) throws IllegalArgumentException
     {
+        IllegalArgumentException defaultException = new IllegalArgumentException("Given argument is invalid, null or has invalid format.");
 
+        if(!setId(id) ||
+            !setAmount(amount) ||
+            !setInterestRate(interestRate) ||
+            !setTerm(term) ||
+            !setBorrower(borrower))
+        {
+            throw defaultException;
+        }
+
+        // Determine the total amount to pay from the borrower.
+        if(!setRemainingBalance(amount + getTotalInterest()))
+        {
+            throw defaultException;
+        }
     }
 
     @Override
@@ -60,7 +79,7 @@ public class Loan implements ILoan
     @Override
     public boolean setInterestRate(double interestRate)
     {
-        if(interestRate >= 0)
+        if(interestRate > -1 && interestRate < 1)
         {
             this.interestRate = interestRate;
 
@@ -83,17 +102,60 @@ public class Loan implements ILoan
         {
             this.term = term;
 
-            return true;
+            return setRemainingTerm(term);
         }
 
         return false;
     }
 
+    private double getTermInYears()
+    {
+        return getTerm() / 12d;
+    }
+
+    private double getTotalInterest()
+    {
+        return getAmount() * (Math.pow(1 + getInterestRate(), getTermInYears()) - 1);
+    }
+
+    private double getMonthlyInterest()
+    {
+        return getTotalInterest() / getTermInYears();
+    }
+
+    private double getMonthlyInstallment()
+    {
+        return getAmount() / getTerm() + getMonthlyInterest();
+    }
+
     @Override
     public boolean payInstallment()
     {
-        // TODO Implement
-        return false;
+        boolean remainingBalanceUpdated = false;
+        boolean remainingTermUpdated = false;
+
+         if(getRemainingTerm() > 0)
+         {
+             remainingBalanceUpdated = setRemainingBalance(getRemainingBalance() - getMonthlyInstallment());
+
+             if(!remainingBalanceUpdated)
+             {
+                 return false;
+             }
+
+             remainingTermUpdated = setRemainingTerm(getRemainingTerm() - 1);
+
+             if(!remainingTermUpdated)
+             {
+                 return false;
+             }
+
+             return true;
+         }
+         else
+         {
+             return false; // The loan is yet done or paid completely.
+         }
     }
 
     @Override
@@ -147,6 +209,8 @@ public class Loan implements ILoan
         {
             return false;
         }
+
+        this.borrower = borrower;
 
         return true;
     }
