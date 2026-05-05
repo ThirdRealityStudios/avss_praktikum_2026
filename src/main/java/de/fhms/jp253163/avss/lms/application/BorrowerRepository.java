@@ -272,12 +272,45 @@ public class BorrowerRepository implements IBorrowerRepository
     @Override
     public boolean updateBorrower(IBorrower borrower)
     {
+        File[] borrowerFiles = null;
+        String jsonFilename = null;
+
+        try
+        {
+            borrowerFiles = listNumericJsonFiles(borrowerDirectoryFile);
+        }
+        catch(IOException e)
+        {
+            // e.printStackTrace();
+
+            return false;
+        }
+
+        for(File jsonFile : borrowerFiles)
+        {
+            jsonFilename = getJSONFilenameNumber(jsonFile);
+
+            if(jsonFilename == null)
+            {
+                continue;
+            }
+
+            if(jsonFilename.equalsIgnoreCase(borrower.getId()+""))
+            {
+                // Borrower file found, so update it.
+
+                return jsonFileService.save(jsonFile.getAbsolutePath(), borrower);
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean deleteBorrower(int id)
     {
+
+
         return false;
     }
 }
