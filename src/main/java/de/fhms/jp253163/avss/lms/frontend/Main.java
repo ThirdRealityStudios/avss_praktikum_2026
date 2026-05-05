@@ -1,13 +1,8 @@
 package de.fhms.jp253163.avss.lms.frontend;
 
 import com.google.gson.GsonBuilder;
-import de.fhms.jp253163.avss.lms.application.BorrowerRepository;
-import de.fhms.jp253163.avss.lms.application.IBorrowerRepository;
-import de.fhms.jp253163.avss.lms.application.ILoanRepository;
-import de.fhms.jp253163.avss.lms.application.LoanRepository;
-import de.fhms.jp253163.avss.lms.application.data.Borrower;
-import de.fhms.jp253163.avss.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.lms.application.data.Loan;
+import de.fhms.jp253163.avss.lms.application.*;
+import de.fhms.jp253163.avss.lms.application.data.*;
 import de.fhms.jp253163.avss.lms.data.IJsonFileService;
 import de.fhms.jp253163.avss.lms.data.JsonFileService;
 
