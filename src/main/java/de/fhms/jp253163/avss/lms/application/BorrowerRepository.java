@@ -59,8 +59,6 @@ public class BorrowerRepository implements IBorrowerRepository
         IBorrower borrower = null;
         String jsonFilepath = null;
 
-        // Date dateOfBirth = Date.from(Instant.parse("1910-01-01"));
-
         int newBorrowerId = -1;
 
         try
@@ -81,7 +79,12 @@ public class BorrowerRepository implements IBorrowerRepository
             jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newBorrowerId + ".json";
 
             // Also save the created Borrower as a JSON file (https://www.geeksforgeeks.org/java/file-getabsolutepath-method-in-java-with-examples/)
-            jsonFileService.save(jsonFilepath, borrower);
+            if(!jsonFileService.save(jsonFilepath, borrower))
+            {
+                System.out.println("Cannot save borrower as a JSON file!");
+
+                return null;
+            }
         }
         catch(IllegalArgumentException e)
         {
