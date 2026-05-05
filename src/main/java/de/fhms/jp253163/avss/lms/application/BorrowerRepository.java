@@ -309,8 +309,8 @@ public class BorrowerRepository implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
+        String filepath = borrowerDirectoryFile.getAbsolutePath() + File.pathSeparator + id + ".json";
 
-
-        return false;
+        return jsonFileService.delete(filepath);
     }
 }
