@@ -5,7 +5,6 @@ import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.lms.application.data.IResidentialAddress;
 import de.fhms.jp253163.avss.lms.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,123 +52,6 @@ public class BorrowerRepository implements IBorrowerRepository
         }
     }
 
-    /**
-     * @param file File to test the extension for.
-     * @param testableExtension File extension to test, ignoring case, without dot! (e.g. "JSON", "jpg", "jPeG" etc.)
-     * @return true if the given file has the given file extension, ignoring case. Otherwise, false.
-     */
-    private boolean hasExtensionIgnoreCase(File file, String testableExtension)
-    {
-        String extension = StringUtils.substringAfterLast(file.getName(), ".");
-
-        return extension.equalsIgnoreCase(testableExtension);
-    }
-
-    /**
-     * Returns only the number contained in the filename of that given JSON file.
-     * If the given file does not represent a numeric filename or is invalid (e.g. null),
-     * then null will be returned.
-     *
-     * @param numericallyNamedJson
-     * @return Number contained in the JSON filename. Otherwise, null (file is not ending on .json, is not numerically named etc.)
-     */
-    private String getNumberFromJsonNumber(File numericallyNamedJson)
-    {
-        String filenameNaked = null;
-
-        if(numericallyNamedJson.isDirectory() || !hasExtensionIgnoreCase(numericallyNamedJson, "json"))
-        {
-            return null; // not an expected file ending on .json
-        }
-
-        filenameNaked = StringUtils.substringBeforeLast(numericallyNamedJson.getName(), ".");
-
-        if(StringUtils.isNumeric(filenameNaked))
-        {
-            // Return the numeric filename.
-            return filenameNaked;
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns all JSON files from that given directory.
-     * If there are no JSON files,
-     * then an empty File array is returned.
-     *
-     * @param directory
-     * @return
-     * @throws IOException E.g. the given directory is invalid.
-     */
-    private File[] listNumericJsonFiles(File directory) throws IOException
-    {
-        IOException e = new IOException("cannot work in that file system environment. Are all files valid? Do they exist?");
-
-        if(directory == null || !directory.isDirectory() || !directory.exists())
-            throw e;
-
-        File[] directoryFiles = directory.listFiles();
-        String iteratedFilenameNaked = null;
-
-        ArrayList<File> jsonFilesFound = new ArrayList<>();
-
-        if(directoryFiles == null)
-            throw e;
-
-        for(File file : directoryFiles)
-        {
-            iteratedFilenameNaked = getNumberFromJsonNumber(file);
-
-            if(iteratedFilenameNaked == null)
-            {
-                continue; // skip (is directory, is no JSON file or is not numerically named)
-            }
-
-            jsonFilesFound.add(file);
-        }
-
-        return jsonFilesFound.toArray(new File[0]);
-    }
-
-    /**
-     * Returns the highest ID found for a Borrower object saved as a JSON file.
-     *
-     * @param numericJsonsDirectory The directory of all the JSON files being numerically named (e.g. "1.json", "12.json").
-     * @return Highest Borrower ID known to the system (judging by the JSON file name). If there is no Borrower object saved yet, then -1 is returned (you can freely choose ID).
-     * @throws IOException
-     */
-    private int getNewestNumberFromJsons(File numericJsonsDirectory) throws IOException
-    {
-        File[] numericJsonFiles = listNumericJsonFiles(numericJsonsDirectory);
-        String filenameNumber = null;
-
-        if(numericJsonFiles.length == 0)
-            return -1; // No JSON files do exist yet for any IBorrower object.
-
-        int highestIdFound = Integer.MIN_VALUE, newlyFoundId = Integer.MIN_VALUE;
-
-        for(File file : numericJsonFiles)
-        {
-            filenameNumber = getNumberFromJsonNumber(file);
-
-            if(filenameNumber == null)
-            {
-                throw new IOException("expected numerically named JSON file but got invalid instead");
-            }
-
-            // Remember the JSON filename.
-            newlyFoundId = Integer.getInteger(filenameNumber);
-
-            if(newlyFoundId > highestIdFound)
-            {
-                highestIdFound = newlyFoundId;
-            }
-        }
-
-        return highestIdFound;
-    }
-
     @Override
     public IBorrower createBorrower(String firstname, String lastname, Date dateOfBirth, IResidentialAddress residentialAddress, double schufaScore)
     {
@@ -182,7 +64,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            newBorrowerId = getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
+            newBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
         }
         catch(IOException e)
         {
@@ -217,7 +99,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            numericJsonFiles = listNumericJsonFiles(borrowerDirectoryFile);
+            numericJsonFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
         }
         catch(IOException e)
         {
@@ -226,7 +108,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         for(File jsonFile : numericJsonFiles)
         {
-            filenameNumber = getNumberFromJsonNumber(jsonFile);
+            filenameNumber = jsonFileService.getNumberFromJsonName(jsonFile);
 
             if(filenameNumber.equalsIgnoreCase("" + id)) // Found that JSON file for the given Borrower.
             {
@@ -249,7 +131,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            numericJsonFiles = listNumericJsonFiles(borrowerDirectoryFile);
+            numericJsonFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
         }
         catch(IOException e)
         {
@@ -281,7 +163,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            borrowerFiles = listNumericJsonFiles(borrowerDirectoryFile);
+            borrowerFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
         }
         catch(IOException e)
         {
@@ -292,7 +174,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         for(File jsonFile : borrowerFiles)
         {
-            jsonFilename = getNumberFromJsonNumber(jsonFile);
+            jsonFilename = jsonFileService.getNumberFromJsonName(jsonFile);
 
             if(jsonFilename == null)
             {
