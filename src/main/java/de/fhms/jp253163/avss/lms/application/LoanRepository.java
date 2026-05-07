@@ -53,16 +53,18 @@ public class LoanRepository implements ILoanRepository
         ILoan loan = null;
         String jsonFilepath = null;
 
-        int newLoanId = -1;
+        int currentLoadId = -1, newLoanId = -1;
 
         try
         {
-            newLoanId = jsonFileService.getNewestNumberFromJsons(this.loanDirectoryFile) + 1;
+            currentLoadId = jsonFileService.getNewestNumberFromJsons(this.loanDirectoryFile);
 
-            if(newLoanId == -2) // an error occurred while determining
+            if(currentLoadId == -2) // an error occurred while determining
             {
                 return null;
             }
+
+            newLoanId = currentLoadId + 1;
         }
         catch(IOException e)
         {

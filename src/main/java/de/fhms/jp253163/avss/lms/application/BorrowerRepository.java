@@ -59,7 +59,7 @@ public class BorrowerRepository implements IBorrowerRepository
         IBorrower borrower = null;
         String jsonFilepath = null;
 
-        int newBorrowerId = -1;
+        int currentBorrowerId = -1, newBorrowerId = -1;
 
         if(firstname == null || firstname.isEmpty() || lastname == null || lastname.isEmpty() || dateOfBirth == null || residentialAddress == null)
         {
@@ -70,12 +70,14 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            newBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
+            currentBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile);
 
-            if(newBorrowerId == -2) // an error occurred while determining.
+            if(currentBorrowerId == -2) // an error occurred while determining.
             {
                 return null;
             }
+
+            newBorrowerId = currentBorrowerId + 1;
         }
         catch(IOException e)
         {
