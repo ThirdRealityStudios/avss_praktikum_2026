@@ -205,13 +205,19 @@ public class Borrower implements IBorrower
     {
         String loansActive = "";
 
+         int i = 0;
+
         for(ILoan loan : getLoans())
         {
             loansActive += "\n" + loan;
+            i++;
         }
 
-        loansActive += "\n";
+        if(i > 0)
+            loansActive += "\n";
+        else
+            loansActive += "No loans active.\n";
 
-        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\bSchufaScore: " + String.format("%2.2f", getSchufaScore()) + "\nResidential Address:\n\n" + getResidentialAddress() + "\nLoans active:\n" + loansActive;
+        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\nSchufaScore: " + String.format("%2.2f", getSchufaScore()) + "\n\nResidential Address:\n" + getResidentialAddress() + "\nLoans active:\n" + loansActive;
     }
 }
