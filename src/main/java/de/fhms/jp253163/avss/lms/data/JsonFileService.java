@@ -211,7 +211,7 @@ public class JsonFileService<T> implements IJsonFileService<T>
 
         if(numericJsonFiles.length == 0)
         {
-            return -1; // No JSON files do exist yet for any IBorrower object.
+            return -4; // No JSON files do exist yet for any IBorrower object.
         }
 
         int highestIdFound = Integer.MIN_VALUE;
