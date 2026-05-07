@@ -213,7 +213,10 @@ public class JsonFileService<T> implements IJsonFileService<T>
         String filenameNumber = null;
 
         if(numericJsonFiles.length == 0)
+        {
+            System.out.println("No JSONS Found!!!!!!!!!!!!!!");
             return -1; // No JSON files do exist yet for any IBorrower object.
+        }
 
         int highestIdFound = Integer.MIN_VALUE;
         Integer newlyFoundId = Integer.MIN_VALUE;
