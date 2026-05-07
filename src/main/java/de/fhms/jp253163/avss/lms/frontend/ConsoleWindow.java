@@ -218,8 +218,7 @@ public class ConsoleWindow implements IConsoleWindow
     {
         String action = null;
         String detail = null;
-        String number = null;
-        int nbmberConverted = -1;
+        int numberConverted = -1;
         String optionalMessage = null;
         IBorrower[] borrowers = null;
 
@@ -252,15 +251,16 @@ public class ConsoleWindow implements IConsoleWindow
 
                             showBorrowerData(borrowers, optionalMessage);
                         }
-                        else if(detail.equalsIgnoreCase("id") && parameters.length > 3)
+                        else if(StringUtils.isNumeric(detail))
                         {
                             try
                             {
-                                number = parameters[3];
+                                numberConverted = Integer.parseInt(detail);
 
-                                nbmberConverted = Integer.parseInt(number);
+                                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(numberConverted) };
 
-                                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(nbmberConverted) };
+                                if(borrowers[0] == null)
+                                    optionalMessage = "Borrower not found!";
                             }
                             catch(NumberFormatException e)
                             {
@@ -404,7 +404,8 @@ public class ConsoleWindow implements IConsoleWindow
         {
             for(IBorrower borrower : borrowers)
             {
-                output += borrower + "\n";
+                if(borrower != null)
+                    output += borrower + "\n";
             }
         }
 
