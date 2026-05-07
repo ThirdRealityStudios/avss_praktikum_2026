@@ -71,6 +71,11 @@ public class BorrowerRepository implements IBorrowerRepository
         try
         {
             newBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
+
+            if(newBorrowerId == -2) // an error occurred while determining.
+            {
+                return null;
+            }
         }
         catch(IOException e)
         {
