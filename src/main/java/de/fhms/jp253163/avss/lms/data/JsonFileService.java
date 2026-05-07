@@ -191,16 +191,16 @@ public class JsonFileService<T> implements IJsonFileService<T>
 
         filenameNaked = StringUtils.substringBeforeLast(numericallyNamedJson.getName(), ".");
 
-        if(numericallyNamedJson.isDirectory() || !hasExtensionJSON(numericallyNamedJson) || !StringUtils.isNumeric(filenameNaked))
+        if(!numericallyNamedJson.isDirectory() && hasExtensionJSON(numericallyNamedJson) && StringUtils.isNumeric(filenameNaked))
         {
-            System.out.println(filenameNaked + " is NO valid JSON!!!");
+            System.out.println(filenameNaked + " is VALID NUMERIC JSON!!!");
 
-            return null; // not an expected file ending on .json
+            return filenameNaked;
         }
 
-        System.out.println(filenameNaked + " is VALID NUMERIC JSON!!!");
+        System.out.println(filenameNaked + " is NO valid JSON!!!");
 
-        return filenameNaked;
+        return null; // not an expected file ending on .json
     }
 
     @Override
