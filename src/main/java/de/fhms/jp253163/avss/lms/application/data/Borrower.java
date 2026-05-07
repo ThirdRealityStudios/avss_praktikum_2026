@@ -3,6 +3,7 @@ package de.fhms.jp253163.avss.lms.application.data;
 import org.apache.commons.lang3.time.DateUtils;
 
 import javax.swing.text.DateFormatter;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.Arrays;
@@ -192,5 +193,20 @@ public class Borrower implements IBorrower
         this.loans = Arrays.copyOf(loans, loans.length);
 
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        String loansActive = "";
+
+        for(ILoan loan : getLoans())
+        {
+            loansActive += "\n" + loan;
+        }
+
+        loansActive += "\n";
+
+        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\bSchufaScore: " + String.format("%2.2f", getSchufaScore()) + "\nResidential Address:\n\n" + getResidentialAddress() + "\nLoans active:\n" + loansActive;
     }
 }

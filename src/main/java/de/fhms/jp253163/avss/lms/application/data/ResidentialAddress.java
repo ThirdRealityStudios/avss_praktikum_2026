@@ -92,4 +92,10 @@ public class ResidentialAddress implements IResidentialAddress
     {
         return place;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Street: " + getStreet() + "\nNo: " + getNo() + "\nZip: " + getZip() + "\nPlace: " + getPlace() + "\n";
+    }
 }

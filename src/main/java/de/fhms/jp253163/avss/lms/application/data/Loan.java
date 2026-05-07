@@ -1,5 +1,7 @@
 package de.fhms.jp253163.avss.lms.application.data;
 
+import java.util.IllegalFormatException;
+
 /**
  * For easier implementation it is assumed,
  * you cannot pay the installments earlier in larger scales in order to pay your loan faster.
@@ -213,5 +215,11 @@ public class Loan implements ILoan
         this.borrower = borrower;
 
         return true;
+    }
+
+    @Override
+    public String toString() throws IllegalFormatException
+    {
+        return "Loan with ID: " + getId() + "\nAmount taken: " + getAmount() + "\nTime agreed to pay: " + getTerm() + "\nInterest rate: " + String.format("2.2f", getInterestRate() * 100) + "%" + "\nRemaining balance to pay: " + String.format("%.2f", getRemainingBalance()) + "\nTerm remaining: " + getRemainingTerm() + "\nBorrower is: \n" + getBorrower();
     }
 }
