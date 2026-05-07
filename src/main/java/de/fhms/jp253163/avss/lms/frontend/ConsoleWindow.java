@@ -244,6 +244,13 @@ public class ConsoleWindow implements IConsoleWindow
                         if(detail.equalsIgnoreCase("all"))
                         {
                             borrowers = borrowerRepository.readAllBorrowers();
+
+                            if(borrowers == null || borrowers.length == 0)
+                            {
+                                optionalMessage = "No borrowers yet created!";
+                            }
+
+                            showBorrowerData(borrowers, optionalMessage);
                         }
                         else if(detail.equalsIgnoreCase("id") && parameters.length > 3)
                         {
@@ -259,10 +266,18 @@ public class ConsoleWindow implements IConsoleWindow
                             {
                                 optionalMessage = "That was no valid number!";
                             }
+
+                            showBorrowerData(borrowers, optionalMessage);
+                        }
+                        else
+                        {
+                            showHelp();
                         }
                     }
-
-                    showBorrowerData(borrowers, optionalMessage);
+                    else
+                    {
+                        showHelp();
+                    }
 
                     return;
                 }
@@ -378,7 +393,22 @@ public class ConsoleWindow implements IConsoleWindow
     @Override
     public void showBorrowerData(IBorrower[] borrowers, String optionalMessage)
     {
+        String output = "";
 
+        if(optionalMessage != null && !optionalMessage.isEmpty())
+        {
+            output += optionalMessage;
+        }
+
+        if(borrowers != null)
+        {
+            for(IBorrower borrower : borrowers)
+            {
+                output += borrower + "\n";
+            }
+        }
+
+        System.out.println(output);
     }
 
     @Override
