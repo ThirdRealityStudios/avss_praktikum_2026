@@ -72,9 +72,6 @@ public class BorrowerRepository implements IBorrowerRepository
         {
             newBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile) + 1;
 
-            if(newBorrowerId == -1)
-                System.out.println("-1 IS UNACCPETIBLE KURWA!!");
-
             if(newBorrowerId == -2) // an error occurred while determining.
             {
                 return null;
