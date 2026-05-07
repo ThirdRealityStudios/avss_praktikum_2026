@@ -318,6 +318,8 @@ public class ConsoleWindow implements IConsoleWindow
 
         int statusCode = 0;
 
+        showHelp();
+
         do
         {
             System.out.print("> ");
