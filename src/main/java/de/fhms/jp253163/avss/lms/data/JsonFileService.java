@@ -229,7 +229,7 @@ public class JsonFileService<T> implements IJsonFileService<T>
             // Remember the JSON filename.
             newlyFoundId = Integer.getInteger(filenameNumber);
 
-            System.out.println("Converted " + newlyFoundId);
+            System.out.println("Converted " + newlyFoundId + (newlyFoundId == null ? " (because filenameNumber = " + filenameNumber + ")" : ""));
 
             if(newlyFoundId == null)
                 return -2;
