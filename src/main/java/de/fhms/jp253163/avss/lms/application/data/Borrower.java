@@ -14,9 +14,9 @@ public class Borrower implements IBorrower
     private int id;
     private String firstname, lastname;
     private Date birthday;
-    private IResidentialAddress residentialAddress;
+    private ResidentialAddress residentialAddress;
     private double schufaScore;
-    private ILoan[] loans;
+    private Loan[] loans;
 
     public Borrower(int id, String firstname, String lastname, Date birthday, IResidentialAddress residentialAddress, double schufaScore, ILoan[] loans) throws IllegalArgumentException
     {
@@ -148,7 +148,7 @@ public class Borrower implements IBorrower
         }
         else
         {
-            this.residentialAddress = residentialAddress;
+            this.residentialAddress = new ResidentialAddress(residentialAddress.getStreet(), residentialAddress.getNo(), residentialAddress.getZip(), residentialAddress.getPlace());
 
             return true;
         }
@@ -190,7 +190,12 @@ public class Borrower implements IBorrower
                 return false;
         }
 
-        this.loans = Arrays.copyOf(loans, loans.length);
+        this.loans = new Loan[loans.length];
+
+        for(int i = 0; i < loans.length; i++)
+        {
+            this.loans[i] = new Loan(loans[i].getId(), loans[i].getAmount(), loans[i].getInterestRate(), loans[i].getTerm(), loans[i].getBorrower());
+        }
 
         return true;
     }
