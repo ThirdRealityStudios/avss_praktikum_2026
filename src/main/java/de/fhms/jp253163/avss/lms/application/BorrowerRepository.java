@@ -72,6 +72,8 @@ public class BorrowerRepository implements IBorrowerRepository
         {
             currentBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile);
 
+            System.out.println("Detected " + currentBorrowerId + " for current highest JSON file!");
+
             if(currentBorrowerId == -2) // an error occurred while determining.
             {
                 return null;
