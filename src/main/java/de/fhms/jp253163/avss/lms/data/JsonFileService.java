@@ -215,7 +215,8 @@ public class JsonFileService<T> implements IJsonFileService<T>
         if(numericJsonFiles.length == 0)
             return -1; // No JSON files do exist yet for any IBorrower object.
 
-        int highestIdFound = Integer.MIN_VALUE, newlyFoundId = Integer.MIN_VALUE;
+        int highestIdFound = Integer.MIN_VALUE;
+        Integer newlyFoundId = Integer.MIN_VALUE;
 
         for(File file : numericJsonFiles)
         {
@@ -228,6 +229,9 @@ public class JsonFileService<T> implements IJsonFileService<T>
 
             // Remember the JSON filename.
             newlyFoundId = Integer.getInteger(filenameNumber);
+
+            if(newlyFoundId == null)
+                return -2;
 
             if(newlyFoundId > highestIdFound)
             {

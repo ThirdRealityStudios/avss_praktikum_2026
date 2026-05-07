@@ -59,7 +59,7 @@ public interface IJsonFileService<T>
      * Returns the highest ID found for a Borrower object saved as a JSON file.
      *
      * @param numericJsonsDirectory The directory of all the JSON files being numerically named (e.g. "1.json", "12.json").
-     * @return Highest Borrower ID known to the system (judging by the JSON file name). If there is no Borrower object saved yet, then -1 is returned (you can freely choose ID).
+     * @return Highest Borrower ID known to the system (judging by the JSON file name). If there is no Borrower object saved yet, then -1 is returned (you can freely choose ID). If there was a technical error, -2 is returned.
      * @throws IOException
      */
     public int getNewestNumberFromJsons(File numericJsonsDirectory) throws IOException;
