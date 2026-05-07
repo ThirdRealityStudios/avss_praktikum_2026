@@ -58,6 +58,11 @@ public class LoanRepository implements ILoanRepository
         try
         {
             newLoanId = jsonFileService.getNewestNumberFromJsons(this.loanDirectoryFile) + 1;
+
+            if(newLoanId == -2) // an error occurred while determining
+            {
+                return null;
+            }
         }
         catch(IOException e)
         {
