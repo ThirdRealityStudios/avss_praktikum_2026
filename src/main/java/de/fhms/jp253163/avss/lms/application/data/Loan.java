@@ -6,10 +6,10 @@ package de.fhms.jp253163.avss.lms.application.data;
  */
 public class Loan implements ILoan
 {
-    private int id;
-    private double amount, remainingBalance;
-    private double interestRate;
-    private int term, remainingTerm;
+    private int id = -1;
+    private double amount = -1, remainingBalance = -1;
+    private double interestRate = -1;
+    private int term = -1, remainingTerm = -1;
     private IBorrower borrower;
 
     public Loan(int id, double amount, double interestRate, int term, IBorrower borrower) throws IllegalArgumentException
@@ -41,7 +41,7 @@ public class Loan implements ILoan
     @Override
     public boolean setId(int id)
     {
-        if(id >= 0)
+        if(id >= 0 && this.id == -1) // you can only change or set the ID once.
         {
             this.id = id;
 
@@ -60,7 +60,7 @@ public class Loan implements ILoan
     @Override
     public boolean setAmount(double amount)
     {
-        if(amount >= 0)
+        if(amount > 0 && this.amount == -1) // you can only set the amount once (when you take the loan)
         {
             this.amount = amount;
 
@@ -79,7 +79,7 @@ public class Loan implements ILoan
     @Override
     public boolean setInterestRate(double interestRate)
     {
-        if(interestRate > -1 && interestRate < 1)
+        if(interestRate > -1 && interestRate < 1 && this.interestRate == -1)
         {
             this.interestRate = interestRate;
 
@@ -98,7 +98,7 @@ public class Loan implements ILoan
     @Override
     public boolean setTerm(int term)
     {
-        if(term >= 1)
+        if(term >= 1 && this.term == -1)
         {
             this.term = term;
 
@@ -167,7 +167,7 @@ public class Loan implements ILoan
     @Override
     public boolean setRemainingTerm(int remainingTerm)
     {
-        if(remainingTerm >= 0)
+        if(remainingTerm >= 0 && this.remainingTerm == -1 || remainingTerm < this.remainingTerm)
         {
             this.remainingTerm = remainingTerm;
 
@@ -186,7 +186,7 @@ public class Loan implements ILoan
     @Override
     public boolean setRemainingBalance(double remainingBalance)
     {
-        if(remainingBalance >= 0)
+        if(remainingBalance >= 0 && this.remainingBalance == -1 || remainingBalance < this.remainingBalance)
         {
             this.remainingBalance = remainingBalance;
 

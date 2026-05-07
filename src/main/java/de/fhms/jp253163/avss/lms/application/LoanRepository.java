@@ -46,7 +46,7 @@ public class LoanRepository implements ILoanRepository
             }
         }
     }
-
+    
     @Override
     public ILoan createLoan(IBorrower borrower, double amount, double interestRate, int term)
     {
@@ -68,7 +68,15 @@ public class LoanRepository implements ILoanRepository
 
         try
         {
-            loan = new Loan(newLoanId, amount, interestRate, term, borrower);
+            // Making conditions when a customer is allowed to get a loan.
+            if(amount <= 1000 && borrower.getSchufaScore() > 0.95d || amount > 1000 && borrower.getSchufaScore() > 0.9d)
+            {
+                loan = new Loan(newLoanId, amount, interestRate, term, borrower);
+            }
+            else
+            {
+                return null;
+            }
 
             jsonFilepath = loanDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newLoanId + ".json";
 
