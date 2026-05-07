@@ -217,6 +217,11 @@ public class ConsoleWindow implements IConsoleWindow
     private void commandBorrower(Scanner scanner, String[] parameters)
     {
         String action = null;
+        String detail = null;
+        String number = null;
+        int nbmberConverted = -1;
+        String optionalMessage = null;
+        IBorrower[] borrowers = null;
 
         if(scanner != null && parameters != null && parameters.length > 1)
         {
@@ -232,7 +237,32 @@ public class ConsoleWindow implements IConsoleWindow
                 }
                 else if(action.equalsIgnoreCase("read"))
                 {
+                    if(parameters.length > 2)
+                    {
+                        detail = parameters[2];
 
+                        if(detail.equalsIgnoreCase("all"))
+                        {
+                            borrowers = borrowerRepository.readAllBorrowers();
+                        }
+                        else if(detail.equalsIgnoreCase("id") && parameters.length > 3)
+                        {
+                            try
+                            {
+                                number = parameters[3];
+
+                                nbmberConverted = Integer.parseInt(number);
+
+                                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(nbmberConverted) };
+                            }
+                            catch(NumberFormatException e)
+                            {
+                                optionalMessage = "That was no valid number!";
+                            }
+                        }
+                    }
+
+                    showBorrowerData(borrowers, optionalMessage);
 
                     return;
                 }
