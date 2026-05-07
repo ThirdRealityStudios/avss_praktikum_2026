@@ -143,15 +143,14 @@ public class JsonFileService<T> implements IJsonFileService<T>
     }
 
     /**
-     * @param file File to test the extension for.
-     * @param testableExtension File extension to test, ignoring case, without dot! (e.g. "JSON", "jpg", "jPeG" etc.)
-     * @return true if the given file has the given file extension, ignoring case. Otherwise, false.
+     * @param file File to test for a valid JSON extension
+     * @return true if the given file has a JSON file extension. Otherwise, false.
      */
-    private boolean hasExtensionIgnoreCase(File file, String testableExtension)
+    private boolean hasExtensionJSON(File file)
     {
         String extension = StringUtils.substringAfterLast(file.getName(), ".");
 
-        return extension.equalsIgnoreCase(testableExtension);
+        return extension.equalsIgnoreCase("json");
     }
 
     @Override
@@ -190,20 +189,18 @@ public class JsonFileService<T> implements IJsonFileService<T>
     {
         String filenameNaked = null;
 
-        if(numericallyNamedJson.isDirectory() || !hasExtensionIgnoreCase(numericallyNamedJson, "json"))
+        filenameNaked = StringUtils.substringBeforeLast(numericallyNamedJson.getName(), ".");
+
+        if(numericallyNamedJson.isDirectory() || !hasExtensionJSON(numericallyNamedJson) || !StringUtils.isNumeric(filenameNaked))
         {
+            System.out.println(numericallyNamedJson.getName() + " is NO valid JSON!!!");
+
             return null; // not an expected file ending on .json
         }
 
-        filenameNaked = StringUtils.substringBeforeLast(numericallyNamedJson.getName(), ".");
+        System.out.println(numericallyNamedJson.getName() + " is VALID NUMERIC JSON!!!");
 
-        if(StringUtils.isNumeric(filenameNaked))
-        {
-            // Return the numeric filename.
-            return filenameNaked;
-        }
-
-        return null;
+        return filenameNaked;
     }
 
     @Override
