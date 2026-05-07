@@ -206,7 +206,6 @@ public class JsonFileService<T> implements IJsonFileService<T>
     @Override
     public int getNewestNumberFromJsons(File numericJsonsDirectory) throws IOException
     {
-        /*
         File[] numericJsonFiles = listNumericJsonFiles(numericJsonsDirectory);
         String filenameNumber = null;
 
@@ -240,9 +239,5 @@ public class JsonFileService<T> implements IJsonFileService<T>
         }
 
         return highestIdFound;
-
-         */
-
-        return 7;
     }
 }
