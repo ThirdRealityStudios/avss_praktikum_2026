@@ -6,6 +6,8 @@ import de.fhms.jp253163.avss.lms.application.data.ResidentialAddress;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -159,5 +161,72 @@ public class BorrowerInputReader
         while(zip < 0 || zip > 99999);
 
         return new ResidentialAddress(street, no, zip, place);
+    }
+
+    public int[] readLoans()
+    {
+        ArrayList<Integer> loans = new ArrayList<>();
+        int[] loansArray = null;
+
+        String loanID = null, loanAmount = null;
+        int loanIDConverted = -1, loanAmountConverted = -1;
+        int index = 0;
+        boolean exit = false;
+
+        do
+        {
+            System.out.print("How many loans do you wish? (0 to abort): ");
+            loanAmount = scanner.nextLine();
+
+            loanAmountConverted = Integer.parseInt(loanAmount);
+
+            if(loanAmountConverted >= 0)
+            {
+                exit = true;
+            }
+        }
+        while(!exit);
+
+        exit = false;
+
+        if(loanAmountConverted == 0)
+            return null;
+
+        do
+        {
+            System.out.print((index + 1) + ". loan ID (at least zero): ");
+            loanID = scanner.nextLine();
+
+            try
+            {
+                loanIDConverted = Integer.parseInt(loanID);
+
+                if(!loans.contains(loanIDConverted) && loanIDConverted >= 0)
+                {
+                    loans.add(loanIDConverted);
+
+                    loanAmountConverted--;
+
+                    if(loanAmountConverted == 0)
+                        exit = true;
+                }
+            }
+            catch(NumberFormatException e)
+            {
+
+            }
+
+            index++;
+        }
+        while(!exit);
+
+        loansArray = new int[loans.size()];
+
+        for(int i = 0; i < loans.size(); i++)
+        {
+            loansArray[i] = loans.get(i);
+        }
+
+        return loansArray;
     }
 }

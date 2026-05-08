@@ -7,6 +7,8 @@ import de.fhms.jp253163.avss.lms.application.data.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ConsoleWindow implements IConsoleWindow
@@ -64,6 +66,8 @@ public class ConsoleWindow implements IConsoleWindow
         int numberConverted = -1;
         String optionalMessage = null;
         IBorrower[] borrowers = null;
+        Date birthday = null;
+        boolean errorOccurred = false;
 
         if(scanner != null && parameters != null && parameters.length > 1)
         {
@@ -133,39 +137,65 @@ public class ConsoleWindow implements IConsoleWindow
 
                         if(StringUtils.isNumeric(updateId) && !updateTarget.isEmpty())
                         {
-                            if(updateTarget.equalsIgnoreCase("firstname"))
-                            {
-
-                            }
-                            else if(updateTarget.equalsIgnoreCase("lastname"))
-                            {
-
-                            }
-                            else if(updateTarget.equalsIgnoreCase("birthday"))
-                            {
-
-                            }
-                            else if(updateTarget.equalsIgnoreCase("address"))
-                            {
-
-                            }
-                            else if(updateTarget.equalsIgnoreCase("schufa"))
-                            {
-                                // schufaRepository.readSchufaScore();
-                            }
-                            else if(updateTarget.equalsIgnoreCase("loans"))
-                            {
-                                
-                            }
-
                             try
                             {
                                 numberConverted = Integer.parseInt(updateId);
 
                                 borrowers = new IBorrower[]{ borrowerRepository.readBorrower(numberConverted) };
 
-                                if(borrowers[0] == null)
-                                    optionalMessage = "Borrower not found!";
+                                if(borrowers[0] != null)
+                                {
+                                    optionalMessage = "Update successful!";
+
+                                    if(updateTarget.equalsIgnoreCase("firstname") && !borrowers[0].setFirstname(borrowerInputReader.readFirstname()))
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                    else if(updateTarget.equalsIgnoreCase("lastname") && !borrowers[0].setLastname(borrowerInputReader.readLastname()))
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                    else if(updateTarget.equalsIgnoreCase("birthday"))
+                                    {
+                                        try
+                                        {
+                                            birthday = borrowerInputReader.readBirthday();
+
+                                            if(birthday == null || !borrowers[0].setDateOfBirth(birthday))
+                                            {
+                                                errorOccurred = true;
+                                            }
+                                        }
+                                        catch(ParseException e)
+                                        {
+                                            errorOccurred = true;
+                                        }
+                                    }
+                                    else if(updateTarget.equalsIgnoreCase("address") && !borrowers[0].setResidentialAddress(borrowerInputReader.readResidentialAddress()))
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                    else if(updateTarget.equalsIgnoreCase("schufa") && !borrowers[0].setSchufaScore(schufaRepository.readSchufaScore(borrowers[0].getId())))
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                    else if(updateTarget.equalsIgnoreCase("loans") && !borrowers[0].setLoans(borrowerInputReader.readLoans()))
+                                    {
+                                        errorOccurred = true;
+                                    }
+
+                                    if(errorOccurred)
+                                    {
+                                        optionalMessage = "Update failed!";
+                                    }
+                                    else
+                                    {
+                                        if(!borrowerRepository.updateBorrower(borrowers[0]))
+                                        {
+                                            optionalMessage = "Update failed! (Reason: file saving)";
+                                        }
+                                    }
+                                }
                             }
                             catch(NumberFormatException e)
                             {
@@ -173,10 +203,6 @@ public class ConsoleWindow implements IConsoleWindow
                             }
 
                             showBorrowerData(borrowers, optionalMessage);
-                        }
-                        else
-                        {
-
                         }
                     }
                 }
