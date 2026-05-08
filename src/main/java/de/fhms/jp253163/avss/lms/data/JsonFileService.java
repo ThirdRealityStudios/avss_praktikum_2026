@@ -193,12 +193,8 @@ public class JsonFileService<T> implements IJsonFileService<T>
 
         if(!numericallyNamedJson.isDirectory() && hasExtensionJSON(numericallyNamedJson) && StringUtils.isNumeric(filenameNaked))
         {
-            System.out.println(filenameNaked + " is VALID NUMERIC JSON!!!");
-
             return filenameNaked;
         }
-
-        System.out.println(filenameNaked + " is NO valid JSON!!!");
 
         return null; // not an expected file ending on .json
     }
@@ -228,8 +224,6 @@ public class JsonFileService<T> implements IJsonFileService<T>
 
             // Remember the JSON filename.
             newlyFoundId = Integer.parseInt(filenameNumber);
-
-            System.out.println("Converted " + newlyFoundId + (newlyFoundId == null ? " (because filenameNumber = " + filenameNumber + ")" : ""));
 
             if(newlyFoundId == null)
                 return -2;
