@@ -5,11 +5,8 @@ import de.fhms.jp253163.avss.lms.application.ILoanRepository;
 import de.fhms.jp253163.avss.lms.application.ISchufaRepository;
 import de.fhms.jp253163.avss.lms.application.data.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.File;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.Scanner;
 
 public class ConsoleWindow implements IConsoleWindow
@@ -18,12 +15,14 @@ public class ConsoleWindow implements IConsoleWindow
     private ILoanRepository loanRepository;
     private IBorrowerRepository borrowerRepository;
     private ISchufaRepository schufaRepository;
+    private CommandCreateBorrower commandCreateBorrower;
 
     public ConsoleWindow(File executionDirectory, ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
     {
         if(executionDirectory == null || !executionDirectory.isDirectory() || loanRepository == null || borrowerRepository == null || schufaRepository == null)
             throw new IllegalArgumentException("at least one argument is null or invalid!");
 
+        this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository);
         this.executionDirectory = executionDirectory;
         this.loanRepository = loanRepository;
         this.borrowerRepository = borrowerRepository;
@@ -52,172 +51,12 @@ public class ConsoleWindow implements IConsoleWindow
         return maxFoundId+1;
     }
 
-    private Date readBirthday(Scanner scanner) throws IllegalArgumentException, ParseException
-    {
-        int year = 0, month = 0, day = 0;
-        String yearText = null, monthText = null, dayText = null;
-        String unparsedDateString = null;
-
-        if(scanner == null)
-            throw new IllegalArgumentException("argument must not be null!");
-
-        do
-        {
-            System.out.print("Year of birth (at least 1910): ");
-            yearText = scanner.nextLine();
-
-            try
-            {
-                year = Integer.parseInt(yearText);
-            }
-            catch(NumberFormatException e)
-            {
-                year = -1;
-            }
-        }
-        while(year < 1910);
-
-        do
-        {
-            System.out.print("Month of birth (1 - 12): ");
-            monthText = scanner.nextLine();
-
-            try
-            {
-                month = Integer.parseInt(monthText);
-            }
-            catch(NumberFormatException e)
-            {
-                month = -1;
-            }
-        }
-        while(month < 1 || month > 12);
-
-        do
-        {
-            System.out.print("Day of birth (1 - 31): ");
-            dayText = scanner.nextLine();
-
-            try
-            {
-                day = Integer.parseInt(dayText);
-            }
-            catch(NumberFormatException e)
-            {
-                day = -1;
-            }
-        }
-        while(day < 1 || day > 31);
-
-        // Used help from here for Date parsing from a given format: https://www.baeldung.com/java-string-to-date
-
-        unparsedDateString = String.format("%04d", year) + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
-
-        return DateUtils.parseDate(unparsedDateString, "yyyy-MM-dd");
-    }
-
-    private IResidentialAddress readResidentialAddress(Scanner scanner) throws IllegalArgumentException
-    {
-        String street = null, no = null, place = null;
-        int zip = 0;
-        String zipText = null;
-
-        do
-        {
-            System.out.print("Street (max. 30 symbols): ");
-            street = scanner.nextLine();
-        }
-        while(street.isEmpty() || street.length() > 30);
-
-        do
-        {
-            System.out.print("No (max. 4 symbols): ");
-            no = scanner.nextLine();
-        }
-        while(no.isEmpty() || no.length() > 4);
-
-        do
-        {
-            System.out.print("Place (max. 30 symbols): ");
-            place = scanner.nextLine();
-        }
-        while(place.isEmpty() || place.length() > 30);
-
-        do
-        {
-            System.out.print("Zip code (exactly 5 symbols): ");
-            zipText = scanner.nextLine();
-
-            try
-            {
-                zip = Integer.parseInt(zipText);
-            }
-            catch(NumberFormatException e)
-            {
-                zip = -1;
-            }
-        }
-        while(zip < 0 || zip > 99999);
-
-        return new ResidentialAddress(street, no, zip, place);
-    }
-
-    private void commandCreateBorrower(Scanner scanner, String[] parameters)
-    {
-         IBorrower borrower = null;
-
-         String firstname = null, lastname = null;
-
-         Date dateOfBirth = null;
-
-         IResidentialAddress residentialAddress = null;
-
-         double schufaScore = 0;
-
-         ILoan[] loans = null;
-
-         if(parameters != null && parameters.length == 2)
-         {
-             do
-             {
-                 System.out.print("Firstname (3 - 20 symbols): ");
-                 firstname = scanner.nextLine();
-             }
-             while(firstname == null || firstname.length() < 2 || firstname.length() > 20);
-
-             do
-             {
-                 System.out.print("Lastname (3 - 20 symbols): ");
-                 lastname = scanner.nextLine();
-             }
-             while(lastname == null || lastname.length() < 2 || lastname.length() > 20);
-
-             try
-             {
-                 dateOfBirth = readBirthday(scanner);
-             }
-             catch(ParseException e)
-             {
-                 e.printStackTrace();
-
-                 return;
-             }
-
-             residentialAddress = readResidentialAddress(scanner);
-
-             borrower = borrowerRepository.createBorrower(firstname, lastname, dateOfBirth, residentialAddress, 0.9d);
-
-             if(borrower != null)
-                System.out.println("Created new borrower");
-             else
-                 System.out.println("Could not create borrower!");
-         }
-    }
-
     private void commandBorrower(Scanner scanner, String[] parameters)
     {
         String action = null;
         String detail = null;
+        String updateId = null;
+        String updateTarget = null;
         int numberConverted = -1;
         String optionalMessage = null;
         IBorrower[] borrowers = null;
@@ -230,7 +69,7 @@ public class ConsoleWindow implements IConsoleWindow
             {
                 if(action.equalsIgnoreCase("create"))
                 {
-                    commandCreateBorrower(scanner, parameters);
+                    commandCreateBorrower.run(scanner, parameters);
 
                     return;
                 }
@@ -283,9 +122,59 @@ public class ConsoleWindow implements IConsoleWindow
                 }
                 else if(action.equalsIgnoreCase("update"))
                 {
+                    if(parameters.length == 4)
+                    {
+                        updateId = parameters[2];
+                        updateTarget = parameters[3];
 
+                        if(StringUtils.isNumeric(updateId) && !updateTarget.isEmpty())
+                        {
+                            if(updateTarget.equalsIgnoreCase("firstname"))
+                            {
 
-                    return;
+                            }
+                            else if(updateTarget.equalsIgnoreCase("lastname"))
+                            {
+
+                            }
+                            else if(updateTarget.equalsIgnoreCase("birthday"))
+                            {
+
+                            }
+                            else if(updateTarget.equalsIgnoreCase("address"))
+                            {
+
+                            }
+                            else if(updateTarget.equalsIgnoreCase("schufa"))
+                            {
+
+                            }
+                            else if(updateTarget.equalsIgnoreCase("loans"))
+                            {
+                                
+                            }
+
+                            try
+                            {
+                                numberConverted = Integer.parseInt(updateId);
+
+                                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(numberConverted) };
+
+                                if(borrowers[0] == null)
+                                    optionalMessage = "Borrower not found!";
+                            }
+                            catch(NumberFormatException e)
+                            {
+                                optionalMessage = "That was no valid number!";
+                            }
+
+                            showBorrowerData(borrowers, optionalMessage);
+                        }
+                        else
+                        {
+
+                        }
+                    }
                 }
                 else if(action.equalsIgnoreCase("delete"))
                 {
