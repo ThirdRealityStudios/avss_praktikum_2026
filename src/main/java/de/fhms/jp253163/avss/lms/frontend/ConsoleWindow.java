@@ -40,23 +40,6 @@ public class ConsoleWindow implements IConsoleWindow
         System.out.println("Goodbye!");
     }
 
-    private int genNewBorrowerId()
-    {
-        IBorrower[] borrowers =  borrowerRepository.readAllBorrowers();
-
-        int maxFoundId = 0;
-
-        for(IBorrower borrower : borrowers)
-        {
-            if(borrower.getId() > maxFoundId)
-            {
-                maxFoundId = borrower.getId();
-            }
-        }
-
-        return maxFoundId+1;
-    }
-
     private void commandBorrower(Scanner scanner, String[] parameters)
     {
         String action = null;
