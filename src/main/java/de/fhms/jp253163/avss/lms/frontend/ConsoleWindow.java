@@ -16,13 +16,17 @@ public class ConsoleWindow implements IConsoleWindow
     private IBorrowerRepository borrowerRepository;
     private ISchufaRepository schufaRepository;
     private CommandCreateBorrower commandCreateBorrower;
+    private BorrowerInputReader borrowerInputReader;
+    private Scanner scanner;
 
     public ConsoleWindow(File executionDirectory, ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
     {
         if(executionDirectory == null || !executionDirectory.isDirectory() || loanRepository == null || borrowerRepository == null || schufaRepository == null)
             throw new IllegalArgumentException("at least one argument is null or invalid!");
 
-        this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository);
+        this.scanner = new Scanner(System.in);
+        this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, scanner);
+        this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository, borrowerInputReader, scanner);
         this.executionDirectory = executionDirectory;
         this.loanRepository = loanRepository;
         this.borrowerRepository = borrowerRepository;
@@ -69,7 +73,7 @@ public class ConsoleWindow implements IConsoleWindow
             {
                 if(action.equalsIgnoreCase("create"))
                 {
-                    commandCreateBorrower.run(scanner, parameters);
+                    commandCreateBorrower.run(parameters);
 
                     return;
                 }
@@ -147,7 +151,7 @@ public class ConsoleWindow implements IConsoleWindow
                             }
                             else if(updateTarget.equalsIgnoreCase("schufa"))
                             {
-
+                                // schufaRepository.readSchufaScore();
                             }
                             else if(updateTarget.equalsIgnoreCase("loans"))
                             {
