@@ -2,10 +2,7 @@ package de.fhms.jp253163.avss.lms.application.data;
 
 import org.apache.commons.lang3.time.DateUtils;
 
-import javax.swing.text.DateFormatter;
-import java.text.NumberFormat;
 import java.text.ParseException;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,9 +13,9 @@ public class Borrower implements IBorrower
     private Date birthday;
     private ResidentialAddress residentialAddress;
     private double schufaScore;
-    private Loan[] loans;
+    private int[] loans;
 
-    public Borrower(int id, String firstname, String lastname, Date birthday, IResidentialAddress residentialAddress, double schufaScore, ILoan[] loans) throws IllegalArgumentException
+    public Borrower(int id, String firstname, String lastname, Date birthday, IResidentialAddress residentialAddress, double schufaScore, int[] loans) throws IllegalArgumentException
     {
         IllegalArgumentException defaultException = new IllegalArgumentException("Given argument is invalid, null or has invalid format.");
 
@@ -176,25 +173,25 @@ public class Borrower implements IBorrower
     }
 
     @Override
-    public ILoan[] getLoans()
+    public int[] getLoans()
     {
         return Arrays.copyOf(loans, loans.length);
     }
 
     @Override
-    public boolean setLoans(ILoan[] loans)
+    public boolean setLoans(int[] loans)
     {
-        for(ILoan loan : loans)
+        for(int loan : loans)
         {
-            if(loan == null)
+            if(loan < 0)
                 return false;
         }
 
-        this.loans = new Loan[loans.length];
+        this.loans = new int[loans.length];
 
         for(int i = 0; i < loans.length; i++)
         {
-            this.loans[i] = new Loan(loans[i].getId(), loans[i].getAmount(), loans[i].getInterestRate(), loans[i].getTerm(), loans[i].getBorrower());
+            this.loans[i] = loans[i];
         }
 
         return true;
@@ -207,17 +204,15 @@ public class Borrower implements IBorrower
 
          int i = 0;
 
-        for(ILoan loan : getLoans())
+        for(int loan : getLoans())
         {
-            loansActive += "\n" + loan;
+            loansActive += "Loan with ID: " + loan + "\n";
             i++;
         }
 
-        if(i > 0)
-            loansActive += "\n";
-        else
+        if(i == 0)
             loansActive += "No loans active.\n";
 
-        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\nSchufaScore: " + String.format("%2.2f", getSchufaScore()) + "\n\nResidential Address:\n" + getResidentialAddress() + "\nLoans active:\n" + loansActive;
+        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\nSchufaScore: " + String.format("%2.2f", getSchufaScore()) + "\n\nResidential Address:\n" + getResidentialAddress() + "\nLoans active:\n\n" + loansActive;
     }
 }

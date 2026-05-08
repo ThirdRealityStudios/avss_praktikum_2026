@@ -77,14 +77,15 @@ public interface ILoan
      */
     public boolean setRemainingBalance(double remainingBalance);
 
-    public IBorrower getBorrower();
+    public int getBorrower();
     /**
-     * Sets the borrower of your loan.
+     * Sets the borrower of your loan,
+     * using the corresponding ID.
      * Can be used multiple times.
      * Simply because someone could instead take the responsibility to the corresponding loan (German: bürgen).
      *
-     * @param borrower Borrower to set.
-     * @return True if the borrower could be set. Otherwise, false (e.g. no valid borrower given, like null or so).
+     * @param borrower Borrower ID to set.
+     * @return True if the borrower could be set. Otherwise, false (e.g. no valid borrower given, like -2 or so).
      */
-    public boolean setBorrower(IBorrower borrower);
+    public boolean setBorrower(int borrower);
 }

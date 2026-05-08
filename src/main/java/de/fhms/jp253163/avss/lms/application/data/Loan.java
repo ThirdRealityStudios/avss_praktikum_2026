@@ -12,9 +12,9 @@ public class Loan implements ILoan
     private double amount = -1, remainingBalance = -1;
     private double interestRate = -1;
     private int term = -1, remainingTerm = -1;
-    private IBorrower borrower;
+    private int borrower;
 
-    public Loan(int id, double amount, double interestRate, int term, IBorrower borrower) throws IllegalArgumentException
+    public Loan(int id, double amount, double interestRate, int term, int borrower) throws IllegalArgumentException
     {
         IllegalArgumentException defaultException = new IllegalArgumentException("Given argument is invalid, null or has invalid format.");
 
@@ -199,15 +199,15 @@ public class Loan implements ILoan
     }
 
     @Override
-    public IBorrower getBorrower()
+    public int getBorrower()
     {
         return borrower;
     }
 
     @Override
-    public boolean setBorrower(IBorrower borrower)
+    public boolean setBorrower(int borrower)
     {
-        if(borrower == null)
+        if(borrower < 0)
         {
             return false;
         }

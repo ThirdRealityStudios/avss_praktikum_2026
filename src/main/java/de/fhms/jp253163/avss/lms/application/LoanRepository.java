@@ -1,12 +1,9 @@
 package de.fhms.jp253163.avss.lms.application;
 
-import de.fhms.jp253163.avss.lms.application.data.Borrower;
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.lms.application.data.Loan;
 import de.fhms.jp253163.avss.lms.data.IJsonFileService;
-import de.fhms.jp253163.avss.lms.data.JsonFileService;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -78,7 +75,7 @@ public class LoanRepository implements ILoanRepository
             // Making conditions when a customer is allowed to get a loan.
             if(amount <= 1000 && borrower.getSchufaScore() > 0.95d || amount > 1000 && borrower.getSchufaScore() > 0.9d)
             {
-                loan = new Loan(newLoanId, amount, interestRate, term, borrower);
+                loan = new Loan(newLoanId, amount, interestRate, term, borrower.getId());
             }
             else
             {

@@ -22,6 +22,6 @@ public interface IBorrower
     public double getSchufaScore();
     public boolean setSchufaScore(double schufaScore);
 
-    public ILoan[] getLoans();
-    public boolean setLoans(ILoan[] loans);
+    public int[] getLoans();
+    public boolean setLoans(int[] loans);
 }

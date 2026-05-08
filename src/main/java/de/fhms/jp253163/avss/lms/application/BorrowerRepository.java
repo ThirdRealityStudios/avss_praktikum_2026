@@ -2,7 +2,6 @@ package de.fhms.jp253163.avss.lms.application;
 
 import de.fhms.jp253163.avss.lms.application.data.Borrower;
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.lms.application.data.IResidentialAddress;
 import de.fhms.jp253163.avss.lms.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
 
@@ -90,7 +89,7 @@ public class BorrowerRepository implements IBorrowerRepository
 
         try
         {
-            borrower = new Borrower(newBorrowerId, firstname, lastname, dateOfBirth, residentialAddress, schufaScore, new ILoan[]{});
+            borrower = new Borrower(newBorrowerId, firstname, lastname, dateOfBirth, residentialAddress, schufaScore, new int[]{});
 
             jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newBorrowerId + ".json";
 
