@@ -12,7 +12,7 @@ public class LoanRepository implements ILoanRepository
 {
     private IJsonFileService<Loan> jsonFileService;
     private File loanDirectoryFile;
-    private SchufaRepository schufaRepository;
+    private ISchufaRepository schufaRepository;
 
     /**
      * Initializes the loan repository,
@@ -24,7 +24,7 @@ public class LoanRepository implements ILoanRepository
      * @throws IllegalArgumentException
      * @throws IOException
      */
-    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory, SchufaRepository schufaRepository) throws IllegalArgumentException, IOException
+    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory, ISchufaRepository schufaRepository) throws IllegalArgumentException, IOException
     {
         if (jsonFileService == null || executableDirectory == null || schufaRepository == null)
             throw new IllegalArgumentException("argument must not be null!");
