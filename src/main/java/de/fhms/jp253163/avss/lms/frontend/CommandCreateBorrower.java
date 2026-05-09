@@ -44,16 +44,10 @@ public class CommandCreateBorrower
             firstname = borrowerInputReader.readFirstname();
             lastname = borrowerInputReader.readLastname();
 
-            try
-            {
-                dateOfBirth = borrowerInputReader.readBirthday();
-            }
-            catch(ParseException e)
-            {
-                e.printStackTrace();
+            dateOfBirth = borrowerInputReader.readBirthday();
 
+            if(dateOfBirth == null)
                 return;
-            }
 
             residentialAddress = borrowerInputReader.readResidentialAddress();
             borrower = borrowerRepository.createBorrower(firstname, lastname, dateOfBirth, residentialAddress, 0.9d);

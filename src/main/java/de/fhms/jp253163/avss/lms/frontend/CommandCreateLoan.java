@@ -34,7 +34,9 @@ public class CommandCreateLoan
 
         if(parameters != null && parameters.length == 2)
         {
-            borrowerId = loanInputReader.readBorrower();
+            borrowerId = loanInputReader.readBorrowerID("Borrower ID (at least zero): ");
+
+
 
             loan = loanRepository.createLoan(borrowerId, amount, interestRate, term);
 

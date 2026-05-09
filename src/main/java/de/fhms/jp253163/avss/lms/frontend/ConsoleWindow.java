@@ -7,7 +7,6 @@ import de.fhms.jp253163.avss.lms.application.data.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -34,8 +33,9 @@ public class ConsoleWindow implements IConsoleWindow
             throw new IllegalArgumentException("at least one argument is null or invalid!");
 
         this.scanner = new Scanner(System.in);
-        this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, scanner);
         this.inputReader = new InputReader(scanner);
+
+        this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, inputReader);
         this.loanInputReader = new LoanInputReader(inputReader);
         this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository, borrowerInputReader, scanner);
         this.executionDirectory = executionDirectory;
@@ -149,16 +149,9 @@ public class ConsoleWindow implements IConsoleWindow
                                     }
                                     else if(updateTarget.equalsIgnoreCase("birthday"))
                                     {
-                                        try
-                                        {
-                                            birthday = borrowerInputReader.readBirthday();
+                                        birthday = borrowerInputReader.readBirthday();
 
-                                            if(birthday == null || !borrowers[0].setDateOfBirth(birthday))
-                                            {
-                                                errorOccurred = true;
-                                            }
-                                        }
-                                        catch(ParseException e)
+                                        if(birthday == null || !borrowers[0].setDateOfBirth(birthday))
                                         {
                                             errorOccurred = true;
                                         }
