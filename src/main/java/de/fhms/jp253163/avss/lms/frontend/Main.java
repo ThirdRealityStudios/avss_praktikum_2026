@@ -53,7 +53,7 @@ public class Main
         try
         {
             loanJsonFileService = new JsonFileService<Loan>(gsonBuilder);
-            loanRepository = new LoanRepository(loanJsonFileService, exeutableDirectory);
+            loanRepository = new LoanRepository(loanJsonFileService, exeutableDirectory, schufaRepository);
         }
         catch(IOException e)
         {
