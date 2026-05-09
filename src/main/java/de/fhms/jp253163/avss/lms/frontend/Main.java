@@ -26,6 +26,8 @@ public class Main
 
         ISchufaRepository schufaRepository = null;
 
+        schufaRepository = new SchufaRepository();
+
         executableDirectoryString = System.getProperty("user.dir");
 
         if(executableDirectoryString == null)
@@ -61,8 +63,6 @@ public class Main
 
             return;
         }
-
-        schufaRepository = new SchufaRepository();
 
         IConsoleWindow consoleWindow = new ConsoleWindow(exeutableDirectory, loanRepository, borrowerRepository, schufaRepository);
 

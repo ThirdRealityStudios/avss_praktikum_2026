@@ -9,18 +9,16 @@ public class CommandCreateLoan
 {
     private ILoanRepository loanRepository;
     private LoanInputReader loanInputReader;
-    private Scanner scanner;
 
-    public CommandCreateLoan(ILoanRepository loanRepository, LoanInputReader loanInputReader, Scanner scanner) throws IllegalArgumentException
+    public CommandCreateLoan(ILoanRepository loanRepository, LoanInputReader loanInputReader) throws IllegalArgumentException
     {
-        if(loanRepository == null || loanInputReader == null || scanner == null)
+        if(loanRepository == null || loanInputReader == null)
         {
             throw new IllegalArgumentException("at least one argument is null!");
         }
 
         this.loanRepository = loanRepository;
         this.loanInputReader = loanInputReader;
-        this.scanner = scanner;
     }
 
     public void run(String[] parameters)

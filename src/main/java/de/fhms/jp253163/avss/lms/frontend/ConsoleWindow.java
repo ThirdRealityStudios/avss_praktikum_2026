@@ -38,6 +38,7 @@ public class ConsoleWindow implements IConsoleWindow
         this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, inputReader);
         this.loanInputReader = new LoanInputReader(inputReader);
         this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository, borrowerInputReader, scanner);
+        this.commandCreateLoan = new CommandCreateLoan(loanRepository, loanInputReader);
         this.executionDirectory = executionDirectory;
         this.loanRepository = loanRepository;
         this.borrowerRepository = borrowerRepository;
