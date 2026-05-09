@@ -10,13 +10,13 @@ public interface ILoanRepository
      * especially Schufa score based.
      * If the loan could be given (= created in the system) then it will be saved persistently in a file.
      *
-     * @param borrower
+     * @param borrowerID
      * @param amount
      * @param interestRate
      * @param term
      * @return The loan (also saved persistently yet then). null if the loan was denied.
      */
-    public ILoan createLoan(IBorrower borrower, double amount, double interestRate, int term);
+    public ILoan createLoan(int borrowerID, double amount, double interestRate, int term);
 
     /**
      * Reads a loan from the system.

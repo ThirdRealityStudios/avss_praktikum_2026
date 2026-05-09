@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.lms.application;
 
-import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.lms.application.data.Loan;
 import de.fhms.jp253163.avss.lms.data.IJsonFileService;
@@ -13,6 +12,7 @@ public class LoanRepository implements ILoanRepository
 {
     private IJsonFileService<Loan> jsonFileService;
     private File loanDirectoryFile;
+    private SchufaRepository schufaRepository;
 
     /**
      * Initializes the loan repository,
@@ -20,15 +20,17 @@ public class LoanRepository implements ILoanRepository
      *
      * @param jsonFileService
      * @param executableDirectory
+     * @param schufaRepository
      * @throws IllegalArgumentException
      * @throws IOException
      */
-    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
+    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory, SchufaRepository schufaRepository) throws IllegalArgumentException, IOException
     {
-        if (jsonFileService == null || executableDirectory == null)
+        if (jsonFileService == null || executableDirectory == null || schufaRepository == null)
             throw new IllegalArgumentException("argument must not be null!");
 
         this.jsonFileService = jsonFileService;
+        this.schufaRepository = schufaRepository;
 
         // To locate the directory where all Borrower objects are stored.
         String loanPath = executableDirectory.getAbsolutePath() + FileSystems.getDefault().getSeparator() + "loan";
@@ -45,12 +47,13 @@ public class LoanRepository implements ILoanRepository
     }
     
     @Override
-    public ILoan createLoan(IBorrower borrower, double amount, double interestRate, int term)
+    public ILoan createLoan(int borrowerID, double amount, double interestRate, int term)
     {
         ILoan loan = null;
         String jsonFilepath = null;
 
         int currentLoadId = -1, newLoanId = -1;
+        double schufaScore = schufaRepository.readSchufaScore(borrowerID);
 
         try
         {
@@ -73,9 +76,9 @@ public class LoanRepository implements ILoanRepository
         try
         {
             // Making conditions when a customer is allowed to get a loan.
-            if(amount <= 1000 && borrower.getSchufaScore() > 0.95d || amount > 1000 && borrower.getSchufaScore() > 0.9d)
+            if(amount <= 1000 && schufaScore > 0.95d || amount > 1000 && schufaScore > 0.9d)
             {
-                loan = new Loan(newLoanId, amount, interestRate, term, borrower.getId());
+                loan = new Loan(newLoanId, amount, interestRate, term, borrowerID);
             }
             else
             {
