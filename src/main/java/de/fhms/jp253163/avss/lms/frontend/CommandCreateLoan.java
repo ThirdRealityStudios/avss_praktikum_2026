@@ -1,12 +1,8 @@
 package de.fhms.jp253163.avss.lms.frontend;
 
 import de.fhms.jp253163.avss.lms.application.ILoanRepository;
-import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
-import de.fhms.jp253163.avss.lms.application.data.IResidentialAddress;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.Scanner;
 
 public class CommandCreateLoan
@@ -29,7 +25,7 @@ public class CommandCreateLoan
 
     public void run(String[] parameters)
     {
-        IBorrower loan = null;
+        ILoan loan = null;
 
         int borrowerId = -1, term = -1;
         double amount = -1, interestRate = -1;

@@ -4,37 +4,23 @@ import java.util.Scanner;
 
 public class LoanInputReader
 {
-    private Scanner scanner;
+    private InputReader inputReader;
 
-    public LoanInputReader(Scanner scanner) throws IllegalArgumentException
+    public LoanInputReader(InputReader inputReader) throws IllegalArgumentException
     {
-        if(scanner == null)
+        if(inputReader == null)
             throw new IllegalArgumentException("argument can't be null");
 
-        this.scanner = scanner;
+        this.inputReader = inputReader;
     }
 
-    public int readBorrower()
+    public double readAmount()
     {
-        String borrower;
-        int borrowerConverted;
+        return inputReader.readDouble(0.01, Double.MAX_VALUE, "Loan amount: ");
+    }
 
-        do
-        {
-            System.out.print("Borrower ID (at least zero): ");
-            borrower = scanner.nextLine();
-
-            try
-            {
-                borrowerConverted = Integer.parseInt(borrower);
-            }
-            catch(NumberFormatException e)
-            {
-                borrowerConverted = -1;
-            }
-        }
-        while(borrowerConverted < 0);
-
-        return borrowerConverted;
+    public double readBorrowerID(String promptMessage)
+    {
+        return inputReader.readInteger(0, Integer.MAX_VALUE, "Borrower ID (at least zero): ");
     }
 }

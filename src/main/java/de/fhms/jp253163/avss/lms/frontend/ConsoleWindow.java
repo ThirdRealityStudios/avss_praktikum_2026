@@ -26,6 +26,7 @@ public class ConsoleWindow implements IConsoleWindow
     private LoanInputReader loanInputReader;
 
     private Scanner scanner;
+    private InputReader inputReader;
 
     public ConsoleWindow(File executionDirectory, ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
     {
@@ -34,7 +35,8 @@ public class ConsoleWindow implements IConsoleWindow
 
         this.scanner = new Scanner(System.in);
         this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, scanner);
-        this.loanInputReader = new LoanInputReader(scanner);
+        this.inputReader = new InputReader(scanner);
+        this.loanInputReader = new LoanInputReader(inputReader);
         this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository, borrowerInputReader, scanner);
         this.executionDirectory = executionDirectory;
         this.loanRepository = loanRepository;
