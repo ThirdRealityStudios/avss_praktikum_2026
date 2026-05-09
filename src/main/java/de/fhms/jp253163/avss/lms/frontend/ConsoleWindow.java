@@ -14,11 +14,17 @@ import java.util.Scanner;
 public class ConsoleWindow implements IConsoleWindow
 {
     private File executionDirectory;
+
     private ILoanRepository loanRepository;
     private IBorrowerRepository borrowerRepository;
     private ISchufaRepository schufaRepository;
+
     private CommandCreateBorrower commandCreateBorrower;
+    private CommandCreateLoan commandCreateLoan;
+
     private BorrowerInputReader borrowerInputReader;
+    private LoanInputReader loanInputReader;
+
     private Scanner scanner;
 
     public ConsoleWindow(File executionDirectory, ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
@@ -28,6 +34,7 @@ public class ConsoleWindow implements IConsoleWindow
 
         this.scanner = new Scanner(System.in);
         this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, scanner);
+        this.loanInputReader = new LoanInputReader(scanner);
         this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository, borrowerInputReader, scanner);
         this.executionDirectory = executionDirectory;
         this.loanRepository = loanRepository;
@@ -201,6 +208,144 @@ public class ConsoleWindow implements IConsoleWindow
         showHelp();
     }
 
+    private void commandLoan(Scanner scanner, String[] parameters)
+    {
+        String action = null;
+        String detail = null;
+        String updateId = null;
+        String updateTarget = null;
+        String targetId = null;
+        int numberConverted = -1;
+        String optionalMessage = null;
+        ILoan[] loans = null;
+        IBorrower newBorrower = null;
+        Date birthday = null;
+        boolean errorOccurred = false;
+
+        if(scanner != null && parameters != null && parameters.length > 1)
+        {
+            action = parameters[1];
+
+            if(action != null)
+            {
+                if(action.equalsIgnoreCase("create"))
+                {
+                    commandCreateLoan.run(parameters);
+
+                    return;
+                }
+                else if(action.equalsIgnoreCase("read"))
+                {
+                    if(parameters.length > 2)
+                    {
+                        detail = parameters[2];
+
+                        if(detail.equalsIgnoreCase("all"))
+                        {
+                            loans = loanRepository.readAllLoans();
+
+                            if(loans == null || loans.length == 0)
+                            {
+                                optionalMessage = "No loans yet created!";
+                            }
+
+                            showLoanData(loans, optionalMessage);
+                        }
+                        else if(StringUtils.isNumeric(detail))
+                        {
+                            try
+                            {
+                                numberConverted = Integer.parseInt(detail);
+
+                                loans = new ILoan[]{ loanRepository.readLoan(numberConverted) };
+
+                                if(loans[0] == null)
+                                    optionalMessage = "Loan not found!";
+                            }
+                            catch(NumberFormatException e)
+                            {
+                                optionalMessage = "That was no valid number!";
+                            }
+
+                            showLoanData(loans, optionalMessage);
+                        }
+                        else
+                        {
+                            showHelp();
+                        }
+                    }
+                    else
+                    {
+                        showHelp();
+                    }
+
+                    return;
+                }
+                else if(action.equalsIgnoreCase("update"))
+                {
+                    if(parameters.length == 5)
+                    {
+                        updateId = parameters[2];
+                        updateTarget = parameters[3]; // e.g. borrower ID of a loan object.
+                        targetId = parameters[4]; // e.g. 43
+
+                        if(StringUtils.isNumeric(updateId) && !updateTarget.isEmpty() && StringUtils.isNumeric(targetId))
+                        {
+                            try
+                            {
+                                numberConverted = Integer.parseInt(updateId);
+                                loans = new ILoan[]{ loanRepository.readLoan(numberConverted) };
+
+                                numberConverted = Integer.parseInt(targetId);
+                                newBorrower = borrowerRepository.readBorrower(numberConverted);
+
+                                if(loans[0] != null && newBorrower != null)
+                                {
+                                    optionalMessage = "Update successful!";
+
+                                    if(updateTarget.equalsIgnoreCase("borrower") && !loans[0].setBorrower(newBorrower.getId()))
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                    else if(updateTarget.equalsIgnoreCase("borrower") && !loans[0].setBorrower(numberConverted))
+                                    {
+                                        errorOccurred = true;
+                                    }
+
+                                    if(errorOccurred)
+                                    {
+                                        optionalMessage = "Update failed!";
+                                    }
+                                    else
+                                    {
+                                        if(!loanRepository.updateLoan(loans[0]))
+                                        {
+                                            optionalMessage = "Update failed! (Reason: file saving)";
+                                        }
+                                    }
+                                }
+                            }
+                            catch(NumberFormatException e)
+                            {
+                                optionalMessage = "That was no valid number!";
+                            }
+
+                            showLoanData(loans, optionalMessage);
+                        }
+                    }
+                }
+                else if(action.equalsIgnoreCase("delete"))
+                {
+
+
+                    return;
+                }
+            }
+        }
+
+        showHelp();
+    }
+
     private void commandInfo()
     {
         System.out.println("Info");
@@ -243,6 +388,12 @@ public class ConsoleWindow implements IConsoleWindow
 
                 return 0;
             }
+            else if(parameters[0].equalsIgnoreCase("/loan"))
+            {
+                commandLoan(scanner, parameters);
+
+                return 0;
+            }
             else
             {
                 showHelp();
@@ -250,7 +401,6 @@ public class ConsoleWindow implements IConsoleWindow
                 return 0;
             }
         }
-
     }
 
     @Override
@@ -317,6 +467,22 @@ public class ConsoleWindow implements IConsoleWindow
     @Override
     public void showLoanData(ILoan[] loans, String optionalMessage)
     {
+        String output = "";
 
+        if(optionalMessage != null && !optionalMessage.isEmpty())
+        {
+            output += optionalMessage;
+        }
+
+        if(loans != null)
+        {
+            for(ILoan loan : loans)
+            {
+                if(loan != null)
+                    output += loan + "\n";
+            }
+        }
+
+        System.out.println(output);
     }
 }
