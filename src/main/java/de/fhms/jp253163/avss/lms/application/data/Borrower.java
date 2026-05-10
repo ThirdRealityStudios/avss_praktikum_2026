@@ -213,6 +213,6 @@ public class Borrower implements IBorrower
         if(i == 0)
             loansActive += "No loans active.\n";
 
-        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\nSchufaScore: " + String.format("%2.2f", getSchufaScore()) + "\n\nResidential Address:\n" + getResidentialAddress() + "\nLoans active:\n\n" + loansActive;
+        return "ID: " + getId() + "\nFirstname: " + getFirstname() + "\nLastname: " + getLastname() + "\nBirthday: " + getDateOfBirth() + "\nSchufaScore: " + String.format("%2.2f", getSchufaScore() * 100) + "%\n\nResidential Address:\n" + getResidentialAddress() + "\nLoans active:\n\n" + loansActive;
     }
 }
