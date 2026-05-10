@@ -30,7 +30,7 @@ public class InputReader
 
             try
             {
-                numberConverted = Integer.parseInt(number);
+                numberConverted = Double.parseDouble(number);
             }
             catch(NumberFormatException e)
             {

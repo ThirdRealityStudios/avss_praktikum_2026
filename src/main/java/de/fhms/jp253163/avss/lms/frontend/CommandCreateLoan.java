@@ -3,8 +3,6 @@ package de.fhms.jp253163.avss.lms.frontend;
 import de.fhms.jp253163.avss.lms.application.ILoanRepository;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
 
-import java.util.Scanner;
-
 public class CommandCreateLoan
 {
     private ILoanRepository loanRepository;
@@ -34,7 +32,11 @@ public class CommandCreateLoan
         {
             borrowerId = loanInputReader.readBorrowerID("Borrower ID (at least zero): ");
 
+            amount = loanInputReader.readAmount();
 
+            interestRate = loanInputReader.readInterestRate();
+
+            term = loanInputReader.readTerm();
 
             loan = loanRepository.createLoan(borrowerId, amount, interestRate, term);
 
