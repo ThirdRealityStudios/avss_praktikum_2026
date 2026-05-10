@@ -6,6 +6,7 @@ import de.fhms.jp253163.avss.lms.application.ISchufaRepository;
 import de.fhms.jp253163.avss.lms.application.data.*;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.Date;
 import java.util.Scanner;
@@ -61,6 +62,7 @@ public class ConsoleWindow implements IConsoleWindow
         IBorrower[] borrowers = null;
         Date birthday = null;
         boolean errorOccurred = false;
+        int deleteId = -1;
 
         if(scanner != null && parameters != null && parameters.length > 1)
         {
@@ -192,9 +194,27 @@ public class ConsoleWindow implements IConsoleWindow
                         }
                     }
                 }
-                else if(action.equalsIgnoreCase("delete"))
+                else if(action.equalsIgnoreCase("delete") && parameters.length == 3 && StringUtils.isNumeric(parameters[2])) // e.g. /borrower delete [borrower ID]
                 {
+                    try
+                    {
+                        deleteId = Integer.parseInt(parameters[2]);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        return;
+                    }
 
+                    if(borrowerRepository.deleteBorrower(deleteId))
+                    {
+                        optionalMessage = "Deleted borrower successfully (had nothing left to pay off)";
+                    }
+                    else
+                    {
+                        optionalMessage = "Deleting borrower failed (has at least one loan active in the system still)";
+                    }
+
+                    showBorrowerData(new IBorrower[0], optionalMessage);
 
                     return;
                 }
@@ -217,6 +237,7 @@ public class ConsoleWindow implements IConsoleWindow
         IBorrower newBorrower = null;
         Date birthday = null;
         boolean errorOccurred = false;
+        int deleteId = -1;
 
         if(scanner != null && parameters != null && parameters.length >= 2)
         {
@@ -357,60 +378,30 @@ public class ConsoleWindow implements IConsoleWindow
                             }
                         }
                     }
-
-                        /*
-                        updateId = parameters[2]; // loan ID to update the corresponding loan
-                        updateTarget = parameters[3]; // e.g. loan ID of a loan object.
-                        targetId = parameters[4]; // e.g. 43
-
-                        if(StringUtils.isNumeric(updateId) && !updateTarget.isEmpty() && StringUtils.isNumeric(targetId))
-                        {
-                            try
-                            {
-                                numberConverted = Integer.parseInt(updateId);
-                                loans = new ILoan[]{ loanRepository.readLoan(numberConverted) };
-
-                                numberConverted = Integer.parseInt(targetId);
-                                newBorrower = borrowerRepository.readBorrower(numberConverted);
-
-                                if(loans[0] != null && newBorrower != null)
-                                {
-                                    optionalMessage = "Update successful!";
-
-                                    if(updateTarget.equalsIgnoreCase("borrower") && !loans[0].setBorrower(newBorrower.getId()))
-                                    {
-                                        errorOccurred = true;
-                                    }
-                                    else if(updateTarget.equalsIgnoreCase("borrower") && !loans[0].setBorrower(numberConverted))
-                                    {
-                                        errorOccurred = true;
-                                    }
-
-                                    if(errorOccurred)
-                                    {
-                                        optionalMessage = "Update failed!";
-                                    }
-                                    else
-                                    {
-                                        if(!loanRepository.updateLoan(loans[0]))
-                                        {
-                                            optionalMessage = "Update failed! (Reason: file saving)";
-                                        }
-                                    }
-                                }
-                            }
-                            catch(NumberFormatException e)
-                            {
-                                optionalMessage = "That was no valid number!";
-                            }
-
-                            showLoanData(loans, optionalMessage);
-                        }
-                        */
                 }
-                else if(action.equalsIgnoreCase("delete"))
+                else if(action.equalsIgnoreCase("delete") && parameters.length == 3 && StringUtils.isNumeric(parameters[2])) // e.g. /loan delete [loan ID]
                 {
+                    try
+                    {
+                        deleteId = Integer.parseInt(parameters[2]);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        return;
+                    }
 
+                    if(loanRepository.deleteLoan(deleteId))
+                    {
+                        optionalMessage = "Deleted loan successfully (paid off)";
+                    }
+                    else
+                    {
+                        optionalMessage = "Deleting loan failed (most likely not paid off yet)";
+                    }
+
+                    loans = new ILoan[0];
+
+                    showLoanData(loans, optionalMessage);
 
                     return;
                 }
