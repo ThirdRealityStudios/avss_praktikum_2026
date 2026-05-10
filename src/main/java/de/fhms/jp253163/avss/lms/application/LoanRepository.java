@@ -61,6 +61,7 @@ public class LoanRepository implements ILoanRepository
 
             if(currentLoadId == -2) // an error occurred while determining
             {
+                System.out.println("COULD NOT LOAD NEWEST JSON NUMBER (1)!");
                 return null;
             }
 
@@ -70,18 +71,20 @@ public class LoanRepository implements ILoanRepository
         {
             e.printStackTrace();
 
+            System.out.println("COULD NOT LOAD NEWEST JSON NUMBER (2)!");
             return null;
         }
 
         try
         {
             // Making conditions when a customer is allowed to get a loan.
-            if(amount <= 1000 && schufaScore > 0.95d || amount > 1000 && schufaScore > 0.9d)
+            if(amount <= 1000 && schufaScore > 0.95d || amount > 1000 && schufaScore >= 0.9d)
             {
                 loan = new Loan(newLoanId, amount, interestRate, term, borrowerID);
             }
             else
             {
+                System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT");
                 return null;
             }
 
@@ -92,6 +95,7 @@ public class LoanRepository implements ILoanRepository
         }
         catch(IllegalArgumentException e)
         {
+            System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT");
             return null;
         }
 
