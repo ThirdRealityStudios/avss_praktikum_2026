@@ -63,6 +63,7 @@ public class ConsoleWindow implements IConsoleWindow
         Date birthday = null;
         boolean errorOccurred = false;
         int deleteId = -1;
+        int[] loanIDs = null;
 
         if(scanner != null && parameters != null && parameters.length > 1)
         {
@@ -171,9 +172,14 @@ public class ConsoleWindow implements IConsoleWindow
                                     {
                                         errorOccurred = true;
                                     }
-                                    else if(updateTarget.equalsIgnoreCase("loans") && !borrowers[0].setLoans(borrowerInputReader.readLoans()))
+                                    else if(updateTarget.equalsIgnoreCase("loans"))
                                     {
-                                        errorOccurred = true;
+                                        loanIDs = borrowerInputReader.readLoans();
+
+                                        if(loanIDs == null || !borrowers[0].setLoans(loanIDs))
+                                        {
+                                            errorOccurred = true;
+                                        }
                                     }
 
                                     if(errorOccurred)
@@ -194,7 +200,9 @@ public class ConsoleWindow implements IConsoleWindow
                                 optionalMessage = "That was no valid number!";
                             }
 
-                            showBorrowerData(borrowers, optionalMessage);
+                            showBorrowerData(new IBorrower[0], optionalMessage);
+
+                            return;
                         }
                     }
                 }
