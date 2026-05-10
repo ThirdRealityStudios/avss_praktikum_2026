@@ -119,7 +119,7 @@ public class LoanRepository implements ILoanRepository
 
         if(ArrayUtils.indexOf(currentLoans, newLoanId) < 0) // check if the given loan is yet known to the borrower (normally shouldn't but never know)
         {
-            currentLoans = ArrayUtils.add(currentLoans, borrowerID);
+            currentLoans = ArrayUtils.add(currentLoans, newLoanId);
 
             borrower.setLoans(currentLoans);
 
