@@ -122,7 +122,7 @@ public class Loan implements ILoan
 
     private double getMonthlyInstallment()
     {
-        return (getAmount() + getTotalInterest()) / getTermInYears();
+        return (getAmount() + getTotalInterest()) / getTerm();
     }
 
     @Override
