@@ -1,18 +1,23 @@
 package de.fhms.jp253163.avss.lms.application;
 
+import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.lms.application.data.Loan;
 import de.fhms.jp253163.avss.lms.data.IJsonFileService;
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoanRepository implements ILoanRepository
 {
     private IJsonFileService<Loan> jsonFileService;
     private File loanDirectoryFile;
     private ISchufaRepository schufaRepository;
+    private IBorrowerRepository borrowerRepository;
 
     /**
      * Initializes the loan repository,
@@ -24,13 +29,14 @@ public class LoanRepository implements ILoanRepository
      * @throws IllegalArgumentException
      * @throws IOException
      */
-    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory, ISchufaRepository schufaRepository) throws IllegalArgumentException, IOException
+    public LoanRepository(IJsonFileService<Loan> jsonFileService, File executableDirectory, ISchufaRepository schufaRepository, IBorrowerRepository borrowerRepository) throws IllegalArgumentException, IOException
     {
-        if (jsonFileService == null || executableDirectory == null || schufaRepository == null)
+        if (jsonFileService == null || executableDirectory == null || schufaRepository == null || borrowerRepository == null)
             throw new IllegalArgumentException("argument must not be null!");
 
         this.jsonFileService = jsonFileService;
         this.schufaRepository = schufaRepository;
+        this.borrowerRepository = borrowerRepository;
 
         // To locate the directory where all Borrower objects are stored.
         String loanPath = executableDirectory.getAbsolutePath() + FileSystems.getDefault().getSeparator() + "loan";
@@ -50,10 +56,17 @@ public class LoanRepository implements ILoanRepository
     public ILoan createLoan(int borrowerID, double amount, double interestRate, int term)
     {
         ILoan loan = null;
+        IBorrower borrower = null;
+        int[] currentLoans = null;
         String jsonFilepath = null;
 
         int currentLoadId = -1, newLoanId = -1;
         double schufaScore = schufaRepository.readSchufaScore(borrowerID);
+
+        borrower = this.borrowerRepository.readBorrower(borrowerID);
+
+        if(borrower == null)
+            return null; // the borrower account does not exist (yet), so loan can't be given (loan denied).
 
         try
         {
@@ -97,6 +110,23 @@ public class LoanRepository implements ILoanRepository
         {
             System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT (2)");
             return null;
+        }
+
+        currentLoans = borrower.getLoans();
+
+        if(currentLoans == null)
+            return null;
+
+        if(ArrayUtils.indexOf(currentLoans, newLoanId) < 0) // check if the given loan is yet known to the borrower (normally shouldn't but never know)
+        {
+            currentLoans = ArrayUtils.add(currentLoans, borrowerID);
+
+            borrower.setLoans(currentLoans);
+
+            if(!borrowerRepository.updateBorrower(borrower))
+            {
+                return null; // Could not add the given loan to the borrower in the system.
+            }
         }
 
         return loan;
@@ -172,6 +202,51 @@ public class LoanRepository implements ILoanRepository
     {
         File[] loanFiles = null;
         String jsonFilename = null;
+
+        ILoan oldLoan = null;
+        IBorrower oldBorrower = null;
+        IBorrower newBorrower = null;
+
+        oldLoan = readLoan(loan.getId());
+
+        if(oldLoan == null)
+            return false; // Loan not known to the system, so update denied.
+
+        oldBorrower = borrowerRepository.readBorrower(oldLoan.getBorrower());
+
+        if(oldBorrower == null)
+            return false; // Borrower of the loan can't be found, so update denied.
+
+        if(loan.getBorrower() != oldLoan.getBorrower())
+        {
+            // See if the new borrower even exists (e.g. if your dad wants to pay your loan instead - but he needs to be known to the system first)
+            newBorrower = borrowerRepository.readBorrower(loan.getId());
+
+            if(newBorrower == null)
+                return false; // New borrower does not exist in the system, so update denied.
+
+            // From this point, all borrowers do exist in the system or are valid.
+
+            if(!oldBorrower.setLoans( ArrayUtils.removeAllOccurrences(oldBorrower.getLoans(), loan.getId()) ))
+            {
+                return false; // Could not remove the loan from the old borrower; in order to give the payment responsibility to a new borrower.
+            }
+
+            if(!borrowerRepository.updateBorrower(oldBorrower))
+            {
+                return false; // Could not update the old borrower, persistently seen.
+            }
+
+            if(!newBorrower.setLoans( ArrayUtils.add(newBorrower.getLoans(), loan.getId()) ))
+            {
+                return false; // Could not add the loan to the new borrower (which should pay the loan instead of the old borrower).
+            }
+
+            if(!borrowerRepository.updateBorrower(newBorrower))
+            {
+                return false; // Could not physically or persistently write the changes to the hard-disk.
+            }
+        }
 
         try
         {
