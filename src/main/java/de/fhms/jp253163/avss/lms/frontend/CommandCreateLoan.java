@@ -43,7 +43,7 @@ public class CommandCreateLoan
             if(loan != null)
                 System.out.println("Created new loan");
             else
-                System.out.println("Could not create loan!");
+                System.out.println("Could not create loan!\nID: " + borrowerId + "\nAmount: " + amount + "\nInterest rate: " + interestRate + "\nTerm: " + term);
         }
     }
 }
