@@ -538,11 +538,11 @@ public class ConsoleWindow implements IConsoleWindow
             for(IBorrower borrower : borrowers)
             {
                 if(borrower != null)
-                    output += borrower + "\n\n";
+                    output += borrower + "\n";
             }
         }
 
-        System.out.println(output);
+        System.out.print(output);
     }
 
     @Override
@@ -560,10 +560,10 @@ public class ConsoleWindow implements IConsoleWindow
             for(ILoan loan : loans)
             {
                 if(loan != null)
-                    output += loan + "\n\n";
+                    output += loan + "\n";
             }
         }
 
-        System.out.println(output);
+        System.out.print(output);
     }
 }
