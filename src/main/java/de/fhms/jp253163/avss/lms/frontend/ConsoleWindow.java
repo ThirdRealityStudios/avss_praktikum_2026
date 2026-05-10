@@ -531,7 +531,7 @@ public class ConsoleWindow implements IConsoleWindow
             for(IBorrower borrower : borrowers)
             {
                 if(borrower != null)
-                    output += borrower + "\n";
+                    output += borrower + "\n\n";
             }
         }
 
@@ -553,7 +553,7 @@ public class ConsoleWindow implements IConsoleWindow
             for(ILoan loan : loans)
             {
                 if(loan != null)
-                    output += loan + "\n";
+                    output += loan + "\n\n";
             }
         }
 
