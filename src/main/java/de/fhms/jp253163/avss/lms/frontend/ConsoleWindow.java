@@ -92,6 +92,8 @@ public class ConsoleWindow implements IConsoleWindow
                             }
 
                             showBorrowerData(borrowers, optionalMessage);
+
+                            return;
                         }
                         else if(StringUtils.isNumeric(detail))
                         {
@@ -267,6 +269,8 @@ public class ConsoleWindow implements IConsoleWindow
                         }
 
                         showLoanData(loans, optionalMessage);
+
+                        return;
                     }
                     else if(StringUtils.isNumeric(detail))
                     {
@@ -285,6 +289,8 @@ public class ConsoleWindow implements IConsoleWindow
                         }
 
                         showLoanData(loans, optionalMessage);
+
+                        return;
                     }
                     else
                     {
