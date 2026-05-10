@@ -120,14 +120,9 @@ public class Loan implements ILoan
         return getAmount() * (Math.pow(1 + getInterestRate(), getTermInYears())) - getAmount();
     }
 
-    private double getMonthlyInterest()
-    {
-        return getTotalInterest() / getTermInYears();
-    }
-
     private double getMonthlyInstallment()
     {
-        return getAmount() / getTerm() + getMonthlyInterest();
+        return (getAmount() + getTotalInterest()) / getTermInYears();
     }
 
     @Override
