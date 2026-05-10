@@ -84,7 +84,7 @@ public class LoanRepository implements ILoanRepository
             }
             else
             {
-                System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT");
+                System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT (1)");
                 return null;
             }
 
@@ -95,7 +95,7 @@ public class LoanRepository implements ILoanRepository
         }
         catch(IllegalArgumentException e)
         {
-            System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT");
+            System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT (2)");
             return null;
         }
 
