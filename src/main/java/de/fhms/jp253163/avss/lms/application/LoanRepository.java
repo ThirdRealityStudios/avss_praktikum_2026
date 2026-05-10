@@ -283,14 +283,30 @@ public class LoanRepository implements ILoanRepository
     public boolean deleteLoan(int id)
     {
         ILoan loan = null;
+        IBorrower borrower = null;
 
         loan = readLoan(id);
 
         if(loan == null)
             return false; // Loan not found in the system. Is this an error?
 
-        if(loan.getRemainingBalance() < 0.01)
+        if(loan.getRemainingBalance() < 0.01) // It is legitimate to delete the loan (paid off)
         {
+            borrower = borrowerRepository.readBorrower(loan.getBorrower());
+
+            if(borrower == null)
+                return false; // For some reason cannot find the borrower from the loan in the system, so deleting failed..
+
+            if(!borrower.setLoans( ArrayUtils.removeAllOccurrences(borrower.getLoans(), id) ))
+            {
+                return false; // Could not remove the loan from the borrower for some reason.
+            }
+
+            if(!borrowerRepository.updateBorrower(borrower))
+            {
+                return false; // Could not write the changes on hard-disk for the removed loan from the borrower.
+            }
+
             String filepath = loanDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
 
             return jsonFileService.delete(filepath);
