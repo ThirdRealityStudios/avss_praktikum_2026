@@ -110,6 +110,8 @@ public class ConsoleWindow implements IConsoleWindow
                             }
 
                             showBorrowerData(borrowers, optionalMessage);
+
+                            return;
                         }
                         else
                         {
