@@ -282,8 +282,22 @@ public class LoanRepository implements ILoanRepository
     @Override
     public boolean deleteLoan(int id)
     {
-        String filepath = loanDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
+        ILoan loan = null;
 
-        return jsonFileService.delete(filepath);
+        loan = readLoan(id);
+
+        if(loan == null)
+            return false; // Loan not found in the system. Is this an error?
+
+        if(loan.getRemainingBalance() < 0.01)
+        {
+            String filepath = loanDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
+
+            return jsonFileService.delete(filepath);
+        }
+        else
+        {
+            return false; // Still something left pay off from the borrower (at least 1 cent).
+        }
     }
 }

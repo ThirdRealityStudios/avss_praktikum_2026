@@ -4,6 +4,7 @@ import de.fhms.jp253163.avss.lms.application.data.Borrower;
 import de.fhms.jp253163.avss.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.lms.application.data.IResidentialAddress;
 import de.fhms.jp253163.avss.lms.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -228,8 +229,19 @@ public class BorrowerRepository implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
-        String filepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
+        IBorrower borrower = null;
 
-        return jsonFileService.delete(filepath);
+        borrower = readBorrower(id);
+
+        if(borrower.getLoans().length == 0) // If no loan left to pay off, then delete the borrower (account) from the system.
+        {
+            String filepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
+
+            return jsonFileService.delete(filepath);
+        }
+        else
+        {
+            return false; // The corresponding borrower still has something to pay off.
+        }
     }
 }
