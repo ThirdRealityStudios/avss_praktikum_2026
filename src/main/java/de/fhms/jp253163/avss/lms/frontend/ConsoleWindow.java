@@ -218,7 +218,7 @@ public class ConsoleWindow implements IConsoleWindow
         Date birthday = null;
         boolean errorOccurred = false;
 
-        if(scanner != null && parameters != null && parameters.length > 1)
+        if(scanner != null && parameters != null && parameters.length >= 2)
         {
             action = parameters[1];
 
@@ -230,59 +230,137 @@ public class ConsoleWindow implements IConsoleWindow
 
                     return;
                 }
-                else if(action.equalsIgnoreCase("read"))
+                else if(action.equalsIgnoreCase("read") && parameters.length >= 3)
                 {
-                    if(parameters.length > 2)
+                    detail = parameters[2];
+
+                    if(detail.equalsIgnoreCase("all"))
                     {
-                        detail = parameters[2];
+                        loans = loanRepository.readAllLoans();
 
-                        if(detail.equalsIgnoreCase("all"))
+                        if(loans == null || loans.length == 0)
                         {
-                            loans = loanRepository.readAllLoans();
-
-                            if(loans == null || loans.length == 0)
-                            {
-                                optionalMessage = "No loans yet created!";
-                            }
-
-                            showLoanData(loans, optionalMessage);
+                            optionalMessage = "No loans yet created!";
                         }
-                        else if(StringUtils.isNumeric(detail))
+
+                        showLoanData(loans, optionalMessage);
+                    }
+                    else if(StringUtils.isNumeric(detail))
+                    {
+                        try
                         {
-                            try
-                            {
-                                numberConverted = Integer.parseInt(detail);
+                            numberConverted = Integer.parseInt(detail);
 
-                                loans = new ILoan[]{ loanRepository.readLoan(numberConverted) };
+                            loans = new ILoan[]{ loanRepository.readLoan(numberConverted) };
 
-                                if(loans[0] == null)
-                                    optionalMessage = "Loan not found!";
-                            }
-                            catch(NumberFormatException e)
-                            {
-                                optionalMessage = "That was no valid number!";
-                            }
-
-                            showLoanData(loans, optionalMessage);
+                            if(loans[0] == null)
+                                optionalMessage = "Loan not found!";
                         }
-                        else
+                        catch(NumberFormatException e)
                         {
-                            showHelp();
+                            optionalMessage = "That was no valid number!";
                         }
+
+                        showLoanData(loans, optionalMessage);
                     }
                     else
                     {
                         showHelp();
                     }
-
-                    return;
                 }
-                else if(action.equalsIgnoreCase("update"))
+                else if(parameters.length == 5 && action.equalsIgnoreCase("update"))
                 {
-                    if(parameters.length == 5)
+                    /**
+                     *      /loan update [loan ID] borrower [new borrower ID]
+                     *
+                     *      /loan update [loan ID] book installment
+                     */
+
+                    String loanIDParam = parameters[2],
+                            loanAction = parameters[3],
+                            loanBorrowerID = parameters[4],
+                            loanBookAction = parameters[4];
+
+                    int loanIDParamConverted = -1;
+
+                    ILoan loan = null;
+
+                    int loanBorrowerIDConverted = -1;
+
+                    if(StringUtils.isNumeric(loanIDParam))
                     {
-                        updateId = parameters[2];
-                        updateTarget = parameters[3]; // e.g. borrower ID of a loan object.
+                        try
+                        {
+                            loanIDParamConverted = Integer.parseInt(loanIDParam);
+
+                            loan = loanRepository.readLoan(loanIDParamConverted);
+
+                            if(loan == null)
+                                throw new NumberFormatException(); // little "workaround", although NumberFormatException does not quite fit.
+                        }
+                        catch(NumberFormatException e)
+                        {
+                            optionalMessage = "Not a valid number for loan ID or loan could not be loaded!";
+
+                            showLoanData(new ILoan[0], optionalMessage);
+
+                            return;
+                        }
+
+                        if(loanAction.equalsIgnoreCase("borrower"))
+                        {
+                            if(StringUtils.isNumeric(loanBorrowerID))
+                            {
+                                try
+                                {
+                                    loanBorrowerIDConverted = Integer.parseInt(loanBorrowerID);
+
+                                    loan.setBorrower(loanBorrowerIDConverted);
+
+                                    if(loanRepository.updateLoan(loan))
+                                    {
+                                        optionalMessage = "Updated loan successfully (changed borrower)!";
+
+                                        showLoanData(new ILoan[]{ loan }, optionalMessage);
+
+                                        return;
+                                    }
+                                }
+                                catch(NumberFormatException e)
+                                {
+                                    // Should show "Invalid value" or smth.
+                                    optionalMessage = "That is not a valid number for a borrower ID!";
+
+                                    showLoanData(new ILoan[0], optionalMessage);
+
+                                    return;
+                                }
+                            }
+                        }
+                        else if(loanAction.equalsIgnoreCase("book"))
+                        {
+                            if(loanBookAction.equalsIgnoreCase("installment"))
+                            {
+                                if(loan.payInstallment() && loanRepository.updateLoan(loan))
+                                {
+                                    optionalMessage = "Updated loan successfully (booked installment)";
+                                }
+                                else
+                                {
+                                    optionalMessage = "Could not book the installment!";
+                                    loan = null;
+                                }
+
+                                showLoanData(new ILoan[]{ loan }, optionalMessage);
+
+                                return;
+                            }
+                        }
+                    }
+
+                        /*
+                        updateId = parameters[2]; // loan ID to update the corresponding loan
+                        updateTarget = parameters[3]; // e.g. loan ID of a loan object.
                         targetId = parameters[4]; // e.g. 43
 
                         if(StringUtils.isNumeric(updateId) && !updateTarget.isEmpty() && StringUtils.isNumeric(targetId))
@@ -328,7 +406,7 @@ public class ConsoleWindow implements IConsoleWindow
 
                             showLoanData(loans, optionalMessage);
                         }
-                    }
+                        */
                 }
                 else if(action.equalsIgnoreCase("delete"))
                 {
