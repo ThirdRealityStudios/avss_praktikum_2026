@@ -78,13 +78,13 @@ public class LoanRepository implements ILoanRepository
         try
         {
             // Making conditions when a customer is allowed to get a loan.
-            if(amount <= 1000 && schufaScore > 0.95d || amount > 1000 && schufaScore >= 0.9d)
+            if(amount <= 1000 && schufaScore >= 0.90d || amount > 1000 && schufaScore >= 0.95d)
             {
                 loan = new Loan(newLoanId, amount, interestRate, term, borrowerID);
             }
             else
             {
-                System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT (1)");
+                System.out.println("Loan denied (missing creditworthiness)");
                 return null;
             }
 
