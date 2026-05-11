@@ -20,8 +20,8 @@ with following content:
 	<servers>
 		<server>
 			<id>gitlab-fhms</id>
-			<username>gitlab+deploy-token</username>
-			<password>...</password>
+			<username>gitlab+deploy-token-640</username> <!-- Begins with something like: "gitlab+deploy-token". Open GitLab, open your project (e.g. "praktikum_ss_26"), watch the left sidebar, click on Settings -> Repository -> Deploy tokens -> Add Token / use your yet generated token -->
+			<password>gldt-cUXMcH3xAjnNxcyrxC5W</password> <!-- Was generated with username together - Copy it! Can't be restored! -->
 		</server>
 	</servers>
 </settings>
