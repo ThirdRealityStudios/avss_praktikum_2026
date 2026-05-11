@@ -16,31 +16,11 @@
 
     <dependencies>
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <dependency>
-            <groupId>de.fhms.jp253163.avss.lms.data</groupId>
-            <artifactId>data-layer</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>de.fhms.jp253163.avss.lms.application</groupId>
-            <artifactId>application-layer</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>de.fhms.jp253163.avss.lms.frontend</groupId>
             <artifactId>frontend-layer</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.20.0</version>
             <scope>compile</scope>
         </dependency>
 
