@@ -16,12 +16,6 @@
 
     <dependencies>
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <dependency>
-            <groupId>de.fhms.jp253163.avss.lms.data</groupId>
-            <artifactId>data-layer</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>de.fhms.jp253163.avss.lms.application</groupId>
