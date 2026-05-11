@@ -1,8 +1,12 @@
+package de.fhms.jp253163.avss.lms;
+
 import com.google.gson.GsonBuilder;
 import de.fhms.jp253163.avss.lms.application.*;
 import de.fhms.jp253163.avss.lms.application.data.*;
 import de.fhms.jp253163.avss.lms.data.IJsonFileService;
 import de.fhms.jp253163.avss.lms.data.JsonFileService;
+import de.fhms.jp253163.avss.lms.frontend.ConsoleWindow;
+import de.fhms.jp253163.avss.lms.frontend.IConsoleWindow;
 
 import java.io.File;
 import java.io.IOException;
