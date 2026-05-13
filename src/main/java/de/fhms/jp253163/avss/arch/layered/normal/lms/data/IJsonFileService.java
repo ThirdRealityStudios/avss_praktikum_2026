@@ -1,4 +1,4 @@
-package de.fhms.avss.arch.layered.normal.lms.data;
+package de.fhms.jp253163.avss.arch.layered.normal.lms.data;
 
 import java.io.File;
 import java.io.IOException;
