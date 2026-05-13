@@ -18,3 +18,7 @@ glpat-IkCQeZPpDcGwEnkG7dYQCm86MQp1OjN0Nwk.01.0z01ekrbd
 ### Component Diagram
 
 ![alt text](artifact/Component_Diagram.jpg)
+
+### Exercise PDF
+
+[Download here](artifact/26SS-SWA-P02%20Schichtenarchitekturen.pdf)
