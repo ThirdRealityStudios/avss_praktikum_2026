@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.fhms.jp253163.avss.lms.application</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
-    <artifactId>application-layer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>de.fhms.jp253163.avss.arch.layered.normal.lms.application</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
+    <artifactId>application-tier</artifactId>
+    <version>1.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source> <!-- 25 represents the Java language level - it should be identical with the value taken in the project settings -->
@@ -17,9 +17,9 @@
     <dependencies>
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
-            <groupId>de.fhms.jp253163.avss.lms.data</groupId>
-            <artifactId>data-layer</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>de.fhms.jp253163.avss.arch.layered.normal.lms.data</groupId>
+            <artifactId>data-tier</artifactId>
+            <version>1.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
