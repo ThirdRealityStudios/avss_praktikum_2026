@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.fhms.jp253163.avss.architecture.layered.normal.lms</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
+    <groupId>de.fhms.jp253163.avss.arch.layered.normal.lms</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
     <artifactId>executable-standalone</artifactId> <!-- This is basically how the resulting JAR should be named after successful deploy - whereas the JAR name will not only contain this but also other automatically generated information, e.g. date and time -->
     <version>1.1-SNAPSHOT</version>
 
@@ -18,7 +18,7 @@
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 
         <dependency>
-            <groupId>de.fhms.jp253163.avss.architecture.layered.normal.lms.presentation</groupId>
+            <groupId>de.fhms.jp253163.avss.arch.layered.normal.lms.presentation</groupId>
             <artifactId>presentation-tier</artifactId>
             <version>1.1-SNAPSHOT</version>
             <scope>compile</scope>
@@ -52,7 +52,7 @@
 
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>de.fhms.jp253163.avss.architecture.layered.normal.lms.Main</mainClass> <!-- This dotted path notation should point to the de.fhms.jp253163.avss.lms.Main class, so always something like "my.project.de.fhms.jp253163.avss.lms.Main" -->
+                                    <mainClass>de.fhms.jp253163.avss.arch.layered.normal.lms.Main</mainClass> <!-- This dotted path notation should point to the de.fhms.jp253163.avss.lms.Main class, so always something like "my.project.de.fhms.jp253163.avss.lms.Main" -->
                                 </transformer>
                             </transformers>
                         </configuration>

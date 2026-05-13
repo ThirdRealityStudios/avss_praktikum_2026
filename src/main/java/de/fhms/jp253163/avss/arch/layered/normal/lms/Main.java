@@ -1,12 +1,12 @@
-package de.fhms.jp253163.avss.architecture.layered.normal.lms;
+package de.fhms.jp253163.avss.arch.layered.normal.lms;
 
 import com.google.gson.GsonBuilder;
-import de.fhms.jp253163.avss.architecture.layered.normal.lms.application.*;
-import de.fhms.jp253163.avss.architecture.layered.normal.lms.application.data.*;
-import de.fhms.jp253163.avss.architecture.layered.normal.lms.data.IJsonFileService;
-import de.fhms.jp253163.avss.architecture.layered.normal.lms.data.JsonFileService;
-import de.fhms.jp253163.avss.architecture.layered.normal.lms.presentation.ConsoleWindow;
-import de.fhms.jp253163.avss.architecture.layered.normal.lms.presentation.IConsoleWindow;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.application.*;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.*;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.data.IJsonFileService;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.data.JsonFileService;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.ConsoleWindow;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.IConsoleWindow;
 
 import java.io.File;
 import java.io.IOException;
