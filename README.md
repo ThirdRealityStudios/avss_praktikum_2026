@@ -1,20 +1,15 @@
-# Praktikum SS 2026 Termin 1 (Loan Management System)
+# Praktikum SS 2026 Termin 2 (Loan Management System)
 
 ## About
 
-Goal is it to implement a loan management system;
-of course very simplified in order to only show the rough business process.
-Appointment 1 (Termin 1) requires a console frontend.
+Goal is it to advance the loan management system from the 1st appointment.
 
 ## Getting started
 
 ### Project Structure
 
-There are 3 branches which do represent the whole project for implementation:
-
-- Darstellung (frontend layer component)
-- Anwendung (application layer component)
-- Datenhaltung (data layer component)
+According to the appointment exercise,
+a Layered Architecture / Schichtenarchitektur is required in different implementations / ways.
 
 ### GitLab Token For IDE Use
 
