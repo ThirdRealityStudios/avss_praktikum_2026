@@ -1,4 +1,4 @@
-# Praktikum SS 2026 Termin 2 (Data Tier Component)
+# Praktikum SS 2026 Termin 2 (Data Tier Component = DateiSpeicher)
 
 Contains the persistent data access logic,
 including serialization.
