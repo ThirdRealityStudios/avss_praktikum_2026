@@ -516,8 +516,16 @@ public class ConsoleWindow implements IConsoleWindow
         System.out.println("Help");
         System.out.println("-----");
         System.out.println();
-        System.out.println("1. /borrower {create, read [ID], update [ID], delete [ID]}");
-        System.out.println("2. /loan {create, read [ID], update [ID], delete [ID]}");
+        System.out.println("1. /borrower");
+        System.out.println("\t\tcreate");
+        System.out.println("\t\tread [ID]");
+        System.out.println("\t\tupdate [ID] [firstname | lastname | address | birthday | schufa | loans]");
+        System.out.println("\t\tdelete [ID]");
+        System.out.println("2. /loan");
+        System.out.println("\t\tcreate");
+        System.out.println("\t\tread [ID]");
+        System.out.println("\t\tupdate [ID] [borrower [ID] | book installment]");
+        System.out.println("\t\tdelete [ID]");
         System.out.println("3. /info    Runtime details");
         System.out.println("4. /exit");
         System.out.println();
