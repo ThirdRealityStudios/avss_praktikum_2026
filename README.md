@@ -1,7 +1,8 @@
-# Praktikum SS 2026 Termin 1 (Datenhaltung-Komponente)
+# Praktikum SS 2026 Termin 2 (Data Tier Component)
 
 Contains the persistent data access logic,
 including serialization.
+So it is mostly the same as in appointment 1 because there it was also layered architecture (by coincidence).
 
 ## GitLab Token For IDE Use
 
