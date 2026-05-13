@@ -1,4 +1,4 @@
-# Praktikum SS 2026 Termin 2 (Presentation Tier)
+# Praktikum SS 2026 Termin 2 (Presentation Tier = Terminal)
 
 ## GitLab Token For IDE Use
 
