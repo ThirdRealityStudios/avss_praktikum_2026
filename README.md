@@ -25,7 +25,7 @@ glpat-IkCQeZPpDcGwEnkG7dYQCm86MQp1OjN0Nwk.01.0z01ekrbd
 
 ### UML Sequence Diagram
 
-![alt text](artifact/UML_Component_Diagram_JPG.jpg)
+![alt text](artifact/UML_Sequence_Diagram_JPG.jpg)
 
 ## Rating Of Diagrams (ChatGPT)
 
