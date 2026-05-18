@@ -7,6 +7,5 @@ public interface IConsoleWindow
 {
     public void showCommandInput();
     public void showHelp();
-    public void showBorrowerData(IBorrower[] borrowers, String optionalMessage);
-    public void showLoanData(ILoan[] loans, String optionalMessage);
+    public void showObjectData(String[] objOutputs, String optionalMessage);
 }
