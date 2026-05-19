@@ -1,11 +1,16 @@
 package de.fhms.jp253163.avss.arch.layered.inverted.lms.application;
 
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.Borrower;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IResidentialAddress;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.ResidentialAddress;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicRequestDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicResponseDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.LogicRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.LogicResponseDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.ITerminalUpdate;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.TerminalRequestDTO;
 
 import java.util.Date;
 
@@ -15,6 +20,8 @@ public class LogicUpdate implements ILogicUpdate
     private IBorrowerRepository borrowerRepository;
     private ILoanRepository loanRepository;
     private ISchufaRepository schufaRepository;
+
+    private ITerminalRequestDTO terminalRequestDTO;
 
     public LogicUpdate(ITerminalUpdate terminalUpdate, IBorrowerRepository borrowerRepository, ILoanRepository loanRepository, ISchufaRepository schufaRepository) throws NullPointerException
     {
@@ -30,7 +37,11 @@ public class LogicUpdate implements ILogicUpdate
     @Override
     public ILogicRequestDTO[] request()
     {
-        ITerminalRequestDTO terminalRequestDTO = terminalUpdate.request();
+        // Should the terminal be skipped?
+        boolean isArtificialCall = terminalRequestDTO != null;
+
+        if(!isArtificialCall) // then not a "hacked" or artificial call, in order to use this function to read a borrower or loan dataset in between a routine.
+            terminalRequestDTO = terminalUpdate.request();
 
         if(terminalRequestDTO == null)
             return null;
@@ -82,16 +93,48 @@ public class LogicUpdate implements ILogicUpdate
 
                 logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.createBorrower(firstname, lastname, dateOfBirth, residentialAddress, 0.9d)};
             }
-            else if(crudAction == 1)
+            else if(crudAction == 1 && longs.length == 1)
             {
-                logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower()};
+                int id = (int) longs[0];
+
+                logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(id)};
             }
             else if(crudAction == 2)
             {
                 logicReqDTOs = borrowerRepository.readAllBorrowers();
             }
-            else if(crudAction == 3)
+            else if(crudAction == 3 && longs.length == 1 && strings.length >= 2)
             {
+                int borrowerID = (int) longs[0];
+
+                ILogicRequestDTO logicRequestDTO = new LogicRequestDTO(borrowerID+".json", null, 2, Borrower.class);
+
+                // Make a simulated user terminal request (little "hack" to load the needed borrower dataset for update).
+                ITerminalRequestDTO artificialTerminalRequestDTO = new TerminalRequestDTO(new long[]{borrowerID}, null, new String[]{"borrower"}, 1);
+
+                // Save reference to actual real terminal request in order to restore the reference after the artificial call.
+                ITerminalRequestDTO backedUpTerminalRequestDTO = terminalRequestDTO;
+
+                // Now do the little "hack" to get the borrower dataset.
+                terminalRequestDTO = artificialTerminalRequestDTO;
+                ILogicRequestDTO[] readBorrower = request();
+                if(readBorrower == null || readBorrower.length == 0)
+                    return null;
+
+                Borrower readBorrowerObj = null;
+                if(readBorrower[0].getObjectType().equals(Borrower.class)) // TODO Check if causes trouble maybe??!
+                    readBorrowerObj = (Borrower) readBorrower[0].getOptionalObject();
+                else
+                    return null;
+
+                // Restore the old reference
+                terminalRequestDTO = backedUpTerminalRequestDTO;
+
+                // TODO Implement further with case-differentiation (is "firstname" and so on) ?
+                IBorrower loadedBorrower = borrowerRepository.readBorrower(borrowerID).getOptionalObject();
+
+                String targetField = strings[1];
+
                 logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.updateBorrower()};
             }
             else if(crudAction == 4)
@@ -103,6 +146,9 @@ public class LogicUpdate implements ILogicUpdate
         {
 
         }
+
+        // Make sure the re-called function will later not think this is an artificial call (in order to ignore the call of the real terminal)
+        terminalRequestDTO = null;
 
         return logicReqDTOs;
     }
