@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
 
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ILogicResponseDTO;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalRequestDTO;
 
 public interface ITerminalUpdate
 {
