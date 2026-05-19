@@ -1,7 +1,8 @@
 # Praktikum SS 2026 Termin 2 (Application Tier Component = Logik)
 
 Contains the business logic and business data objects for run-time.
-The same as in appointment 1 mostly because coincidently implemented layered architecture there yet.
+Inspired by solution of appointment 1 but the layered architecture is inverted.
+So a lot had to be changed anyway.
 
 ## GitLab Token For IDE Use
 
