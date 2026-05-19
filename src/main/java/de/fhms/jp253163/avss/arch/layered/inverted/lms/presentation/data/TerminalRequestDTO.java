@@ -1,21 +1,21 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data;
 
 public class TerminalRequestDTO implements ITerminalRequestDTO
 {
-    private int[] integers;
+    private long[] longs;
     private double[] doubles;
     private String[] strings;
     private int crudAction = -1;
 
     /**
-     * @param integers Can be null or contains the necessary integers.
+     * @param longs Can be null or contains the necessary longs.
      * @param doubles Can be null or contains the necessary doubles.
      * @param strings Can be null or contains the necessary strings.
      * @param crudAction 0: create borrower / loan, 1: read single borrower / loan, 2: read all existing borrowers / loans, 3: update a single borrower / loan, 4: delete a single borrower / loan
      */
-    public TerminalRequestDTO(int[] integers, double[] doubles, String[] strings, int crudAction) throws IllegalArgumentException
+    public TerminalRequestDTO(long[] longs, double[] doubles, String[] strings, int crudAction) throws IllegalArgumentException
     {
-        setIntegers(integers);
+        setLongs(longs);
         setDoubles(doubles);
         setStrings(strings);
 
@@ -23,9 +23,9 @@ public class TerminalRequestDTO implements ITerminalRequestDTO
             throw new IllegalArgumentException("the CRUD action should be between 0 and 4");
     }
 
-    private void setIntegers(int[] integers)
+    private void setLongs(long[] longs)
     {
-        this.integers = integers;
+        this.longs = longs;
     }
 
     private void setDoubles(double[] doubles)
@@ -49,9 +49,9 @@ public class TerminalRequestDTO implements ITerminalRequestDTO
     }
 
     @Override
-    public int[] getIntegers()
+    public long[] getLongs()
     {
-        return integers;
+        return longs;
     }
 
     @Override

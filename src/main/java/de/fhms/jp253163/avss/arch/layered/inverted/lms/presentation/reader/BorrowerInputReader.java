@@ -1,8 +1,4 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader;
-
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.ResidentialAddress;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -10,15 +6,13 @@ import java.util.Date;
 
 public class BorrowerInputReader
 {
-    private IBorrowerRepository borrowerRepository;
     private InputReader inputReader;
 
-    public BorrowerInputReader(IBorrowerRepository borrowerRepository, InputReader inputReader) throws IllegalArgumentException
+    public BorrowerInputReader(InputReader inputReader) throws IllegalArgumentException
     {
-        if(borrowerRepository == null || inputReader == null)
+        if(inputReader == null)
             throw new IllegalArgumentException("argument can't be null");
 
-        this.borrowerRepository = borrowerRepository;
         this.inputReader = inputReader;
     }
 
@@ -50,7 +44,7 @@ public class BorrowerInputReader
         }
     }
 
-    public IResidentialAddress readResidentialAddress() throws IllegalArgumentException
+    public String[] readResidentialAddress() throws IllegalArgumentException
     {
         String street, no, place;
         int zip;
@@ -60,13 +54,13 @@ public class BorrowerInputReader
         place = inputReader.readString(1, 30, "Place (max. 30 symbols): ");
         zip = inputReader.readInteger(0, 99999, "Zip code (max. 5 numbers): ");
 
-        return new ResidentialAddress(street, no, zip, place);
+        return new String[]{street, no, zip+"", place};
     }
 
-    public int[] readLoans()
+    public long[] readLoans()
     {
         ArrayList<Integer> loans = new ArrayList<>();
-        int[] loansArray;
+        long[] loansArray;
 
         int loanID, loanAmount, index = 0;
 
@@ -91,7 +85,7 @@ public class BorrowerInputReader
             }
         }
 
-        loansArray = new int[loans.size()];
+        loansArray = new long[loans.size()];
 
         for(int i = 0; i < loans.size(); i++)
         {

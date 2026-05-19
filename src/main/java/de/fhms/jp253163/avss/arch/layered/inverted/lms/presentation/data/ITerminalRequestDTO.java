@@ -1,8 +1,8 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data;
 
 public interface ITerminalRequestDTO
 {
-    public int[] getIntegers();
+    public long[] getLongs();
     public double[] getDoubles();
     public String[] getStrings();
     public int getCRUDAction();

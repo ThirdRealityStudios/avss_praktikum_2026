@@ -1,31 +1,22 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ILoanRepository;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ISchufaRepository;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.*;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.command.CommandCreateBorrower;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.command.CommandCreateLoan;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalRequestDTO;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalResponseDTO;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.TerminalRequestDTO;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.TerminalResponseDTO;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.BorrowerInputReader;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.InputReader;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.LoanInputReader;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.command.CommandCreateBorrower;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.command.CommandCreateLoan;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.TerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader.BorrowerInputReader;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader.InputReader;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader.LoanInputReader;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
 public class ConsoleWindow implements IConsoleWindow
 {
     private File executionDirectory;
-
-    private ILoanRepository loanRepository;
-    private IBorrowerRepository borrowerRepository;
-    private ISchufaRepository schufaRepository;
 
     private CommandCreateBorrower commandCreateBorrower;
     private CommandCreateLoan commandCreateLoan;
@@ -36,24 +27,21 @@ public class ConsoleWindow implements IConsoleWindow
     private Scanner scanner;
     private InputReader inputReader;
 
-    private ITerminalResponseDTO termRespDTO = null;
+    private ITerminalRequestDTO termReqDTO = null;
 
-    public ConsoleWindow(File executionDirectory, ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
+    public ConsoleWindow(File executionDirectory) throws IllegalArgumentException
     {
-        if(executionDirectory == null || !executionDirectory.isDirectory() || loanRepository == null || borrowerRepository == null || schufaRepository == null)
+        if(executionDirectory == null || !executionDirectory.isDirectory())
             throw new IllegalArgumentException("at least one argument is null or invalid!");
 
         this.scanner = new Scanner(System.in);
         this.inputReader = new InputReader(scanner);
 
-        this.borrowerInputReader = new BorrowerInputReader(borrowerRepository, inputReader);
+        this.borrowerInputReader = new BorrowerInputReader(inputReader);
         this.loanInputReader = new LoanInputReader(inputReader);
-        this.commandCreateBorrower = new CommandCreateBorrower(borrowerRepository, borrowerInputReader, scanner);
-        this.commandCreateLoan = new CommandCreateLoan(loanRepository, loanInputReader);
+        this.commandCreateBorrower = new CommandCreateBorrower(borrowerInputReader);
+        this.commandCreateLoan = new CommandCreateLoan(loanInputReader);
         this.executionDirectory = executionDirectory;
-        this.loanRepository = loanRepository;
-        this.borrowerRepository = borrowerRepository;
-        this.schufaRepository = schufaRepository;
     }
 
     private void commandExit()
@@ -69,11 +57,13 @@ public class ConsoleWindow implements IConsoleWindow
         String updateTarget = null;
         int numberConverted = -1;
         String optionalMessage = null;
-        IBorrower[] borrowers = null;
         Date birthday = null;
         boolean errorOccurred = false;
         int deleteId = -1;
-        int[] loanIDs = null;
+        long[] loanIDs = null;
+        String[] residentialAddress = null;
+
+        termReqDTO = null;
 
         if(scanner != null && parameters != null && parameters.length > 1)
         {
@@ -83,9 +73,7 @@ public class ConsoleWindow implements IConsoleWindow
             {
                 if(action.equalsIgnoreCase("create"))
                 {
-                    borrowers = new IBorrower[]{commandCreateBorrower.run(parameters)};
-
-                    termRespDTO = new TerminalResponseDTO(borrowers, true);
+                    termReqDTO = commandCreateBorrower.run(parameters);
 
                     return;
                 }
@@ -97,6 +85,7 @@ public class ConsoleWindow implements IConsoleWindow
 
                         if(detail.equalsIgnoreCase("all"))
                         {
+                            /*
                             borrowers = borrowerRepository.readAllBorrowers();
 
                             if(borrowers == null || borrowers.length == 0)
@@ -105,6 +94,9 @@ public class ConsoleWindow implements IConsoleWindow
                             }
 
                             showObjectData(borrowers, optionalMessage);
+                             */
+
+                            termReqDTO = new TerminalRequestDTO(null, null, new String[]{"borrower"}, 2);
 
                             return;
                         }
@@ -114,28 +106,33 @@ public class ConsoleWindow implements IConsoleWindow
                             {
                                 numberConverted = Integer.parseInt(detail);
 
+                                /*
                                 borrowers = new IBorrower[]{ borrowerRepository.readBorrower(numberConverted) };
 
                                 if(borrowers[0] == null)
                                     optionalMessage = "Borrower not found!";
+                                 */
+
+                                try
+                                {
+                                    termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"borrower"}, 1);
+
+                                    return;
+                                }
+                                catch (IllegalArgumentException e)
+                                {
+
+                                }
                             }
                             catch(NumberFormatException e)
                             {
                                 optionalMessage = "That was no valid number!";
                             }
 
-                            showObjectData(borrowers, optionalMessage);
+                            // showObjectData(borrowers, optionalMessage);
 
                             return;
                         }
-                        else
-                        {
-                            showHelp();
-                        }
-                    }
-                    else
-                    {
-                        showHelp();
                     }
 
                     return;
@@ -153,66 +150,148 @@ public class ConsoleWindow implements IConsoleWindow
                             {
                                 numberConverted = Integer.parseInt(updateId);
 
-                                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(numberConverted) };
-
-                                if(borrowers[0] != null)
+                                if(updateTarget.equalsIgnoreCase("firstname"))
                                 {
-                                    optionalMessage = "Update successful!";
+                                    try
+                                    {
+                                        termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"borrower", "firstname", borrowerInputReader.readFirstname()}, 3);
 
-                                    if(updateTarget.equalsIgnoreCase("firstname") && !borrowers[0].setFirstname(borrowerInputReader.readFirstname()))
+                                        return;
+                                    }
+                                    catch(IllegalArgumentException e)
                                     {
                                         errorOccurred = true;
                                     }
-                                    else if(updateTarget.equalsIgnoreCase("lastname") && !borrowers[0].setLastname(borrowerInputReader.readLastname()))
+                                }
+                                else if(updateTarget.equalsIgnoreCase("lastname"))
+                                {
+                                    try
+                                    {
+                                        termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"borrower", "lastname", borrowerInputReader.readLastname()}, 3);
+
+                                        return;
+                                    }
+                                    catch(IllegalArgumentException e)
                                     {
                                         errorOccurred = true;
                                     }
-                                    else if(updateTarget.equalsIgnoreCase("birthday"))
-                                    {
-                                        birthday = borrowerInputReader.readBirthday();
+                                }
+                                else if(updateTarget.equalsIgnoreCase("birthday"))
+                                {
+                                    birthday = borrowerInputReader.readBirthday();
 
-                                        if(birthday == null || !borrowers[0].setDateOfBirth(birthday))
-                                        {
-                                            errorOccurred = true;
-                                        }
-                                    }
-                                    else if(updateTarget.equalsIgnoreCase("address") && !borrowers[0].setResidentialAddress(borrowerInputReader.readResidentialAddress()))
+                                    if(birthday == null)
                                     {
                                         errorOccurred = true;
-                                    }
-                                    else if(updateTarget.equalsIgnoreCase("schufa") && !borrowers[0].setSchufaScore(schufaRepository.readSchufaScore(borrowers[0].getId())))
-                                    {
-                                        errorOccurred = true;
-                                    }
-                                    else if(updateTarget.equalsIgnoreCase("loans"))
-                                    {
-                                        loanIDs = borrowerInputReader.readLoans();
-
-                                        if(loanIDs == null || !borrowers[0].setLoans(loanIDs))
-                                        {
-                                            errorOccurred = true;
-                                        }
-                                    }
-
-                                    if(errorOccurred)
-                                    {
-                                        optionalMessage = "Update failed!";
                                     }
                                     else
                                     {
-                                        if(!borrowerRepository.updateBorrower(borrowers[0]))
+                                        try
                                         {
-                                            optionalMessage = "Update failed! (Reason: file saving)";
+                                            termReqDTO = new TerminalRequestDTO(new long[]{numberConverted, birthday.getTime()}, null, new String[]{"borrower", "birthday"}, 3);
+
+                                            return;
+                                        }
+                                        catch(IllegalArgumentException e)
+                                        {
+                                            errorOccurred = true;
                                         }
                                     }
                                 }
+                                else if(updateTarget.equalsIgnoreCase("address"))
+                                {
+                                    try
+                                    {
+                                        residentialAddress = borrowerInputReader.readResidentialAddress();
+
+                                        try
+                                        {
+                                            termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"borrower", "address", residentialAddress[0], residentialAddress[1], residentialAddress[2], residentialAddress[3]}, 3);
+
+                                            return;
+                                        }
+                                        catch(IllegalArgumentException e)
+                                        {
+                                            errorOccurred = true;
+                                        }
+                                    }
+                                    catch(IllegalArgumentException e)
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                }
+                                else if(updateTarget.equalsIgnoreCase("schufa"))
+                                {
+                                    try
+                                    {
+                                        termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"borrower", "schufa"}, 3);
+
+                                        return;
+                                    }
+                                    catch(IllegalArgumentException e)
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                }
+                                else if(updateTarget.equalsIgnoreCase("loans"))
+                                {
+                                    loanIDs = borrowerInputReader.readLoans();
+
+                                    if(loanIDs == null)
+                                    {
+                                        errorOccurred = true;
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            long[] loansAndId = Arrays.copyOf(loanIDs, (loanIDs.length+1));
+                                            loansAndId[loansAndId.length-1] = numberConverted; // borrower ID as last element exceptionally here. Normally in the beginning.
+
+                                            termReqDTO = new TerminalRequestDTO(loansAndId, null, new String[]{"borrower", "loans"}, 3);
+
+                                            return;
+                                        }
+                                        catch(IllegalArgumentException e)
+                                        {
+                                            errorOccurred = true;
+                                        }
+                                    }
+                                }
+
+                                if(errorOccurred)
+                                {
+                                    optionalMessage = "Update failed!";
+
+                                    termReqDTO = null;
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                                /*
+                                else
+                                {
+                                    try
+                                    {
+                                        termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"borrower", updateTarget}, 3);
+
+                                        return;
+                                    }
+                                    catch(IllegalArgumentException e)
+                                    {
+                                        termReqDTO = null;
+                                    }
+                                }
+
+                                 */
                             }
                             catch(NumberFormatException e)
                             {
                                 optionalMessage = "That was no valid number!";
                             }
 
-                            showObjectData(new IBorrower[0], optionalMessage);
+                            showObjectData(new Object[0], optionalMessage);
 
                             return;
                         }
@@ -223,12 +302,23 @@ public class ConsoleWindow implements IConsoleWindow
                     try
                     {
                         deleteId = Integer.parseInt(parameters[2]);
+
+                        termReqDTO = new TerminalRequestDTO(new long[]{deleteId}, null, new String[]{"borrower"}, 4);
+
+                        return;
                     }
                     catch(NumberFormatException e)
                     {
+                        termReqDTO = null;
+
+                        optionalMessage = "Deleting borrower failed (cannot read ID)";
+
+                        showObjectData(new Object[0], optionalMessage);
+
                         return;
                     }
 
+                    /*
                     if(borrowerRepository.deleteBorrower(deleteId))
                     {
                         optionalMessage = "Deleted borrower successfully (had nothing left to pay off)";
@@ -241,11 +331,10 @@ public class ConsoleWindow implements IConsoleWindow
                     showObjectData(new IBorrower[0], optionalMessage);
 
                     return;
+                     */
                 }
             }
         }
-
-        showHelp();
     }
 
     private void commandLoan(Scanner scanner, String[] parameters)
@@ -257,8 +346,6 @@ public class ConsoleWindow implements IConsoleWindow
         String targetId = null;
         int numberConverted = -1;
         String optionalMessage = null;
-        ILoan[] loans = null;
-        IBorrower newBorrower = null;
         Date birthday = null;
         boolean errorOccurred = false;
         int deleteId = -1;
@@ -271,7 +358,7 @@ public class ConsoleWindow implements IConsoleWindow
             {
                 if(action.equalsIgnoreCase("create"))
                 {
-                    commandCreateLoan.run(parameters);
+                    termReqDTO = commandCreateLoan.run(parameters);
 
                     return;
                 }
@@ -281,6 +368,7 @@ public class ConsoleWindow implements IConsoleWindow
 
                     if(detail.equalsIgnoreCase("all"))
                     {
+                        /*
                         loans = loanRepository.readAllLoans();
 
                         if(loans == null || loans.length == 0)
@@ -289,6 +377,9 @@ public class ConsoleWindow implements IConsoleWindow
                         }
 
                         showObjectData(loans, optionalMessage);
+                         */
+
+                        termReqDTO = new TerminalRequestDTO(null, null, new String[]{"loan"}, 2);
 
                         return;
                     }
@@ -298,24 +389,35 @@ public class ConsoleWindow implements IConsoleWindow
                         {
                             numberConverted = Integer.parseInt(detail);
 
+                            /*
                             loans = new ILoan[]{ loanRepository.readLoan(numberConverted) };
 
                             if(loans[0] == null)
                                 optionalMessage = "Loan not found!";
+                             */
+
+                            try
+                            {
+                                termReqDTO = new TerminalRequestDTO(new long[]{numberConverted}, null, new String[]{"loan"}, 1);
+
+                                return;
+                            }
+                            catch (IllegalArgumentException e)
+                            {
+
+                            }
                         }
                         catch(NumberFormatException e)
                         {
                             optionalMessage = "That was no valid number!";
                         }
 
-                        showObjectData(loans, optionalMessage);
+                        // showObjectData(loans, optionalMessage);
 
                         return;
                     }
-                    else
-                    {
-                        showHelp();
-                    }
+
+                    showHelp();
                 }
                 else if(parameters.length == 5 && action.equalsIgnoreCase("update"))
                 {
@@ -332,8 +434,6 @@ public class ConsoleWindow implements IConsoleWindow
 
                     int loanIDParamConverted = -1;
 
-                    ILoan loan = null;
-
                     int loanBorrowerIDConverted = -1;
 
                     if(StringUtils.isNumeric(loanIDParam))
@@ -342,16 +442,18 @@ public class ConsoleWindow implements IConsoleWindow
                         {
                             loanIDParamConverted = Integer.parseInt(loanIDParam);
 
+                            /*
                             loan = loanRepository.readLoan(loanIDParamConverted);
 
                             if(loan == null)
                                 throw new NumberFormatException(); // little "workaround", although NumberFormatException does not quite fit.
+                             */
                         }
                         catch(NumberFormatException e)
                         {
                             optionalMessage = "Not a valid number for loan ID or loan could not be loaded!";
 
-                            showObjectData(new ILoan[0], optionalMessage);
+                            showObjectData(new Object[0], optionalMessage);
 
                             return;
                         }
@@ -364,6 +466,11 @@ public class ConsoleWindow implements IConsoleWindow
                                 {
                                     loanBorrowerIDConverted = Integer.parseInt(loanBorrowerID);
 
+                                    termReqDTO = new TerminalRequestDTO(new long[]{loanIDParamConverted, loanBorrowerIDConverted}, null, new String[]{"loan", "borrowerid"}, 3);
+
+                                    return;
+
+                                    /*
                                     loan.setBorrower(loanBorrowerIDConverted);
 
                                     if(loanRepository.updateLoan(loan))
@@ -374,13 +481,14 @@ public class ConsoleWindow implements IConsoleWindow
 
                                         return;
                                     }
+                                     */
                                 }
                                 catch(NumberFormatException e)
                                 {
                                     // Should show "Invalid value" or smth.
                                     optionalMessage = "That is not a valid number for a borrower ID!";
 
-                                    showObjectData(new ILoan[0], optionalMessage);
+                                    showObjectData(new Object[0], optionalMessage);
 
                                     return;
                                 }
@@ -390,6 +498,7 @@ public class ConsoleWindow implements IConsoleWindow
                         {
                             if(loanBookAction.equalsIgnoreCase("installment"))
                             {
+                                /*
                                 if(loan.payInstallment() && loanRepository.updateLoan(loan))
                                 {
                                     optionalMessage = "Updated loan successfully (booked installment)";
@@ -399,8 +508,18 @@ public class ConsoleWindow implements IConsoleWindow
                                     optionalMessage = "Could not book the installment!";
                                     loan = null;
                                 }
+                                 */
 
-                                showObjectData(new ILoan[]{ loan }, optionalMessage);
+                                try
+                                {
+                                    termReqDTO = new TerminalRequestDTO(new long[]{loanIDParamConverted}, null, new String[]{"loan", "book", "installment"}, 3);
+
+                                    return;
+                                }
+                                catch(IllegalArgumentException e)
+                                {
+                                    showObjectData(new Object[0], optionalMessage);
+                                }
 
                                 return;
                             }
@@ -412,12 +531,28 @@ public class ConsoleWindow implements IConsoleWindow
                     try
                     {
                         deleteId = Integer.parseInt(parameters[2]);
+
+                        try
+                        {
+                            termReqDTO = new TerminalRequestDTO(new long[]{deleteId}, null, new String[]{"loan"}, 4);
+
+                            return;
+                        }
+                        catch(IllegalArgumentException e)
+                        {
+                            optionalMessage = "Deleting loan failed (internal processing error)";
+
+                            showObjectData(new Object[0], optionalMessage);
+                        }
                     }
                     catch(NumberFormatException e)
                     {
-                        return;
+                        optionalMessage = "Deleting loan failed (not a number!)";
+
+                        showObjectData(new Object[0], optionalMessage);
                     }
 
+                    /*
                     if(loanRepository.deleteLoan(deleteId))
                     {
                         optionalMessage = "Deleted loan successfully (paid off)";
@@ -430,13 +565,12 @@ public class ConsoleWindow implements IConsoleWindow
                     loans = new ILoan[0];
 
                     showObjectData(loans, optionalMessage);
+                     */
 
                     return;
                 }
             }
         }
-
-        showHelp();
     }
 
     private void commandInfo()
@@ -489,7 +623,7 @@ public class ConsoleWindow implements IConsoleWindow
             }
             else
             {
-                showHelp();
+                termReqDTO = null;
 
                 return 0;
             }
@@ -503,10 +637,11 @@ public class ConsoleWindow implements IConsoleWindow
 
         Scanner scanner = new Scanner(System.in);
 
-        IBorrower[] borrowers = null;
-        ILoan[] loans = null;
-
         int statusCode = 0;
+
+        ITerminalRequestDTO terminalRequestDTO = null;
+
+        int crudAction = -1;
 
         showHelp();
 
@@ -515,11 +650,15 @@ public class ConsoleWindow implements IConsoleWindow
             System.out.print("> ");
             command = scanner.nextLine();
 
+            // TODO terminalRequestDTO from process() as instance variable
             statusCode = process(scanner, command);
         }
         while(command != null && statusCode != -1);
 
         scanner.close();
+
+        if(termReqDTO == null || termReqDTO.getCRUDAction() == -1)
+            showHelp();
     }
 
     @Override
@@ -565,8 +704,8 @@ public class ConsoleWindow implements IConsoleWindow
         System.out.print(output);
     }
 
-    public ITerminalResponseDTO getTerminalResponseDTO()
+    public ITerminalRequestDTO getTerminalRequestDTO()
     {
-        return termRespDTO;
+        return termReqDTO;
     }
 }

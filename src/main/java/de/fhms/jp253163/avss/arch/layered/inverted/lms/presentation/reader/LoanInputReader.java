@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader;
 
 public class LoanInputReader
 {

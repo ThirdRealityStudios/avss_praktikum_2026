@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.fhms.jp253163.avss.arch.layered.normal.lms.presentation</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
+    <groupId>de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
     <artifactId>terminal</artifactId> <!-- This is basically how the resulting JAR should be named after successful deploy - whereas the JAR name will not only contain this but also other automatically generated information, e.g. date and time -->
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source> <!-- 25 represents the Java language level - it should be identical with the value taken in the project settings -->
@@ -16,13 +16,6 @@
 
     <dependencies>
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-
-        <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.layered.normal.lms.application</groupId>
-            <artifactId>logik</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data;
 
 public class TerminalResponseDTO implements ITerminalResponseDTO
 {

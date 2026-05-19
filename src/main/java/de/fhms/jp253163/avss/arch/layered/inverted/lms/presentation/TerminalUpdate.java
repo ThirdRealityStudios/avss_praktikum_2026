@@ -1,7 +1,7 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
+package de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalRequestDTO;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalResponseDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalResponseDTO;
 
 public class TerminalUpdate implements ITerminalUpdate
 {
@@ -29,6 +29,13 @@ public class TerminalUpdate implements ITerminalUpdate
         if(termRespDTO.getObjectData() != null)
         {
             consoleWindow.showObjectData(termRespDTO.getObjectData(), null);
+        }
+        else
+        {
+            if(termRespDTO.isSuccessful())
+                consoleWindow.showObjectData(null, "Action was successful!");
+            else
+                consoleWindow.showObjectData(null, "Action failed!");
         }
     }
 }
