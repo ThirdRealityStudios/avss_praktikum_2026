@@ -1,8 +1,8 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data;
 
-public class LogicResponseDTO implements ILogicResponseDTO
+public class TerminalResponseDTO implements ITerminalResponseDTO
 {
-    private String[] objectOutputData = null;
+    private Object[] objectOutputData = null;
     private boolean isSuccessful = false;
 
     /**
@@ -10,7 +10,7 @@ public class LogicResponseDTO implements ILogicResponseDTO
      * @param isSuccessful Was the desired action successful? (especially CRUD)
      * @throws NullPointerException
      */
-    public LogicResponseDTO(String[] objectOutputData, boolean isSuccessful) throws NullPointerException
+    public TerminalResponseDTO(Object[] objectOutputData, boolean isSuccessful) throws NullPointerException
     {
         if(!setObjectData(objectOutputData))
         {
@@ -20,7 +20,7 @@ public class LogicResponseDTO implements ILogicResponseDTO
         setSuccessful(isSuccessful);
     }
 
-    private boolean setObjectData(String[] objectData)
+    private boolean setObjectData(Object[] objectData)
     {
         if(objectData == null)
         {
@@ -38,14 +38,14 @@ public class LogicResponseDTO implements ILogicResponseDTO
     }
 
     @Override
-    public String[] getObjectData()
+    public Object[] getObjectData()
     {
-        return new String[0];
+        return objectOutputData;
     }
 
     @Override
     public boolean isSuccessful()
     {
-        return false;
+        return isSuccessful;
     }
 }

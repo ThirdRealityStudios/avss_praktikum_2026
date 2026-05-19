@@ -1,7 +1,7 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data;
 
-public interface ILogicResponseDTO
+public interface ITerminalResponseDTO
 {
-    public String[] getObjectData();
+    public Object[] getObjectData();
     public boolean isSuccessful();
 }
