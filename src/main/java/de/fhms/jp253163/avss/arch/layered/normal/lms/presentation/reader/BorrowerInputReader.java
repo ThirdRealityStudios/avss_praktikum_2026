@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
+package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader;
 
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IResidentialAddress;

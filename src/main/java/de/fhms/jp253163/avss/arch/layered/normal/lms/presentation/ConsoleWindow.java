@@ -4,9 +4,17 @@ import de.fhms.jp253163.avss.arch.layered.normal.lms.application.IBorrowerReposi
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ILoanRepository;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ISchufaRepository;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.*;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.command.CommandCreateBorrower;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.command.CommandCreateLoan;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalResponseDTO;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.TerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.TerminalResponseDTO;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.BorrowerInputReader;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.InputReader;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.LoanInputReader;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.Date;
 import java.util.Scanner;
@@ -27,6 +35,8 @@ public class ConsoleWindow implements IConsoleWindow
 
     private Scanner scanner;
     private InputReader inputReader;
+
+    private ITerminalResponseDTO termRespDTO = null;
 
     public ConsoleWindow(File executionDirectory, ILoanRepository loanRepository, IBorrowerRepository borrowerRepository, ISchufaRepository schufaRepository) throws IllegalArgumentException
     {
@@ -73,7 +83,9 @@ public class ConsoleWindow implements IConsoleWindow
             {
                 if(action.equalsIgnoreCase("create"))
                 {
-                    commandCreateBorrower.run(parameters);
+                    borrowers = new IBorrower[]{commandCreateBorrower.run(parameters)};
+
+                    termRespDTO = new TerminalResponseDTO(borrowers, true);
 
                     return;
                 }
@@ -92,7 +104,7 @@ public class ConsoleWindow implements IConsoleWindow
                                 optionalMessage = "No borrowers yet created!";
                             }
 
-                            showBorrowerData(borrowers, optionalMessage);
+                            showObjectData(borrowers, optionalMessage);
 
                             return;
                         }
@@ -112,7 +124,7 @@ public class ConsoleWindow implements IConsoleWindow
                                 optionalMessage = "That was no valid number!";
                             }
 
-                            showBorrowerData(borrowers, optionalMessage);
+                            showObjectData(borrowers, optionalMessage);
 
                             return;
                         }
@@ -200,7 +212,7 @@ public class ConsoleWindow implements IConsoleWindow
                                 optionalMessage = "That was no valid number!";
                             }
 
-                            showBorrowerData(new IBorrower[0], optionalMessage);
+                            showObjectData(new IBorrower[0], optionalMessage);
 
                             return;
                         }
@@ -226,7 +238,7 @@ public class ConsoleWindow implements IConsoleWindow
                         optionalMessage = "Deleting borrower failed (has at least one loan active in the system still)";
                     }
 
-                    showBorrowerData(new IBorrower[0], optionalMessage);
+                    showObjectData(new IBorrower[0], optionalMessage);
 
                     return;
                 }
@@ -276,7 +288,7 @@ public class ConsoleWindow implements IConsoleWindow
                             optionalMessage = "No loans yet created!";
                         }
 
-                        showLoanData(loans, optionalMessage);
+                        showObjectData(loans, optionalMessage);
 
                         return;
                     }
@@ -296,7 +308,7 @@ public class ConsoleWindow implements IConsoleWindow
                             optionalMessage = "That was no valid number!";
                         }
 
-                        showLoanData(loans, optionalMessage);
+                        showObjectData(loans, optionalMessage);
 
                         return;
                     }
@@ -339,7 +351,7 @@ public class ConsoleWindow implements IConsoleWindow
                         {
                             optionalMessage = "Not a valid number for loan ID or loan could not be loaded!";
 
-                            showLoanData(new ILoan[0], optionalMessage);
+                            showObjectData(new ILoan[0], optionalMessage);
 
                             return;
                         }
@@ -358,7 +370,7 @@ public class ConsoleWindow implements IConsoleWindow
                                     {
                                         optionalMessage = "Updated loan successfully (changed borrower)!";
 
-                                        showLoanData(new ILoan[]{ loan }, optionalMessage);
+                                        showObjectData(new ILoan[]{ loan }, optionalMessage);
 
                                         return;
                                     }
@@ -368,7 +380,7 @@ public class ConsoleWindow implements IConsoleWindow
                                     // Should show "Invalid value" or smth.
                                     optionalMessage = "That is not a valid number for a borrower ID!";
 
-                                    showLoanData(new ILoan[0], optionalMessage);
+                                    showObjectData(new ILoan[0], optionalMessage);
 
                                     return;
                                 }
@@ -388,7 +400,7 @@ public class ConsoleWindow implements IConsoleWindow
                                     loan = null;
                                 }
 
-                                showLoanData(new ILoan[]{ loan }, optionalMessage);
+                                showObjectData(new ILoan[]{ loan }, optionalMessage);
 
                                 return;
                             }
@@ -417,7 +429,7 @@ public class ConsoleWindow implements IConsoleWindow
 
                     loans = new ILoan[0];
 
-                    showLoanData(loans, optionalMessage);
+                    showObjectData(loans, optionalMessage);
 
                     return;
                 }
@@ -532,7 +544,7 @@ public class ConsoleWindow implements IConsoleWindow
     }
 
     @Override
-    public void showBorrowerData(IBorrower[] borrowers, String optionalMessage)
+    public void showObjectData(Object[] objects, String optionalMessage)
     {
         String output = "";
 
@@ -541,37 +553,20 @@ public class ConsoleWindow implements IConsoleWindow
             output += optionalMessage;
         }
 
-        if(borrowers != null)
+        if(objects != null)
         {
-            for(IBorrower borrower : borrowers)
+            for(Object object : objects)
             {
-                if(borrower != null)
-                    output += borrower + "\n";
+                if(object != null)
+                    output += object + "\n";
             }
         }
 
         System.out.print(output);
     }
 
-    @Override
-    public void showLoanData(ILoan[] loans, String optionalMessage)
+    public ITerminalResponseDTO getTerminalResponseDTO()
     {
-        String output = "";
-
-        if(optionalMessage != null && !optionalMessage.isEmpty())
-        {
-            output += optionalMessage;
-        }
-
-        if(loans != null)
-        {
-            for(ILoan loan : loans)
-            {
-                if(loan != null)
-                    output += loan + "\n";
-            }
-        }
-
-        System.out.print(output);
+        return termRespDTO;
     }
 }

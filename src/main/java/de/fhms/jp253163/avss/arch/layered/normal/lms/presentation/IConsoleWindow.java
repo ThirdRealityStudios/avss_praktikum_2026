@@ -1,11 +1,11 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.data.ITerminalResponseDTO;
 
 public interface IConsoleWindow
 {
     public void showCommandInput();
     public void showHelp();
-    public void showObjectData(String[] objOutputs, String optionalMessage);
-    public ITerminalRequestDTO getTerminalRequestDTO();
+    public void showObjectData(Object[] objectData, String optionalMessage);
+    public ITerminalResponseDTO getTerminalResponseDTO();
 }

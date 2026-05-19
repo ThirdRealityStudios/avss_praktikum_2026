@@ -1,7 +1,8 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
+package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.command;
 
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ILoanRepository;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.ILoan;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.LoanInputReader;
 
 public class CommandCreateLoan
 {
@@ -19,7 +20,7 @@ public class CommandCreateLoan
         this.loanInputReader = loanInputReader;
     }
 
-    public void run(String[] parameters)
+    public ILoan run(String[] parameters)
     {
         ILoan loan = null;
 
@@ -41,9 +42,19 @@ public class CommandCreateLoan
             loan = loanRepository.createLoan(borrowerId, amount, interestRate, term);
 
             if(loan != null)
+            {
                 System.out.println("Created new loan");
+
+                return loan;
+            }
             else
+            {
                 System.out.println("Could not create loan!");
+
+                return null;
+            }
         }
+
+        return null;
     }
 }

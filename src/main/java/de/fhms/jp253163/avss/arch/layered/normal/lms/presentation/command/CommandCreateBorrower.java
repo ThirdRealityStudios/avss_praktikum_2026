@@ -1,11 +1,11 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
+package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.command;
 
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.ILoan;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.reader.BorrowerInputReader;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -27,7 +27,7 @@ public class CommandCreateBorrower
         this.scanner = scanner;
     }
 
-    public void run(String[] parameters)
+    public IBorrower run(String[] parameters)
     {
         IBorrower borrower = null;
 
@@ -47,15 +47,25 @@ public class CommandCreateBorrower
             dateOfBirth = borrowerInputReader.readBirthday();
 
             if(dateOfBirth == null)
-                return;
+                return null;
 
             residentialAddress = borrowerInputReader.readResidentialAddress();
             borrower = borrowerRepository.createBorrower(firstname, lastname, dateOfBirth, residentialAddress, 0.9d);
 
             if(borrower != null)
+            {
                 System.out.println("Created new borrower");
+
+                return borrower;
+            }
             else
+            {
                 System.out.println("Could not create borrower!");
+
+                return null;
+            }
         }
+
+        return null;
     }
 }
