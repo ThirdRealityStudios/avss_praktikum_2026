@@ -1,7 +1,7 @@
 package de.fhms.jp253163.avss.arch.layered.inverted.lms.application;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IBorrower;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IResidentialAddress;
 
 import java.util.Date;
 

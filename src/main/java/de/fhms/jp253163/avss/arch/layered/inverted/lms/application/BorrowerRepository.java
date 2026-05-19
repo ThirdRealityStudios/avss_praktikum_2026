@@ -1,10 +1,9 @@
 package de.fhms.jp253163.avss.arch.layered.inverted.lms.application;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.Borrower;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
-import de.fhms.jp253163.avss.arch.layered.normal.lms.data.*;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.Borrower;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IBorrower;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
 
 import java.io.File;
 import java.io.IOException;

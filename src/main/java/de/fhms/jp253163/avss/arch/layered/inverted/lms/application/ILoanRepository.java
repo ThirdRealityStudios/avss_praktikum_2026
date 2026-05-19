@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.layered.inverted.lms.application;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.ILoan;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.ILoan;
 
 public interface ILoanRepository
 {

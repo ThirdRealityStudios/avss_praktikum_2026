@@ -1,9 +1,8 @@
 package de.fhms.jp253163.avss.arch.layered.inverted.lms.application;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.ILoan;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.Loan;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.data.*;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IBorrower;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.ILoan;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.Loan;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
