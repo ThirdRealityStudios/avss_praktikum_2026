@@ -7,6 +7,7 @@ import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.Termina
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader.BorrowerInputReader;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader.InputReader;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.reader.LoanInputReader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -245,10 +246,9 @@ public class ConsoleWindow implements IConsoleWindow
                                     {
                                         try
                                         {
-                                            long[] loansAndId = Arrays.copyOf(loanIDs, (loanIDs.length+1));
-                                            loansAndId[loansAndId.length-1] = numberConverted; // borrower ID as last element exceptionally here. Normally in the beginning.
+                                            long[] borrowerIDWithLoanIDs = ArrayUtils.addFirst(loanIDs, numberConverted);
 
-                                            termReqDTO = new TerminalRequestDTO(loansAndId, null, new String[]{"borrower", "loans"}, 3);
+                                            termReqDTO = new TerminalRequestDTO(borrowerIDWithLoanIDs, null, new String[]{"borrower", "loans"}, 3);
 
                                             return;
                                         }
