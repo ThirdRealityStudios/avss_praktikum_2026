@@ -107,7 +107,7 @@ public class LogicUpdate implements ILogicUpdate
             {
                 int borrowerID = (int) longs[0];
 
-                ILogicRequestDTO logicRequestDTO = new LogicRequestDTO(borrowerID+".json", null, 2, Borrower.class);
+                ILogicRequestDTO logicRequestDTO = new LogicRequestDTO<Borrower>(borrowerID+".json", null, 2, Borrower.class);
 
                 // Make a simulated user terminal request (little "hack" to load the needed borrower dataset for update).
                 ITerminalRequestDTO artificialTerminalRequestDTO = new TerminalRequestDTO(new long[]{borrowerID}, null, new String[]{"borrower"}, 1);
@@ -131,11 +131,79 @@ public class LogicUpdate implements ILogicUpdate
                 terminalRequestDTO = backedUpTerminalRequestDTO;
 
                 // TODO Implement further with case-differentiation (is "firstname" and so on) ?
-                IBorrower loadedBorrower = borrowerRepository.readBorrower(borrowerID).getOptionalObject();
+                IBorrower loadedBorrower = (Borrower) borrowerRepository.readBorrower(borrowerID).getOptionalObject();
 
                 String targetField = strings[1];
 
-                logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.updateBorrower()};
+                // TODO Require specific strings length. Otherwise return yet null.
+
+                if(targetField.equalsIgnoreCase("firstname"))
+                {
+                    String firstnameValue = strings[2];
+
+                    if(!readBorrowerObj.setFirstname(firstnameValue))
+                        return null;
+                }
+                else if(targetField.equalsIgnoreCase("lastname"))
+                {
+                    String lastnameValue = strings[2];
+
+                    if(!readBorrowerObj.setLastname(lastnameValue))
+                        return null;
+                }
+                else if(targetField.equalsIgnoreCase("birthday"))
+                {
+                    long birthday = longs[1];
+                    Date birthdayObj = new Date(birthday);
+
+                    if(!readBorrowerObj.setDateOfBirth(birthdayObj))
+                        return null;
+                }
+                else if(targetField.equalsIgnoreCase("address"))
+                {
+                    String street = strings[2];
+                    String no = strings[3];
+                    String place = strings[4];
+                    String zip = strings[5];
+
+                    int zipParsed = -1;
+
+                    try
+                    {
+                        zipParsed = Integer.parseInt(zip);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        return null;
+                    }
+
+                    IResidentialAddress residentialAddress = null;
+
+                    try
+                    {
+                        residentialAddress = new ResidentialAddress(street, no, zipParsed, place);
+                    }
+                    catch(IllegalArgumentException e)
+                    {
+                        return null;
+                    }
+
+                    if(!readBorrowerObj.setResidentialAddress(residentialAddress))
+                        return null;
+                }
+                else if(targetField.equalsIgnoreCase("schufa"))
+                {
+                    double currentSchufaScore = schufaRepository.readSchufaScore(borrowerID);
+
+                    if(!readBorrowerObj.setSchufaScore(currentSchufaScore))
+                        return null;
+                }
+                else if(targetField.equalsIgnoreCase("loans"))
+                {
+
+                }
+
+                logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.updateBorrower(readBorrowerObj)};
             }
             else if(crudAction == 4)
             {
