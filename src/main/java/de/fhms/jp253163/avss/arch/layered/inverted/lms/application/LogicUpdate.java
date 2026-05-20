@@ -1,9 +1,6 @@
 package de.fhms.jp253163.avss.arch.layered.inverted.lms.application;
 
-import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.Borrower;
-import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.ResidentialAddress;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.*;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicRequestDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicResponseDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.LogicRequestDTO;
@@ -11,12 +8,7 @@ import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.Logi
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.ITerminalUpdate;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalRequestDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.TerminalRequestDTO;
-import org.apache.commons.lang3.ArraySorter;
-import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 
 public class LogicUpdate implements ILogicUpdate
@@ -249,48 +241,21 @@ public class LogicUpdate implements ILogicUpdate
         // TODO Adjust this function for loan management.
         ILogicRequestDTO[] logicReqDTOs = null;
 
-        if(crudAction == 0 && strings.length == 7)
+        if(crudAction == 0 && doubles.length == 2 && longs.length == 2)
         {
-            if(longs.length != 1)
-                return null;
+            int borrowerID = (int) longs[0];
+            int term = (int) longs[1];
 
-            long birthday = longs[0]; // in ms or smth since 1970: ofc a problem because you could be older
+            double amount = doubles[0];
+            double interestRate = doubles[1];
 
-            if(doubles.length != 1)
-                return null;
-
-            String firstname = strings[1],
-                    lastname = strings[2],
-                    street = strings[3],
-                    no = strings[4],
-                    place = strings[5],
-                    zip = strings[6];
-
-            int zipConverted = -1;
-
-            try
-            {
-                zipConverted = Integer.parseInt(zip);
-            }
-            catch(NumberFormatException e)
-            {
-                return null;
-            }
-
-            IResidentialAddress residentialAddress = new ResidentialAddress(street, no, zipConverted, place);
-
-            Date dateOfBirth = new Date(birthday);
-
-            int maxIndex = max(jsonNumbers);
-            int maxValue = jsonNumbers[maxIndex];
-
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.createBorrower(maxValue, firstname, lastname, dateOfBirth, residentialAddress, 0.9d)};
+            logicReqDTOs = new ILogicRequestDTO[]{loanRepository.createLoan(borrowerID, amount, interestRate, term)};
         }
         else if(crudAction == 1 && longs.length == 1)
         {
-            int id = (int) longs[0];
+            int borrowerID = (int) longs[0];
 
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(jsonNumbers, id)};
+            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(jsonNumbers, borrowerID)};
         }
         else if(crudAction == 2)
         {
@@ -298,139 +263,62 @@ public class LogicUpdate implements ILogicUpdate
         }
         else if(crudAction == 3 && longs.length >= 1 && strings.length >= 2)
         {
-            int borrowerID = (int) longs[0];
+            int loanID = (int) longs[0];
+            ILoan readLoan = null; // TODO Load with "hack" !!!
 
-            ILogicRequestDTO logicRequestDTO = new LogicRequestDTO<Borrower>(borrowerID+".json", null, 2, Borrower.class);
+            String updateTarget0 = strings[1];
 
-            // Make a simulated user terminal request (little "hack" to load the needed borrower dataset for update).
-            ITerminalRequestDTO artificialTerminalRequestDTO = new TerminalRequestDTO(new long[]{borrowerID}, null, new String[]{"borrower"}, 1);
-
-            // Save reference to actual real terminal request in order to restore the reference after the artificial call.
-            ITerminalRequestDTO backedUpTerminalRequestDTO = terminalRequestDTO;
-
-            // Now do the little "hack" to get the borrower dataset.
-            terminalRequestDTO = artificialTerminalRequestDTO;
-            ILogicRequestDTO[] artificialRequestData = request(jsonNumbers);
-            if(artificialRequestData == null || artificialRequestData.length == 0)
-                return null;
-
-            ILogicRequestDTO borrowerRequestData = artificialRequestData[0];
-
-            if(borrowerRequestData == null)
-                return null;
-
-            Borrower readBorrowerObj = null;
-
-            Class<Borrower> objectType = borrowerRequestData.getObjectType();
-
-            if(objectType == null)
-                return null;
-
-            Object optionalObject = borrowerRequestData.getOptionalObject();
-
-            if(optionalObject == null)
-                return null;
-
-            // TODO Check if type comparison causes trouble maybe??!
-            if(!objectType.equals(Borrower.class))
-                return null;
-
-            readBorrowerObj = (Borrower) optionalObject;
-
-            // Restore the old reference
-            terminalRequestDTO = backedUpTerminalRequestDTO;
-
-            String targetField = strings[1];
-
-            // further with case-differentiation (e.g. "is firstname" meant to update?" and so on)
-            if(targetField.equalsIgnoreCase("firstname"))
+            if(strings.length == 2)
             {
-                String firstnameValue = strings[2];
-
-                if(!readBorrowerObj.setFirstname(firstnameValue))
-                    return null;
-            }
-            else if(targetField.equalsIgnoreCase("lastname"))
-            {
-                String lastnameValue = strings[2];
-
-                if(!readBorrowerObj.setLastname(lastnameValue))
-                    return null;
-            }
-            else if(targetField.equalsIgnoreCase("birthday") && longs.length == 2)
-            {
-                long birthday = longs[1];
-                Date birthdayObj = new Date(birthday);
-
-                if(!readBorrowerObj.setDateOfBirth(birthdayObj))
-                    return null;
-            }
-            else if(targetField.equalsIgnoreCase("address") && strings.length == 6)
-            {
-                String street = strings[2];
-                String no = strings[3];
-                String place = strings[4];
-                String zip = strings[5];
-
-                int zipParsed = -1;
-
-                try
+                if(updateTarget0.equalsIgnoreCase("borrowerid"))
                 {
-                    zipParsed = Integer.parseInt(zip);
+                    if(longs.length == 2)
+                    {
+                        int borrowerIDToAttach = (int) longs[1];
+
+                        if(!readLoan.setBorrower(borrowerIDToAttach))
+                            return null;
+
+                        logicReqDTOs = new ILogicRequestDTO[]{loanRepository.updateLoan(readLoan)};
+                        // TODO implement
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                catch(NumberFormatException e)
+                else
                 {
                     return null;
                 }
-
-                IResidentialAddress residentialAddress = null;
-
-                try
-                {
-                    residentialAddress = new ResidentialAddress(street, no, zipParsed, place);
-                }
-                catch(IllegalArgumentException e)
-                {
-                    return null;
-                }
-
-                if(!readBorrowerObj.setResidentialAddress(residentialAddress))
-                    return null;
             }
-            else if(targetField.equalsIgnoreCase("schufa"))
+            else if(strings.length == 3)
             {
-                double currentSchufaScore = schufaRepository.readSchufaScore(borrowerID);
+                String updateTarget1 = strings[2];
 
-                if(!readBorrowerObj.setSchufaScore(currentSchufaScore))
-                    return null;
-            }
-            else if(targetField.equalsIgnoreCase("loans"))
-            {
-                if(longs.length < 2)
-                    return null;
-
-                int[] loanIDs = new int[longs.length-1]; // at least one loan ID exists in that
-
-                for(int i = 0; i < loanIDs.length; i++)
+                if(updateTarget0.equalsIgnoreCase("book"))
                 {
-                    loanIDs[i] = (int) longs[i+1];
-                }
+                    if(updateTarget1.equalsIgnoreCase("installment") && longs.length == 1)
+                    {
+                        if(!readLoan.payInstallment())
+                            return null;
 
-                if(!readBorrowerObj.setLoans(loanIDs))
+                        logicReqDTOs = new ILogicRequestDTO[]{loanRepository.updateLoan(readLoan)};
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
                     return null;
+                }
             }
             else
             {
                 return null;
             }
-
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.updateBorrower(readBorrowerObj)};
-        }
-        else if(crudAction == 4 && longs.length == 1)
-        {
-            int borrowerID = (int) longs[0];
-
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.deleteBorrower(borrowerID)};
         }
 
         return logicReqDTOs;
