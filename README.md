@@ -15,10 +15,6 @@ a Layered Architecture / Schichtenarchitektur is required in different implement
 
 glpat-IkCQeZPpDcGwEnkG7dYQCm86MQp1OjN0Nwk.01.0z01ekrbd
 
-### Exercise PDF
-
-[Download here](artifact/26SS-SWA-P02%20Schichtenarchitekturen.pdf)
-
 ### Troubleshooting For Windows 11 Users (Maven Certificate Issue)
 
 Download the certificate from git.fh-muenster.de (using your browser e.g.).
@@ -31,6 +27,10 @@ Then execute the following command:
 ```
 
 Make sure %JAVA_HOME% is set properly and your IDE has set correct language levels and JDK paths.
+
+### Exercise PDF
+
+[Download here](artifact/26SS-SWA-P02%20Schichtenarchitekturen.pdf)
 
 ### UML Component Diagram
 
