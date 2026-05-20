@@ -4,7 +4,6 @@ import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.*;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicRequestDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicResponseDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.LogicRequestDTO;
-import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.LogicResponseDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.ITerminalUpdate;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalRequestDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.TerminalRequestDTO;
@@ -43,6 +42,11 @@ public class LogicUpdate implements ILogicUpdate
                 max = i;
 
         return max;
+    }
+
+    private IBorrower requestBorrowerFrom()
+    {
+
     }
 
     private ILogicRequestDTO[] processBorrowerRequest(int[] jsonNumbers, long[] longs, double[] doubles, String[] strings, int crudAction)
@@ -99,8 +103,6 @@ public class LogicUpdate implements ILogicUpdate
         else if(crudAction == 3 && longs.length >= 1 && strings.length >= 2)
         {
             int borrowerID = (int) longs[0];
-
-            ILogicRequestDTO logicRequestDTO = new LogicRequestDTO<Borrower>(borrowerID+".json", null, 2, Borrower.class);
 
             // Make a simulated user terminal request (little "hack" to load the needed borrower dataset for update).
             ITerminalRequestDTO artificialTerminalRequestDTO = new TerminalRequestDTO(new long[]{borrowerID}, null, new String[]{"borrower"}, 1);
