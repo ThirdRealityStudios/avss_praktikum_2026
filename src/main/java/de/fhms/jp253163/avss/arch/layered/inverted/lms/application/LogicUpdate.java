@@ -117,26 +117,41 @@ public class LogicUpdate implements ILogicUpdate
 
                 // Now do the little "hack" to get the borrower dataset.
                 terminalRequestDTO = artificialTerminalRequestDTO;
-                ILogicRequestDTO[] readBorrower = request();
-                if(readBorrower == null || readBorrower.length == 0)
+                ILogicRequestDTO[] artificialRequestData = request();
+                if(artificialRequestData == null || artificialRequestData.length == 0)
+                    return null;
+
+                ILogicRequestDTO borrowerRequestData = artificialRequestData[0];
+
+                if(borrowerRequestData == null)
                     return null;
 
                 Borrower readBorrowerObj = null;
-                if(readBorrower[0].getObjectType().equals(Borrower.class)) // TODO Check if causes trouble maybe??!
-                    readBorrowerObj = (Borrower) readBorrower[0].getOptionalObject();
-                else
+
+                Class<Borrower> objectType = borrowerRequestData.getObjectType();
+
+                if(objectType == null)
                     return null;
+
+                Object optionalObject = borrowerRequestData.getOptionalObject();
+
+                if(optionalObject == null)
+                    return null;
+
+                // TODO Check if type comparison causes trouble maybe??!
+                if(!objectType.equals(Borrower.class))
+                    return null;
+
+                readBorrowerObj = (Borrower) optionalObject;
 
                 // Restore the old reference
                 terminalRequestDTO = backedUpTerminalRequestDTO;
-
-                // TODO Implement further with case-differentiation (is "firstname" and so on) ?
-                IBorrower loadedBorrower = (Borrower) borrowerRepository.readBorrower(borrowerID).getOptionalObject();
 
                 String targetField = strings[1];
 
                 // TODO Require specific strings length. Otherwise return yet null.
 
+                // further with case-differentiation (e.g. "is firstname" meant to update?" and so on)
                 if(targetField.equalsIgnoreCase("firstname"))
                 {
                     String firstnameValue = strings[2];
