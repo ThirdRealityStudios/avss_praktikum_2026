@@ -8,9 +8,9 @@ import java.util.Date;
 
 public interface IBorrowerRepository
 {
-    public ILogicRequestDTO createBorrower(String firstname, String lastname, Date dateOfBirth, IResidentialAddress residentialAddress, double schufaScore);
-    public ILogicRequestDTO readBorrower(int id);
-    public ILogicRequestDTO[] readAllBorrowers();
+    public ILogicRequestDTO createBorrower(int newestNumberFromJsons, String firstname, String lastname, Date dateOfBirth, IResidentialAddress residentialAddress, double schufaScore);
+    public ILogicRequestDTO readBorrower(int[] jsonNumbers, int id);
+    public ILogicRequestDTO[] readAllBorrowers(int[] jsonNumbers);
     public ILogicRequestDTO updateBorrower(IBorrower borrower);
     public ILogicRequestDTO deleteBorrower(int id);
 }

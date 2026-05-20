@@ -4,59 +4,20 @@ import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.Borrower
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IBorrower;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.IResidentialAddress;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.ILogicRequestDTO;
+import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.LogicRequestDTO;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class BorrowerRepository implements IBorrowerRepository
 {
-    private IJsonFileService<Borrower> jsonFileService;
-    private File borrowerDirectoryFile;
-
-    /**
-     * Initializes the loan repository,
-     * including the creation of the "loan" folder in the executable path if not existing yet.
-     *
-     * @param jsonFileService
-     * @param executableDirectory
-     * @throws IllegalArgumentException
-     * @throws IOException
-     */
-    public BorrowerRepository(IJsonFileService<Borrower> jsonFileService, File executableDirectory) throws IllegalArgumentException, IOException
-    {
-        if(jsonFileService == null || executableDirectory == null)
-            throw new IllegalArgumentException("argument must not be null!");
-
-        this.jsonFileService = jsonFileService;
-
-        if(!executableDirectory.exists() || !executableDirectory.isDirectory())
-            throw new IllegalArgumentException("given executable path does not exist or is not a directory");
-
-        // To locate the directory where all Borrower objects are stored.
-        String borrowerPath = executableDirectory.getAbsolutePath() + FileSystems.getDefault().getSeparator() + "borrower";
-
-        borrowerDirectoryFile = new File(borrowerPath);
-
-        /**
-         * Create the directory to store all borrower JSON files if not done yet..
-         */
-        if(!borrowerDirectoryFile.exists())
-        {
-            if(!borrowerDirectoryFile.mkdir())
-            {
-                throw new IOException("could not create the directory to store all JSON files");
-            }
-        }
-    }
-
     @Override
-    public IBorrower createBorrower(String firstname, String lastname, Date dateOfBirth, IResidentialAddress residentialAddress, double schufaScore)
+    public ILogicRequestDTO createBorrower(int newestNumberFromJsons, String firstname, String lastname, Date dateOfBirth, IResidentialAddress residentialAddress, double schufaScore)
     {
         IBorrower borrower = null;
         String jsonFilepath = null;
+        ILogicRequestDTO logicReqDTO = null;
 
         int currentBorrowerId = -1, newBorrowerId = -1;
 
@@ -67,39 +28,18 @@ public class BorrowerRepository implements IBorrowerRepository
             return null;
         }
 
-        try
-        {
-            currentBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile);
+        currentBorrowerId = newestNumberFromJsons;
 
-            System.out.println("Detected " + currentBorrowerId + " for current highest JSON file!");
-
-            if(currentBorrowerId == -2) // an error occurred while determining.
-            {
-                return null;
-            }
-
-            newBorrowerId = currentBorrowerId + 1;
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-
-            return null;
-        }
+        newBorrowerId = currentBorrowerId + 1;
 
         try
         {
             borrower = new Borrower(newBorrowerId, firstname, lastname, dateOfBirth, residentialAddress, schufaScore, new int[]{});
 
-            jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newBorrowerId + ".json";
+            // jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newBorrowerId + ".json";
 
             // Also save the created Borrower as a JSON file (https://www.geeksforgeeks.org/java/file-getabsolutepath-method-in-java-with-examples/)
-            if(!jsonFileService.save(jsonFilepath, borrower))
-            {
-                System.out.println("Cannot save borrower as a JSON file!");
-
-                return null;
-            }
+            logicReqDTO = new LogicRequestDTO<Borrower>(newBorrowerId + ".json", borrower, 0, Borrower.class);
         }
         catch(IllegalArgumentException e)
         {
@@ -120,16 +60,13 @@ public class BorrowerRepository implements IBorrowerRepository
             return null;
         }
 
-        return borrower;
+        return logicReqDTO;
     }
 
     @Override
-    public IBorrower readBorrower(int id)
+    public ILogicRequestDTO readBorrower(int[] jsonNumbers, int id)
     {
-        File[] numericJsonFiles = null;
-        String filenameNumber = null;
-        IBorrower borrower = null;
-
+        /*
         try
         {
             numericJsonFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
@@ -138,25 +75,43 @@ public class BorrowerRepository implements IBorrowerRepository
         {
             return null;
         }
+         */
 
-        for(File jsonFile : numericJsonFiles)
+        for(int jsonNumber : jsonNumbers)
         {
-            filenameNumber = jsonFileService.getNumberFromJsonName(jsonFile);
+            // filenameNumber = jsonFileService.getNumberFromJsonName(jsonFile);
 
+            if(jsonNumber == id)
+            {
+                return new LogicRequestDTO<Borrower>(jsonNumber+".json", null, 1, Borrower.class);
+            }
+
+            /*
             if(filenameNumber.equalsIgnoreCase("" + id)) // Found that JSON file for the given Borrower.
             {
                 borrower = jsonFileService.read(jsonFile.getAbsolutePath(), Borrower.class);
 
                 return borrower;
             }
+             */
         }
 
         return null;
     }
 
     @Override
-    public IBorrower[] readAllBorrowers()
+    public ILogicRequestDTO[] readAllBorrowers(int[] jsonNumbers)
     {
+        ILogicRequestDTO[] logicRequestDTOS = new ILogicRequestDTO[jsonNumbers.length];
+
+        for(int i = 0; i < jsonNumbers.length; i++)
+        {
+            logicRequestDTOS[i] = new LogicRequestDTO<Borrower>(jsonNumbers[i]+".json", null, 1, Borrower.class);
+        }
+
+        return logicRequestDTOS;
+
+        /*
         ArrayList<Borrower> borrowers = new ArrayList<>();
 
         File[] numericJsonFiles = null;
@@ -186,11 +141,15 @@ public class BorrowerRepository implements IBorrowerRepository
         }
 
         return borrowers.toArray(new Borrower[0]);
+         */
     }
 
     @Override
-    public boolean updateBorrower(IBorrower borrower)
+    public ILogicRequestDTO updateBorrower(IBorrower borrower)
     {
+        return new LogicRequestDTO<Borrower>(borrower.getId()+".json", borrower, 0, Borrower.class);
+
+        /*
         File[] borrowerFiles = null;
         String jsonFilename = null;
 
@@ -223,11 +182,15 @@ public class BorrowerRepository implements IBorrowerRepository
         }
 
         return false;
+         */
     }
 
     @Override
-    public boolean deleteBorrower(int id)
+    public ILogicRequestDTO deleteBorrower(int id)
     {
+        return new LogicRequestDTO<Borrower>(id+".json", null, 2, Borrower.class);
+
+        /*
         IBorrower borrower = null;
 
         borrower = readBorrower(id);
@@ -242,5 +205,6 @@ public class BorrowerRepository implements IBorrowerRepository
         {
             return false; // The corresponding borrower still has something to pay off.
         }
+         */
     }
 }
