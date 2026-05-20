@@ -103,7 +103,7 @@ public class LogicUpdate implements ILogicUpdate
             {
                 logicReqDTOs = borrowerRepository.readAllBorrowers();
             }
-            else if(crudAction == 3 && longs.length == 1 && strings.length >= 2)
+            else if(crudAction == 3 && longs.length >= 1 && strings.length >= 2)
             {
                 int borrowerID = (int) longs[0];
 
@@ -149,8 +149,6 @@ public class LogicUpdate implements ILogicUpdate
 
                 String targetField = strings[1];
 
-                // TODO Require specific strings length. Otherwise return yet null.
-
                 // further with case-differentiation (e.g. "is firstname" meant to update?" and so on)
                 if(targetField.equalsIgnoreCase("firstname"))
                 {
@@ -166,7 +164,7 @@ public class LogicUpdate implements ILogicUpdate
                     if(!readBorrowerObj.setLastname(lastnameValue))
                         return null;
                 }
-                else if(targetField.equalsIgnoreCase("birthday"))
+                else if(targetField.equalsIgnoreCase("birthday") && longs.length == 2)
                 {
                     long birthday = longs[1];
                     Date birthdayObj = new Date(birthday);
@@ -174,7 +172,7 @@ public class LogicUpdate implements ILogicUpdate
                     if(!readBorrowerObj.setDateOfBirth(birthdayObj))
                         return null;
                 }
-                else if(targetField.equalsIgnoreCase("address"))
+                else if(targetField.equalsIgnoreCase("address") && strings.length == 6)
                 {
                     String street = strings[2];
                     String no = strings[3];
@@ -215,19 +213,36 @@ public class LogicUpdate implements ILogicUpdate
                 }
                 else if(targetField.equalsIgnoreCase("loans"))
                 {
+                    if(longs.length < 2)
+                        return null;
 
+                    int[] loanIDs = new int[longs.length-1]; // at least one loan ID exists in that
+
+                    for(int i = 0; i < loanIDs.length; i++)
+                    {
+                        loanIDs[i] = (int) longs[i+1];
+                    }
+
+                    if(!readBorrowerObj.setLoans(loanIDs))
+                        return null;
+                }
+                else
+                {
+                    return null;
                 }
 
                 logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.updateBorrower(readBorrowerObj)};
             }
-            else if(crudAction == 4)
+            else if(crudAction == 4 && longs.length == 1)
             {
-                logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.deleteBorrower()};
+                int borrowerID = (int) longs[0];
+
+                logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.deleteBorrower(borrowerID)};
             }
         }
         else if(strings[0].equalsIgnoreCase("loan"))
         {
-
+            
         }
 
         // Make sure the re-called function will later not think this is an artificial call (in order to ignore the call of the real terminal)
