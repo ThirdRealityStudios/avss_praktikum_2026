@@ -19,6 +19,19 @@ glpat-IkCQeZPpDcGwEnkG7dYQCm86MQp1OjN0Nwk.01.0z01ekrbd
 
 [Download here](artifact/26SS-SWA-P02%20Schichtenarchitekturen.pdf)
 
+### Troubleshooting For Windows 11 Users (Maven Certificate Issue)
+
+Download the certificate from git.fh-muenster.de (using your browser e.g.).
+You wil receive a .pem from the CA (which is normally enough).
+
+Then execute the following command:
+
+```
+"%JAVA_HOME%\bin\keytool.exe" -importcert ^ -alias harica-root ^ -file "%JAVA_HOME%\bin\git-fh-muenster-de.pem" ^ -keystore "%JAVA_HOME%\lib\security\cacerts" ^ -storepass changeit
+```
+
+Make sure %JAVA_HOME% is set properly and your IDE has set correct language levels and JDK paths.
+
 ### UML Component Diagram
 
 ![alt text](artifact/UML_Component_Diagram_JPG.jpg)
