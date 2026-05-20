@@ -11,7 +11,12 @@ import de.fhms.jp253163.avss.arch.layered.inverted.lms.application.data.dto.Logi
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.ITerminalUpdate;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.ITerminalRequestDTO;
 import de.fhms.jp253163.avss.arch.layered.inverted.lms.presentation.data.TerminalRequestDTO;
+import org.apache.commons.lang3.ArraySorter;
+import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 public class LogicUpdate implements ILogicUpdate
@@ -34,7 +39,21 @@ public class LogicUpdate implements ILogicUpdate
         this.schufaRepository = schufaRepository;
     }
 
-    private ILogicRequestDTO[] processBorrowerRequest(long[] longs, double[] doubles, String[] strings, int crudAction)
+    private int max(int[] arr)
+    {
+        if(arr == null || arr.length == 0)
+            return -1;
+
+        int max = 0;
+
+        for(int i = 0; i < arr.length; i++)
+            if(arr[i] > arr[max])
+                max = i;
+
+        return max;
+    }
+
+    private ILogicRequestDTO[] processBorrowerRequest(int[] jsonNumbers, long[] longs, double[] doubles, String[] strings, int crudAction)
     {
         ILogicRequestDTO[] logicReqDTOs = null;
 
@@ -70,17 +89,20 @@ public class LogicUpdate implements ILogicUpdate
 
             Date dateOfBirth = new Date(birthday);
 
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.createBorrower(firstname, lastname, dateOfBirth, residentialAddress, 0.9d)};
+            int maxIndex = max(jsonNumbers);
+            int maxValue = jsonNumbers[maxIndex];
+
+            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.createBorrower(maxValue, firstname, lastname, dateOfBirth, residentialAddress, 0.9d)};
         }
         else if(crudAction == 1 && longs.length == 1)
         {
             int id = (int) longs[0];
 
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(id)};
+            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(jsonNumbers, id)};
         }
         else if(crudAction == 2)
         {
-            logicReqDTOs = borrowerRepository.readAllBorrowers();
+            logicReqDTOs = borrowerRepository.readAllBorrowers(jsonNumbers);
         }
         else if(crudAction == 3 && longs.length >= 1 && strings.length >= 2)
         {
@@ -96,7 +118,7 @@ public class LogicUpdate implements ILogicUpdate
 
             // Now do the little "hack" to get the borrower dataset.
             terminalRequestDTO = artificialTerminalRequestDTO;
-            ILogicRequestDTO[] artificialRequestData = request();
+            ILogicRequestDTO[] artificialRequestData = request(jsonNumbers);
             if(artificialRequestData == null || artificialRequestData.length == 0)
                 return null;
 
@@ -222,7 +244,7 @@ public class LogicUpdate implements ILogicUpdate
         return logicReqDTOs;
     }
 
-    private ILogicRequestDTO[] processLoanRequest(long[] longs, double[] doubles, String[] strings, int crudAction)
+    private ILogicRequestDTO[] processLoanRequest(int[] jsonNumbers, long[] longs, double[] doubles, String[] strings, int crudAction)
     {
         // TODO Adjust this function for loan management.
         ILogicRequestDTO[] logicReqDTOs = null;
@@ -259,17 +281,20 @@ public class LogicUpdate implements ILogicUpdate
 
             Date dateOfBirth = new Date(birthday);
 
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.createBorrower(firstname, lastname, dateOfBirth, residentialAddress, 0.9d)};
+            int maxIndex = max(jsonNumbers);
+            int maxValue = jsonNumbers[maxIndex];
+
+            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.createBorrower(maxValue, firstname, lastname, dateOfBirth, residentialAddress, 0.9d)};
         }
         else if(crudAction == 1 && longs.length == 1)
         {
             int id = (int) longs[0];
 
-            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(id)};
+            logicReqDTOs = new ILogicRequestDTO[]{borrowerRepository.readBorrower(jsonNumbers, id)};
         }
         else if(crudAction == 2)
         {
-            logicReqDTOs = borrowerRepository.readAllBorrowers();
+            logicReqDTOs = borrowerRepository.readAllBorrowers(jsonNumbers);
         }
         else if(crudAction == 3 && longs.length >= 1 && strings.length >= 2)
         {
@@ -285,7 +310,7 @@ public class LogicUpdate implements ILogicUpdate
 
             // Now do the little "hack" to get the borrower dataset.
             terminalRequestDTO = artificialTerminalRequestDTO;
-            ILogicRequestDTO[] artificialRequestData = request();
+            ILogicRequestDTO[] artificialRequestData = request(jsonNumbers);
             if(artificialRequestData == null || artificialRequestData.length == 0)
                 return null;
 
@@ -412,7 +437,7 @@ public class LogicUpdate implements ILogicUpdate
     }
 
     @Override
-    public ILogicRequestDTO[] request()
+    public ILogicRequestDTO[] request(int[] jsonNumbers)
     {
         // Should the terminal be skipped?
         boolean isArtificialCall = terminalRequestDTO != null;
@@ -436,11 +461,11 @@ public class LogicUpdate implements ILogicUpdate
 
         if(strings[0].equalsIgnoreCase("borrower"))
         {
-            logicReqDTOs = processBorrowerRequest(longs, doubles, strings, crudAction);
+            logicReqDTOs = processBorrowerRequest(jsonNumbers, longs, doubles, strings, crudAction);
         }
         else if(strings[0].equalsIgnoreCase("loan"))
         {
-            logicReqDTOs = processLoanRequest(longs, doubles, strings, crudAction);
+            logicReqDTOs = processLoanRequest(jsonNumbers, longs, doubles, strings, crudAction);
         }
 
         // Make sure the re-called function will later not think this is an artificial call (in order to ignore the call of the real terminal)
