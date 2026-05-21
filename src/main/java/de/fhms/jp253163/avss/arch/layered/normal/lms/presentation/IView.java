@@ -1,6 +1,8 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
 
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.ICreateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IReadBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IDeleteBorrowerViewHandler;
@@ -35,6 +37,13 @@ public interface IView
      * @param handler
      */
     public void setReadBorrowerViewHandler(IReadBorrowerViewHandler handler);
+
+    /**
+     * Similar to setCreateBorrowerViewHandler()
+     *
+     * @param handler
+     */
+    public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler handler);
 
     /**
      * Similar to setCreateBorrowerViewHandler()
