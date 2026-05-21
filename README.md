@@ -1,8 +1,10 @@
-# Praktikum SS 2026 Termin 2 (Data Tier Component = DateiSpeicher)
+# Praktikum SS 2026 Termin 3 (Infrastructure Component = DateiSpeicher)
 
 Contains the persistent data access logic,
 including serialization.
-So it is mostly the same as in appointment 1 because there it was also layered architecture (by coincidence).
+So it is mostly the same as the Data Tier in appointment 1 and 2 because DateiSpeicher is infrastructure.
+It is not directly part of MVP pattern but ofc necessary.
+Model component will use this here.
 
 ## GitLab Token For IDE Use
 
