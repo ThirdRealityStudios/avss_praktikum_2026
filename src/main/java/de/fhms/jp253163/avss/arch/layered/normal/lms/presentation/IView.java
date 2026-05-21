@@ -3,8 +3,8 @@ package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IUpdateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IRequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IDeleteBorrowerViewHandler;
 
 import java.util.List;
@@ -70,6 +70,6 @@ public interface IView
      *
      * @param borrowers
      */
-    public void setBorrowerData(List<IDTOBorrowerCreate> borrowers);
-    public void showLoanData(List<IDTOLoanCreate> loans);
+    public void setBorrowerData(List<IRequestDTOBorrowerCreate> borrowers);
+    public void showLoanData(List<IRequestDTOLoanCreate> loans);
 }

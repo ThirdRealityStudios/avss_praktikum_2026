@@ -1,9 +1,6 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto;
 
-/**
- * Returned by view to the presenter for requesting borrower creation with the given data.
- */
-public interface IDTOBorrowerCreate
+public interface IDTOBorrower
 {
     public String getFirstname();
     public String getLastname();

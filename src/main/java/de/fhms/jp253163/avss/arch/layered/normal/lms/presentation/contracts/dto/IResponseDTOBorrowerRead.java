@@ -5,7 +5,7 @@ package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto
  * Contains all necessary borrower data,
  * ready to show.
  */
-public interface IDTOBorrowerRead extends IDTOBorrowerCreate
+public interface IResponseDTOBorrowerRead extends IDTOBorrower
 {
-    public int getID();
+    public int getBorrowerID();
 }
