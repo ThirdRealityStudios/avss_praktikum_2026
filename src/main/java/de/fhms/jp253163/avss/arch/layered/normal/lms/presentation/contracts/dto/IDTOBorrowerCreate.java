@@ -7,7 +7,10 @@ public interface IDTOBorrowerCreate
     public int getDayOfBirth();
     public int getMonthOfBirth();
     public int getYearOfBirth();
-    public String[] getResidentialAddress();
+    public String getStreet();
+    public String getNo();
+    public String getPlace();
+    public int getZip();
     public double getSchufaScore();
     public int[] getLoanIDs();
 }
