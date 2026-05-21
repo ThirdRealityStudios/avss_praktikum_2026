@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto;
 
-public interface IDTOLoanRead
+public interface IDTOLoanRead extends IDTOLoanCreate
 {
 
 }
