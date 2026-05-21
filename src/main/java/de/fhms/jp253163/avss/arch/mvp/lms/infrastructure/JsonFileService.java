@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.data;
+package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
