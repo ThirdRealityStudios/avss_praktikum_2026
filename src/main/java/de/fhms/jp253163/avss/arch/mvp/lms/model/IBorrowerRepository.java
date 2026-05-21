@@ -1,7 +1,7 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.application;
+package de.fhms.jp253163.avss.arch.mvp.lms.model;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IBorrower;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
 
 import java.util.Date;
 

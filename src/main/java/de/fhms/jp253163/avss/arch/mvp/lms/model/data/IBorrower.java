@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.application.data;
+package de.fhms.jp253163.avss.arch.mvp.lms.model.data;
 
 import java.util.Date;
 

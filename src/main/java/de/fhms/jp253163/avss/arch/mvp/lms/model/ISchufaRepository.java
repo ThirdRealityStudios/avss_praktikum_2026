@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.application;
+package de.fhms.jp253163.avss.arch.mvp.lms.model;
 
 public interface ISchufaRepository
 {
