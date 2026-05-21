@@ -1,8 +1,7 @@
-package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts;
+package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto;
 
-public interface IBorrowerDTO
+public interface IDTOBorrowerCreate
 {
-    public int getId();
     public String getFirstname();
     public String getLastname();
     public int getDayOfBirth();
