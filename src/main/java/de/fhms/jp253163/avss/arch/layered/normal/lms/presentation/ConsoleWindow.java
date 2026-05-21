@@ -5,9 +5,12 @@ import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ILoanRepository
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.ISchufaRepository;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.application.data.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateParser;
 
 import javax.swing.*;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
 import java.util.Scanner;
 
