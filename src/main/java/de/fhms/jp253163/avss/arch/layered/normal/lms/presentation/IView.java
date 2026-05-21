@@ -1,9 +1,9 @@
 package de.fhms.jp253163.avss.arch.layered.normal.lms.presentation;
 
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IAddBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.dto.IDTOLoanCreate;
-import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IRemoveBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.layered.normal.lms.presentation.contracts.IDeleteBorrowerViewHandler;
 
 import java.util.List;
 
@@ -25,10 +25,23 @@ public interface IView
      *
      * in a console: the start() function will simply invoke the needed handlers exactly at the times when needed (see its JavaDoc comment)
      *
-     * @param addBorrower
+     * @param handler
      */
-    public void setAddBorrowerViewHandler(IAddBorrowerViewHandler addBorrower);
-    public void setRemoveBorrowerViewHandler(IRemoveBorrowerViewHandler removeBorrower);
+    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler);
+
+    /**
+     * Similar to setCreateBorrowerViewHandler()
+     *
+     * @param handler
+     */
+    public void setReadBorrowerViewHandler(IReadBorrowerViewHandler handler);
+
+    /**
+     * Similar to setCreateBorrowerViewHandler()
+     *
+     * @param handler
+     */
+    public void setDeleteBorrowerViewHandler(IDeleteBorrowerViewHandler handler);
 
     /**
      * Starts the view.
