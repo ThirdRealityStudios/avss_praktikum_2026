@@ -9,6 +9,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.command.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.BorrowerInputReader;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.InputReader;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.LoanInputReader;
@@ -268,6 +269,10 @@ public class ConsoleView implements IView
         }
         else if(command instanceof CommandUpdateBorrower)
         {
+            // TODO Make this done here..!
+
+            int borrowerID
+
             String firstname = borrowerInputReader.readFirstname();
             String lastname = borrowerInputReader.readLastname();
 
@@ -278,13 +283,11 @@ public class ConsoleView implements IView
 
             LocalDate birthday = borrowerInputReader.readBirthday();
 
-            double schufaScore = 0.9d; // simplified assumed
-
             int[] loans = new int[0]; // in the beginning, there are no loans
 
             try
             {
-                IRequestDTOBorrowerUpdate updateBorrowerDTO = new RequestDTOBorrowerUpdate(firstname, lastname, street, no, place, zip, birthday, schufaScore, loans);
+                IRequestDTOBorrowerUpdate updateBorrowerDTO = new RequestDTOBorrowerUpdate(firstname, lastname, street, no, place, zip, birthday, loans);
 
                 if(updateBorrowerViewHandler != null)
                     updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
