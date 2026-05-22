@@ -1,12 +1,20 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.command.ICommand;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.command.*;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.BorrowerInputReader;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.InputReader;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.LoanInputReader;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,6 +29,20 @@ public class ConsoleView implements IView
     private IReadLoanViewHandler readLoanViewHandler;
     private IUpdateLoanViewHandler updateLoanViewHandler;
     private IDeleteLoanViewHandler deleteLoanViewHandler;
+
+    private InputReader inputReader;
+    private BorrowerInputReader borrowerInputReader;
+    private LoanInputReader loanInputReader;
+
+    public ConsoleView(InputReader inputReader, BorrowerInputReader borrowerInputReader, LoanInputReader loanInputReader) throws NullPointerException
+    {
+        if(inputReader == null || borrowerInputReader == null || loanInputReader == null)
+            throw new NullPointerException("at least one argument in constructor is null");
+
+        this.inputReader = inputReader;
+        this.borrowerInputReader = borrowerInputReader;
+        this.loanInputReader = loanInputReader;
+    }
 
     @Override
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler)
@@ -93,7 +115,7 @@ public class ConsoleView implements IView
         return false;
     }
 
-    private Object parse(String userInput)
+    private ICommand parse(String userInput)
     {
         String[] userEntries = StringUtils.split(userInput, " ");
 
@@ -175,19 +197,73 @@ public class ConsoleView implements IView
         return null;
     }
 
-    private Object interpret(Object command)
+    private Object execute(ICommand command)
     {
         if(command instanceof CommandCreateBorrower)
         {
-            CommandCreateBorrower parsedCommand = (CommandCreateBorrower) command;
+            String firstname = borrowerInputReader.readFirstname();
+            String lastname = borrowerInputReader.readLastname();
 
-            IRequestDTOBorrowerCreate createBorrowerDTO = new
+            String street = borrowerInputReader.readStreet();
+            String no = borrowerInputReader.readNo();
+            String place = borrowerInputReader.readPlace();
+            int zip = borrowerInputReader.readZip();
+
+            LocalDate birthday = borrowerInputReader.readBirthday();
+
+            double schufaScore = 0.9d; // simplified assumed
+
+            int[] loans = new int[0]; // in the beginning, there are no loans
+
+            try
+            {
+                IRequestDTOBorrowerCreate createBorrowerDTO = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zip, birthday, schufaScore, loans);
+
+                if(createBorrowerViewHandler != null)
+                    createBorrowerViewHandler.invoke(createBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
+            }
+            catch(NullPointerException e)
+            {
+                return null;
+            }
         }
         else if(command instanceof CommandReadBorrower)
         {
-            CommandReadBorrower parsedCommand = (CommandReadBorrower) command;
+            if(command.getParameters().length > 1)
+            {
+                String readTarget = command.getParameters()[1];
 
+                IRequestDTOBorrowerRead readBorrowerDTO = null;
 
+                if(readTarget.equalsIgnoreCase("all"))
+                {
+                    readBorrowerDTO = new RequestDTOBorrowerRead(-1);
+
+                    if(readBorrowerViewHandler != null)
+                        readBorrowerViewHandler.invoke(readBorrowerDTO);
+                }
+                else if(StringUtils.isNumeric(readTarget))
+                {
+                    int id = -1;
+
+                    try
+                    {
+                        id = Integer.parseInt(readTarget);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        return null;
+                    }
+
+                    if(id >= 0)
+                    {
+                        readBorrowerDTO = new RequestDTOBorrowerRead(id);
+
+                        if(readBorrowerViewHandler != null)
+                            readBorrowerViewHandler.invoke(readBorrowerDTO);
+                    }
+                }
+            }
         }
         else if(command instanceof CommandUpdateBorrower)
         {
@@ -235,8 +311,8 @@ public class ConsoleView implements IView
         while(true)
         {
             String userInput = readUserInput();
-            Object command = parse(userInput);
-            Object handler = interpret(command);
+            ICommand command = parse(userInput);
+            Object handler = execute(command);
 
             // TODO Invoke
         }

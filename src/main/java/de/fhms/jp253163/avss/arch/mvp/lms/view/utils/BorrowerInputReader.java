@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.utils;
 
-import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ public class BorrowerInputReader
         this.inputReader = inputReader;
     }
 
-    public String readFirstname() throws IllegalArgumentException
+    public String readFirstname()
     {
         return inputReader.readString(3, 20, "Firstname (3 - 20 symbols): ");
     }
 
-    public String readLastname() throws IllegalArgumentException
+    public String readLastname()
     {
         return inputReader.readString(3, 20, "Lastname (3 - 20 symbols): ");
     }

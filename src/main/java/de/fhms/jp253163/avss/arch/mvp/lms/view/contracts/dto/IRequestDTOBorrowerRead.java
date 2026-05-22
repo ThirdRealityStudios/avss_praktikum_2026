@@ -5,7 +5,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto;
  * Contains all necessary borrower data,
  * ready to show.
  */
-public interface IRequestDTOBorrowerRead extends IDTOBorrower
+public interface IRequestDTOBorrowerRead
 {
-    public int[] getBorrowerIDs();
+    public int getBorrowerID();
 }
