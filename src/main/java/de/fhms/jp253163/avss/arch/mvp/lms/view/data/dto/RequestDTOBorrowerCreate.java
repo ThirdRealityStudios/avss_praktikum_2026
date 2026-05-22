@@ -11,13 +11,10 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
     private int zip;
 
     private LocalDate birthday;
-    private double schufaScore;
 
-    private int[] loanIDs;
-
-    public RequestDTOBorrowerCreate(String firstname, String lastname, String street, String no, String place, int zip, LocalDate birthday, double schufaScore, int[] loanIDs) throws NullPointerException
+    public RequestDTOBorrowerCreate(String firstname, String lastname, String street, String no, String place, int zip, LocalDate birthday) throws NullPointerException
     {
-        if(firstname == null || lastname == null || street == null || no == null || place == null || birthday == null || loanIDs == null)
+        if(firstname == null || lastname == null || street == null || no == null || place == null || birthday == null)
             throw new NullPointerException();
 
         this.firstname = firstname;
@@ -29,8 +26,6 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
         this.zip = zip;
 
         this.birthday = birthday;
-        this.schufaScore = schufaScore;
-        this.loanIDs = loanIDs;
     }
 
     @Override
@@ -76,15 +71,5 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
     @Override
     public int getZip() {
         return zip;
-    }
-
-    @Override
-    public double getSchufaScore() {
-        return schufaScore;
-    }
-
-    @Override
-    public int[] getLoanIDs() {
-        return loanIDs;
     }
 }

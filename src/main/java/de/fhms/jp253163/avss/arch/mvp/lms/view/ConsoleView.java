@@ -3,6 +3,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.command.ICommand;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.command.*;
@@ -217,7 +218,7 @@ public class ConsoleView implements IView
 
             try
             {
-                IRequestDTOBorrowerCreate createBorrowerDTO = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zip, birthday, schufaScore, loans);
+                IRequestDTOBorrowerCreate createBorrowerDTO = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zip, birthday);
 
                 if(createBorrowerViewHandler != null)
                     createBorrowerViewHandler.invoke(createBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
@@ -267,9 +268,31 @@ public class ConsoleView implements IView
         }
         else if(command instanceof CommandUpdateBorrower)
         {
-            CommandUpdateBorrower parsedCommand = (CommandUpdateBorrower) command;
+            String firstname = borrowerInputReader.readFirstname();
+            String lastname = borrowerInputReader.readLastname();
 
+            String street = borrowerInputReader.readStreet();
+            String no = borrowerInputReader.readNo();
+            String place = borrowerInputReader.readPlace();
+            int zip = borrowerInputReader.readZip();
 
+            LocalDate birthday = borrowerInputReader.readBirthday();
+
+            double schufaScore = 0.9d; // simplified assumed
+
+            int[] loans = new int[0]; // in the beginning, there are no loans
+
+            try
+            {
+                IRequestDTOBorrowerUpdate updateBorrowerDTO = new RequestDTOBorrowerUpdate(firstname, lastname, street, no, place, zip, birthday, schufaScore, loans);
+
+                if(updateBorrowerViewHandler != null)
+                    updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
+            }
+            catch(NullPointerException e)
+            {
+                return null;
+            }
         }
         else if(command instanceof CommandDeleteBorrower)
         {

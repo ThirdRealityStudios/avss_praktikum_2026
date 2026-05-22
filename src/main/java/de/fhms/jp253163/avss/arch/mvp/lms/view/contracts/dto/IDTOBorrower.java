@@ -11,6 +11,4 @@ public interface IDTOBorrower
     public String getNo();
     public String getPlace();
     public int getZip();
-    public double getSchufaScore();
-    public int[] getLoanIDs();
 }
