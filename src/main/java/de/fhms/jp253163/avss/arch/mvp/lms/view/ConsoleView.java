@@ -1,15 +1,10 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.command.ICommand;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.command.*;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.BorrowerInputReader;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.InputReader;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.LoanInputReader;
@@ -199,121 +194,261 @@ public class ConsoleView implements IView
         return null;
     }
 
-    private Object execute(ICommand command)
+    private void executeCreateBorrower()
     {
-        if(command instanceof CommandCreateBorrower)
+        String firstname = borrowerInputReader.readFirstname();
+        String lastname = borrowerInputReader.readLastname();
+
+        String street = borrowerInputReader.readStreet();
+        String no = borrowerInputReader.readNo();
+        String place = borrowerInputReader.readPlace();
+        int zip = borrowerInputReader.readZip();
+
+        LocalDate birthday = borrowerInputReader.readBirthday();
+
+        double schufaScore = 0.9d; // simplified assumed
+
+        int[] loans = new int[0]; // in the beginning, there are no loans
+
+        try
         {
-            String firstname = borrowerInputReader.readFirstname();
-            String lastname = borrowerInputReader.readLastname();
+            IRequestDTOBorrowerCreate createBorrowerDTO = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zip, birthday);
 
-            String street = borrowerInputReader.readStreet();
-            String no = borrowerInputReader.readNo();
-            String place = borrowerInputReader.readPlace();
-            int zip = borrowerInputReader.readZip();
-
-            LocalDate birthday = borrowerInputReader.readBirthday();
-
-            double schufaScore = 0.9d; // simplified assumed
-
-            int[] loans = new int[0]; // in the beginning, there are no loans
-
-            try
-            {
-                IRequestDTOBorrowerCreate createBorrowerDTO = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zip, birthday);
-
-                if(createBorrowerViewHandler != null)
-                    createBorrowerViewHandler.invoke(createBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
-            }
-            catch(NullPointerException e)
-            {
-                return null;
-            }
+            if(createBorrowerViewHandler != null)
+                createBorrowerViewHandler.invoke(createBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
         }
-        else if(command instanceof CommandReadBorrower)
+        catch(NullPointerException e)
         {
-            if(command.getParameters().length > 1)
+
+        }
+    }
+
+    private void executeReadBorrower(ICommand readBorrower)
+    {
+        if(readBorrower.getParameters().length == 2)
+        {
+            String readTarget = readBorrower.getParameters()[1];
+
+            IRequestDTOBorrowerRead readBorrowerDTO = null;
+
+            if(readTarget.equalsIgnoreCase("all"))
             {
-                String readTarget = command.getParameters()[1];
+                readBorrowerDTO = new RequestDTOBorrowerRead(-1);
 
-                IRequestDTOBorrowerRead readBorrowerDTO = null;
+                if(readBorrowerViewHandler != null)
+                    readBorrowerViewHandler.invoke(readBorrowerDTO);
+            }
+            else if(StringUtils.isNumeric(readTarget))
+            {
+                int id = -1;
 
-                if(readTarget.equalsIgnoreCase("all"))
+                try
                 {
-                    readBorrowerDTO = new RequestDTOBorrowerRead(-1);
+                    id = Integer.parseInt(readTarget);
+                }
+                catch(NumberFormatException e)
+                {
+
+                }
+
+                if(id >= 0)
+                {
+                    readBorrowerDTO = new RequestDTOBorrowerRead(id);
 
                     if(readBorrowerViewHandler != null)
                         readBorrowerViewHandler.invoke(readBorrowerDTO);
                 }
-                else if(StringUtils.isNumeric(readTarget))
+            }
+        }
+    }
+
+    private void executeUpdateBorrower(ICommand updateBorrower)
+    {
+        if(updateBorrower.getParameters().length == 3)
+        {
+            String borrowerID = updateBorrower.getParameters()[1];
+            String property = updateBorrower.getParameters()[2];
+
+            if(StringUtils.isNumeric(borrowerID))
+            {
+                int borrowerIDParsed = -1, zip = -1;
+                String firstname = null, lastname = null, street = null, no = null, place = null;
+                LocalDate birthday = null;
+                int[] loans = null;
+
+                try
                 {
-                    int id = -1;
+                    borrowerIDParsed = Integer.parseInt(borrowerID);
+
+                    if(property.equalsIgnoreCase("firstname"))
+                    {
+                        firstname = borrowerInputReader.readFirstname();
+                    }
+                    else if(property.equalsIgnoreCase("lastname"))
+                    {
+                        lastname = borrowerInputReader.readLastname();
+                    }
+                    else if(property.equalsIgnoreCase("street"))
+                    {
+                        street = borrowerInputReader.readStreet();
+                    }
+                    else if(property.equalsIgnoreCase("no"))
+                    {
+                        no = borrowerInputReader.readNo();
+                    }
+                    else if(property.equalsIgnoreCase("place"))
+                    {
+                        place = borrowerInputReader.readPlace();
+                    }
+                    else if(property.equalsIgnoreCase("zip"))
+                    {
+                        zip = borrowerInputReader.readZip();
+                    }
+                    else if(property.equalsIgnoreCase("birthday"))
+                    {
+                        birthday = borrowerInputReader.readBirthday();
+                    }
+                    else if(property.equalsIgnoreCase("loans"))
+                    {
+                        loans = borrowerInputReader.readLoans();
+                    }
 
                     try
                     {
-                        id = Integer.parseInt(readTarget);
-                    }
-                    catch(NumberFormatException e)
-                    {
-                        return null;
-                    }
+                        IRequestDTOBorrowerUpdate updateBorrowerDTO = new RequestDTOBorrowerUpdate(borrowerIDParsed, firstname, lastname, birthday, street, no, place, zip, loans);
 
-                    if(id >= 0)
-                    {
-                        readBorrowerDTO = new RequestDTOBorrowerRead(id);
-
-                        if(readBorrowerViewHandler != null)
-                            readBorrowerViewHandler.invoke(readBorrowerDTO);
+                        if(updateBorrowerViewHandler != null)
+                            updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
                     }
+                    catch(NullPointerException e)
+                    {
+
+                    }
+                }
+                catch(NumberFormatException e)
+                {
+
                 }
             }
         }
+    }
+
+    private void executeDeleteBorrower(ICommand deleteBorrower)
+    {
+        if(deleteBorrower.getParameters().length == 2)
+        {
+            String deleteTarget = deleteBorrower.getParameters()[1];
+
+            IRequestDTOBorrowerDelete deleteBorrowerDTO = null;
+
+            if(StringUtils.isNumeric(deleteTarget))
+            {
+                int id = -1;
+
+                try
+                {
+                    id = Integer.parseInt(deleteTarget);
+                }
+                catch(NumberFormatException e)
+                {
+
+                }
+
+                if(id >= 0)
+                {
+                    deleteBorrowerDTO = new RequestDTOBorrowerDelete(id);
+
+                    if(deleteBorrowerViewHandler != null)
+                        deleteBorrowerViewHandler.invoke(deleteBorrowerDTO);
+                }
+            }
+        }
+    }
+
+    private void executeCreateLoan()
+    {
+        int borrowerID = loanInputReader.readBorrowerID("Borrower ID (at least 0)");
+        double amount = loanInputReader.readAmount();
+        double interestRate = loanInputReader.readInterestRate();
+        int term = loanInputReader.readTerm();
+
+        try
+        {
+            IRequestDTOLoanCreate createLoanDTO = new RequestDTOLoanCreate(borrowerID, amount, interestRate, term);
+
+            if(createLoanViewHandler != null)
+                createLoanViewHandler.invoke(createLoanDTO); // actual logic run here, defined in the presenter usually anyway.
+        }
+        catch(NullPointerException e)
+        {
+
+        }
+    }
+
+    private void executeReadLoan(ICommand readLoan)
+    {
+        if(readLoan.getParameters().length == 2)
+        {
+            String readTarget = readLoan.getParameters()[1];
+
+            IRequestDTOLoanRead readLoanDTO = null;
+
+            if(readTarget.equalsIgnoreCase("all"))
+            {
+                readLoanDTO = new RequestDTOLoanRead(null);
+
+                if(readLoanViewHandler != null)
+                    readLoanViewHandler.invoke(readLoanDTO);
+            }
+            else if(StringUtils.isNumeric(readTarget))
+            {
+                int id = -1;
+
+                try
+                {
+                    id = Integer.parseInt(readTarget);
+                }
+                catch(NumberFormatException e)
+                {
+
+                }
+
+                if(id >= 0)
+                {
+                    readLoanDTO = new RequestDTOLoanRead(id);
+
+                    if(readLoanViewHandler != null)
+                        readLoanViewHandler.invoke(readLoanDTO);
+                }
+            }
+        }
+    }
+
+    private void execute(ICommand command)
+    {
+        if(command instanceof CommandCreateBorrower)
+        {
+            executeCreateBorrower();
+        }
+        else if(command instanceof CommandReadBorrower)
+        {
+            executeReadBorrower(command);
+        }
         else if(command instanceof CommandUpdateBorrower)
         {
-            // TODO Make this done here..!
-
-            int borrowerID
-
-            String firstname = borrowerInputReader.readFirstname();
-            String lastname = borrowerInputReader.readLastname();
-
-            String street = borrowerInputReader.readStreet();
-            String no = borrowerInputReader.readNo();
-            String place = borrowerInputReader.readPlace();
-            int zip = borrowerInputReader.readZip();
-
-            LocalDate birthday = borrowerInputReader.readBirthday();
-
-            int[] loans = new int[0]; // in the beginning, there are no loans
-
-            try
-            {
-                IRequestDTOBorrowerUpdate updateBorrowerDTO = new RequestDTOBorrowerUpdate(firstname, lastname, street, no, place, zip, birthday, loans);
-
-                if(updateBorrowerViewHandler != null)
-                    updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
-            }
-            catch(NullPointerException e)
-            {
-                return null;
-            }
+            executeUpdateBorrower(command);
         }
         else if(command instanceof CommandDeleteBorrower)
         {
-            CommandDeleteBorrower parsedCommand = (CommandDeleteBorrower) command;
-
-
+            executeDeleteBorrower(command);
         }
         else if(command instanceof CommandCreateLoan)
         {
-            CommandCreateLoan parsedCommand = (CommandCreateLoan) command;
-
-
+            executeCreateLoan();
         }
         else if(command instanceof CommandReadLoan)
         {
-            CommandReadLoan parsedCommand = (CommandReadLoan) command;
-
-
+            executeReadLoan(command);
         }
         else if(command instanceof CommandUpdateLoan)
         {
@@ -327,8 +462,6 @@ public class ConsoleView implements IView
 
 
         }
-
-        return null; // Event handler triggered
     }
 
     @Override
@@ -338,9 +471,13 @@ public class ConsoleView implements IView
         {
             String userInput = readUserInput();
             ICommand command = parse(userInput);
-            Object handler = execute(command);
 
-            // TODO Invoke
+            /** Command execution will also listen to the corresponding events.
+             *  E.g. "borrower create event" was detected.
+             *  Then it will trigger the (optionally) attached handler too
+             *  (logic code usually defined in presenter, as it should for MVP user interactions)
+             */
+            execute(command);
         }
     }
 
