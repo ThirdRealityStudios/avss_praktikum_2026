@@ -351,16 +351,13 @@ public class ConsoleView implements IView
                 }
                 catch(NumberFormatException e)
                 {
-
+                    return;
                 }
 
-                if(id >= 0)
-                {
-                    deleteBorrowerDTO = new RequestDTOBorrowerDelete(id);
+                deleteBorrowerDTO = new RequestDTOBorrowerDelete(id);
 
-                    if(deleteBorrowerViewHandler != null)
-                        deleteBorrowerViewHandler.invoke(deleteBorrowerDTO);
-                }
+                if(deleteBorrowerViewHandler != null)
+                    deleteBorrowerViewHandler.invoke(deleteBorrowerDTO);
             }
         }
     }
@@ -395,7 +392,7 @@ public class ConsoleView implements IView
 
             if(readTarget.equalsIgnoreCase("all"))
             {
-                readLoanDTO = new RequestDTOLoanRead(null);
+                readLoanDTO = new RequestDTOLoanRead(-1);
 
                 if(readLoanViewHandler != null)
                     readLoanViewHandler.invoke(readLoanDTO);
@@ -410,16 +407,82 @@ public class ConsoleView implements IView
                 }
                 catch(NumberFormatException e)
                 {
-
+                    return;
                 }
 
-                if(id >= 0)
+                readLoanDTO = new RequestDTOLoanRead(id);
+
+                if(readLoanViewHandler != null)
+                    readLoanViewHandler.invoke(readLoanDTO);
+            }
+        }
+    }
+
+    private void executeUpdateLoan(ICommand updateLoan)
+    {
+        if(updateLoan.getParameters().length == 3)
+        {
+            String loanID = updateLoan.getParameters()[1];
+            String property = updateLoan.getParameters()[2];
+
+            if(StringUtils.isNumeric(loanID))
+            {
+                int loanIDParsed = -1, borrowerID = -1;
+
+                try
                 {
-                    readLoanDTO = new RequestDTOLoanRead(id);
+                    loanIDParsed = Integer.parseInt(loanID);
 
-                    if(readLoanViewHandler != null)
-                        readLoanViewHandler.invoke(readLoanDTO);
+                    if(property.equalsIgnoreCase("borrower"))
+                    {
+                        borrowerID = loanInputReader.readBorrowerID("Borrower ID (at least 0)");
+                    }
+
+                    try
+                    {
+                        IRequestDTOLoanUpdate updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, borrowerID);
+
+                        if(updateLoanViewHandler != null)
+                            updateLoanViewHandler.invoke(updateLoanDTO); // actual logic run here, defined in the presenter usually anyway.
+                    }
+                    catch(NullPointerException e)
+                    {
+
+                    }
                 }
+                catch(NumberFormatException e)
+                {
+
+                }
+            }
+        }
+    }
+
+    private void executeDeleteLoan(ICommand deleteLoan)
+    {
+        if(deleteLoan.getParameters().length == 2)
+        {
+            String deleteTarget = deleteLoan.getParameters()[1];
+
+            IRequestDTOLoanDelete deleteLoanDTO = null;
+
+            if(StringUtils.isNumeric(deleteTarget))
+            {
+                int id = -1;
+
+                try
+                {
+                    id = Integer.parseInt(deleteTarget);
+                }
+                catch(NumberFormatException e)
+                {
+                    return;
+                }
+
+                deleteLoanDTO = new RequestDTOLoanDelete(id);
+
+                if(deleteLoanViewHandler != null)
+                    deleteLoanViewHandler.invoke(deleteLoanDTO);
             }
         }
     }
@@ -452,15 +515,11 @@ public class ConsoleView implements IView
         }
         else if(command instanceof CommandUpdateLoan)
         {
-            CommandUpdateLoan parsedCommand = (CommandUpdateLoan) command;
-
-
+            executeUpdateLoan(command);
         }
         else if(command instanceof CommandDeleteLoan)
         {
-            CommandDeleteLoan parsedCommand = (CommandDeleteLoan) command;
-
-
+            executeDeleteLoan(command);
         }
     }
 
@@ -488,14 +547,26 @@ public class ConsoleView implements IView
     }
 
     @Override
-    public void setBorrowerData(List<IRequestDTOBorrowerCreate> borrowers)
+    public void setBorrowerData(List<IDTOBorrowerSet> borrowers)
     {
+        // in this console application it is unnecessary to save model component data as abstracted DTO in order to change the UI components
+        // (because this is a console application)
+        // So outputting beautified is enough in this context (It is expected every borrower DTO has overwritten the toString() function - beautified).
 
+        for(IDTOBorrowerSet borrowerSetDTO : borrowers)
+        {
+            showMessage(borrowerSetDTO.toString());
+            showMessage("\n");
+        }
     }
 
     @Override
-    public void setLoanData(List<IRequestDTOLoanCreate> loans)
+    public void setLoanData(List<IDTOLoanSet> loans)
     {
-
+        for(IDTOLoanSet loanSetDTO : loans)
+        {
+            showMessage(loanSetDTO.toString());
+            showMessage("\n");
+        }
     }
 }

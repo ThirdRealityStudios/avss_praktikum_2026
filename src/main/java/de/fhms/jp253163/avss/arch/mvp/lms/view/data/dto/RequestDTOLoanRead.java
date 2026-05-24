@@ -7,7 +7,7 @@ public class RequestDTOLoanRead implements IRequestDTOLoanRead
     private int loanID;
 
     /**
-     * @param loanID Give ID of all loans here.
+     * @param loanID Give ID of a loan here. Or -1 if all wanted.
      */
     public RequestDTOLoanRead(int loanID)
     {
@@ -15,7 +15,8 @@ public class RequestDTOLoanRead implements IRequestDTOLoanRead
     }
 
     @Override
-    public int getLoanIDs() {
+    public int getLoanID()
+    {
         return loanID;
     }
 }

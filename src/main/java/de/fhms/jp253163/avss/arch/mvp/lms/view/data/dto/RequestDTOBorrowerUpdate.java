@@ -26,13 +26,20 @@ public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
      * @param zip
      * @param loans
      */
-    public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip, int[] loans)
+    public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip, int[] loans) throws NullPointerException
     {
+        if(firstname == null || lastname == null || birthday == null || street == null || no == null || place == null || loans == null)
+            throw new NullPointerException();
+
         this.borrowerID = borrowerID;
         this.firstname = firstname;
         this.lastname = lastname;
         this.birthday = birthday;
-        this.
+        this.street = street;
+        this.no = no;
+        this.place = place;
+        this.zip = zip;
+        this.loans = loans;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
@@ -96,6 +98,6 @@ public interface IView
      *
      * @param borrowers
      */
-    public void setBorrowerData(List<IRequestDTOBorrowerCreate> borrowers);
-    public void setLoanData(List<IRequestDTOLoanCreate> loans);
+    public void setBorrowerData(List<IDTOBorrowerSet> borrowers);
+    public void setLoanData(List<IDTOLoanSet> loans);
 }
