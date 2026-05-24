@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ConsoleView implements IView
@@ -96,7 +97,15 @@ public class ConsoleView implements IView
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("> ");
-        userInput = scanner.nextLine();
+
+        try
+        {
+            userInput = scanner.nextLine();
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
 
         scanner.close();
 
@@ -529,6 +538,10 @@ public class ConsoleView implements IView
         while(true)
         {
             String userInput = readUserInput();
+
+            if(userInput == null)
+                continue;
+
             ICommand command = parse(userInput);
 
             /** Command execution will also listen to the corresponding events.
