@@ -532,6 +532,26 @@ public class ConsoleView implements IView
         }
     }
 
+    public void showHelp()
+    {
+        String helpMessage =
+        "Help\n" +
+        "-----\n" +
+        "\n" +
+        "1. /create\n" +
+        "\t\tborrower\n" +
+        "\t\tloan\n" +
+        "2. /read [borrower | loan] [ID | all]\n" +
+        "3. /update\n" +
+        "\t\tborrower [ID] [firstname | lastname | address | birthday | schufa | loans]\n" +
+        "\t\tloan [ID] [borrower [ID] | book installment]\n" +
+        "4. /delete [borrower | loan] [ID]\n" +
+        "5. /info\t\tRuntime details\n" +
+        "6. /exit\n";
+
+        showMessage(helpMessage);
+    }
+
     @Override
     public void start()
     {
@@ -543,6 +563,13 @@ public class ConsoleView implements IView
                 continue;
 
             ICommand command = parse(userInput);
+
+            if(command == null)
+            {
+                showHelp();
+
+                continue;
+            }
 
             /** Command execution will also listen to the corresponding events.
              *  E.g. "borrower create event" was detected.
@@ -557,6 +584,7 @@ public class ConsoleView implements IView
     public void showMessage(String message)
     {
         System.out.println(message);
+        System.out.println();
     }
 
     @Override
