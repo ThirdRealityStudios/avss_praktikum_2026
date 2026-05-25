@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
