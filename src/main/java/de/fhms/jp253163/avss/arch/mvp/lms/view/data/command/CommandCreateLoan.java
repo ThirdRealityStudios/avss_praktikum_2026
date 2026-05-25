@@ -33,34 +33,4 @@ public class CommandCreateLoan implements ICommand
     {
         return parameters;
     }
-
-    /*
-    public void run(String[] parameters)
-    {
-        ILoan loan = null;
-
-        int borrowerId = -1, term = -1;
-        double amount = -1, interestRate = -1;
-
-        ILoan[] loans = null;
-
-        if(parameters != null && parameters.length == 2)
-        {
-            borrowerId = loanInputReader.readBorrowerID("Borrower ID (at least zero): ");
-
-            amount = loanInputReader.readAmount();
-
-            interestRate = loanInputReader.readInterestRate();
-
-            term = loanInputReader.readTerm();
-
-            loan = loanRepository.createLoan(borrowerId, amount, interestRate, term);
-
-            if(loan != null)
-                System.out.println("Created new loan");
-            else
-                System.out.println("Could not create loan!");
-        }
-    }
-     */
 }

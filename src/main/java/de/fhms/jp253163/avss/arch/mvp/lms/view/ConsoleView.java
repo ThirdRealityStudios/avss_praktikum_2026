@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ConsoleView implements IView
@@ -563,8 +562,7 @@ public class ConsoleView implements IView
         "\t\tborrower [ID] [firstname | lastname | address | birthday | schufa | loans]\n" +
         "\t\tloan [ID] [borrower [ID] | book installment]\n" +
         "4. /delete [borrower | loan] [ID]\n" +
-        "5. /info\t\tRuntime details\n" +
-        "6. /exit\n";
+        "5. /exit\n";
 
         showMessage(helpMessage);
     }
