@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class JsonFileService<T> implements IJsonFileService<T>
 {
@@ -71,7 +72,7 @@ public class JsonFileService<T> implements IJsonFileService<T>
         FileReader reader = null;
         File file = null;
         T obj = null;
-        String json = null;
+        String json = "";
 
         try
         {
@@ -97,8 +98,20 @@ public class JsonFileService<T> implements IJsonFileService<T>
 
         try
         {
-            json = reader.readAllAsString();
+            // json = reader.readAllAsString();
+            Scanner scanner = new Scanner(reader);
 
+            try
+            {
+                while(scanner.hasNextLine())
+                    json += scanner.nextLine();
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
+
+            scanner.close();
             reader.close();
         }
         catch(IOException e)
