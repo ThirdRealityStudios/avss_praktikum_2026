@@ -70,12 +70,21 @@ public class InputReader
 
     public String readString(int minLength, int maxLength, String promptMessage)
     {
-        String stringRead;
+        String stringRead = null;
 
         do
         {
             System.out.print(promptMessage);
-            stringRead = scanner.nextLine();
+
+            try
+            {
+                if(scanner.hasNextLine())
+                    stringRead = scanner.nextLine();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
         while(stringRead == null || stringRead.length() < minLength || stringRead.length() > maxLength);
 
