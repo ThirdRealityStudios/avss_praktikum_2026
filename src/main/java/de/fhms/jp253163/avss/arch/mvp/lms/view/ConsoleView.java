@@ -31,13 +31,14 @@ public class ConsoleView implements IView
     private InputReader inputReader;
     private BorrowerInputReader borrowerInputReader;
     private LoanInputReader loanInputReader;
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
 
-    public ConsoleView(InputReader inputReader, BorrowerInputReader borrowerInputReader, LoanInputReader loanInputReader) throws NullPointerException
+    public ConsoleView(Scanner scanner, InputReader inputReader, BorrowerInputReader borrowerInputReader, LoanInputReader loanInputReader) throws NullPointerException
     {
-        if(inputReader == null || borrowerInputReader == null || loanInputReader == null)
+        if(scanner == null || inputReader == null || borrowerInputReader == null || loanInputReader == null)
             throw new NullPointerException("at least one argument in constructor is null");
 
+        this.scanner = scanner;
         this.inputReader = inputReader;
         this.borrowerInputReader = borrowerInputReader;
         this.loanInputReader = loanInputReader;
