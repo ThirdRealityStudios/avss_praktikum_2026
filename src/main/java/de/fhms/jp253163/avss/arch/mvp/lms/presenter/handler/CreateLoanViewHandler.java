@@ -23,7 +23,11 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
     @Override
     public void invoke(IRequestDTOLoanCreate iRequestDTOLoanCreate) {
         if(iRequestDTOLoanCreate == null)
+        {
+            presenter.getView().showMessage("Creating loan failed (code 0: technical issue?)");
+
             return;
+        }
 
         int borrowerID = iRequestDTOLoanCreate.getBorrower();
         double interestRate = iRequestDTOLoanCreate.getInterestRate();

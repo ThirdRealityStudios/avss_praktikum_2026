@@ -28,7 +28,11 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
     public void invoke(IRequestDTOBorrowerCreate iRequestDTOBorrowerCreate)
     {
         if(iRequestDTOBorrowerCreate == null)
+        {
+            presenter.getView().showMessage("Creating borrower failed (code 0: technical issue?)");
+
             return;
+        }
 
         String firstname = iRequestDTOBorrowerCreate.getFirstname();
         String lastname = iRequestDTOBorrowerCreate.getLastname();
@@ -44,7 +48,18 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         int zip = iRequestDTOBorrowerCreate.getZip();
         String place = iRequestDTOBorrowerCreate.getPlace();
 
-        IResidentialAddress residentialAddress = new ResidentialAddress(street, no, zip, place);
+        IResidentialAddress residentialAddress = null;
+
+        try
+        {
+            residentialAddress = new ResidentialAddress(street, no, zip, place);
+        }
+        catch (IllegalArgumentException e)
+        {
+            presenter.getView().showMessage("Could not create borrower! (code 1: technical issue?)");
+
+            return;
+        }
 
         double schufaScore = 0.9d;
 

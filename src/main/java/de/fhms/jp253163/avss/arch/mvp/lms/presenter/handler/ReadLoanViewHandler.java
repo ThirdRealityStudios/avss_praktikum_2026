@@ -23,7 +23,11 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
     @Override
     public void invoke(IRequestDTOLoanRead iRequestDTOLoanRead) {
         if(iRequestDTOLoanRead == null)
+        {
+            presenter.getView().showMessage("Reading loan failed! (code 0: technical issue?)");
+
             return;
+        }
 
         ILoan loan = loanRepository.readLoan(iRequestDTOLoanRead.getLoanID());
 

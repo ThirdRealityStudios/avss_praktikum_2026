@@ -23,7 +23,11 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
     @Override
     public void invoke(IRequestDTOBorrowerRead iRequestDTOBorrowerRead) {
         if(iRequestDTOBorrowerRead == null)
+        {
+            presenter.getView().showMessage("Reading borrower failed! (code 0: technical issue?)");
+
             return;
+        }
 
         IBorrower borrower = borrowerRepository.readBorrower(iRequestDTOBorrowerRead.getBorrowerID());
 

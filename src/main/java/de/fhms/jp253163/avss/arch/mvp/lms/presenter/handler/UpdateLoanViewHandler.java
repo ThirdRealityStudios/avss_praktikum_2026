@@ -23,7 +23,11 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
     @Override
     public void invoke(IRequestDTOLoanUpdate iRequestDTOLoanUpdate) {
         if(iRequestDTOLoanUpdate == null)
+        {
+            presenter.getView().showMessage("Reading loan failed! (code 0: technical issue?)");
+
             return;
+        }
 
         int loanID = iRequestDTOLoanUpdate.getLoanID();
         int borrowerIDAttached = iRequestDTOLoanUpdate.getBorrowerID();
