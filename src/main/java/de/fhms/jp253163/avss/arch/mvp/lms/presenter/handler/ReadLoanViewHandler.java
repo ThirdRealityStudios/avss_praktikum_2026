@@ -21,7 +21,8 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
     }
 
     @Override
-    public void invoke(IRequestDTOLoanRead iRequestDTOLoanRead) {
+    public void invoke(IRequestDTOLoanRead iRequestDTOLoanRead)
+    {
         if(iRequestDTOLoanRead == null)
         {
             presenter.getView().showMessage("Reading loan failed! (code 0: technical issue?)");
@@ -29,11 +30,38 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
             return;
         }
 
-        ILoan loan = loanRepository.readLoan(iRequestDTOLoanRead.getLoanID());
+        int loanID = iRequestDTOLoanRead.getLoanID();
+        ILoan[] loans = null;
 
-        if(loan == null)
-            presenter.getView().showMessage("Could not find that loan!");
+        if(loanID == -1) // Read all
+        {
+            loans = loanRepository.readAllLoans();
+
+            if(loans == null || loans.length == 0)
+            {
+                presenter.getView().showMessage("Could not find any loans!");
+            }
+            else
+            {
+                presenter.getView().showMessage("The following loans do exist:");
+
+                for(ILoan loan : loans)
+                    presenter.getView().showMessage(loan.toString());
+            }
+
+            return;
+        }
         else
-            presenter.getView().showMessage(loan.toString());
+        {
+            loans = new ILoan[]{ loanRepository.readLoan(iRequestDTOLoanRead.getLoanID()) };
+
+            if(loans[0] == null)
+                presenter.getView().showMessage("Could not find that loan!");
+            else
+                presenter.getView().showMessage(loans[0].toString());
+
+            return;
+        }
+
     }
 }
