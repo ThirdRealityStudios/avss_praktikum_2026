@@ -34,7 +34,8 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
         double amount = iRequestDTOLoanCreate.getAmount();
         int term = iRequestDTOLoanCreate.getTerm();
 
-        ILoan loan = loanRepository.createLoan(borrowerID, interestRate, amount, term);
+                                 // createLoan(int borrowerID, double amount, double interestRate, int term)
+        ILoan loan = loanRepository.createLoan(borrowerID, amount interestRate, term);
 
         if(loan == null)
             presenter.getView().showMessage("Creating loan failed");
