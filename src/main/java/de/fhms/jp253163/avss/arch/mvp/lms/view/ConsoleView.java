@@ -31,6 +31,7 @@ public class ConsoleView implements IView
     private InputReader inputReader;
     private BorrowerInputReader borrowerInputReader;
     private LoanInputReader loanInputReader;
+    private Scanner scanner = new Scanner(System.in);
 
     public ConsoleView(InputReader inputReader, BorrowerInputReader borrowerInputReader, LoanInputReader loanInputReader) throws NullPointerException
     {
@@ -93,8 +94,6 @@ public class ConsoleView implements IView
     private String readUserInput()
     {
         String userInput = null;
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.print("> ");
 
@@ -197,6 +196,13 @@ public class ConsoleView implements IView
                 {
                     return new CommandDeleteLoan(parameters);
                 }
+            }
+        }
+        else
+        {
+            if(command.equalsIgnoreCase("/exit"))
+            {
+                return new CommandExit();
             }
         }
 
@@ -496,7 +502,13 @@ public class ConsoleView implements IView
         }
     }
 
-    private void execute(ICommand command)
+    /**
+     * Executes a command.
+     *
+     * @param command
+     * @return Usually returns false (do not exist). Except you enter /exit (then returns true to signalize)
+     */
+    private boolean execute(ICommand command)
     {
         if(command instanceof CommandCreateBorrower)
         {
@@ -530,6 +542,12 @@ public class ConsoleView implements IView
         {
             executeDeleteLoan(command);
         }
+        else if(command instanceof CommandExit)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public void showHelp()
@@ -555,7 +573,9 @@ public class ConsoleView implements IView
     @Override
     public void start()
     {
-        while(true)
+        boolean exit = false;
+
+        while(!exit)
         {
             String userInput = readUserInput();
 
@@ -576,8 +596,12 @@ public class ConsoleView implements IView
              *  Then it will trigger the (optionally) attached handler too
              *  (logic code usually defined in presenter, as it should for MVP user interactions)
              */
-            execute(command);
+            exit = execute(command);
         }
+
+        showMessage("Goodbye!");
+
+        scanner.close();
     }
 
     @Override
