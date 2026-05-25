@@ -13,7 +13,7 @@ public class CommandCreateLoan implements ICommand
      */
     public CommandCreateLoan(String[] parameters) throws IllegalArgumentException
     {
-        if(parameters == null || parameters.length == 0 || !parameters[0].equalsIgnoreCase("borrower"))
+        if(parameters == null || parameters.length == 0 || !parameters[0].equalsIgnoreCase("loan"))
         {
             throw new IllegalArgumentException("parameters are null, invalid or empty");
         }
