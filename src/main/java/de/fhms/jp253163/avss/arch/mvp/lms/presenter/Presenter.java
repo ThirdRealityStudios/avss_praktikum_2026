@@ -22,6 +22,4 @@ public class Presenter implements IPresenter
 
         return true;
     }
-
-
 }
