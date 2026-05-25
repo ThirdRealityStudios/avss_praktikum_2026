@@ -14,11 +14,14 @@ public class Presenter implements IPresenter
 
     public Presenter(IView view, IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws NullPointerException
     {
-        if(!setView(view) || borrowerRepository == null || loanRepository == null)
+        if(borrowerRepository == null || loanRepository == null)
             throw new NullPointerException();
 
         this.borrowerRepository = borrowerRepository;
         this.loanRepository = loanRepository;
+
+        if(!setView(view))
+            throw new NullPointerException();
     }
 
     @Override
