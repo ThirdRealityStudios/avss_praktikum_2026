@@ -145,7 +145,7 @@ public class ConsoleView implements IView
                 return null;
             }
         }
-        catch(IndexOutOfBoundsException e)
+        catch(Exception e)
         {
             return null;
         }
