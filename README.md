@@ -1,4 +1,4 @@
-# Praktikum SS 2026 Termin 3 (View Component = Terminal)
+# Praktikum SS 2026 Termin 3 (Presenter Component)
 
 ## GitLab Token For IDE Use
 
