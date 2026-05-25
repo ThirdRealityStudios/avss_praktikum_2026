@@ -1,12 +1,63 @@
 package de.fhms.jp253163.avss.arch.mvp.lms;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.IView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonFileService;
+import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.JsonFileService;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.*;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Borrower;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Loan;
+import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
+import de.fhms.jp253163.avss.arch.mvp.lms.presenter.Presenter;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.ConsoleView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.BorrowerInputReader;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.InputReader;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.LoanInputReader;
+
+import java.io.File;
+import java.util.Scanner;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        IView view = new ConsoleView();
+        Scanner s = new Scanner(System.in);
+        InputReader inputReader = new InputReader(s);
+        BorrowerInputReader bir = new BorrowerInputReader(inputReader);
+        LoanInputReader lir = new LoanInputReader(inputReader);
+
+        IView view = new ConsoleView(inputReader, bir, lir);
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+
+        try
+        {
+            IJsonFileService<Borrower> jfsBorrower = new JsonFileService(builder);
+            String executableDirectoryString = System.getProperty("user.dir");
+
+            if(executableDirectoryString == null)
+            {
+                return;
+            }
+
+            File exeutableDirectory = new File(executableDirectoryString);
+
+            IBorrowerRepository borrowerRepository = new BorrowerRepository(jfsBorrower, exeutableDirectory);
+
+            IJsonFileService<Loan> jfsLoan = new JsonFileService(builder);
+            ISchufaRepository schufaRepo = new SchufaRepository();
+            ILoanRepository loanRepository = new LoanRepository(jfsLoan, exeutableDirectory, schufaRepo, borrowerRepository);
+
+            IPresenter presenter = new Presenter(view, borrowerRepository, loanRepository);
+
+            view.start();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
