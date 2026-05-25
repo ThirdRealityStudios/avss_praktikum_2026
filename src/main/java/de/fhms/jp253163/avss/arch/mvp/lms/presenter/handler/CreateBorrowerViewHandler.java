@@ -12,14 +12,20 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
 
-    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository)
+    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository) throws NullPointerException
     {
+        if(borrowerRepository == null)
+            throw new NullPointerException();
+
         this.borrowerRepository = borrowerRepository;
     }
 
     @Override
     public void invoke(IRequestDTOBorrowerCreate iRequestDTOBorrowerCreate)
     {
+        if(iRequestDTOBorrowerCreate == null)
+            return;
+
         String firstname = iRequestDTOBorrowerCreate.getFirstname();
         String lastname = iRequestDTOBorrowerCreate.getLastname();
 

@@ -9,4 +9,6 @@ public interface IPresenter
      * @return True if given view is not null. Otherwise, false.
      */
     public boolean setView(IView view);
+
+    public IView getView();
 }
