@@ -29,11 +29,35 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
             return;
         }
 
-        IBorrower borrower = borrowerRepository.readBorrower(iRequestDTOBorrowerRead.getBorrowerID());
+        IBorrower[] borrowers = null;
+        int borrowerID = iRequestDTOBorrowerRead.getBorrowerID();
 
-        if(borrower == null)
-            presenter.getView().showMessage("Could not find that borrower!");
+        if(borrowerID == -1)
+        {
+            borrowers = borrowerRepository.readAllBorrowers();
+
+            if(borrowers == null || borrowers.length == 0)
+            {
+                presenter.getView().showMessage("Could not find any borrowers!");
+            }
+            else
+            {
+                presenter.getView().showMessage("The following borrowers do exist:");
+
+                for(IBorrower borrower : borrowers)
+                    presenter.getView().showMessage(borrower.toString());
+            }
+        }
         else
-            presenter.getView().showMessage(borrower.toString());
+        {
+            borrowers = new IBorrower[]{ borrowerRepository.readBorrower(iRequestDTOBorrowerRead.getBorrowerID()) };
+
+            if(borrowers[0] == null)
+                presenter.getView().showMessage("Could not find that borrower!");
+            else
+                presenter.getView().showMessage(borrowers[0].toString());
+
+            return;
+        }
     }
 }
