@@ -4,5 +4,9 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 
 public interface IPresenter
 {
-    public void setView(IView view);
+    /**
+     * @param view
+     * @return True if given view is not null. Otherwise, false.
+     */
+    public boolean setView(IView view);
 }
