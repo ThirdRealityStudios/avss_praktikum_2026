@@ -1,21 +1,19 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.model.data;
 
-import org.apache.commons.lang3.time.DateUtils;
-
-import java.text.ParseException;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 
 public class Borrower implements IBorrower
 {
     private int id;
     private String firstname, lastname;
-    private Date birthday;
+    private LocalDate birthday;
     private ResidentialAddress residentialAddress;
     private double schufaScore;
     private int[] loans;
 
-    public Borrower(int id, String firstname, String lastname, Date birthday, IResidentialAddress residentialAddress, double schufaScore, int[] loans) throws IllegalArgumentException
+    public Borrower(int id, String firstname, String lastname, LocalDate birthday, IResidentialAddress residentialAddress, double schufaScore, int[] loans) throws IllegalArgumentException
     {
         IllegalArgumentException defaultException = new IllegalArgumentException("Given argument is invalid, null or has invalid format.");
 
@@ -94,31 +92,31 @@ public class Borrower implements IBorrower
     }
 
     @Override
-    public Date getDateOfBirth()
+    public LocalDate getDateOfBirth()
     {
-        return new Date(birthday.getTime());
+        return LocalDate.of(birthday.getYear(), birthday.getMonthValue(), birthday.getDayOfMonth());
     }
 
     @Override
-    public boolean setDateOfBirth(Date birthday)
+    public boolean setDateOfBirth(LocalDate birthday)
     {
-        Date tooOldToBeTrue = null;
+        LocalDate tooOldToBeTrue = null;
 
         try
         {
-            tooOldToBeTrue = DateUtils.parseDate("1910-01-01", new String[] { "yyyy-MM-dd" });
+            tooOldToBeTrue = LocalDate.of(1910, 1, 1);
 
             if(tooOldToBeTrue == null)
                 return false;
         }
-        catch(ParseException e)
+        catch(DateTimeException e)
         {
             e.printStackTrace();
 
             return false;
         }
 
-        if(birthday == null || birthday.before(tooOldToBeTrue))
+        if(birthday == null || birthday.isBefore(tooOldToBeTrue))
         {
             return false;
         }

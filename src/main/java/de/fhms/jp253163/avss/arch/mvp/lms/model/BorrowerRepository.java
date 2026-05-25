@@ -9,6 +9,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -54,7 +55,7 @@ public class BorrowerRepository implements IBorrowerRepository
     }
 
     @Override
-    public IBorrower createBorrower(String firstname, String lastname, Date dateOfBirth, IResidentialAddress residentialAddress, double schufaScore)
+    public IBorrower createBorrower(String firstname, String lastname, LocalDate dateOfBirth, IResidentialAddress residentialAddress, double schufaScore)
     {
         IBorrower borrower = null;
         String jsonFilepath = null;

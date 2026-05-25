@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.model.data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public interface IBorrower
 {
@@ -13,8 +13,8 @@ public interface IBorrower
     public String getLastname();
     public boolean setLastname(String lastname);
 
-    public Date getDateOfBirth();
-    public boolean setDateOfBirth(Date birthday);
+    public LocalDate getDateOfBirth();
+    public boolean setDateOfBirth(LocalDate birthday);
 
     public IResidentialAddress getResidentialAddress();
     public boolean setResidentialAddress(IResidentialAddress residentialAddress);
