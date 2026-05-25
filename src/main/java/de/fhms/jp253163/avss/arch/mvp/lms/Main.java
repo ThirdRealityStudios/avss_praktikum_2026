@@ -28,7 +28,7 @@ public class Main
         BorrowerInputReader bir = new BorrowerInputReader(inputReader);
         LoanInputReader lir = new LoanInputReader(inputReader);
 
-        IView view = new ConsoleView(inputReader, bir, lir);
+        IView view = new ConsoleView(s, inputReader, bir, lir);
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
