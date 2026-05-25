@@ -107,8 +107,6 @@ public class ConsoleView implements IView
             return null;
         }
 
-        scanner.close();
-
         return userInput;
     }
 
@@ -575,10 +573,11 @@ public class ConsoleView implements IView
     public void start()
     {
         boolean exit = false;
+        String userInput = null;
 
         while(!exit)
         {
-            String userInput = readUserInput();
+            userInput = readUserInput();
 
             if(userInput == null)
                 continue;
@@ -598,6 +597,8 @@ public class ConsoleView implements IView
              *  (logic code usually defined in presenter, as it should for MVP user interactions)
              */
             exit = execute(command);
+
+            userInput = null;
         }
 
         showMessage("Goodbye!");
