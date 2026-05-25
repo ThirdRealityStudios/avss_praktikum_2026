@@ -233,7 +233,7 @@ public class ConsoleView implements IView
         }
         catch(NullPointerException e)
         {
-
+            showMessage("Could not create borrower! (code: 1651)");
         }
     }
 

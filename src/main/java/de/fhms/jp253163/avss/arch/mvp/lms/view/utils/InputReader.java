@@ -1,11 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.utils;
 
-import org.apache.commons.lang3.time.DateUtils;
-
-import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Scanner;
 
 public class InputReader
@@ -22,21 +18,26 @@ public class InputReader
 
     public double readDouble(double min, double max, String promptMessage)
     {
-        String number;
-        double numberConverted;
+        String number = null;
+        double numberConverted = -1;
 
         do
         {
             System.out.print(promptMessage);
-            number = scanner.nextLine();
 
             try
             {
+                if(scanner.hasNextLine())
+                    number = scanner.nextLine();
+
+                if(number == null)
+                    continue;
+
                 numberConverted = Double.parseDouble(number);
             }
-            catch(NumberFormatException e)
+            catch(Exception e)
             {
-                numberConverted = -1;
+                return -1;
             }
         }
         while(numberConverted < min || numberConverted > max);
@@ -46,21 +47,26 @@ public class InputReader
 
     public int readInteger(int min, int max, String promptMessage)
     {
-        String number;
-        int numberConverted;
+        String number = null;
+        int numberConverted = -1;
 
         do
         {
             System.out.print(promptMessage);
-            number = scanner.nextLine();
 
             try
             {
+                if(scanner.hasNextLine())
+                    number = scanner.nextLine();
+
+                if(number == null)
+                    continue;
+
                 numberConverted = Integer.parseInt(number);
             }
-            catch(NumberFormatException e)
+            catch(Exception e)
             {
-                numberConverted = -1;
+                return -1;
             }
         }
         while(numberConverted < min || numberConverted > max);
@@ -78,10 +84,10 @@ public class InputReader
 
             try
             {
-                if(scanner.hasNextLine())
-                    stringRead = scanner.nextLine();
+                if(scanner.hasNextLine()) // hasNextLine() blocks the program flow to await an user-input
+                    stringRead = scanner.nextLine(); // then nextLine() will read from the stream the whole line
             }
-            catch (Exception e)
+            catch(Exception e)
             {
 
             }
@@ -108,6 +114,17 @@ public class InputReader
 
         day = readInteger(1, 31, promptMessageDay);
 
-        return LocalDate.of(year, month, day);
+        LocalDate date = null;
+
+        try
+        {
+            date = LocalDate.of(year, month, day);
+
+            return date;
+        }
+        catch (DateTimeException e)
+        {
+            return null;
+        }
     }
 }
