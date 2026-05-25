@@ -24,7 +24,7 @@ public class Loan implements ILoan
             !setTerm(term) ||
             !setBorrower(borrower))
         {
-            System.out.println("id: " + id + ", amount: " + amount + ", interest rate: " + String.format("%2.2f", interestRate) + ", term: " + term + ", borrower id attached: " + borrower + "\n");
+            // System.out.println("id: " + id + ", amount: " + amount + ", interest rate: " + String.format("%2.2f", interestRate) + ", term: " + term + ", borrower id attached: " + borrower + "\n");
 
             throw defaultException;
         }
