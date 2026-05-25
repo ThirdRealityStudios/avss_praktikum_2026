@@ -28,8 +28,8 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
         IBorrower borrower = borrowerRepository.readBorrower(iRequestDTOBorrowerRead.getBorrowerID());
 
         if(borrower == null)
-            return;
-
-        presenter.getView().showMessage(borrower.toString());
+            presenter.getView().showMessage("Could not find that borrower!");
+        else
+            presenter.getView().showMessage(borrower.toString());
     }
 }

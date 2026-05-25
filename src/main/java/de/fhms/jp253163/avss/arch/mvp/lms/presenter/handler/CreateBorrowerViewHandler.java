@@ -1,8 +1,10 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
+import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ResidentialAddress;
+import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
 
@@ -11,13 +13,15 @@ import java.time.LocalDate;
 public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
+    private IPresenter presenter;
 
-    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository) throws NullPointerException
+    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository, IPresenter presenter) throws NullPointerException
     {
-        if(borrowerRepository == null)
+        if(borrowerRepository == null || presenter == null)
             throw new NullPointerException();
 
         this.borrowerRepository = borrowerRepository;
+        this.presenter = presenter;
     }
 
     @Override
@@ -44,6 +48,11 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 
         double schufaScore = 0.9d;
 
-        borrowerRepository.createBorrower(firstname, lastname, birthday, residentialAddress, schufaScore);
+        IBorrower borrower = borrowerRepository.createBorrower(firstname, lastname, birthday, residentialAddress, schufaScore);
+
+        if(borrower == null)
+            presenter.getView().showMessage("Could not create borrower!");
+        else
+            presenter.getView().showMessage("Created borrower successfully!");
     }
 }
