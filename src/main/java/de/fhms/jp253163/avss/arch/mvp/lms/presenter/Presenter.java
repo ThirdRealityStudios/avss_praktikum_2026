@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.presenter;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
 
 public class Presenter implements IPresenter
 {
@@ -19,6 +20,8 @@ public class Presenter implements IPresenter
             return false;
 
         this.view = view;
+
+        ICreateBorrowerViewHandler createBorrowerViewHandler =
 
         return true;
     }
