@@ -116,7 +116,18 @@ public class BorrowerCreateActionListener implements ActionListener
             return;
         }
 
-        IRequestDTOBorrowerCreate requestDTOBorrowerCreate = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
+        IRequestDTOBorrowerCreate requestDTOBorrowerCreate = null;
+
+        try
+        {
+            requestDTOBorrowerCreate = new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
+        }
+        catch(NullPointerException npe)
+        {
+            view.showMessage("Borrower creation failed! (technical issue)");
+
+            return;
+        }
 
         createBorrowerViewHandler.invoke(requestDTOBorrowerCreate);
     }
