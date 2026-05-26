@@ -11,6 +11,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.data.BorrowerDataTab
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.LoanTabPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,11 +37,10 @@ public class SwingView extends JFrame implements IView
 
     private LoanTabPanel loanTabPanel;
 
+    private JTabbedPane tabbedPane;
+
     public SwingView()
     {
-        setTitle("Loan Management System");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         table = new JTable();
         dataTabPanel = new BorrowerDataTabPanel(table);
 
@@ -52,14 +52,12 @@ public class SwingView extends JFrame implements IView
         borrowerTabPanel = new BorrowerTabPanel(dataTabPanel, controlsPanel);
         loanTabPanel = new LoanTabPanel();
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Borrowers", borrowerTabPanel);
         tabbedPane.addTab("Loans", loanTabPanel);
 
         add(tabbedPane);
-
-        tabbedPane.setVisible(true);
     }
 
     @Override
@@ -117,7 +115,7 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void showMessage(String message) {
-
+        setTitle(message);
     }
 
     @Override
@@ -127,6 +125,13 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void setLoanData(List<IDTOLoanSet> loans) {
-
+        setTitle("Loan Management System");
+        setMinimumSize(new Dimension(800, 600));
+        setSize(new Dimension(800, 600));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        pack();
+        tabbedPane.setVisible(true);
+        setVisible(true);
     }
 }
