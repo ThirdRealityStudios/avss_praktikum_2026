@@ -22,7 +22,7 @@ public class UIFactory
      * https://www.google.com/url?sa=t&source=web&rct=j&url=https%3A%2F%2Fflylib.com%2Fbooks%2Fen%2F3.441.1.99%2F1%2F&ved=0CBYQjRxqFwoTCNCJvrik15QDFQAAAAAdAAAAABAF&opi=89978449
      * https://javabeginners.de/Layout/GridBagLayout.php
      *
-     * @param paneOrPanel
+     * @param panel
      * @param component
      * @param gridx
      * @param gridy
@@ -30,11 +30,11 @@ public class UIFactory
      * @param constraints
      * @throws NullPointerException
      */
-    public static void addComponentFor(JComponent paneOrPanel, JComponent component, int gridx, int gridy, int anchor, GridBagConstraints constraints) throws NullPointerException
+    public static void addComponentFor(JPanel panel, JComponent component, int gridx, int gridy, int anchor, GridBagConstraints constraints) throws NullPointerException
     {
         constraints.gridx = gridx;
         constraints.gridy = gridy;
         constraints.anchor = anchor;
-        paneOrPanel.add(component, constraints);
+        panel.add(component, constraints);
     }
 }
