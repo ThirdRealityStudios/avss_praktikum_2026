@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
 
@@ -9,7 +9,7 @@ public class BorrowerBirthdayPanel extends JPanel
 {
     private LabelledTextfield day, month, year;
 
-    public BorrowerBirthdayPanel(LabelledTextfield day, LabelledTextfield month, LabelledTextfield year)
+    public BorrowerBirthdayPanel(LabelledTextfield day, LabelledTextfield month, LabelledTextfield year) throws NullPointerException
     {
         Objects.requireNonNull(day);
         Objects.requireNonNull(month);

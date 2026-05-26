@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
 
@@ -9,7 +9,7 @@ public class BorrowerAddressPanel extends JPanel
 {
     private LabelledTextfield street, no, place, zip;
 
-    public BorrowerAddressPanel(LabelledTextfield street, LabelledTextfield no, LabelledTextfield place, LabelledTextfield zip)
+    public BorrowerAddressPanel(LabelledTextfield street, LabelledTextfield no, LabelledTextfield place, LabelledTextfield zip) throws NullPointerException
     {
         Objects.requireNonNull(street);
         Objects.requireNonNull(no);
