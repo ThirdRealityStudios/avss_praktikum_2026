@@ -15,6 +15,7 @@ public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
      * Specify what values used to update the current value.
      * Passing null for one single argument means that it simply does not get updated (ignored).
      * So passing a value will update it.
+     * Passing null is also valid for arguments (= don't update me).
      *
      * @param borrowerID
      * @param firstname
@@ -28,9 +29,6 @@ public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
      */
     public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip, int[] loans) throws NullPointerException
     {
-        if(firstname == null || lastname == null || birthday == null || street == null || no == null || place == null || loans == null)
-            throw new NullPointerException();
-
         this.borrowerID = borrowerID;
         this.firstname = firstname;
         this.lastname = lastname;
