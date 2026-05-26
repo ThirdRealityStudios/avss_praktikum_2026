@@ -3,9 +3,12 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.LoanTabPanel;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Objects;
 
 public class SwingView extends JFrame implements IView
 {
@@ -18,6 +21,23 @@ public class SwingView extends JFrame implements IView
     private IReadLoanViewHandler readLoanViewHandler;
     private IUpdateLoanViewHandler updateLoanViewHandler;
     private IDeleteLoanViewHandler deleteLoanViewHandler;
+
+    private BorrowerTabPanel borrowerTabPanel;
+    private LoanTabPanel loanTabPanel;
+
+    public SwingView(BorrowerTabPanel borrowerTabPanel, LoanTabPanel loanTabPanel)
+    {
+        Objects.requireNonNull(borrowerTabPanel);
+        Objects.requireNonNull(loanTabPanel);
+
+        this.borrowerTabPanel = borrowerTabPanel;
+        this.loanTabPanel = loanTabPanel;
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        tabbedPane.addTab("Borrowers", borrowerTabPanel);
+        tabbedPane.addTab("Loans", loanTabPanel);
+    }
 
     @Override
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler)

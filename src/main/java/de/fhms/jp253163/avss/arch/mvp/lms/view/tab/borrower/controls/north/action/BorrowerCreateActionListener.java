@@ -1,9 +1,9 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.action;
 
+import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.BorrowerCreateUpdatePanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,22 +11,23 @@ import java.util.Objects;
 
 public class BorrowerCreateActionListener implements ActionListener
 {
+    private IView view;
+    private BorrowerSharedLogic sharedLogic;
     private ICreateBorrowerViewHandler createBorrowerViewHandler;
-    private BorrowerCreateUpdatePanel createUpdatePanel;
 
-    public BorrowerCreateActionListener(ICreateBorrowerViewHandler createBorrowerViewHandler, BorrowerCreateUpdatePanel createUpdatePanel) throws NullPointerException
+    public BorrowerCreateActionListener(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, BorrowerSharedLogic sharedLogic) throws NullPointerException
     {
+        Objects.requireNonNull(view);
+        Objects.requireNonNull(sharedLogic);
         Objects.requireNonNull(createBorrowerViewHandler);
-        Objects.requireNonNull(createUpdatePanel);
 
+        this.view = view;
+        this.sharedLogic = sharedLogic;
         this.createBorrowerViewHandler = createBorrowerViewHandler;
-        this.createUpdatePanel = createUpdatePanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        BorrowerSharedLogic sharedLogic = new BorrowerSharedLogic(createUpdatePanel);
-
         BorrowerSharedLogicDTO dto = sharedLogic.prepareUserEntries(true);
 
         IRequestDTOBorrowerCreate requestDTOBorrowerCreate = null;
@@ -37,7 +38,7 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            createUpdatePanel.getView().showMessage("Borrower creation failed! (technical issue)");
+            view.showMessage("Borrower creation failed! (technical issue)");
 
             return;
         }
