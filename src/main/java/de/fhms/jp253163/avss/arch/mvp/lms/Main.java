@@ -9,24 +9,15 @@ import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Loan;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.Presenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.ConsoleView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.BorrowerInputReader;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.InputReader;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.utils.LoanInputReader;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.SwingView;
 
 import java.io.File;
-import java.util.Scanner;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        Scanner s = new Scanner(System.in);
-        InputReader inputReader = new InputReader(s);
-        BorrowerInputReader bir = new BorrowerInputReader(inputReader);
-        LoanInputReader lir = new LoanInputReader(inputReader);
-
-        IView view = new ConsoleView(s, inputReader, bir, lir);
+        IView view = new SwingView(); // TODO Instantiate GUI implementation here instead
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();

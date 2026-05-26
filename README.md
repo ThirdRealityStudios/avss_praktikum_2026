@@ -1,16 +1,13 @@
-# Praktikum SS 2026 Termin 3 No 1 (LMS With Console View)
+# Praktikum SS 2026 Termin 3 No 2 (LMS With GUI)
 
 ## About
 
-Goal is it turn the appointment 2 architecture into an MVP architecture.
+Goal is it turn the appointment 2 architecture into an MVP architecture
+(but with GUI in the 2nd exercise)
 
 ## Result
 
-ChatGPT gives the result (MVP architecture, coding and so on)
-a German 1 or 2 as a rating.
-Everything works as it should after testing.
-
-(source: https://chatgpt.com/share/6a153f5d-7cc4-83eb-8205-3e4f1feb69ab)
+Not evaluated with ChatGPT yet
 
 ## Getting started
 
