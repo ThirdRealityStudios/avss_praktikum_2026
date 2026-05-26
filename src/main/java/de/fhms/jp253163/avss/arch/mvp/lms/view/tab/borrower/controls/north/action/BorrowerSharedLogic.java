@@ -1,6 +1,9 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.BorrowerCreateUpdatePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield.BorrowerAddressPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield.BorrowerBirthdayPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield.BorrowerNamePanel;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -19,16 +22,20 @@ public class BorrowerSharedLogic
 
     public BorrowerSharedLogicDTO prepareUserEntries(boolean ignoreID)
     {
+        BorrowerNamePanel namePanel = createUpdatePanel.getTextfieldPanel().getNamePanel();
+        BorrowerBirthdayPanel birthdayPanel = createUpdatePanel.getTextfieldPanel().getBirthdayPanel();
+        BorrowerAddressPanel addressPanel = createUpdatePanel.getTextfieldPanel().getAddressPanel();
+
         String id = ignoreID ? "-1" : "-1", // createUpdatePanel.getView().get....getFocusedId();
-                firstname = createUpdatePanel.getNamePanel().getFirstname().getJTextField().getText(),
-                lastname = createUpdatePanel.getNamePanel().getLastname().getJTextField().getText(),
-                day = createUpdatePanel.getBirthdayPanel().getDay().getJTextField().getText(),
-                month = createUpdatePanel.getBirthdayPanel().getMonth().getJTextField().getText(),
-                year = createUpdatePanel.getBirthdayPanel().getYear().getJTextField().getText(),
-                street = createUpdatePanel.getAddressPanel().getStreet().getJTextField().getText(),
-                no = createUpdatePanel.getAddressPanel().getNo().getJTextField().getText(),
-                place = createUpdatePanel.getAddressPanel().getPlace().getJTextField().getText(),
-                zip = createUpdatePanel.getAddressPanel().getZip().getJTextField().getText();
+                firstname = namePanel.getFirstname().getJTextField().getText(),
+                lastname = namePanel.getLastname().getJTextField().getText(),
+                day = birthdayPanel.getDay().getJTextField().getText(),
+                month = birthdayPanel.getMonth().getJTextField().getText(),
+                year = birthdayPanel.getYear().getJTextField().getText(),
+                street = addressPanel.getStreet().getJTextField().getText(),
+                no = addressPanel.getNo().getJTextField().getText(),
+                place = addressPanel.getPlace().getJTextField().getText(),
+                zip = addressPanel.getZip().getJTextField().getText();
 
         if(id == null) id = "";
         if(firstname == null) firstname = "";
