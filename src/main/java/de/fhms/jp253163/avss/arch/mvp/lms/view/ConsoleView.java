@@ -425,10 +425,10 @@ public class ConsoleView implements IView
     {
         IRequestDTOLoanUpdate updateLoanDTO = null; // if not valid command input given, then remains null
 
-        if(updateLoan.getParameters().length == 3)
+        if(updateLoan.getParameters().length >= 3)
         {
             String loanID = updateLoan.getParameters()[1];
-            String property = updateLoan.getParameters()[2];
+            String targetAction = updateLoan.getParameters()[2];
 
             if(StringUtils.isNumeric(loanID))
             {
@@ -438,11 +438,23 @@ public class ConsoleView implements IView
                 {
                     loanIDParsed = Integer.parseInt(loanID);
 
-                    if(property.equalsIgnoreCase("borrower"))
+                    if(updateLoan.getParameters().length == 3)
                     {
-                        borrowerID = loanInputReader.readBorrowerID("Borrower ID (at least 0)");
+                        if(targetAction.equalsIgnoreCase("borrower"))
+                        {
+                            borrowerID = loanInputReader.readBorrowerID("Borrower ID (at least 0)");
 
-                        updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, borrowerID);
+                            updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, borrowerID, false);
+                        }
+                    }
+                    else if(updateLoan.getParameters().length == 4)
+                    {
+                        if(targetAction.equalsIgnoreCase("book"))
+                        {
+                            String bookTarget = updateLoan.getParameters()[3];
+
+                            updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, -1, true);
+                        }
                     }
                 }
                 catch(Exception e) // Invalid syntax (no valid ID given)
@@ -545,7 +557,7 @@ public class ConsoleView implements IView
         "2. /read [borrower | loan] [ID | all]\n" +
         "3. /update\n" +
         "\t\tborrower [ID] [firstname | lastname | address | birthday | schufa | loans]\n" +
-        "\t\tloan [ID] [borrower [ID] | book installment]\n" +
+        "\t\tloan [ID] [borrower | book installment]\n" +
         "4. /delete [borrower | loan] [ID]\n" +
         "5. /exit\n";
 

@@ -14,4 +14,9 @@ public interface IRequestDTOLoanUpdate
      * @return The attached borrower ID to change / update.
      */
     public int getBorrowerID();
+
+    /**
+     * @return Whether an installment should be booked (true) or not (false)
+     */
+    public boolean isBookInstallmentWanted();
 }
