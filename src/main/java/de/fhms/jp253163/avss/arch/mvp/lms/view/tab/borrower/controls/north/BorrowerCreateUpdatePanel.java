@@ -15,6 +15,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield.BorrowerNamePanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
 public class BorrowerCreateUpdatePanel extends JPanel
@@ -35,10 +36,10 @@ public class BorrowerCreateUpdatePanel extends JPanel
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         BorrowerTextfieldPanel textfieldPanel = createTextfieldPanel();
-        UIFactory.addComponentFor(this, textfieldPanel, 0, 0, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.NORTH, layoutResult.getConstraints());
 
         BorrowerButtonPanel buttonPanel = createButtonPanel(createBorrowerViewHandler, updateBorrowerViewHandler);
-        UIFactory.addComponentFor(this, buttonPanel, 0, 1, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.SOUTH, layoutResult.getConstraints());
     }
 
     private BorrowerTextfieldPanel createTextfieldPanel() throws NullPointerException

@@ -16,10 +16,20 @@ public class UIFactory
         return new LayoutResultDTO(layout, constraints);
     }
 
-    public static void addComponentFor(JPanel panel, JComponent component, int gridx, int gridy, GridBagConstraints constraints) throws NullPointerException
+    /**
+     * @param panel
+     * @param component
+     * @param gridx
+     * @param gridy
+     * @param anchor E.g. GridBagConstraints.EAST
+     * @param constraints
+     * @throws NullPointerException
+     */
+    public static void addComponentFor(JPanel panel, JComponent component, int gridx, int gridy, int anchor, GridBagConstraints constraints) throws NullPointerException
     {
         constraints.gridx = gridx;
         constraints.gridy = gridy;
+        constraints.anchor = anchor;
         panel.add(component, constraints);
     }
 }
