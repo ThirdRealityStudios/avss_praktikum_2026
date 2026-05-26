@@ -36,10 +36,10 @@ public class BorrowerCreateUpdatePanel extends JPanel
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         BorrowerTextfieldPanel textfieldPanel = createTextfieldPanel();
-        UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.NORTH, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
         BorrowerButtonPanel buttonPanel = createButtonPanel(createBorrowerViewHandler, updateBorrowerViewHandler);
-        UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.SOUTH, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
     private BorrowerTextfieldPanel createTextfieldPanel() throws NullPointerException

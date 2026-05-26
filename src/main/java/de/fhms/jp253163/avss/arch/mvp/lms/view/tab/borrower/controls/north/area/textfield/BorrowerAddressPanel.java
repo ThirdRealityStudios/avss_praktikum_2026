@@ -1,8 +1,11 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
 public class BorrowerAddressPanel extends JPanel
@@ -20,6 +23,13 @@ public class BorrowerAddressPanel extends JPanel
         this.no = no;
         this.place = place;
         this.zip = zip;
+
+        LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
+
+        UIFactory.addComponentFor(this, street, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, no, 0, 1, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, place, 0, 2, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, zip, 0, 3, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
     }
 
     public LabelledTextfield getStreet()

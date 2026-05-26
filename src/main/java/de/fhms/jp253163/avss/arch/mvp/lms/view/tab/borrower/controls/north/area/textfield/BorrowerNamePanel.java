@@ -1,8 +1,11 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
 public class BorrowerNamePanel extends JPanel
@@ -16,6 +19,11 @@ public class BorrowerNamePanel extends JPanel
 
         this.firstname = firstname;
         this.lastname = lastname;
+
+        LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
+
+        UIFactory.addComponentFor(this, firstname, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, lastname, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
     public LabelledTextfield getFirstname()

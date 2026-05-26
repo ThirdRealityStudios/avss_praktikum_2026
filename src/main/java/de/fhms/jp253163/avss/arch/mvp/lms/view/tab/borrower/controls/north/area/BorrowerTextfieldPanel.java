@@ -7,6 +7,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield.BorrowerNamePanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
 public class BorrowerTextfieldPanel extends JPanel
@@ -27,7 +28,9 @@ public class BorrowerTextfieldPanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-
+        UIFactory.addComponentFor(this, namePanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, birthdayPanel, 0, 1, GridBagConstraints.CENTER, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, addressPanel, 0, 2, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
     public BorrowerNamePanel getNamePanel() {
