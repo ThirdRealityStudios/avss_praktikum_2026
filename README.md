@@ -1,4 +1,4 @@
-# Praktikum SS 2026 Termin 3 No 1 (Loan Management System)
+# Praktikum SS 2026 Termin 3 No 1 (LMS With Console View)
 
 ## About
 
