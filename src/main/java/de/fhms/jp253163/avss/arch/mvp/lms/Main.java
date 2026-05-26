@@ -11,6 +11,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.presenter.Presenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.SwingView;
 
+import javax.swing.*;
 import java.io.File;
 
 public class Main
