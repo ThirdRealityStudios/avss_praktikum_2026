@@ -29,6 +29,7 @@ public class BorrowerCreateUpdatePanel extends JPanel
     public BorrowerCreateUpdatePanel(ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, IView view) throws NullPointerException
     {
         Objects.requireNonNull(createBorrowerViewHandler);
+        Objects.requireNonNull(updateBorrowerViewHandler);
         Objects.requireNonNull(view);
 
         this.view = view;

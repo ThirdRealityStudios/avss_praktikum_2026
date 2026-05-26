@@ -3,7 +3,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.BorrowerCreateUpdatePanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.BorrowerUpdateDeletePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.BorrowerDeletePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +12,9 @@ import java.util.Objects;
 public class BorrowerControlsPanel extends JPanel
 {
     private BorrowerCreateUpdatePanel createUpdatePanel;
-    private BorrowerUpdateDeletePanel deletePanel;
+    private BorrowerDeletePanel deletePanel;
 
-    public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerUpdateDeletePanel deletePanel)
+    public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerDeletePanel deletePanel)
     {
         Objects.requireNonNull(createUpdatePanel);
         Objects.requireNonNull(deletePanel);
@@ -32,7 +32,7 @@ public class BorrowerControlsPanel extends JPanel
         return createUpdatePanel;
     }
 
-    public BorrowerUpdateDeletePanel getDeletePanel() {
+    public BorrowerDeletePanel getDeletePanel() {
         return deletePanel;
     }
 }
