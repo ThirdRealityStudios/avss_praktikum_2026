@@ -1,10 +1,9 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.borrower.action;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.page.c.action;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.page.c.BorrowerCreatePanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,55 +14,28 @@ import java.util.Objects;
 public class BorrowerCreateActionListener implements ActionListener
 {
     private ICreateBorrowerViewHandler createBorrowerViewHandler;
-    private LabelledTextfield firstname, lastname, day, month, year, street, no, place, zip;
-    private IView view;
+    private BorrowerCreatePanel createPanel;
 
-    private boolean hasNullElements(LabelledTextfield[] arr)
-    {
-        for(LabelledTextfield field : arr)
-            if(field == null)
-                return true;
-
-        return false;
-    }
-
-    public BorrowerCreateActionListener(ICreateBorrowerViewHandler createBorrowerViewHandler, LabelledTextfield[] labelledTextfields, IView view) throws NullPointerException
+    public BorrowerCreateActionListener(ICreateBorrowerViewHandler createBorrowerViewHandler, BorrowerCreatePanel createPanel) throws NullPointerException
     {
         Objects.requireNonNull(createBorrowerViewHandler);
-        Objects.requireNonNull(labelledTextfields);
-        Objects.requireNonNull(view);
-
-        if(labelledTextfields.length != 9 || hasNullElements(labelledTextfields))
-        {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(createPanel);
 
         this.createBorrowerViewHandler = createBorrowerViewHandler;
-
-        firstname = labelledTextfields[0];
-        lastname = labelledTextfields[1];
-        day = labelledTextfields[2];
-        month = labelledTextfields[3];
-        year = labelledTextfields[4];
-        street = labelledTextfields[5];
-        no = labelledTextfields[6];
-        place = labelledTextfields[7];
-        zip = labelledTextfields[8];
-
-        this.view = view;
+        this.createPanel = createPanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String firstname = this.firstname.getJTextField().getText(),
-            lastname = this.lastname.getJTextField().getText(),
-            day = this.day.getJTextField().getText(),
-            month = this.month.getJTextField().getText(),
-            year = this.year.getJTextField().getText(),
-            street = this.year.getJTextField().getText(),
-            no = this.no.getJTextField().getText(),
-            place = this.place.getJTextField().getText(),
-            zip = this.zip.getJTextField().getText();
+        String firstname = createPanel.getCreateNamePanel().getFirstname().getJTextField().getText(),
+            lastname = createPanel.getCreateNamePanel().getLastname().getJTextField().getText(),
+            day = createPanel.getCreateBirthdayPanel().getDay().getJTextField().getText(),
+            month = createPanel.getCreateBirthdayPanel().getMonth().getJTextField().getText(),
+            year = createPanel.getCreateBirthdayPanel().getYear().getJTextField().getText(),
+            street = createPanel.getCreateAddressPanel().getStreet().getJTextField().getText(),
+            no = createPanel.getCreateAddressPanel().getNo().getJTextField().getText(),
+            place = createPanel.getCreateAddressPanel().getPlace().getJTextField().getText(),
+            zip = createPanel.getCreateAddressPanel().getZip().getJTextField().getText();
 
         if(firstname == null) firstname = "";
         if(lastname == null) lastname = "";
@@ -83,7 +55,7 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch (NumberFormatException nfe)
         {
-            view.showMessage("Incorrect zip code! (not a number)");
+            createPanel.getView().showMessage("Incorrect zip code! (not a number)");
 
             return;
         }
@@ -98,7 +70,7 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch (NumberFormatException nfe)
         {
-            view.showMessage("Incorrect birthday! (not everywhere numbers)");
+            createPanel.getView().showMessage("Incorrect birthday! (not everywhere numbers)");
 
             return;
         }
@@ -111,7 +83,7 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch (DateTimeException dte)
         {
-            view.showMessage("Incorrect birthday! (not a valid date)");
+            createPanel.getView().showMessage("Incorrect birthday! (not a valid date)");
 
             return;
         }
@@ -124,7 +96,7 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("Borrower creation failed! (technical issue)");
+            createPanel.getView().showMessage("Borrower creation failed! (technical issue)");
 
             return;
         }
