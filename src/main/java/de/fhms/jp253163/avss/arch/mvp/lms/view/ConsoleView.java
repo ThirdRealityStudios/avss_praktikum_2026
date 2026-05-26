@@ -238,18 +238,15 @@ public class ConsoleView implements IView
 
     private void executeReadBorrower(ICommand readBorrower)
     {
+        IRequestDTOBorrowerRead readBorrowerDTO = null;
+
         if(readBorrower.getParameters().length == 2)
         {
             String readTarget = readBorrower.getParameters()[1];
 
-            IRequestDTOBorrowerRead readBorrowerDTO = null;
-
             if(readTarget.equalsIgnoreCase("all"))
             {
                 readBorrowerDTO = new RequestDTOBorrowerRead(-1);
-
-                if(readBorrowerViewHandler != null)
-                    readBorrowerViewHandler.invoke(readBorrowerDTO);
             }
             else if(StringUtils.isNumeric(readTarget))
             {
@@ -267,16 +264,18 @@ public class ConsoleView implements IView
                 if(id >= 0)
                 {
                     readBorrowerDTO = new RequestDTOBorrowerRead(id);
-
-                    if(readBorrowerViewHandler != null)
-                        readBorrowerViewHandler.invoke(readBorrowerDTO);
                 }
             }
         }
+
+        if(readBorrowerViewHandler != null)
+            readBorrowerViewHandler.invoke(readBorrowerDTO);
     }
 
     private void executeUpdateBorrower(ICommand updateBorrower)
     {
+        IRequestDTOBorrowerUpdate updateBorrowerDTO = null;
+
         if(updateBorrower.getParameters().length == 3)
         {
             String borrowerID = updateBorrower.getParameters()[1];
@@ -288,7 +287,6 @@ public class ConsoleView implements IView
                 String firstname = null, lastname = null, street = null, no = null, place = null;
                 LocalDate birthday = null;
                 int[] loans = null;
-                IRequestDTOBorrowerUpdate updateBorrowerDTO = null;
 
                 try
                 {
@@ -333,11 +331,11 @@ public class ConsoleView implements IView
                 {
 
                 }
-
-                if(updateBorrowerViewHandler != null)
-                    updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
             }
         }
+
+        if(updateBorrowerViewHandler != null)
+            updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
     }
 
     private void executeDeleteBorrower(ICommand deleteBorrower)
@@ -391,18 +389,16 @@ public class ConsoleView implements IView
 
     private void executeReadLoan(ICommand readLoan)
     {
+        // if it is remains null later, then likely due to invalid syntax (which the invocation function will check of the handler)
+        IRequestDTOLoanRead readLoanDTO = null;
+
         if(readLoan.getParameters().length == 2)
         {
             String readTarget = readLoan.getParameters()[1];
 
-            IRequestDTOLoanRead readLoanDTO = null;
-
             if(readTarget.equalsIgnoreCase("all"))
             {
                 readLoanDTO = new RequestDTOLoanRead(-1);
-
-                if(readLoanViewHandler != null)
-                    readLoanViewHandler.invoke(readLoanDTO);
             }
             else if(StringUtils.isNumeric(readTarget))
             {
@@ -418,15 +414,17 @@ public class ConsoleView implements IView
                 }
 
                 readLoanDTO = new RequestDTOLoanRead(id);
-
-                if(readLoanViewHandler != null)
-                    readLoanViewHandler.invoke(readLoanDTO);
             }
         }
+
+        if(readLoanViewHandler != null)
+            readLoanViewHandler.invoke(readLoanDTO);
     }
 
     private void executeUpdateLoan(ICommand updateLoan)
     {
+        IRequestDTOLoanUpdate updateLoanDTO = null; // if not valid command input given, then remains null
+
         if(updateLoan.getParameters().length == 3)
         {
             String loanID = updateLoan.getParameters()[1];
@@ -435,7 +433,6 @@ public class ConsoleView implements IView
             if(StringUtils.isNumeric(loanID))
             {
                 int loanIDParsed = -1, borrowerID = -1;
-                IRequestDTOLoanUpdate updateLoanDTO = null; // if not valid command input given, then remains null
 
                 try
                 {
@@ -452,11 +449,11 @@ public class ConsoleView implements IView
                 {
 
                 }
-
-                if(updateLoanViewHandler != null)
-                    updateLoanViewHandler.invoke(updateLoanDTO); // actual logic run here, defined in the presenter usually anyway.
             }
         }
+
+        if(updateLoanViewHandler != null)
+            updateLoanViewHandler.invoke(updateLoanDTO); // actual logic run here, defined in the presenter usually anyway.
     }
 
     private void executeDeleteLoan(ICommand deleteLoan)
