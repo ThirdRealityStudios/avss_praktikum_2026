@@ -219,13 +219,14 @@ public class LoanRepository implements ILoanRepository
         if(loan.getBorrower() != oldLoan.getBorrower())
         {
             // See if the new borrower even exists (e.g. if your dad wants to pay your loan instead - but he needs to be known to the system first)
-            newBorrower = borrowerRepository.readBorrower(loan.getId());
+            newBorrower = borrowerRepository.readBorrower(loan.getBorrower());
 
             if(newBorrower == null)
                 return false; // New borrower does not exist in the system, so update denied.
 
             // From this point, all borrowers do exist in the system or are valid.
 
+            // Take away the loan from the old current borrower
             if(!oldBorrower.setLoans( ArrayUtils.removeAllOccurrences(oldBorrower.getLoans(), loan.getId()) ))
             {
                 return false; // Could not remove the loan from the old borrower; in order to give the payment responsibility to a new borrower.
@@ -236,11 +237,13 @@ public class LoanRepository implements ILoanRepository
                 return false; // Could not update the old borrower, persistently seen.
             }
 
+            // Then give the taken away loan to the actual new borrower (who should pay instead)
             if(!newBorrower.setLoans( ArrayUtils.add(newBorrower.getLoans(), loan.getId()) ))
             {
                 return false; // Could not add the loan to the new borrower (which should pay the loan instead of the old borrower).
             }
 
+            // Save again
             if(!borrowerRepository.updateBorrower(newBorrower))
             {
                 return false; // Could not physically or persistently write the changes to the hard-disk.
