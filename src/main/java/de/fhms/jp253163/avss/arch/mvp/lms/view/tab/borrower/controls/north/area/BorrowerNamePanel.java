@@ -1,15 +1,15 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.page.c;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
 
 import javax.swing.*;
 import java.util.Objects;
 
-public class BorrowerCreateNamePanel extends JPanel
+public class BorrowerNamePanel extends JPanel
 {
     private LabelledTextfield firstname, lastname;
 
-    public BorrowerCreateNamePanel(LabelledTextfield firstname, LabelledTextfield lastname)
+    public BorrowerNamePanel(LabelledTextfield firstname, LabelledTextfield lastname)
     {
         Objects.requireNonNull(firstname);
         Objects.requireNonNull(lastname);

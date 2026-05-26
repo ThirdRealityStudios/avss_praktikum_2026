@@ -1,15 +1,15 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.page.c;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
 
 import javax.swing.*;
 import java.util.Objects;
 
-public class BorrowerCreateAddressPanel extends JPanel
+public class BorrowerAddressPanel extends JPanel
 {
     private LabelledTextfield street, no, place, zip;
 
-    public BorrowerCreateAddressPanel(LabelledTextfield street, LabelledTextfield no, LabelledTextfield place, LabelledTextfield zip)
+    public BorrowerAddressPanel(LabelledTextfield street, LabelledTextfield no, LabelledTextfield place, LabelledTextfield zip)
     {
         Objects.requireNonNull(street);
         Objects.requireNonNull(no);

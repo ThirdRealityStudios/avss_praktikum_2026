@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.data.BorrowerDataTabPanel;
 
 import javax.swing.*;
@@ -10,9 +10,9 @@ import java.util.Objects;
 public class BorrowerTabPanel extends JPanel
 {
     private BorrowerDataTabPanel dataTabPanel;
-    private BorrowerControlsTabPanel controlsTabPanel;
+    private BorrowerControlsPanel controlsTabPanel;
 
-    public BorrowerTabPanel(BorrowerDataTabPanel dataTabPanel, BorrowerControlsTabPanel controlsTabPanel)
+    public BorrowerTabPanel(BorrowerDataTabPanel dataTabPanel, BorrowerControlsPanel controlsTabPanel)
     {
         Objects.requireNonNull(dataTabPanel);
         Objects.requireNonNull(controlsTabPanel);
@@ -40,5 +40,15 @@ public class BorrowerTabPanel extends JPanel
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.SOUTH;
         add(controlsTabPanel, constraints);
+    }
+
+    public BorrowerDataTabPanel getDataTabPanel()
+    {
+        return dataTabPanel;
+    }
+
+    public BorrowerControlsPanel getControlsTabPanel()
+    {
+        return controlsTabPanel;
     }
 }
