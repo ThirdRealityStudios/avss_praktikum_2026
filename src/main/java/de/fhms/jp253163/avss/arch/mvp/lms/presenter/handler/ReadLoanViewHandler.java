@@ -25,7 +25,7 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
     {
         if(iRequestDTOLoanRead == null)
         {
-            presenter.getView().showMessage("Reading loan failed! (code 0: technical issue?)");
+            presenter.getView().showMessage("Invalid syntax! Consult /help");
 
             return;
         }

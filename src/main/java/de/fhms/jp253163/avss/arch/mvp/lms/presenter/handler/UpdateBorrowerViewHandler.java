@@ -28,7 +28,7 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
     public void invoke(IRequestDTOBorrowerUpdate iRequestDTOBorrowerUpdate) {
         if(iRequestDTOBorrowerUpdate == null)
         {
-            presenter.getView().showMessage("Invalid syntax!");
+            presenter.getView().showMessage("Invalid syntax! Consult /help");
 
             return;
         }
