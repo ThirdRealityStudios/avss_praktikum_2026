@@ -453,7 +453,10 @@ public class ConsoleView implements IView
                         {
                             String bookTarget = updateLoan.getParameters()[3];
 
-                            updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, -1, true);
+                            if(bookTarget.equalsIgnoreCase("installment"))
+                            {
+                                updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, -1, true);
+                            }
                         }
                     }
                 }
