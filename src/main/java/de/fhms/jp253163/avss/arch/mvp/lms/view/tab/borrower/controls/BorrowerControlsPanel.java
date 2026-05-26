@@ -11,20 +11,28 @@ import java.util.Objects;
 
 public class BorrowerControlsPanel extends JPanel
 {
-    private BorrowerCreateUpdatePanel createPanel;
-    private BorrowerUpdateDeletePanel updateDeletePanel;
+    private BorrowerCreateUpdatePanel createUpdatePanel;
+    private BorrowerUpdateDeletePanel deletePanel;
 
     public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerUpdateDeletePanel deletePanel)
     {
         Objects.requireNonNull(createUpdatePanel);
         Objects.requireNonNull(deletePanel);
 
-        this.createPanel = createUpdatePanel;
-        this.updateDeletePanel = deletePanel;
+        this.createUpdatePanel = createUpdatePanel;
+        this.deletePanel = deletePanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         UIFactory.addComponentFor(this, createUpdatePanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, deletePanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
+    }
+
+    public BorrowerCreateUpdatePanel getCreateUpdatePanel() {
+        return createUpdatePanel;
+    }
+
+    public BorrowerUpdateDeletePanel getDeletePanel() {
+        return deletePanel;
     }
 }
