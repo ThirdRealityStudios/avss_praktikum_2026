@@ -76,7 +76,7 @@ public class BorrowerCreateUpdatePanel extends JPanel
         BorrowerUpdateActionListener updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, sharedLogic);
         buttonUpdate.addActionListener(updateActionListener);
 
-        return new BorrowerButtonPanel(this);
+        return new BorrowerButtonPanel(view, createBorrowerViewHandler, updateBorrowerViewHandler, sharedLogic);
     }
 
     public BorrowerNamePanel getNamePanel()
