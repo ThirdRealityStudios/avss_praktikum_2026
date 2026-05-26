@@ -234,6 +234,9 @@ public class BorrowerRepository implements IBorrowerRepository
 
         borrower = readBorrower(id);
 
+        if(borrower == null)
+            return false;
+
         if(borrower.getLoans().length == 0) // If no loan left to pay off, then delete the borrower (account) from the system.
         {
             String filepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
