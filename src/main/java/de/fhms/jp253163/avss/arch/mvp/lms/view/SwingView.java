@@ -12,9 +12,8 @@ import java.util.Objects;
 
 public class SwingView extends JFrame implements IView
 {
-    private ICreateBorrowerViewHandler createBorrowerViewHandler;
+    // TODO These left view handlers are to implement
     private IReadBorrowerViewHandler readBorrowerViewHandler;
-    private IUpdateBorrowerViewHandler updateBorrowerViewHandler;
     private IDeleteBorrowerViewHandler deleteBorrowerViewHandler;
 
     private ICreateLoanViewHandler createLoanViewHandler;
@@ -30,6 +29,9 @@ public class SwingView extends JFrame implements IView
         Objects.requireNonNull(borrowerTabPanel);
         Objects.requireNonNull(loanTabPanel);
 
+        setTitle("Loan Management System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         this.borrowerTabPanel = borrowerTabPanel;
         this.loanTabPanel = loanTabPanel;
 
@@ -37,12 +39,16 @@ public class SwingView extends JFrame implements IView
 
         tabbedPane.addTab("Borrowers", borrowerTabPanel);
         tabbedPane.addTab("Loans", loanTabPanel);
+
+        add(tabbedPane);
+
+        tabbedPane.setVisible(true);
     }
 
     @Override
-    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler)
+    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler) throws NullPointerException
     {
-        this.createBorrowerViewHandler = handler;
+        this.borrowerTabPanel.getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateBorrowerViewHandler(handler);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler handler)
     {
-        this.updateBorrowerViewHandler = handler;
+        this.borrowerTabPanel.getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(handler);
     }
 
     @Override
@@ -89,7 +95,7 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void start() {
-
+        setVisible(true);
     }
 
     @Override

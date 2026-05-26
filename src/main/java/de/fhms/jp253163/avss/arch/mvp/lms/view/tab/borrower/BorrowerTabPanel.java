@@ -47,7 +47,7 @@ public class BorrowerTabPanel extends JPanel
         return dataTabPanel;
     }
 
-    public BorrowerControlsPanel getControlsTabPanel()
+    public BorrowerControlsPanel getControlsPanel()
     {
         return controlsTabPanel;
     }

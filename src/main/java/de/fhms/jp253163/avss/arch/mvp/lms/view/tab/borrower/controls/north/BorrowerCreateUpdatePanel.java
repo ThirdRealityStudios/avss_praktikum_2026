@@ -21,16 +21,12 @@ import java.util.Objects;
 
 public class BorrowerCreateUpdatePanel extends JPanel
 {
-    private BorrowerNamePanel namePanel;
-    private BorrowerAddressPanel addressPanel;
-    private BorrowerBirthdayPanel birthdayPanel;
-
-    private ICreateBorrowerViewHandler createBorrowerViewHandler;
-    private IUpdateBorrowerViewHandler updateBorrowerViewHandler;
-
     private IView view;
 
     private BorrowerSharedLogic sharedLogic;
+
+    private BorrowerTextfieldPanel textfieldPanel;
+    private BorrowerButtonPanel buttonPanel;
 
     public BorrowerCreateUpdatePanel(ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, IView view) throws NullPointerException
     {
@@ -38,16 +34,14 @@ public class BorrowerCreateUpdatePanel extends JPanel
         Objects.requireNonNull(updateBorrowerViewHandler);
         Objects.requireNonNull(view);
 
-        this.createBorrowerViewHandler = createBorrowerViewHandler;
-        this.updateBorrowerViewHandler = updateBorrowerViewHandler;
         this.view = view;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        BorrowerTextfieldPanel textfieldPanel = createTextfieldPanel();
+        textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        BorrowerButtonPanel buttonPanel = createButtonPanel(createBorrowerViewHandler, updateBorrowerViewHandler);
+        buttonPanel = createButtonPanel(createBorrowerViewHandler, updateBorrowerViewHandler);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
 
         // Used for the creation and update event handlers only for borrower (because logic very similar)
@@ -56,9 +50,9 @@ public class BorrowerCreateUpdatePanel extends JPanel
 
     private BorrowerTextfieldPanel createTextfieldPanel() throws NullPointerException
     {
-        namePanel = new BorrowerNamePanel(new LabelledTextfield("Firstname:"), new LabelledTextfield("Lastname:"));
-        birthdayPanel = new BorrowerBirthdayPanel(new LabelledTextfield("Day of birth:"), new LabelledTextfield("Month of birth:"), new LabelledTextfield("Year of birth:"));
-        addressPanel = new BorrowerAddressPanel(new LabelledTextfield("Street:"), new LabelledTextfield("No:"), new LabelledTextfield("Place:"), new LabelledTextfield("Zip:"));
+        BorrowerNamePanel namePanel = new BorrowerNamePanel(new LabelledTextfield("Firstname:"), new LabelledTextfield("Lastname:"));
+        BorrowerBirthdayPanel birthdayPanel = new BorrowerBirthdayPanel(new LabelledTextfield("Day of birth:"), new LabelledTextfield("Month of birth:"), new LabelledTextfield("Year of birth:"));
+        BorrowerAddressPanel addressPanel = new BorrowerAddressPanel(new LabelledTextfield("Street:"), new LabelledTextfield("No:"), new LabelledTextfield("Place:"), new LabelledTextfield("Zip:"));
 
         return new BorrowerTextfieldPanel(namePanel, birthdayPanel, addressPanel);
     }
@@ -79,33 +73,18 @@ public class BorrowerCreateUpdatePanel extends JPanel
         return new BorrowerButtonPanel(view, createBorrowerViewHandler, updateBorrowerViewHandler, sharedLogic);
     }
 
-    public BorrowerNamePanel getNamePanel()
-    {
-        return namePanel;
-    }
-
-    public BorrowerBirthdayPanel getBirthdayPanel()
-    {
-        return birthdayPanel;
-    }
-
-    public BorrowerAddressPanel getAddressPanel()
-    {
-        return addressPanel;
-    }
-
     public IView getView()
     {
         return view;
     }
 
-    public ICreateBorrowerViewHandler getCreateBorrowerViewHandler()
+    public BorrowerTextfieldPanel getTextfieldPanel()
     {
-        return createBorrowerViewHandler;
+        return textfieldPanel;
     }
 
-    public IUpdateBorrowerViewHandler getUpdateBorrowerViewHandler()
+    public BorrowerButtonPanel getButtonPanel()
     {
-        return updateBorrowerViewHandler;
+        return buttonPanel;
     }
 }
