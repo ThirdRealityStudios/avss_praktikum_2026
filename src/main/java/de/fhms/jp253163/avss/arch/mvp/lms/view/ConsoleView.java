@@ -288,6 +288,7 @@ public class ConsoleView implements IView
                 String firstname = null, lastname = null, street = null, no = null, place = null;
                 LocalDate birthday = null;
                 int[] loans = null;
+                IRequestDTOBorrowerUpdate updateBorrowerDTO = null;
 
                 try
                 {
@@ -326,22 +327,15 @@ public class ConsoleView implements IView
                         loans = borrowerInputReader.readLoans();
                     }
 
-                    try
-                    {
-                        IRequestDTOBorrowerUpdate updateBorrowerDTO = new RequestDTOBorrowerUpdate(borrowerIDParsed, firstname, lastname, birthday, street, no, place, zip, loans);
-
-                        if(updateBorrowerViewHandler != null)
-                            updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
-                    }
-                    catch(NullPointerException e)
-                    {
-
-                    }
+                    updateBorrowerDTO = new RequestDTOBorrowerUpdate(borrowerIDParsed, firstname, lastname, birthday, street, no, place, zip, loans);
                 }
-                catch(NumberFormatException e)
+                catch(Exception e)
                 {
 
                 }
+
+                if(updateBorrowerViewHandler != null)
+                    updateBorrowerViewHandler.invoke(updateBorrowerDTO); // actual logic run here, defined in the presenter usually anyway.
             }
         }
     }
@@ -441,6 +435,7 @@ public class ConsoleView implements IView
             if(StringUtils.isNumeric(loanID))
             {
                 int loanIDParsed = -1, borrowerID = -1;
+                IRequestDTOLoanUpdate updateLoanDTO = null; // if not valid command input given, then remains null
 
                 try
                 {
@@ -449,24 +444,17 @@ public class ConsoleView implements IView
                     if(property.equalsIgnoreCase("borrower"))
                     {
                         borrowerID = loanInputReader.readBorrowerID("Borrower ID (at least 0)");
-                    }
 
-                    try
-                    {
-                        IRequestDTOLoanUpdate updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, borrowerID);
-
-                        if(updateLoanViewHandler != null)
-                            updateLoanViewHandler.invoke(updateLoanDTO); // actual logic run here, defined in the presenter usually anyway.
-                    }
-                    catch(NullPointerException e)
-                    {
-
+                        updateLoanDTO = new RequestDTOLoanUpdate(loanIDParsed, borrowerID);
                     }
                 }
-                catch(NumberFormatException e)
+                catch(Exception e) // Invalid syntax (no valid ID given)
                 {
 
                 }
+
+                if(updateLoanViewHandler != null)
+                    updateLoanViewHandler.invoke(updateLoanDTO); // actual logic run here, defined in the presenter usually anyway.
             }
         }
     }
