@@ -14,9 +14,13 @@ public class BorrowerDeleteActionListener implements ActionListener
     private IDeleteBorrowerViewHandler deleteBorrowerViewHandler;
     private BorrowerDeletePanel deletePanel;
 
+    /**
+     * @param deleteBorrowerViewHandler Or null is allowed too (do run nothing in this case)
+     * @param deletePanel
+     * @throws NullPointerException
+     */
     public BorrowerDeleteActionListener(IDeleteBorrowerViewHandler deleteBorrowerViewHandler, BorrowerDeletePanel deletePanel) throws NullPointerException
     {
-        Objects.requireNonNull(deleteBorrowerViewHandler);
         Objects.requireNonNull(deletePanel);
 
         this.deleteBorrowerViewHandler = deleteBorrowerViewHandler;
@@ -41,6 +45,7 @@ public class BorrowerDeleteActionListener implements ActionListener
             return;
         }
 
-        deleteBorrowerViewHandler.invoke(requestDTOBorrowerDelete);
+        if(deleteBorrowerViewHandler != null)
+            deleteBorrowerViewHandler.invoke(requestDTOBorrowerDelete);
     }
 }

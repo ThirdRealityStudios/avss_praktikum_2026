@@ -4,6 +4,10 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.BorrowerCreateUpdatePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.BorrowerDeletePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.data.BorrowerDataTabPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.LoanTabPanel;
 
 import javax.swing.*;
@@ -21,19 +25,32 @@ public class SwingView extends JFrame implements IView
     private IUpdateLoanViewHandler updateLoanViewHandler;
     private IDeleteLoanViewHandler deleteLoanViewHandler;
 
+    private JTable table;
+    private BorrowerDataTabPanel dataTabPanel;
+    private BorrowerControlsPanel controlsPanel;
+
+    private BorrowerCreateUpdatePanel createUpdatePanel;
+    private BorrowerDeletePanel deletePanel;
+
     private BorrowerTabPanel borrowerTabPanel;
+
     private LoanTabPanel loanTabPanel;
 
-    public SwingView(BorrowerTabPanel borrowerTabPanel, LoanTabPanel loanTabPanel)
+    public SwingView()
     {
-        Objects.requireNonNull(borrowerTabPanel);
-        Objects.requireNonNull(loanTabPanel);
-
         setTitle("Loan Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.borrowerTabPanel = borrowerTabPanel;
-        this.loanTabPanel = loanTabPanel;
+        table = new JTable();
+        dataTabPanel = new BorrowerDataTabPanel(table);
+
+        createUpdatePanel = new BorrowerCreateUpdatePanel(this);
+        deletePanel = new BorrowerDeletePanel(this);
+
+        controlsPanel = new BorrowerControlsPanel(createUpdatePanel, deletePanel);
+
+        borrowerTabPanel = new BorrowerTabPanel(dataTabPanel, controlsPanel);
+        loanTabPanel = new LoanTabPanel();
 
         JTabbedPane tabbedPane = new JTabbedPane();
 

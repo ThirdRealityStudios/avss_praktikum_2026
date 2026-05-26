@@ -25,11 +25,17 @@ public class BorrowerButtonPanel extends JPanel
 
     private JButton createButton, updateButton;
 
+    /**
+     *
+     * @param view
+     * @param createBorrowerViewHandler Or null allowed too (do nothing at this event)
+     * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
+     * @param sharedLogic
+     * @throws NullPointerException
+     */
     public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerSharedLogic sharedLogic) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(createBorrowerViewHandler);
-        Objects.requireNonNull(updateBorrowerViewHandler);
         Objects.requireNonNull(sharedLogic);
 
         this.view = view;
@@ -46,15 +52,11 @@ public class BorrowerButtonPanel extends JPanel
 
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler) throws NullPointerException
     {
-        Objects.requireNonNull(createBorrowerViewHandler);
-
         initCreateButton(createBorrowerViewHandler);
     }
 
     public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
     {
-        Objects.requireNonNull(updateBorrowerViewHandler);
-
         initUpdateButton(updateBorrowerViewHandler);
     }
 

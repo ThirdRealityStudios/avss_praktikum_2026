@@ -19,7 +19,6 @@ public class BorrowerUpdateActionListener implements ActionListener
     public BorrowerUpdateActionListener(IView view, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerSharedLogic sharedLogic) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(updateBorrowerViewHandler);
         Objects.requireNonNull(sharedLogic);
 
         this.view = view;
@@ -45,6 +44,7 @@ public class BorrowerUpdateActionListener implements ActionListener
             return;
         }
 
-        updateBorrowerViewHandler.invoke(requestDTOBorrowerUpdate);
+        if(updateBorrowerViewHandler != null)
+            updateBorrowerViewHandler.invoke(requestDTOBorrowerUpdate);
     }
 }

@@ -19,7 +19,6 @@ public class BorrowerCreateActionListener implements ActionListener
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(sharedLogic);
-        Objects.requireNonNull(createBorrowerViewHandler);
 
         this.view = view;
         this.sharedLogic = sharedLogic;
@@ -43,6 +42,7 @@ public class BorrowerCreateActionListener implements ActionListener
             return;
         }
 
-        createBorrowerViewHandler.invoke(requestDTOBorrowerCreate);
+        if(createBorrowerViewHandler != null)
+            createBorrowerViewHandler.invoke(requestDTOBorrowerCreate);
     }
 }
