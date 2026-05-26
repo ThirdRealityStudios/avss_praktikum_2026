@@ -31,13 +31,21 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
 
         int loanID = iRequestDTOLoanUpdate.getLoanID();
         int borrowerIDAttached = iRequestDTOLoanUpdate.getBorrowerID();
+        boolean bookInstallment = iRequestDTOLoanUpdate.isBookInstallmentWanted(); // has always priority (semantically)
 
         ILoan currentLoan = loanRepository.readLoan(loanID);
 
         if(currentLoan == null)
+        {
             presenter.getView().showMessage("Could not find that loan!");
 
-        currentLoan.setBorrower(borrowerIDAttached);
+            return;
+        }
+
+        if(bookInstallment)
+            currentLoan.payInstallment();
+        else
+            currentLoan.setBorrower(borrowerIDAttached);
 
         if(loanRepository.updateLoan(currentLoan))
             presenter.getView().showMessage("Updated loan successfully!");
