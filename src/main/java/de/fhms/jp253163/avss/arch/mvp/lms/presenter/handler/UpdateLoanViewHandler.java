@@ -24,7 +24,7 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
     public void invoke(IRequestDTOLoanUpdate iRequestDTOLoanUpdate) {
         if(iRequestDTOLoanUpdate == null)
         {
-            presenter.getView().showMessage("Reading loan failed! (code 0: technical issue?)");
+            presenter.getView().showMessage("Invalid syntax!");
 
             return;
         }
