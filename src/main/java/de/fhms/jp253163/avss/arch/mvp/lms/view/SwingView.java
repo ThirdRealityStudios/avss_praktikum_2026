@@ -40,11 +40,14 @@ public class SwingView extends JFrame implements IView
 
     public SwingView()
     {
+        createUpdatePanel = new BorrowerCreateUpdatePanel(this);
+        deletePanel = new BorrowerDeletePanel(this);
+
         controlsPanel = new BorrowerControlsPanel(createUpdatePanel, deletePanel);
         controlsPanel.setPreferredSize(new Dimension(800, controlsPanel.getPreferredSize().height));
 
-        int height = controlsPanel.getPreferredSize().height;
-        int remainingHeight = 600 - height;
+        int controlsPanelHeight = controlsPanel.getPreferredSize().height;
+        int remainingHeight = 600 - controlsPanelHeight;
 
         if(remainingHeight < 300)
             remainingHeight = 300;
@@ -52,9 +55,6 @@ public class SwingView extends JFrame implements IView
         table = new JTable();
         dataTabPanel = new BorrowerDataTabPanel(table);
         dataTabPanel.setPreferredSize(new Dimension(800, remainingHeight));
-
-        createUpdatePanel = new BorrowerCreateUpdatePanel(this);
-        deletePanel = new BorrowerDeletePanel(this);
 
         borrowerTabPanel = new BorrowerTabPanel(dataTabPanel, controlsPanel);
         loanTabPanel = new LoanTabPanel();
