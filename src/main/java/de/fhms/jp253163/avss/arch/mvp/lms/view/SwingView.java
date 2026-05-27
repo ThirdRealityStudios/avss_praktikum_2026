@@ -110,6 +110,13 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void start() {
+        setTitle("Loan Management System");
+        setMinimumSize(new Dimension(800, 600));
+        setSize(new Dimension(800, 600));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        pack();
+        tabbedPane.setVisible(true);
         setVisible(true);
     }
 
@@ -125,13 +132,6 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void setLoanData(List<IDTOLoanSet> loans) {
-        setTitle("Loan Management System");
-        setMinimumSize(new Dimension(800, 600));
-        setSize(new Dimension(800, 600));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        pack();
-        tabbedPane.setVisible(true);
-        setVisible(true);
+
     }
 }
