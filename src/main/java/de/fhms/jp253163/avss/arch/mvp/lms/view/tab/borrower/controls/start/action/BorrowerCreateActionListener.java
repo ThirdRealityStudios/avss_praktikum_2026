@@ -3,7 +3,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.acti
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerCreate;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

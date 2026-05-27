@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.component;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
