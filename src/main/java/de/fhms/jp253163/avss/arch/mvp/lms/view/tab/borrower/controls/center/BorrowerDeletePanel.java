@@ -1,13 +1,10 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.action.BorrowerCreateActionListener;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.action.BorrowerSharedLogic;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.action.BorrowerDeleteActionListener;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.action.BorrowerDeleteActionListener;
 
 import javax.swing.*;
 import java.awt.*;

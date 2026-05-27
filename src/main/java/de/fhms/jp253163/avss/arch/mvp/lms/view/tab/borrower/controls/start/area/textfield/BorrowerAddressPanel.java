@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.area.textfield;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.component.LabelledTextfield;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;

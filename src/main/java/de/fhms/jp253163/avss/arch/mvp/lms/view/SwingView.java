@@ -5,8 +5,9 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.north.BorrowerCreateUpdatePanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.BorrowerDeletePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.end.BorrowerMessagePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.BorrowerDeletePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.data.BorrowerDataTabPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.LoanTabPanel;
 
@@ -31,6 +32,7 @@ public class SwingView extends JFrame implements IView
 
     private BorrowerCreateUpdatePanel createUpdatePanel;
     private BorrowerDeletePanel deletePanel;
+    private BorrowerMessagePanel messagePanel;
 
     private BorrowerTabPanel borrowerTabPanel;
 
@@ -42,8 +44,9 @@ public class SwingView extends JFrame implements IView
     {
         createUpdatePanel = new BorrowerCreateUpdatePanel(this);
         deletePanel = new BorrowerDeletePanel(this);
+        messagePanel = new BorrowerMessagePanel(this);
 
-        controlsPanel = new BorrowerControlsPanel(createUpdatePanel, deletePanel);
+        controlsPanel = new BorrowerControlsPanel(createUpdatePanel, deletePanel, messagePanel);
         controlsPanel.setPreferredSize(new Dimension(800, controlsPanel.getPreferredSize().height));
 
         int controlsPanelHeight = controlsPanel.getPreferredSize().height;
@@ -127,7 +130,7 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void showMessage(String message) {
-        setTitle(message);
+        messagePanel.getMessageLabel().setText(message);
     }
 
     @Override

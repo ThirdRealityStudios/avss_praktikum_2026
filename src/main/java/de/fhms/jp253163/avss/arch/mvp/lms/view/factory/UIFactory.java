@@ -5,13 +5,13 @@ import java.awt.*;
 
 public class UIFactory
 {
-    public static LayoutResultDTO createGridBagLayoutFor(JComponent paneOrPanel) throws NullPointerException
+    public static LayoutResultDTO createGridBagLayoutFor(JPanel panel) throws NullPointerException
     {
         // Set and prepare correct layout
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
-        layout.setConstraints(paneOrPanel, constraints);
-        paneOrPanel.setLayout(layout);
+        layout.setConstraints(panel, constraints);
+        panel.setLayout(layout);
 
         return new LayoutResultDTO(layout, constraints);
     }
@@ -35,7 +35,7 @@ public class UIFactory
         constraints.gridx = gridx;
         constraints.gridy = gridy;
         constraints.anchor = anchor;
-        constraints.weightx = 5.0;
+        constraints.weightx = 1.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipadx = 10;
         constraints.ipady = 10;

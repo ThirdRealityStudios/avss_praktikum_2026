@@ -1,9 +1,9 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.action;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerDelete;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.RequestDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.south.BorrowerDeletePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.BorrowerDeletePanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
