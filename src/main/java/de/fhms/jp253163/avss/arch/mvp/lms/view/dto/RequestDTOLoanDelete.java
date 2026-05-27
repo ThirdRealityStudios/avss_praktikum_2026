@@ -4,16 +4,16 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanDele
 
 public class RequestDTOLoanDelete implements IRequestDTOLoanDelete
 {
-    private int borrowerID = -1;
+    private int loanID = -1;
 
-    public RequestDTOLoanDelete(int borrowerID)
+    public RequestDTOLoanDelete(int loanID)
     {
-        this.borrowerID = borrowerID;
+        this.loanID = loanID;
     }
 
     @Override
     public int getLoanID()
     {
-        return borrowerID;
+        return loanID;
     }
 }
