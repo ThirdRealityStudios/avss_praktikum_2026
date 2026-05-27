@@ -13,7 +13,6 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.LoanTabPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Objects;
 
 public class SwingView extends JFrame implements IView
 {
@@ -43,6 +42,7 @@ public class SwingView extends JFrame implements IView
     {
         table = new JTable();
         dataTabPanel = new BorrowerDataTabPanel(table);
+        dataTabPanel.setPreferredSize(new Dimension(800, controlsPanel.getPreferredSize().height));
 
         createUpdatePanel = new BorrowerCreateUpdatePanel(this);
         deletePanel = new BorrowerDeletePanel(this);
