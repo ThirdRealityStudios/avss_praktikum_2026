@@ -35,7 +35,7 @@ public class UIFactory
         constraints.gridx = gridx;
         constraints.gridy = gridy;
         constraints.anchor = anchor;
-        constraints.weightx = 2.0;
+        constraints.weightx = 5.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(component, constraints);
     }
