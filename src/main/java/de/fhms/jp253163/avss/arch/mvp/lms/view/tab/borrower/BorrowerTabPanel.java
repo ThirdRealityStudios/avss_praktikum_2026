@@ -31,9 +31,12 @@ public class BorrowerTabPanel extends JPanel
         layout.setConstraints(this, constraints);
         setLayout(layout);
 
+        Insets insets = new Insets(0, 30, 30, 30);
+
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.NORTH;
+        constraints.insets = insets;
         add(dataTabPanel, constraints);
 
         constraints.gridx = 0;
