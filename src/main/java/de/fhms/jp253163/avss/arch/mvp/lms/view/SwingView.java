@@ -119,45 +119,13 @@ public class SwingView extends JFrame implements IView
         messagePanel.getMessageLabel().setText(message);
     }
 
-    private void addColumnNames(Method[] getterMethods, ArrayList<String> columnNamesList)
-    {
-        for(int i = 0; i < getterMethods.length; i++)
-        {
-            Method getterMethod = getterMethods[i];
-
-            if(getterMethod == null)
-            {
-                showMessage("Cannot detect the column names!");
-
-                return;
-            }
-
-            String methodName = getterMethod.getName();
-
-            String propertyName = methodName.replace("get", "");
-
-            System.out.println("Detected coumn: " + propertyName);
-
-            columnNamesList.add(propertyName);
-        }
-    }
-
     @Override
     public void setBorrowerData(List<IDTOBorrowerSet> borrowers) {
         if(borrowers == null)
             return;
 
-        Method[] getterMethods0 = IDTOBorrowerSet.class.getDeclaredMethods();
-        Method[] getterMethods1 = IDTOBorrower.class.getDeclaredMethods();
-
-        int totalColumnCount = getterMethods0.length + getterMethods1.length;
-
-        ArrayList<String> columnNamesList = new ArrayList<>();
-
-        addColumnNames(getterMethods0, columnNamesList);
-        addColumnNames(getterMethods1, columnNamesList);
-
-        String[][] data = new String[borrowers.size()][totalColumnCount];
+        String[] columns = new String[]{ "ID", "Firstname", "Lastname", "Day", "Month", "Year", "Street", "No", "Place", "ZIP" };
+        String[][] data = new String[borrowers.size()][columns.length];
 
         for(int i = 0; i < borrowers.size(); i++)
         {
@@ -202,7 +170,7 @@ public class SwingView extends JFrame implements IView
 
         if(borrowerTable.getModel() == null)
         {
-            TableModel model = new DefaultTableModel(data, columnNamesList.toArray(new String[0]));
+            TableModel model = new DefaultTableModel(data, columns);
 
             try
             {
@@ -221,32 +189,9 @@ public class SwingView extends JFrame implements IView
         if(loans == null)
             return;
 
-        int columnCountDTOLoanSet = IDTOLoanSet.class.getDeclaredMethods().length,
-                columnCountDTOLoan = IDTOLoan.class.getDeclaredMethods().length,
-                totalColumnCount = columnCountDTOLoan + columnCountDTOLoanSet;
+        String[] columnNames = new String[]{ "ID", "Amount", "Interest Rate", "Term", "Borrower Assigned", "Remaining Term", "Remaining Balance" };
 
-        Method[] getterMethods = IDTOLoanSet.class.getDeclaredMethods();
-        String[] columnNames = new String[getterMethods.length];
-
-        for(int i = 0; i < getterMethods.length; i++)
-        {
-            Method getterMethod = getterMethods[i];
-
-            if(getterMethod == null)
-            {
-                columnNames[i] = "[Can't load]";
-
-                continue;
-            }
-
-            String methodName = getterMethod.getName();
-
-            String propertyName = methodName.replace("get", "");
-
-            columnNames[i] = propertyName;
-        }
-
-        String[][] data = new String[loans.size()][totalColumnCount];
+        String[][] data = new String[loans.size()][columnNames.length];
 
         for(int i = 0; i < loans.size(); i++)
         {
@@ -254,23 +199,25 @@ public class SwingView extends JFrame implements IView
 
             String loanID = "" + loanSet.getID();
 
-            String remainingTerm = "" + loanSet.getRemainingTerm();
-            String remainingBalance = "" + loanSet.getRemainingBalance();
-
             String amount = "" + loanSet.getAmount();
             String interestRate = "" + loanSet.getInterestRate();
             String term = "" + loanSet.getTerm();
+
             String borrowerID = "" + loanSet.getBorrower();
+
+            String remainingTerm = "" + loanSet.getRemainingTerm();
+            String remainingBalance = "" + loanSet.getRemainingBalance();
 
             data[i][0] = loanID;
 
-            data[i][1] = remainingTerm;
-            data[i][2] = remainingBalance;
+            data[i][1] = amount;
+            data[i][2] = interestRate;
+            data[i][3] = term;
 
-            data[i][3] = amount;
-            data[i][4] = interestRate;
-            data[i][5] = term;
-            data[i][6] = borrowerID;
+            data[i][4] = borrowerID;
+
+            data[i][5] = remainingTerm;
+            data[i][6] = remainingBalance;
         }
 
         if(tabsPanel == null || tabsPanel.getLoanTabPanel() == null || tabsPanel.getLoanTabPanel().getDataTabPanel() == null)
