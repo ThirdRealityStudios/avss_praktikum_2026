@@ -4,6 +4,8 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePa
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 
 import javax.swing.*;
@@ -87,6 +89,13 @@ public class SwingView extends JFrame implements IView
         setResizable(false);
         pack();
         setVisible(true);
+
+        // Notify view handler to load all datasets on every program start (into the tables)
+        if(readBorrowerViewHandler != null)
+            readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
+
+        if(readLoanViewHandler != null)
+            readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
     }
 
     @Override
