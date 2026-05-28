@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;

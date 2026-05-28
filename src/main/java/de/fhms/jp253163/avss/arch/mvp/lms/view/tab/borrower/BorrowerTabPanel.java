@@ -10,15 +10,15 @@ import java.util.Objects;
 public class BorrowerTabPanel extends JPanel
 {
     private ScrollableTablePanel scrollableTablePanel;
-    private BorrowerControlsPanel controlsTabPanel;
+    private BorrowerControlsPanel controlsPanel;
 
-    public BorrowerTabPanel(ScrollableTablePanel scrollableTablePanel, BorrowerControlsPanel controlsTabPanel)
+    public BorrowerTabPanel(ScrollableTablePanel scrollableTablePanel, BorrowerControlsPanel controlsPanel)
     {
         Objects.requireNonNull(scrollableTablePanel);
-        Objects.requireNonNull(controlsTabPanel);
+        Objects.requireNonNull(controlsPanel);
 
         this.scrollableTablePanel = scrollableTablePanel;
-        this.controlsTabPanel = controlsTabPanel;
+        this.controlsPanel = controlsPanel;
 
         initLayout();
     }
@@ -35,14 +35,14 @@ public class BorrowerTabPanel extends JPanel
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.anchor = GridBagConstraints.PAGE_START;
         constraints.insets = insets;
         add(scrollableTablePanel, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.SOUTH;
-        add(controlsTabPanel, constraints);
+        constraints.anchor = GridBagConstraints.PAGE_END;
+        add(controlsPanel, constraints);
     }
 
     public ScrollableTablePanel getDataTabPanel()
@@ -52,6 +52,6 @@ public class BorrowerTabPanel extends JPanel
 
     public BorrowerControlsPanel getControlsPanel()
     {
-        return controlsTabPanel;
+        return controlsPanel;
     }
 }
