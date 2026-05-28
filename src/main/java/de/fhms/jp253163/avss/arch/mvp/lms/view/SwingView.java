@@ -44,7 +44,9 @@ public class SwingView extends JFrame implements IView
         messagePanel = new MessagePanel(this);
         tabsPanel = new TabsPanel(this);
 
-        // TODO PAGE_START, PAGE_END each
+        SwingPanel panel = new SwingPanel(messagePanel, tabsPanel);
+
+        add(panel);
     }
 
     @Override
@@ -101,7 +103,7 @@ public class SwingView extends JFrame implements IView
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
-        tabbedPane.setVisible(true);
+        // tabbedPane.setVisible(true);
         setVisible(true);
     }
 
