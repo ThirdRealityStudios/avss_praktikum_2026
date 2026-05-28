@@ -173,8 +173,17 @@ public class SwingView extends JFrame implements IView
             return;
         }
 
-        tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(800, 300));
-        tabsPanel.getBorrowerTabPanel().getControlsPanel().setPreferredSize(new Dimension(800, 300));
+        // tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(800, 300));
+        // tabsPanel.getBorrowerTabPanel().getControlsPanel().setPreferredSize(new Dimension(800, 300));
+
+        tabsPanel.setPreferredSize(new Dimension(800, 600));
+        tabsPanel.getBorrowerTabPanel().setPreferredSize(new Dimension(750, 550));
+
+        tabsPanel.getBorrowerTabPanel().getDataTabPanel().setPreferredSize(new Dimension(375, 275));
+
+        tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(370, 270));
+
+        tabsPanel.getBorrowerTabPanel().getControlsPanel().setPreferredSize(new Dimension(375, 275));
     }
 
     @Override
@@ -233,7 +242,13 @@ public class SwingView extends JFrame implements IView
             }
         }
 
-        tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(800, 300));
-        tabsPanel.getLoanTabPanel().getControlsPanel().setPreferredSize(new Dimension(800, 300));
+        tabsPanel.setPreferredSize(new Dimension(800, 600));
+        tabsPanel.getLoanTabPanel().setPreferredSize(new Dimension(750, 550));
+
+        tabsPanel.getLoanTabPanel().getDataTabPanel().setPreferredSize(new Dimension(375, 275));
+
+        tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(370, 270));
+
+        tabsPanel.getLoanTabPanel().getControlsPanel().setPreferredSize(new Dimension(375, 275));
     }
 }
