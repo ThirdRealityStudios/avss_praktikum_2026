@@ -71,7 +71,7 @@ public class LoanSharedLogic
 
     public static RequestDTOLoanUpdate genUpdateLoanDTO(LoanTextfieldPanel textfieldPanel, boolean bookInstallment) throws NullPointerException
     {
-        String loanID = textfieldPanel.getLoanID().getJTextField().getText(),
+        String loanID = "-1", // TODO Get loan id from selected data table row / loan dataset
                 borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText();;
 
         if(loanID == null) loanID = "";

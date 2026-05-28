@@ -9,7 +9,7 @@ public class ScrollableTablePanel extends JScrollPane
 
     public ScrollableTablePanel(JTable table) throws NullPointerException
     {
-        super(table);
+        super(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         Objects.requireNonNull(table);
         this.table = table;
