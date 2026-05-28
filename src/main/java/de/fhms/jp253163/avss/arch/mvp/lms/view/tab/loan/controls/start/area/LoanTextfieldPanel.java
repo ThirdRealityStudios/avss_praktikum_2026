@@ -36,7 +36,7 @@ public class LoanTextfieldPanel extends JPanel
         UIFactory.addComponentFor(this, borrowerID, 0, 1, GridBagConstraints.LINE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, amount, 0, 2, GridBagConstraints.LINE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, interestRate, 0, 3, GridBagConstraints.LINE_START, layoutResult.getConstraints());
-        UIFactory.addComponentFor(this, interestRate, 0, 4, GridBagConstraints.LINE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, term, 0, 4, GridBagConstraints.LINE_START, layoutResult.getConstraints());
     }
 
     public IView getView()
