@@ -1,9 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoan;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
@@ -11,13 +9,9 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SwingView extends JFrame implements IView
@@ -168,6 +162,18 @@ public class SwingView extends JFrame implements IView
         if(borrowerTable == null)
             return;
 
+        TableModel model = new DefaultTableModel(data, columns);
+
+        try
+        {
+            borrowerTable.setModel(model);
+        }
+        catch (IllegalArgumentException iae)
+        {
+            return;
+        }
+
+        /*
         if(borrowerTable.getModel() == null)
         {
             TableModel model = new DefaultTableModel(data, columns);
@@ -181,6 +187,7 @@ public class SwingView extends JFrame implements IView
                 return;
             }
         }
+         */
     }
 
     @Override
