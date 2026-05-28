@@ -11,6 +11,8 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
@@ -98,6 +100,9 @@ public class SwingView extends JFrame implements IView
 
         if(readLoanViewHandler != null)
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
+
+        tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setVisible(true);
+        tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setVisible(true);
     }
 
     @Override
