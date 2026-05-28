@@ -35,7 +35,7 @@ public class BorrowerCreateUpdatePanel extends JPanel
         textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new BorrowerButtonPanel(view, null, null);
+        buttonPanel = new BorrowerButtonPanel(view, null, null, textfieldPanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
