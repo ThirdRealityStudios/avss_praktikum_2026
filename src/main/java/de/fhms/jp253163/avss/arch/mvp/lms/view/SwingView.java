@@ -136,7 +136,7 @@ public class SwingView extends JFrame implements IView
 
             String propertyName = methodName.replace("get", "");
 
-            showMessage("Detected coumn: " + propertyName);
+            System.out.println("Detected coumn: " + propertyName);
 
             columnNamesList.add(propertyName);
         }
