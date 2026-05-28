@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
 public class ScrollableTablePanel extends JScrollPane
@@ -13,7 +14,7 @@ public class ScrollableTablePanel extends JScrollPane
 
         Objects.requireNonNull(table);
 
-        table.setSize(800, 600);
+        table.setPreferredSize(new Dimension(800, 600));
 
         this.table = table;
 
