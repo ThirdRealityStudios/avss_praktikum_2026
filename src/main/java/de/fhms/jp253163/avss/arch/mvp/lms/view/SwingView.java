@@ -172,22 +172,6 @@ public class SwingView extends JFrame implements IView
         {
             return;
         }
-
-        /*
-        if(borrowerTable.getModel() == null)
-        {
-            TableModel model = new DefaultTableModel(data, columns);
-
-            try
-            {
-                borrowerTable.setModel(model);
-            }
-            catch (IllegalArgumentException iae)
-            {
-                return;
-            }
-        }
-         */
     }
 
     @Override

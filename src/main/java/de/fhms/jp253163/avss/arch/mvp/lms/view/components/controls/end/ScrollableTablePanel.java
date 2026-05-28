@@ -12,6 +12,9 @@ public class ScrollableTablePanel extends JScrollPane
         super(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         Objects.requireNonNull(table);
+
+        table.setSize(800, 600);
+
         this.table = table;
 
         // ScrollPaneLayout layout = new ScrollPaneLayout();
