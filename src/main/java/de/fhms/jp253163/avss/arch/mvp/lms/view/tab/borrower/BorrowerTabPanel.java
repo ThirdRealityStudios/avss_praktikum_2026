@@ -1,5 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower;
 
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 
@@ -25,24 +27,21 @@ public class BorrowerTabPanel extends JPanel
 
     private void initLayout()
     {
-        GridBagLayout layout = new GridBagLayout();
+        LayoutResultDTO dto = UIFactory.createGridBagLayoutFor(this);
 
-        GridBagConstraints constraints = new GridBagConstraints();
-        layout.setConstraints(this, constraints);
-        setLayout(layout);
+        Insets insets = new Insets(30, 30, 0, 30);
 
-        Insets insets = new Insets(0, 30, 30, 30);
+        dto.getConstraints().gridx = 0;
+        dto.getConstraints().gridy = 0;
+        dto.getConstraints().anchor = GridBagConstraints.PAGE_START;
+        dto.getConstraints().insets = insets;
+        add(scrollableTablePanel, dto.getConstraints());
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.PAGE_START;
-        constraints.insets = insets;
-        add(scrollableTablePanel, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.PAGE_END;
-        add(controlsPanel, constraints);
+        dto.getConstraints().gridx = 0;
+        dto.getConstraints().gridy = 1;
+        dto.getConstraints().anchor = GridBagConstraints.PAGE_END;
+        dto.getConstraints().insets = new Insets(30, 30, 30, 30);
+        add(controlsPanel, dto.getConstraints());
     }
 
     public ScrollableTablePanel getDataTabPanel()

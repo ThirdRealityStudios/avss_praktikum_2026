@@ -1,7 +1,6 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
@@ -107,9 +106,6 @@ public class SwingView extends JFrame implements IView
          */
 
         // pack();
-        setPreferredSize(new Dimension(800, 600));
-        setSize(new Dimension(800, 600));
-        setVisible(true);
     }
 
     @Override
@@ -178,17 +174,11 @@ public class SwingView extends JFrame implements IView
             return;
         }
 
-        // tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(800, 300));
-        // tabsPanel.getBorrowerTabPanel().getControlsPanel().setPreferredSize(new Dimension(800, 300));
+        setPreferredSize(new Dimension(800, 600));
+        setSize(new Dimension(800, 600));
+        setVisible(true);
 
-        tabsPanel.setPreferredSize(new Dimension(800, 600));
-        tabsPanel.getBorrowerTabPanel().setPreferredSize(new Dimension(750, 550));
-
-        tabsPanel.getBorrowerTabPanel().getDataTabPanel().setPreferredSize(new Dimension(375, 275));
-
-        tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(370, 270));
-
-        tabsPanel.getBorrowerTabPanel().getControlsPanel().setPreferredSize(new Dimension(375, 275));
+        System.out.println("Updated BORROWER table and sizes of JFrame");
     }
 
     @Override
@@ -247,13 +237,10 @@ public class SwingView extends JFrame implements IView
             }
         }
 
-        tabsPanel.setPreferredSize(new Dimension(800, 600));
-        tabsPanel.getLoanTabPanel().setPreferredSize(new Dimension(750, 550));
+        setPreferredSize(new Dimension(800, 600));
+        setSize(new Dimension(800, 600));
+        setVisible(true);
 
-        tabsPanel.getLoanTabPanel().getDataTabPanel().setPreferredSize(new Dimension(375, 275));
-
-        tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(370, 270));
-
-        tabsPanel.getLoanTabPanel().getControlsPanel().setPreferredSize(new Dimension(375, 275));
+        System.out.println("Updated BORROWER table and sizes of JFrame");
     }
 }

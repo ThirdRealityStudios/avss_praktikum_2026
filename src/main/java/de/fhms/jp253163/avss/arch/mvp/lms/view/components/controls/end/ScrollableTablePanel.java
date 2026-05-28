@@ -14,8 +14,6 @@ public class ScrollableTablePanel extends JScrollPane
 
         Objects.requireNonNull(table);
 
-        table.setPreferredSize(new Dimension(800, 600));
-
         this.table = table;
 
         // ScrollPaneLayout layout = new ScrollPaneLayout();
