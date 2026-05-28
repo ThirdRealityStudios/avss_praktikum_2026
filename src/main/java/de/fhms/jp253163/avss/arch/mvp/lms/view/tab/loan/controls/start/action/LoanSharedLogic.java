@@ -101,6 +101,18 @@ public class LoanSharedLogic
         if(loanID == null) loanID = "";
         if(borrowerID == null) borrowerID = "";
 
+        if(loanID.isEmpty())
+        {
+            textfieldPanel.getView().showMessage("Please fill in loan ID!");
+            return null;
+        }
+
+        if(borrowerID.isEmpty())
+        {
+            textfieldPanel.getView().showMessage("Please fill in borrower ID!");
+            return null;
+        }
+
         int loanIDParsed = -1;
         try
         {
