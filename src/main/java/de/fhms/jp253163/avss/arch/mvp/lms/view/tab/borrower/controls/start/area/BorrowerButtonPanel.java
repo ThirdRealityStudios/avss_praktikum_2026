@@ -16,6 +16,7 @@ import java.util.Objects;
 public class BorrowerButtonPanel extends JPanel
 {
     private IView view;
+    private BorrowerTextfieldPanel textfieldPanel;
 
     private BorrowerCreateActionListener createActionListener;
 
@@ -30,11 +31,13 @@ public class BorrowerButtonPanel extends JPanel
      * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
      * @throws NullPointerException
      */
-    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
+    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
+        Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
+        this.textfieldPanel = textfieldPanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
@@ -64,7 +67,7 @@ public class BorrowerButtonPanel extends JPanel
             createButton.removeActionListener(createActionListener);
 
         // create (new) one and assign it
-        createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler);
+        createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler, textfieldPanel);
         createButton.addActionListener(createActionListener);
     }
 
@@ -77,7 +80,7 @@ public class BorrowerButtonPanel extends JPanel
             updateButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler);
+        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, textfieldPanel);
         updateButton.addActionListener(updateActionListener);
     }
 
