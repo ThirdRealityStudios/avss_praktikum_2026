@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
@@ -30,7 +31,9 @@ public class SwingView extends JFrame implements IView
 
         SwingPanel panel = new SwingPanel(messagePanel, tabsPanel);
 
-        add(panel);
+        JScrollPane pane = new JScrollPane(panel);
+
+        add(pane);
     }
 
     @Override

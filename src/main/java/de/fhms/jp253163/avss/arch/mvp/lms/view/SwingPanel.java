@@ -9,20 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class SwingPanel extends JScrollPane
+public class SwingPanel extends JPanel
 {
     public SwingPanel(MessagePanel messagePanel, TabsPanel tabsPanel) throws NullPointerException
     {
         Objects.requireNonNull(tabsPanel);
         Objects.requireNonNull(messagePanel);
 
-        JPanel panel = new JPanel();
+        LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(panel);
-
-        UIFactory.addComponentFor(panel, tabsPanel, 0, 0, GridBagConstraints.LINE_START, layoutResult.getConstraints());
-        UIFactory.addComponentFor(panel, messagePanel, 0, 1, GridBagConstraints.LINE_END, layoutResult.getConstraints());
-
-        add(panel);
+        UIFactory.addComponentFor(this, tabsPanel, 0, 0, GridBagConstraints.LINE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, messagePanel, 0, 1, GridBagConstraints.LINE_END, layoutResult.getConstraints());
     }
 }
