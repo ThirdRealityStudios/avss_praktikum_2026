@@ -5,7 +5,6 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrower
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 
 import java.awt.event.ActionEvent;
@@ -38,7 +37,7 @@ public class BorrowerUpdateActionListener implements ActionListener
 
         try
         {
-            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateLoanDTO(view, textfieldPanel);
+            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateBorrowerDTO(view, textfieldPanel);
         }
         catch(NullPointerException npe)
         {

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 public class BorrowerSharedLogic
 {
-    public static RequestDTOBorrowerCreate genCreateLoanDTO(IView view, BorrowerTextfieldPanel textfieldPanel)
+    public static RequestDTOBorrowerCreate genCreateBorrowerDTO(IView view, BorrowerTextfieldPanel textfieldPanel)
     {
         BorrowerNamePanel namePanel = textfieldPanel.getNamePanel();
         BorrowerBirthdayPanel birthdayPanel = textfieldPanel.getBirthdayPanel();
@@ -38,6 +38,60 @@ public class BorrowerSharedLogic
         if(no == null) no = "";
         if(place == null) place = "";
         if(zip == null) zip = "";
+
+        if(firstname.isEmpty())
+        {
+            view.showMessage("Please fill in firstname!");
+            return null;
+        }
+
+        if(lastname.isEmpty())
+        {
+            view.showMessage("Please fill in lastname!");
+            return null;
+        }
+
+        if(day.isEmpty())
+        {
+            view.showMessage("Please fill in day!");
+            return null;
+        }
+
+        if(month.isEmpty())
+        {
+            view.showMessage("Please fill in month!");
+            return null;
+        }
+
+        if(year.isEmpty())
+        {
+            view.showMessage("Please fill in year!");
+            return null;
+        }
+
+        if(street.isEmpty())
+        {
+            view.showMessage("Please fill in street!");
+            return null;
+        }
+
+        if(no.isEmpty())
+        {
+            view.showMessage("Please fill in no!");
+            return null;
+        }
+
+        if(place.isEmpty())
+        {
+            view.showMessage("Please fill in place!");
+            return null;
+        }
+
+        if(zip.isEmpty())
+        {
+            view.showMessage("Please fill in zip!");
+            return null;
+        }
 
         int zipParsed = -1;
 
@@ -83,9 +137,12 @@ public class BorrowerSharedLogic
         return new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
     }
 
-    public static RequestDTOBorrowerUpdate genUpdateLoanDTO(IView view, BorrowerTextfieldPanel textfieldPanel)
+    public static RequestDTOBorrowerUpdate genUpdateBorrowerDTO(IView view, BorrowerTextfieldPanel textfieldPanel)
     {
-        RequestDTOBorrowerCreate helpingDTO = genCreateLoanDTO(view, textfieldPanel);
+        RequestDTOBorrowerCreate helpingDTO = genCreateBorrowerDTO(view, textfieldPanel);
+
+        if(helpingDTO == null)
+            return null;
 
         String id = "-1"; // TODO createUpdatePanel.getView().get....getFocusedId();
         if(id == null) id = "";
@@ -98,7 +155,6 @@ public class BorrowerSharedLogic
         catch (NumberFormatException nfe)
         {
             view.showMessage("Borrower ID is not a number!");
-
             return null;
         }
 

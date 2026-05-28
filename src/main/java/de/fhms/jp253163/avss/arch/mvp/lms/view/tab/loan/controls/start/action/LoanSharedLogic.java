@@ -18,6 +18,30 @@ public class LoanSharedLogic
         if(interestRate == null) interestRate = "";
         if(term == null) term = "";
 
+        if(borrowerID.isEmpty())
+        {
+            textfieldPanel.getView().showMessage("Please fill in borrower ID!");
+            return null;
+        }
+
+        if(amount.isEmpty())
+        {
+            textfieldPanel.getView().showMessage("Please fill in amount!");
+            return null;
+        }
+
+        if(interestRate.isEmpty())
+        {
+            textfieldPanel.getView().showMessage("Please fill in interest rate!");
+            return null;
+        }
+
+        if(term.isEmpty())
+        {
+            textfieldPanel.getView().showMessage("Please fill in term!");
+            return null;
+        }
+
         int borrowerIDParsed = -1;
         try
         {
@@ -96,7 +120,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Borrower ID you want to assign is not a number!");
+            textfieldPanel.getView().showMessage("Borrower ID is not a number!");
 
             return null;
         }

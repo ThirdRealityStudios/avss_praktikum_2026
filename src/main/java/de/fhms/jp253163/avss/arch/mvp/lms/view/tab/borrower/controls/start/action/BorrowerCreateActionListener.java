@@ -35,7 +35,7 @@ public class BorrowerCreateActionListener implements ActionListener
 
         try
         {
-            requestDTOBorrowerCreate = BorrowerSharedLogic.genCreateLoanDTO(view, textfieldPanel);
+            requestDTOBorrowerCreate = BorrowerSharedLogic.genCreateBorrowerDTO(view, textfieldPanel);
         }
         catch(NullPointerException npe)
         {
