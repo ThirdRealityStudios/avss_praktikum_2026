@@ -59,7 +59,7 @@ public class SwingView extends JFrame implements IView
 
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Borrowers", borrowerTabPanel);
-        tabbedPane.addTab("Loans", loanTablePanel);
+        tabbedPane.addTab("Loans", loanTabPanel);
         add(tabbedPane);
     }
 
