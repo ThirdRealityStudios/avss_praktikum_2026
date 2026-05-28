@@ -105,6 +105,7 @@ public class SwingView extends JFrame implements IView
 
         // pack();
         setPreferredSize(new Dimension(800, 600));
+        setSize(new Dimension(800, 600));
         setVisible(true);
     }
 
