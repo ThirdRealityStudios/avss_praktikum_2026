@@ -21,8 +21,6 @@ public class BorrowerButtonPanel extends JPanel
 
     private BorrowerUpdateActionListener updateActionListener;
 
-    private BorrowerSharedLogic sharedLogic;
-
     private JButton createButton, updateButton;
 
     /**
@@ -30,16 +28,13 @@ public class BorrowerButtonPanel extends JPanel
      * @param view
      * @param createBorrowerViewHandler Or null allowed too (do nothing at this event)
      * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
-     * @param sharedLogic
      * @throws NullPointerException
      */
-    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerSharedLogic sharedLogic) throws NullPointerException
+    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(sharedLogic);
 
         this.view = view;
-        this.sharedLogic = sharedLogic;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
@@ -69,7 +64,7 @@ public class BorrowerButtonPanel extends JPanel
             createButton.removeActionListener(createActionListener);
 
         // create (new) one and assign it
-        createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler, sharedLogic);
+        createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler);
         createButton.addActionListener(createActionListener);
     }
 
@@ -82,7 +77,7 @@ public class BorrowerButtonPanel extends JPanel
             updateButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, sharedLogic);
+        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler);
         updateButton.addActionListener(updateActionListener);
     }
 

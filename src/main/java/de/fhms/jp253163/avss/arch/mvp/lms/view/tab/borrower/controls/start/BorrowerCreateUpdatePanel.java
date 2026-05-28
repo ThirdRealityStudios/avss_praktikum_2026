@@ -21,8 +21,6 @@ public class BorrowerCreateUpdatePanel extends JPanel
 {
     private IView view;
 
-    private BorrowerSharedLogic sharedLogic;
-
     private BorrowerTextfieldPanel textfieldPanel;
     private BorrowerButtonPanel buttonPanel;
 
@@ -34,13 +32,10 @@ public class BorrowerCreateUpdatePanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        // Used for the creation and update event handlers only for borrower (because logic very similar)
-        sharedLogic = new BorrowerSharedLogic(this);
-
         textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new BorrowerButtonPanel(view, null, null, sharedLogic);
+        buttonPanel = new BorrowerButtonPanel(view, null, null);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 

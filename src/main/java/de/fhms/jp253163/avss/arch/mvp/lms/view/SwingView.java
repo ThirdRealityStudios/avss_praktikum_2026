@@ -35,8 +35,6 @@ public class SwingView extends JFrame implements IView
 
     private MessagePanel messagePanel;
 
-    private JTabbedPane tabbedPane;
-
     private TabsPanel tabsPanel;
 
     public SwingView()
@@ -76,7 +74,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setCreateLoanViewHandler(ICreateLoanViewHandler handler)
     {
-        this.createLoanViewHandler = handler;
+        this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateLoanViewHandler(handler);
     }
 
     @Override
@@ -88,7 +86,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setUpdateLoanViewHandler(IUpdateLoanViewHandler handler)
     {
-        this.updateLoanViewHandler = handler;
+        this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateLoanViewHandler(handler);
     }
 
     @Override

@@ -4,6 +4,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,33 +14,31 @@ public class BorrowerUpdateActionListener implements ActionListener
 {
     private IView view;
     private IUpdateBorrowerViewHandler updateBorrowerViewHandler;
-    private BorrowerSharedLogic sharedLogic;
+    private BorrowerTextfieldPanel textfieldPanel;
 
     // view, createBorrowerViewHandler, sharedLogic
-    public BorrowerUpdateActionListener(IView view, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerSharedLogic sharedLogic) throws NullPointerException
+    public BorrowerUpdateActionListener(IView view, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(sharedLogic);
+        Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
         this.updateBorrowerViewHandler = updateBorrowerViewHandler;
-        this.sharedLogic = sharedLogic;
+        this.textfieldPanel = textfieldPanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        BorrowerSharedLogicDTO dto = sharedLogic.prepareUserEntries(false);
-
         IRequestDTOBorrowerUpdate requestDTOBorrowerUpdate = null;
 
         try
         {
-            requestDTOBorrowerUpdate = new RequestDTOBorrowerUpdate(dto.getBorrowerId(), dto.getFirstname(), dto.getLastname(), dto.getBirthday(), dto.getStreet(), dto.getNo(), dto.getPlace(), dto.getZip(), null);
+            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateLoanDTO(view, textfieldPanel);
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("Borrower update failed! (code: 0)");
+            view.showMessage("Borrower update failed!");
 
             return;
         }

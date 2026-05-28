@@ -3,7 +3,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.acti
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,32 +12,30 @@ import java.util.Objects;
 public class BorrowerCreateActionListener implements ActionListener
 {
     private IView view;
-    private BorrowerSharedLogic sharedLogic;
     private ICreateBorrowerViewHandler createBorrowerViewHandler;
+    private BorrowerTextfieldPanel textfieldPanel;
 
-    public BorrowerCreateActionListener(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, BorrowerSharedLogic sharedLogic) throws NullPointerException
+    public BorrowerCreateActionListener(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(sharedLogic);
+        Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
-        this.sharedLogic = sharedLogic;
         this.createBorrowerViewHandler = createBorrowerViewHandler;
+        this.textfieldPanel = textfieldPanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        BorrowerSharedLogicDTO dto = sharedLogic.prepareUserEntries(true);
-
         IRequestDTOBorrowerCreate requestDTOBorrowerCreate = null;
 
         try
         {
-            requestDTOBorrowerCreate = new RequestDTOBorrowerCreate(dto.getFirstname(), dto.getLastname(), dto.getStreet(), dto.getNo(), dto.getPlace(), dto.getZip(), dto.getBirthday());
+            requestDTOBorrowerCreate = BorrowerSharedLogic.genCreateLoanDTO(view, textfieldPanel);
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("Borrower creation failed! (code: 0)");
+            view.showMessage("Borrower creation failed!");
 
             return;
         }

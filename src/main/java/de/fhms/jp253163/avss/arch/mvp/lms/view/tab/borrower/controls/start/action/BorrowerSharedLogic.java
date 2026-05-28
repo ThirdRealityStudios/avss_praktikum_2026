@@ -1,33 +1,25 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerAddressPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerBirthdayPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerNamePanel;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class BorrowerSharedLogic
 {
-    private BorrowerCreateUpdatePanel createUpdatePanel;
-
-    public BorrowerSharedLogic(BorrowerCreateUpdatePanel createUpdatePanel)
+    public static RequestDTOBorrowerCreate genCreateLoanDTO(IView view, BorrowerTextfieldPanel textfieldPanel)
     {
-        Objects.requireNonNull(createUpdatePanel);
+        BorrowerNamePanel namePanel = textfieldPanel.getNamePanel();
+        BorrowerBirthdayPanel birthdayPanel = textfieldPanel.getBirthdayPanel();
+        BorrowerAddressPanel addressPanel = textfieldPanel.getAddressPanel();
 
-        this.createUpdatePanel = createUpdatePanel;
-    }
-
-    public BorrowerSharedLogicDTO prepareUserEntries(boolean ignoreID)
-    {
-        BorrowerNamePanel namePanel = createUpdatePanel.getTextfieldPanel().getNamePanel();
-        BorrowerBirthdayPanel birthdayPanel = createUpdatePanel.getTextfieldPanel().getBirthdayPanel();
-        BorrowerAddressPanel addressPanel = createUpdatePanel.getTextfieldPanel().getAddressPanel();
-
-        String id = ignoreID ? "-1" : "-1", // createUpdatePanel.getView().get....getFocusedId();
-                firstname = namePanel.getFirstname().getJTextField().getText(),
+        String firstname = namePanel.getFirstname().getJTextField().getText(),
                 lastname = namePanel.getLastname().getJTextField().getText(),
                 day = birthdayPanel.getDay().getJTextField().getText(),
                 month = birthdayPanel.getMonth().getJTextField().getText(),
@@ -37,7 +29,6 @@ public class BorrowerSharedLogic
                 place = addressPanel.getPlace().getJTextField().getText(),
                 zip = addressPanel.getZip().getJTextField().getText();
 
-        if(id == null) id = "";
         if(firstname == null) firstname = "";
         if(lastname == null) lastname = "";
         if(day == null) day = "";
@@ -49,18 +40,6 @@ public class BorrowerSharedLogic
         if(zip == null) zip = "";
 
         int zipParsed = -1;
-        int idParsed = -1;
-
-        try
-        {
-            idParsed = Integer.parseInt(id);
-        }
-        catch (NumberFormatException nfe)
-        {
-            createUpdatePanel.getView().showMessage("Cannot update borrower! (ID corrupted)");
-
-            return null;
-        }
 
         try
         {
@@ -68,7 +47,7 @@ public class BorrowerSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            createUpdatePanel.getView().showMessage("Incorrect zip code! (not a number)");
+            view.showMessage("Incorrect zip code! (not a number)");
 
             return null;
         }
@@ -83,7 +62,7 @@ public class BorrowerSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            createUpdatePanel.getView().showMessage("Incorrect birthday! (not everywhere numbers)");
+            view.showMessage("Incorrect birthday! (not numbers everywhere)");
 
             return null;
         }
@@ -96,13 +75,35 @@ public class BorrowerSharedLogic
         }
         catch (DateTimeException dte)
         {
-            createUpdatePanel.getView().showMessage("Incorrect birthday! (not a valid date)");
+            view.showMessage("Incorrect birthday! (not a valid date)");
 
             return null;
         }
 
-        BorrowerSharedLogicDTO sharedLogicDTO = new BorrowerSharedLogicDTO(idParsed, firstname, lastname, birthdayParsed, street, no, place, zipParsed);
+        return new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
+    }
 
-        return sharedLogicDTO;
+    public static RequestDTOBorrowerUpdate genUpdateLoanDTO(IView view, BorrowerTextfieldPanel textfieldPanel)
+    {
+        RequestDTOBorrowerCreate helpingDTO = genCreateLoanDTO(view, textfieldPanel);
+
+        String id = "-1"; // TODO createUpdatePanel.getView().get....getFocusedId();
+        if(id == null) id = "";
+
+        int idParsed = -1;
+        try
+        {
+            idParsed = Integer.parseInt(id);
+        }
+        catch (NumberFormatException nfe)
+        {
+            view.showMessage("Borrower ID is not a number!");
+
+            return null;
+        }
+
+        LocalDate birthday = LocalDate.of(helpingDTO.getYearOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getDayOfBirth());
+
+        return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), birthday, helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
     }
 }
