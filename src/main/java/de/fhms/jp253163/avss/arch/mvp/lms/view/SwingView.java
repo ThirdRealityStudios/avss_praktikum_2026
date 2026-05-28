@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SwingView extends JFrame implements IView
@@ -118,6 +119,29 @@ public class SwingView extends JFrame implements IView
         messagePanel.getMessageLabel().setText(message);
     }
 
+    private void addColumnNames(Method[] getterMethods, ArrayList<String> columnNamesList)
+    {
+        for(int i = 0; i < getterMethods.length; i++)
+        {
+            Method getterMethod = getterMethods[i];
+
+            if(getterMethod == null)
+            {
+                showMessage("Cannot detect the column names!");
+
+                return;
+            }
+
+            String methodName = getterMethod.getName();
+
+            String propertyName = methodName.replace("get", "");
+
+            showMessage("Detected coumn: " + propertyName);
+
+            columnNamesList.add(propertyName);
+        }
+    }
+
     @Override
     public void setBorrowerData(List<IDTOBorrowerSet> borrowers) {
         if(borrowers == null)
@@ -127,26 +151,13 @@ public class SwingView extends JFrame implements IView
             columnCountDTOBorrower = IDTOBorrower.class.getDeclaredMethods().length,
             totalColumnCount = columnCountDTOBorrower + columnCountDTOBorrowerSet;
 
-        Method[] getterMethods = IDTOBorrowerSet.class.getDeclaredMethods();
-        String[] columnNames = new String[getterMethods.length];
+        Method[] getterMethods0 = IDTOBorrowerSet.class.getDeclaredMethods();
+        Method[] getterMethods1 = IDTOBorrowerSet.class.getDeclaredMethods();
 
-        for(int i = 0; i < getterMethods.length; i++)
-        {
-            Method getterMethod = getterMethods[i];
+        ArrayList<String> columnNamesList = new ArrayList<>();
 
-            if(getterMethod == null)
-            {
-                columnNames[i] = "[Can't load]";
-
-                continue;
-            }
-
-            String methodName = getterMethod.getName();
-
-            String propertyName = methodName.replace("get", "");
-
-            columnNames[i] = propertyName;
-        }
+        addColumnNames(getterMethods0, columnNamesList);
+        addColumnNames(getterMethods1, columnNamesList);
 
         String[][] data = new String[borrowers.size()][totalColumnCount];
 
@@ -193,7 +204,7 @@ public class SwingView extends JFrame implements IView
 
         if(borrowerTable.getModel() == null)
         {
-            TableModel model = new DefaultTableModel(data, columnNames);
+            TableModel model = new DefaultTableModel(data, columnNamesList.toArray(new String[0]));
 
             try
             {
