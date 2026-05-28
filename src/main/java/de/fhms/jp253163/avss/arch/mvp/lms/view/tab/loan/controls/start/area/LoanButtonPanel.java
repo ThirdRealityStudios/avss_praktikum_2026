@@ -33,8 +33,6 @@ public class LoanButtonPanel extends JPanel
     public LoanButtonPanel(IView view, ICreateLoanViewHandler createLoanViewHandler, IUpdateLoanViewHandler updateLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(createLoanViewHandler);
-        Objects.requireNonNull(updateLoanViewHandler);
         Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
