@@ -22,7 +22,6 @@ public class LoanDeleteActionListener implements ActionListener
     public LoanDeleteActionListener(IDeleteLoanViewHandler deleteLoanViewHandler, LoanDeletePanel deletePanel) throws NullPointerException
     {
         Objects.requireNonNull(deletePanel);
-        Objects.requireNonNull(deleteLoanViewHandler);
 
         this.deleteLoanViewHandler = deleteLoanViewHandler;
         this.deletePanel = deletePanel;
