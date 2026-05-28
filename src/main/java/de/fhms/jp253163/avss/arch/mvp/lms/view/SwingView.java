@@ -147,12 +147,10 @@ public class SwingView extends JFrame implements IView
         if(borrowers == null)
             return;
 
-        int columnCountDTOBorrowerSet = IDTOBorrowerSet.class.getDeclaredMethods().length,
-            columnCountDTOBorrower = IDTOBorrower.class.getDeclaredMethods().length,
-            totalColumnCount = columnCountDTOBorrower + columnCountDTOBorrowerSet;
-
         Method[] getterMethods0 = IDTOBorrowerSet.class.getDeclaredMethods();
-        Method[] getterMethods1 = IDTOBorrowerSet.class.getDeclaredMethods();
+        Method[] getterMethods1 = IDTOBorrower.class.getDeclaredMethods();
+
+        int totalColumnCount = getterMethods0.length + getterMethods1.length;
 
         ArrayList<String> columnNamesList = new ArrayList<>();
 
