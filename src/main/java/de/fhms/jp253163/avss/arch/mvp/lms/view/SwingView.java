@@ -91,8 +91,6 @@ public class SwingView extends JFrame implements IView
         setTitle("Loan Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        pack();
-        setVisible(true);
 
         // Notify view handler to load all datasets on every program start (into the tables)
         if(readBorrowerViewHandler != null)
@@ -101,8 +99,13 @@ public class SwingView extends JFrame implements IView
         if(readLoanViewHandler != null)
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
 
+        /*
         tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setVisible(true);
         tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setVisible(true);
+         */
+
+        // pack();
+        setVisible(true);
     }
 
     @Override
