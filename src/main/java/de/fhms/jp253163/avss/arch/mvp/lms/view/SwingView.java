@@ -95,9 +95,13 @@ public class SwingView extends JFrame implements IView
         // Notify view handler to load all datasets on every program start (into the tables)
         if(readBorrowerViewHandler != null)
             readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
+        else
+            showMessage("Cannot invoke borrower read request!");
 
         if(readLoanViewHandler != null)
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
+        else
+            showMessage("Cannot invoke loan read request!");
 
         /*
         tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setVisible(true);
@@ -110,6 +114,7 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void showMessage(String message) {
+        messagePanel.getMessageLabel().setForeground(Color.RED);
         messagePanel.getMessageLabel().setText(message);
     }
 
