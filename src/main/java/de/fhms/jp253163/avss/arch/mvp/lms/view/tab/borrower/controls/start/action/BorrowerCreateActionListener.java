@@ -3,6 +3,8 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.acti
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 
 import java.awt.event.ActionEvent;
@@ -13,15 +15,17 @@ public class BorrowerCreateActionListener implements ActionListener
 {
     private IView view;
     private ICreateBorrowerViewHandler createBorrowerViewHandler;
+    private IReadBorrowerViewHandler readBorrowerViewHandler;
     private BorrowerTextfieldPanel textfieldPanel;
 
-    public BorrowerCreateActionListener(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public BorrowerCreateActionListener(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
         this.createBorrowerViewHandler = createBorrowerViewHandler;
+        this.readBorrowerViewHandler = readBorrowerViewHandler;
         this.textfieldPanel = textfieldPanel;
     }
 
@@ -40,7 +44,12 @@ public class BorrowerCreateActionListener implements ActionListener
             return;
         }
 
-        if(createBorrowerViewHandler != null)
+        if(createBorrowerViewHandler != null && readBorrowerViewHandler != null)
+        {
             createBorrowerViewHandler.invoke(requestDTOBorrowerCreate);
+
+            // Just show all borrowers (in the table) after creating a new dataset
+            readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
+        }
     }
 }

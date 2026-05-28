@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
@@ -35,7 +36,7 @@ public class BorrowerCreateUpdatePanel extends JPanel
         textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new BorrowerButtonPanel(view, null, null, textfieldPanel);
+        buttonPanel = new BorrowerButtonPanel(view, null, null, null, textfieldPanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
@@ -63,13 +64,13 @@ public class BorrowerCreateUpdatePanel extends JPanel
         return buttonPanel;
     }
 
-    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler)
+    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler)
     {
-        buttonPanel.setCreateBorrowerViewHandler(createBorrowerViewHandler);
+        buttonPanel.setCreateBorrowerViewHandler(createBorrowerViewHandler, readBorrowerViewHandler);
     }
 
-    public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler updateBorrowerViewHandler)
+    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler)
     {
-        buttonPanel.setUpdateBorrowerViewHandler(updateBorrowerViewHandler);
+        buttonPanel.setUpdateBorrowerViewHandler(readBorrowerViewHandler, updateBorrowerViewHandler);
     }
 }

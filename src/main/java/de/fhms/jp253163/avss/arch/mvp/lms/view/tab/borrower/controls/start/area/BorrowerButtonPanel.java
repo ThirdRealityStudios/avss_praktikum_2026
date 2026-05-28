@@ -2,6 +2,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
@@ -31,7 +32,7 @@ public class BorrowerButtonPanel extends JPanel
      * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
      * @throws NullPointerException
      */
-    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(textfieldPanel);
@@ -41,24 +42,24 @@ public class BorrowerButtonPanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        initCreateButton(createBorrowerViewHandler);
-        initUpdateButton(updateBorrowerViewHandler);
+        initCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
+        initUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
     }
 
-    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler) throws NullPointerException
+    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
     {
-        initCreateButton(createBorrowerViewHandler);
+        initCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
     }
 
-    public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
+    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
     {
-        initUpdateButton(updateBorrowerViewHandler);
+        initUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
     }
 
-    private void initCreateButton(ICreateBorrowerViewHandler createBorrowerViewHandler) throws NullPointerException
+    private void initCreateButton(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
     {
         if(createButton == null)
             createButton = new JButton("Create");
@@ -67,11 +68,11 @@ public class BorrowerButtonPanel extends JPanel
             createButton.removeActionListener(createActionListener);
 
         // create (new) one and assign it
-        createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler, textfieldPanel);
+        createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler, readBorrowerViewHandler, textfieldPanel);
         createButton.addActionListener(createActionListener);
     }
 
-    private void initUpdateButton(IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
+    private void initUpdateButton(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
     {
         if(updateButton == null)
             updateButton = new JButton("Update");
@@ -80,7 +81,7 @@ public class BorrowerButtonPanel extends JPanel
             updateButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, textfieldPanel);
+        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, readBorrowerViewHandler, textfieldPanel);
         updateButton.addActionListener(updateActionListener);
     }
 

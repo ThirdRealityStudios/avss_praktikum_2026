@@ -2,7 +2,9 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.act
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerDelete;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerDelete;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.BorrowerDeletePanel;
 
 import java.awt.event.ActionEvent;
@@ -11,18 +13,21 @@ import java.util.Objects;
 
 public class BorrowerDeleteActionListener implements ActionListener
 {
+    private IReadBorrowerViewHandler readBorrowerViewHandler;
     private IDeleteBorrowerViewHandler deleteBorrowerViewHandler;
     private BorrowerDeletePanel deletePanel;
 
     /**
+     * @param readBorrowerViewHandler Or null is allowed too (do run nothing in this case)
      * @param deleteBorrowerViewHandler Or null is allowed too (do run nothing in this case)
      * @param deletePanel
      * @throws NullPointerException
      */
-    public BorrowerDeleteActionListener(IDeleteBorrowerViewHandler deleteBorrowerViewHandler, BorrowerDeletePanel deletePanel) throws NullPointerException
+    public BorrowerDeleteActionListener(IReadBorrowerViewHandler readBorrowerViewHandler, IDeleteBorrowerViewHandler deleteBorrowerViewHandler, BorrowerDeletePanel deletePanel) throws NullPointerException
     {
         Objects.requireNonNull(deletePanel);
 
+        this.readBorrowerViewHandler = readBorrowerViewHandler;
         this.deleteBorrowerViewHandler = deleteBorrowerViewHandler;
         this.deletePanel = deletePanel;
     }
@@ -45,7 +50,11 @@ public class BorrowerDeleteActionListener implements ActionListener
             return;
         }
 
-        if(deleteBorrowerViewHandler != null)
+        if(readBorrowerViewHandler != null && deleteBorrowerViewHandler != null)
+        {
             deleteBorrowerViewHandler.invoke(requestDTOBorrowerDelete);
+
+            readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
+        }
     }
 }

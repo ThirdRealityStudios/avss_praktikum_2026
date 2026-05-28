@@ -2,6 +2,8 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.center;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.center.action.LoanDeleteActionListener;
@@ -24,7 +26,7 @@ public class LoanDeletePanel extends JPanel
 
         LayoutResultDTO layoutDTO = UIFactory.createGridBagLayoutFor(this);
 
-        initDeleteButton(null);
+        initDeleteButton(null, null);
 
         UIFactory.addComponentFor(this, deleteButton, 0, 0, GridBagConstraints.PAGE_START, layoutDTO.getConstraints());
     }
@@ -34,7 +36,7 @@ public class LoanDeletePanel extends JPanel
         return this.view;
     }
 
-    private void initDeleteButton(IDeleteLoanViewHandler deleteLoanViewHandler) throws NullPointerException
+    private void initDeleteButton(IReadLoanViewHandler readBorrowerViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler) throws NullPointerException
     {
         if(deleteButton == null)
             deleteButton = new JButton("Delete");
@@ -43,12 +45,12 @@ public class LoanDeletePanel extends JPanel
             deleteButton.removeActionListener(deleteActionListener);
 
         // create (new) one and assign it
-        deleteActionListener = new LoanDeleteActionListener(deleteLoanViewHandler, this);
+        deleteActionListener = new LoanDeleteActionListener(readBorrowerViewHandler, deleteLoanViewHandler, this);
         deleteButton.addActionListener(deleteActionListener);
     }
 
-    public void setDeleteLoanViewHandler(IDeleteLoanViewHandler deleteLoanViewHandler)
+    public void setDeleteLoanViewHandler(IReadLoanViewHandler loanViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler)
     {
-        initDeleteButton(deleteLoanViewHandler);
+        initDeleteButton(loanViewHandler, deleteLoanViewHandler);
     }
 }

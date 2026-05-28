@@ -2,6 +2,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.action.BorrowerDeleteActionListener;
@@ -24,7 +25,7 @@ public class BorrowerDeletePanel extends JPanel
 
         LayoutResultDTO layoutDTO = UIFactory.createGridBagLayoutFor(this);
 
-        initDeleteButton(null);
+        initDeleteButton(null, null);
 
         UIFactory.addComponentFor(this, deleteButton, 0, 0, GridBagConstraints.PAGE_START, layoutDTO.getConstraints());
     }
@@ -34,7 +35,7 @@ public class BorrowerDeletePanel extends JPanel
         return this.view;
     }
 
-    private void initDeleteButton(IDeleteBorrowerViewHandler deleteBorrowerViewHandler) throws NullPointerException
+    private void initDeleteButton(IReadBorrowerViewHandler readBorrowerViewHandler, IDeleteBorrowerViewHandler deleteBorrowerViewHandler) throws NullPointerException
     {
         if(deleteButton == null)
             deleteButton = new JButton("Delete");
@@ -43,12 +44,12 @@ public class BorrowerDeletePanel extends JPanel
             deleteButton.removeActionListener(deleteActionListener);
 
         // create (new) one and assign it
-        deleteActionListener = new BorrowerDeleteActionListener(deleteBorrowerViewHandler, this);
+        deleteActionListener = new BorrowerDeleteActionListener(readBorrowerViewHandler, deleteBorrowerViewHandler, this);
         deleteButton.addActionListener(deleteActionListener);
     }
 
-    public void setDeleteBorrowerViewHandler(IDeleteBorrowerViewHandler deleteBorrowerViewHandler)
+    public void setDeleteBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IDeleteBorrowerViewHandler deleteBorrowerViewHandler)
     {
-        initDeleteButton(deleteBorrowerViewHandler);
+        initDeleteButton(readBorrowerViewHandler, deleteBorrowerViewHandler);
     }
 }

@@ -2,6 +2,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
@@ -31,7 +32,7 @@ public class LoanCreateUpdatePanel extends JPanel
         textfieldPanel = new LoanTextfieldPanel(view, new LabelledTextfield("Borrower ID:"), new LabelledTextfield("Amount:"), new LabelledTextfield("Interest rate:"), new LabelledTextfield("Term:"));
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new LoanButtonPanel(view, null, null, textfieldPanel);
+        buttonPanel = new LoanButtonPanel(view, null, null, null, textfieldPanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
@@ -50,13 +51,13 @@ public class LoanCreateUpdatePanel extends JPanel
         return buttonPanel;
     }
 
-    public void setCreateBorrowerViewHandler(ICreateLoanViewHandler createLoanViewHandler)
+    public void setCreateBorrowerViewHandler(ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler)
     {
-        buttonPanel.setCreateLoanViewHandler(createLoanViewHandler);
+        buttonPanel.setCreateLoanViewHandler(createLoanViewHandler, readLoanViewHandler);
     }
 
-    public void setUpdateBorrowerViewHandler(IUpdateLoanViewHandler updateLoanViewHandler)
+    public void setUpdateBorrowerViewHandler(IReadLoanViewHandler readLoanViewHandler, IUpdateLoanViewHandler updateLoanViewHandler)
     {
-        buttonPanel.setUpdateLoanViewHandler(updateLoanViewHandler);
+        buttonPanel.setUpdateLoanViewHandler(readLoanViewHandler, updateLoanViewHandler);
     }
 }

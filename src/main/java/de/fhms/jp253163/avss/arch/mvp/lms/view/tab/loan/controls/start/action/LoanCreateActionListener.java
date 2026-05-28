@@ -3,6 +3,8 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
 
 import java.awt.event.ActionEvent;
@@ -13,15 +15,17 @@ public class LoanCreateActionListener implements ActionListener
 {
     private IView view;
     private ICreateLoanViewHandler createViewHandler;
+    private IReadLoanViewHandler readLoanViewHandler;
     private LoanTextfieldPanel textfieldPanel;
 
-    public LoanCreateActionListener(IView view, ICreateLoanViewHandler createViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
+    public LoanCreateActionListener(IView view, ICreateLoanViewHandler createViewHandler, IReadLoanViewHandler readLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
         this.createViewHandler = createViewHandler;
+        this.readLoanViewHandler = readLoanViewHandler;
         this.textfieldPanel = textfieldPanel;
     }
 
@@ -40,7 +44,11 @@ public class LoanCreateActionListener implements ActionListener
             return;
         }
 
-        if(createViewHandler != null)
+        if(createViewHandler != null && readLoanViewHandler != null)
+        {
             createViewHandler.invoke(requestDTOLoanCreate);
+
+            readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
+        }
     }
 }

@@ -15,14 +15,8 @@ import java.util.List;
 
 public class SwingView extends JFrame implements IView
 {
-    // TODO These left view handlers are to implement
     private IReadBorrowerViewHandler readBorrowerViewHandler;
-    private IDeleteBorrowerViewHandler deleteBorrowerViewHandler;
-
-    private ICreateLoanViewHandler createLoanViewHandler;
     private IReadLoanViewHandler readLoanViewHandler;
-    private IUpdateLoanViewHandler updateLoanViewHandler;
-    private IDeleteLoanViewHandler deleteLoanViewHandler;
 
     private MessagePanel messagePanel;
 
@@ -41,7 +35,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler) throws NullPointerException
     {
-        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateBorrowerViewHandler(handler);
+        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateBorrowerViewHandler(handler, readBorrowerViewHandler);
     }
 
     @Override
@@ -53,19 +47,19 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler handler)
     {
-        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(handler);
+        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(readBorrowerViewHandler, handler);
     }
 
     @Override
     public void setDeleteBorrowerViewHandler(IDeleteBorrowerViewHandler handler)
     {
-        this.deleteBorrowerViewHandler = handler;
+        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getDeletePanel().setDeleteBorrowerViewHandler(readBorrowerViewHandler, handler);
     }
 
     @Override
-    public void setCreateLoanViewHandler(ICreateLoanViewHandler handler)
+    public void setCreateLoanViewHandler(ICreateLoanViewHandler createLoanViewHandler)
     {
-        this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateLoanViewHandler(handler);
+        this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateLoanViewHandler(createLoanViewHandler, readLoanViewHandler);
     }
 
     @Override
@@ -75,15 +69,15 @@ public class SwingView extends JFrame implements IView
     }
 
     @Override
-    public void setUpdateLoanViewHandler(IUpdateLoanViewHandler handler)
+    public void setUpdateLoanViewHandler(IUpdateLoanViewHandler updateLoanViewHandler)
     {
-        this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateLoanViewHandler(handler);
+        this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateLoanViewHandler(readLoanViewHandler, updateLoanViewHandler);
     }
 
     @Override
     public void setDeleteLoanViewHandler(IDeleteLoanViewHandler handler)
     {
-        this.deleteLoanViewHandler = handler;
+        this.tabsPanel.getLoanTabPanel().getControlsPanel().getDeletePanel().setDeleteLoanViewHandler(readLoanViewHandler, handler);
     }
 
     @Override
@@ -92,7 +86,6 @@ public class SwingView extends JFrame implements IView
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
-        // tabbedPane.setVisible(true);
         setVisible(true);
     }
 
