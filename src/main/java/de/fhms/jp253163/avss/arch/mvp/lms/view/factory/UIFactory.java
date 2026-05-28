@@ -16,17 +16,6 @@ public class UIFactory
         return new LayoutResultDTO(layout, constraints);
     }
 
-    public static LayoutResultDTO createGridBagLayoutFor(JScrollPane panel) throws NullPointerException
-    {
-        // Set and prepare correct layout
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints constraints = new GridBagConstraints();
-        layout.setConstraints(panel, constraints);
-        panel.setLayout(layout);
-
-        return new LayoutResultDTO(layout, constraints);
-    }
-
     /**
      * Sources for help:
      *
