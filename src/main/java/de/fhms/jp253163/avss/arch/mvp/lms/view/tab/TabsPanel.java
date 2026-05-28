@@ -82,7 +82,7 @@ public class TabsPanel extends JTabbedPane
 
         loanTable = new JTable();
         loanTablePanel = new ScrollableTablePanel(loanTable);
-        loanTablePanel.setPreferredSize(new Dimension(800, remainingHeight));
+        loanTablePanel.setPreferredSize(new Dimension(300, remainingHeight));
         loanTabPanel = new LoanTabPanel(loanTablePanel, loanControlsPanel);
     }
 
