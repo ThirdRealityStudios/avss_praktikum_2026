@@ -172,6 +172,9 @@ public class SwingView extends JFrame implements IView
         {
             return;
         }
+
+        tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(800, 300));
+        tabsPanel.getBorrowerTabPanel().getControlsPanel().setPreferredSize(new Dimension(800, 300));
     }
 
     @Override
@@ -229,5 +232,8 @@ public class SwingView extends JFrame implements IView
                 return;
             }
         }
+
+        tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setPreferredSize(new Dimension(800, 300));
+        tabsPanel.getLoanTabPanel().getControlsPanel().setPreferredSize(new Dimension(800, 300));
     }
 }

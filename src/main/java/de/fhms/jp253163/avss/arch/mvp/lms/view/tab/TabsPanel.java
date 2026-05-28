@@ -54,15 +54,8 @@ public class TabsPanel extends JTabbedPane
         borrowerControlsPanel = new BorrowerControlsPanel(borrowerCreateUpdatePanel, borrowerDeletePanel);
         borrowerControlsPanel.setPreferredSize(new Dimension(800, borrowerControlsPanel.getPreferredSize().height));
 
-        int controlsPanelHeight = borrowerControlsPanel.getPreferredSize().height;
-        int remainingHeight = 600 - controlsPanelHeight;
-
-        if(remainingHeight < 300)
-            remainingHeight = 300;
-
         borrowerTable = new JTable();
         borrowerTablePanel = new ScrollableTablePanel(borrowerTable);
-        borrowerTablePanel.setPreferredSize(new Dimension(800, remainingHeight));
         borrowerTabPanel = new BorrowerTabPanel(borrowerTablePanel, borrowerControlsPanel);
     }
 
@@ -74,15 +67,8 @@ public class TabsPanel extends JTabbedPane
         loanControlsPanel = new LoanControlsPanel(loanCreateUpdatePanel, loanDeletePanel);
         loanControlsPanel.setPreferredSize(new Dimension(800, loanControlsPanel.getPreferredSize().height));
 
-        int controlsPanelHeight = loanControlsPanel.getPreferredSize().height;
-        int remainingHeight = 600 - controlsPanelHeight;
-
-        if(remainingHeight < 300)
-            remainingHeight = 300;
-
         loanTable = new JTable();
         loanTablePanel = new ScrollableTablePanel(loanTable);
-        loanTablePanel.setPreferredSize(new Dimension(300, remainingHeight));
         loanTabPanel = new LoanTabPanel(loanTablePanel, loanControlsPanel);
     }
 
