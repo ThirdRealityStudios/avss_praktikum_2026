@@ -1,7 +1,9 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoan;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
@@ -108,7 +110,9 @@ public class SwingView extends JFrame implements IView
         if(borrowers == null)
             return;
 
-        int columns = IDTOBorrowerSet.class.getDeclaredMethods().length;
+        int columnCountDTOBorrowerSet = IDTOBorrowerSet.class.getDeclaredMethods().length,
+            columnCountDTOBorrower = IDTOBorrower.class.getDeclaredMethods().length,
+            totalColumnCount = columnCountDTOBorrower + columnCountDTOBorrowerSet;
 
         Method[] getterMethods = IDTOBorrowerSet.class.getDeclaredMethods();
         String[] columnNames = new String[getterMethods.length];
@@ -131,7 +135,7 @@ public class SwingView extends JFrame implements IView
             columnNames[i] = propertyName;
         }
 
-        String[][] data = new String[borrowers.size()][columns];
+        String[][] data = new String[borrowers.size()][totalColumnCount];
 
         for(int i = 0; i < borrowers.size(); i++)
         {
@@ -195,7 +199,9 @@ public class SwingView extends JFrame implements IView
         if(loans == null)
             return;
 
-        int columns = IDTOLoanSet.class.getDeclaredMethods().length;
+        int columnCountDTOLoanSet = IDTOLoanSet.class.getDeclaredMethods().length,
+                columnCountDTOLoan = IDTOLoan.class.getDeclaredMethods().length,
+                totalColumnCount = columnCountDTOLoan + columnCountDTOLoanSet;
 
         Method[] getterMethods = IDTOLoanSet.class.getDeclaredMethods();
         String[] columnNames = new String[getterMethods.length];
@@ -218,7 +224,7 @@ public class SwingView extends JFrame implements IView
             columnNames[i] = propertyName;
         }
 
-        String[][] data = new String[loans.size()][columns];
+        String[][] data = new String[loans.size()][totalColumnCount];
 
         for(int i = 0; i < loans.size(); i++)
         {
