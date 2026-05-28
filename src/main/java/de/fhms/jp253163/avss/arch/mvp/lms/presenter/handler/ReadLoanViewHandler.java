@@ -25,7 +25,7 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
     {
         if(iRequestDTOLoanRead == null)
         {
-            presenter.getView().showMessage("Invalid syntax! Consult /help");
+            presenter.getView().showMessage("Invalid read request!");
 
             return;
         }

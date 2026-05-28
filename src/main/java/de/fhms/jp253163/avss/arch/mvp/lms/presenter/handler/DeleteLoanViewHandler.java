@@ -23,7 +23,7 @@ public class DeleteLoanViewHandler implements IDeleteLoanViewHandler
     public void invoke(IRequestDTOLoanDelete iRequestDTOLoanDelete) {
         if(iRequestDTOLoanDelete == null)
         {
-            presenter.getView().showMessage("Deleting loan failed! (code 0: technical issue?)");
+            presenter.getView().showMessage("Invalid deletion request!");
 
             return;
         }

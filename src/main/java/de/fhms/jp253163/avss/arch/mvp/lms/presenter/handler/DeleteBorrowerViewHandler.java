@@ -23,7 +23,7 @@ public class DeleteBorrowerViewHandler implements IDeleteBorrowerViewHandler
     public void invoke(IRequestDTOBorrowerDelete iRequestDTOBorrowerDelete) {
         if(iRequestDTOBorrowerDelete == null)
         {
-            presenter.getView().showMessage("Deleting borrower failed! (code 0: technical issue?)");
+            presenter.getView().showMessage("Invalid deletion request!");
 
             return;
         }

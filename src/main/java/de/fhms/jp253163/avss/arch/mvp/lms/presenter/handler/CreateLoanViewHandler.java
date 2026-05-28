@@ -24,7 +24,7 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
     public void invoke(IRequestDTOLoanCreate iRequestDTOLoanCreate) {
         if(iRequestDTOLoanCreate == null)
         {
-            presenter.getView().showMessage("Creating loan failed (code 0: technical issue?)");
+            presenter.getView().showMessage("Invalid creation request!");
 
             return;
         }

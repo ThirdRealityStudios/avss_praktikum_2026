@@ -24,7 +24,7 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
     public void invoke(IRequestDTOBorrowerRead iRequestDTOBorrowerRead) {
         if(iRequestDTOBorrowerRead == null)
         {
-            presenter.getView().showMessage("Invalid syntax! Consult /help");
+            presenter.getView().showMessage("Invalid read request!");
 
             return;
         }

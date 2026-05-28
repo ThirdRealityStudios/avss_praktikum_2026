@@ -29,7 +29,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
     {
         if(iRequestDTOBorrowerCreate == null)
         {
-            presenter.getView().showMessage("Creating borrower failed (code 0: technical issue?)");
+            presenter.getView().showMessage("Invalid creation request!");
 
             return;
         }
