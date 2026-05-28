@@ -131,7 +131,7 @@ public class SwingView extends JFrame implements IView
             columnNames[i] = propertyName;
         }
 
-        String[][] data = new String[columns][borrowers.size()];
+        String[][] data = new String[borrowers.size()][columns];
 
         for(int i = 0; i < borrowers.size(); i++)
         {
@@ -218,7 +218,7 @@ public class SwingView extends JFrame implements IView
             columnNames[i] = propertyName;
         }
 
-        String[][] data = new String[columns][loans.size()];
+        String[][] data = new String[loans.size()][columns];
 
         for(int i = 0; i < loans.size(); i++)
         {
