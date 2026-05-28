@@ -3,8 +3,12 @@ package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.DTOLoanSet;
+
+import java.util.ArrayList;
 
 public class ReadLoanViewHandler implements IReadLoanViewHandler
 {
@@ -43,10 +47,16 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
             }
             else
             {
-                presenter.getView().showMessage("The following loans do exist:");
+                ArrayList<IDTOLoanSet> loanSets = new ArrayList<IDTOLoanSet>();
 
                 for(ILoan loan : loans)
-                    presenter.getView().showMessage(loan.toString());
+                {
+                    IDTOLoanSet loanSet = new DTOLoanSet(loan.getId(), loan.getAmount(), loan.getRemainingBalance(), loan.getInterestRate(), loan.getTerm(), loan.getRemainingTerm(), loan.getBorrower());
+
+                    loanSets.add(loanSet);
+                }
+
+                presenter.getView().setLoanData(loanSets);
             }
 
             return;
@@ -58,7 +68,15 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
             if(loans[0] == null)
                 presenter.getView().showMessage("Could not find that loan!");
             else
-                presenter.getView().showMessage(loans[0].toString());
+            {
+                ArrayList<IDTOLoanSet> loanSets = new ArrayList<IDTOLoanSet>();
+
+                IDTOLoanSet loanSet = new DTOLoanSet(loans[0].getId(), loans[0].getAmount(), loans[0].getRemainingBalance(), loans[0].getInterestRate(), loans[0].getTerm(), loans[0].getRemainingTerm(), loans[0].getBorrower());
+
+                loanSets.add(loanSet);
+
+                presenter.getView().setLoanData(loanSets);
+            }
 
             return;
         }

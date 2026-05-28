@@ -3,8 +3,14 @@ package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.DTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.DTOLoanSet;
+
+import java.util.ArrayList;
 
 public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
 {
@@ -42,10 +48,16 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
             }
             else
             {
-                presenter.getView().showMessage("The following borrowers do exist:");
+                ArrayList<IDTOBorrowerSet> borrowerSets = new ArrayList<IDTOBorrowerSet>();
 
                 for(IBorrower borrower : borrowers)
-                    presenter.getView().showMessage(borrower.toString());
+                {
+                    IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrower.getId(), borrower.getFirstname(), borrower.getLastname(), borrower.getDateOfBirth(), borrower.getResidentialAddress().getStreet(), borrower.getResidentialAddress().getNo(), borrower.getResidentialAddress().getPlace(), borrower.getResidentialAddress().getZip());
+
+                    borrowerSets.add(borrowerSet);
+                }
+
+                presenter.getView().setBorrowerData(borrowerSets);
             }
         }
         else
@@ -55,7 +67,15 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
             if(borrowers[0] == null)
                 presenter.getView().showMessage("Could not find that borrower!");
             else
-                presenter.getView().showMessage(borrowers[0].toString());
+            {
+                ArrayList<IDTOBorrowerSet> borrowerSets = new ArrayList<IDTOBorrowerSet>();
+
+                IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrowers[0].getId(), borrowers[0].getFirstname(), borrowers[0].getLastname(), borrowers[0].getDateOfBirth(), borrowers[0].getResidentialAddress().getStreet(), borrowers[0].getResidentialAddress().getNo(), borrowers[0].getResidentialAddress().getPlace(), borrowers[0].getResidentialAddress().getZip());
+
+                borrowerSets.add(borrowerSet);
+
+                presenter.getView().setBorrowerData(borrowerSets);
+            }
 
             return;
         }
