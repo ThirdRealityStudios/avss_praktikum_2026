@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class SwingPanel extends JPanel
+public class SwingPanel extends JScrollPane
 {
     private MessagePanel messagePanel;
     private TabsPanel tabsPanel;

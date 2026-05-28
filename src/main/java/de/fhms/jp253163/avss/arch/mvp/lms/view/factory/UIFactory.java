@@ -41,4 +41,16 @@ public class UIFactory
         constraints.ipady = 10;
         panel.add(component, constraints);
     }
+
+    public static void addComponentFor(JScrollPane panel, JComponent component, int gridx, int gridy, int anchor, GridBagConstraints constraints) throws NullPointerException
+    {
+        constraints.gridx = gridx;
+        constraints.gridy = gridy;
+        constraints.anchor = anchor;
+        constraints.weightx = 1.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipadx = 10;
+        constraints.ipady = 10;
+        panel.add(component, constraints);
+    }
 }
