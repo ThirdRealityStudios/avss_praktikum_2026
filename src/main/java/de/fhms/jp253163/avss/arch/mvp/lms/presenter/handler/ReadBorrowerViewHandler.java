@@ -55,6 +55,8 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
                     IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrower.getId(), borrower.getFirstname(), borrower.getLastname(), borrower.getDateOfBirth(), borrower.getResidentialAddress().getStreet(), borrower.getResidentialAddress().getNo(), borrower.getResidentialAddress().getPlace(), borrower.getResidentialAddress().getZip());
 
                     borrowerSets.add(borrowerSet);
+
+                    System.out.println(borrower.toString()+"\n");
                 }
 
                 presenter.getView().setBorrowerData(borrowerSets);
@@ -62,15 +64,15 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
         }
         else
         {
-            borrowers = new IBorrower[]{ borrowerRepository.readBorrower(iRequestDTOBorrowerRead.getBorrowerID()) };
+            IBorrower borrower = borrowerRepository.readBorrower(borrowerID);
 
-            if(borrowers[0] == null)
-                presenter.getView().showMessage("Could not find that borrower!");
+            if(borrower == null)
+                presenter.getView().showMessage("Could not find that borrower or negative ID!");
             else
             {
                 ArrayList<IDTOBorrowerSet> borrowerSets = new ArrayList<IDTOBorrowerSet>();
 
-                IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrowers[0].getId(), borrowers[0].getFirstname(), borrowers[0].getLastname(), borrowers[0].getDateOfBirth(), borrowers[0].getResidentialAddress().getStreet(), borrowers[0].getResidentialAddress().getNo(), borrowers[0].getResidentialAddress().getPlace(), borrowers[0].getResidentialAddress().getZip());
+                IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrower.getId(), borrower.getFirstname(), borrower.getLastname(), borrower.getDateOfBirth(), borrower.getResidentialAddress().getStreet(), borrower.getResidentialAddress().getNo(), borrower.getResidentialAddress().getPlace(), borrower.getResidentialAddress().getZip());
 
                 borrowerSets.add(borrowerSet);
 
