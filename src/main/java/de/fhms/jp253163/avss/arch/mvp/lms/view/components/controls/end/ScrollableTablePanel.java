@@ -1,13 +1,13 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.data;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end;
 
 import javax.swing.*;
 import java.util.Objects;
 
-public class LoanDataTabPanel extends JScrollPane
+public class ScrollableTablePanel extends JScrollPane
 {
     private JTable table;
 
-    public LoanDataTabPanel(JTable table) throws NullPointerException
+    public ScrollableTablePanel(JTable table) throws NullPointerException
     {
         super(table);
 

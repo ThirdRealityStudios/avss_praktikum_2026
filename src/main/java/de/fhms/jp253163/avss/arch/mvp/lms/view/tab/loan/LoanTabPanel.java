@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.data.LoanDataTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.LoanControlsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,16 +9,15 @@ import java.util.Objects;
 
 public class LoanTabPanel extends JPanel
 {
-    /*
-    private LoanDataTabPanel dataTabPanel;
+    private ScrollableTablePanel scrollableTablePanel;
     private LoanControlsPanel controlsTabPanel;
 
-    public LoanTabPanel(LoanDataTabPanel dataTabPanel, LoanControlsPanel controlsTabPanel)
+    public LoanTabPanel(ScrollableTablePanel scrollableTablePanel, LoanControlsPanel controlsTabPanel)
     {
-        Objects.requireNonNull(dataTabPanel);
+        Objects.requireNonNull(scrollableTablePanel);
         Objects.requireNonNull(controlsTabPanel);
 
-        this.dataTabPanel = dataTabPanel;
+        this.scrollableTablePanel = scrollableTablePanel;
         this.controlsTabPanel = controlsTabPanel;
 
         initLayout();
@@ -37,7 +37,7 @@ public class LoanTabPanel extends JPanel
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.insets = insets;
-        add(dataTabPanel, constraints);
+        add(scrollableTablePanel, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -45,14 +45,13 @@ public class LoanTabPanel extends JPanel
         add(controlsTabPanel, constraints);
     }
 
-    public LoanDataTabPanel getDataTabPanel()
+    public ScrollableTablePanel getDataTabPanel()
     {
-        return dataTabPanel;
+        return scrollableTablePanel;
     }
 
     public LoanControlsPanel getControlsPanel()
     {
         return controlsTabPanel;
     }
-     */
 }

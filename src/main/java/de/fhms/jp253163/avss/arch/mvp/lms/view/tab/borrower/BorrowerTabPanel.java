@@ -1,7 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.data.BorrowerDataTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,15 +9,15 @@ import java.util.Objects;
 
 public class BorrowerTabPanel extends JPanel
 {
-    private BorrowerDataTabPanel dataTabPanel;
+    private ScrollableTablePanel scrollableTablePanel;
     private BorrowerControlsPanel controlsTabPanel;
 
-    public BorrowerTabPanel(BorrowerDataTabPanel dataTabPanel, BorrowerControlsPanel controlsTabPanel)
+    public BorrowerTabPanel(ScrollableTablePanel scrollableTablePanel, BorrowerControlsPanel controlsTabPanel)
     {
-        Objects.requireNonNull(dataTabPanel);
+        Objects.requireNonNull(scrollableTablePanel);
         Objects.requireNonNull(controlsTabPanel);
 
-        this.dataTabPanel = dataTabPanel;
+        this.scrollableTablePanel = scrollableTablePanel;
         this.controlsTabPanel = controlsTabPanel;
 
         initLayout();
@@ -37,7 +37,7 @@ public class BorrowerTabPanel extends JPanel
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.insets = insets;
-        add(dataTabPanel, constraints);
+        add(scrollableTablePanel, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -45,9 +45,9 @@ public class BorrowerTabPanel extends JPanel
         add(controlsTabPanel, constraints);
     }
 
-    public BorrowerDataTabPanel getDataTabPanel()
+    public ScrollableTablePanel getDataTabPanel()
     {
-        return dataTabPanel;
+        return scrollableTablePanel;
     }
 
     public BorrowerControlsPanel getControlsPanel()

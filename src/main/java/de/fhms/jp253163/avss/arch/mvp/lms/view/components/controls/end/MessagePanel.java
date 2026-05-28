@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.end;
+package de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
@@ -8,15 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class BorrowerMessagePanel extends JPanel
+public class MessagePanel extends JPanel
 {
     private IView view;
     private JLabel messageLabel;
 
-    public BorrowerMessagePanel(IView view)
+    public MessagePanel(IView view)
     {
         Objects.requireNonNull(view);
-
         this.view = view;
 
         LayoutResultDTO layoutDTO = UIFactory.createGridBagLayoutFor(this);

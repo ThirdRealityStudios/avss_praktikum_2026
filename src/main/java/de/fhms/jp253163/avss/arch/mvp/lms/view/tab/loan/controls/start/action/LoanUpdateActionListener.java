@@ -1,0 +1,61 @@
+package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
+
+import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+
+public class LoanUpdateActionListener implements ActionListener
+{
+    private IView view;
+    private IUpdateLoanViewHandler updateLoanViewHandler;
+    private LoanTextfieldPanel textfieldPanel;
+
+    public LoanUpdateActionListener(IView view, IUpdateLoanViewHandler updateLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
+    {
+        Objects.requireNonNull(view);
+        Objects.requireNonNull(textfieldPanel);
+
+        this.view = view;
+        this.updateLoanViewHandler = updateLoanViewHandler;
+        this.textfieldPanel = textfieldPanel;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        IRequestDTOLoanUpdate requestDTOLoanUpdate = null;
+
+        JButton button = null;
+
+        try
+        {
+            if(e.getSource() instanceof JButton)
+            {
+                button = (JButton) e.getSource();
+            }
+            else
+            {
+                return;
+            }
+
+            boolean bookInstallemnt = button.getText().toLowerCase().contains("installment") || button.getText().equalsIgnoreCase("book installment");
+
+            requestDTOLoanUpdate = LoanSharedLogic.genUpdateLoanDTO(textfieldPanel, bookInstallemnt);
+        }
+        catch(NullPointerException npe)
+        {
+            view.showMessage("Loan update failed! (code: 0)");
+
+            return;
+        }
+
+        if(updateLoanViewHandler != null)
+            updateLoanViewHandler.invoke(requestDTOLoanUpdate);
+    }
+}

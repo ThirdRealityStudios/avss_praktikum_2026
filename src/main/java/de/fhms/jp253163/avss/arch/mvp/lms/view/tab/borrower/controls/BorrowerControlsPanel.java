@@ -1,8 +1,8 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls;
 
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.end.BorrowerMessagePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.BorrowerDeletePanel;
 
@@ -14,9 +14,9 @@ public class BorrowerControlsPanel extends JPanel
 {
     private BorrowerCreateUpdatePanel createUpdatePanel;
     private BorrowerDeletePanel deletePanel;
-    private BorrowerMessagePanel messagePanel;
+    private MessagePanel messagePanel;
 
-    public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerDeletePanel deletePanel, BorrowerMessagePanel messagePanel)
+    public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerDeletePanel deletePanel, MessagePanel messagePanel)
     {
         Objects.requireNonNull(createUpdatePanel);
         Objects.requireNonNull(deletePanel);
@@ -41,7 +41,7 @@ public class BorrowerControlsPanel extends JPanel
         return deletePanel;
     }
 
-    public BorrowerMessagePanel getMessagePanel()
+    public MessagePanel getMessagePanel()
     {
         return messagePanel;
     }

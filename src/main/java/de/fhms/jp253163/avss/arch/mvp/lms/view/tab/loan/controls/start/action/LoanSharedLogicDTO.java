@@ -3,7 +3,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class BorrowerSharedLogicDTO
+public class LoanSharedLogicDTO
 {
     private int id = -1;
     private String firstname, lastname;
@@ -11,7 +11,7 @@ public class BorrowerSharedLogicDTO
     private String street, no, place;
     private int zip;
 
-    public BorrowerSharedLogicDTO(int id, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip) throws NullPointerException
+    public LoanSharedLogicDTO(int id, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip) throws NullPointerException
     {
         Objects.requireNonNull(firstname);
         Objects.requireNonNull(lastname);
