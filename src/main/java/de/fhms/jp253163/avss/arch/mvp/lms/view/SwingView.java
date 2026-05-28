@@ -103,7 +103,7 @@ public class SwingView extends JFrame implements IView
         tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setVisible(true);
          */
 
-        pack();
+        // pack();
         setVisible(true);
     }
 
