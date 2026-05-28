@@ -4,6 +4,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePa
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
@@ -16,7 +17,6 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.LoanCreat
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.lang.reflect.Method;
@@ -33,82 +33,24 @@ public class SwingView extends JFrame implements IView
     private IUpdateLoanViewHandler updateLoanViewHandler;
     private IDeleteLoanViewHandler deleteLoanViewHandler;
 
-    private JTable borrowerTable, loanTable;
-    private ScrollableTablePanel borrowerTablePanel, loanTablePanel;
-
-    private BorrowerControlsPanel borrowerControlsPanel;
-    private LoanControlsPanel loanControlsPanel;
-
-    private BorrowerCreateUpdatePanel borrowerCreateUpdatePanel;
-    private LoanCreateUpdatePanel loanCreateUpdatePanel;
-
-    private BorrowerDeletePanel borrowerDeletePanel;
-    private LoanDeletePanel loanDeletePanel;
-
-    private MessagePanel borrowerMessagePanel, loanMessagePanel;
-
-    private BorrowerTabPanel borrowerTabPanel;
-    private LoanTabPanel loanTabPanel;
+    private MessagePanel messagePanel;
 
     private JTabbedPane tabbedPane;
 
+    private TabsPanel tabsPanel;
+
     public SwingView()
     {
-        initBorrowerTab();
-        initLoanTab();
+        messagePanel = new MessagePanel(this);
+        tabsPanel = new TabsPanel(this);
 
-        tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Borrowers", borrowerTabPanel);
-        tabbedPane.addTab("Loans", loanTabPanel);
-        add(tabbedPane);
-    }
-
-    private void initBorrowerTab()
-    {
-        borrowerCreateUpdatePanel = new BorrowerCreateUpdatePanel(this);
-        borrowerDeletePanel = new BorrowerDeletePanel(this);
-        borrowerMessagePanel = new MessagePanel(this);
-
-        borrowerControlsPanel = new BorrowerControlsPanel(borrowerCreateUpdatePanel, borrowerDeletePanel, borrowerMessagePanel);
-        borrowerControlsPanel.setPreferredSize(new Dimension(800, borrowerControlsPanel.getPreferredSize().height));
-
-        int controlsPanelHeight = borrowerControlsPanel.getPreferredSize().height;
-        int remainingHeight = 600 - controlsPanelHeight;
-
-        if(remainingHeight < 300)
-            remainingHeight = 300;
-
-        borrowerTable = new JTable();
-        borrowerTablePanel = new ScrollableTablePanel(borrowerTable);
-        borrowerTablePanel.setPreferredSize(new Dimension(800, remainingHeight));
-        borrowerTabPanel = new BorrowerTabPanel(borrowerTablePanel, borrowerControlsPanel);
-    }
-
-    private void initLoanTab()
-    {
-        loanCreateUpdatePanel = new LoanCreateUpdatePanel(this);
-        loanDeletePanel = new LoanDeletePanel(this);
-        loanMessagePanel = new MessagePanel(this);
-
-        loanControlsPanel = new LoanControlsPanel(loanCreateUpdatePanel, loanDeletePanel, loanMessagePanel);
-        loanControlsPanel.setPreferredSize(new Dimension(800, loanControlsPanel.getPreferredSize().height));
-
-        int controlsPanelHeight = loanControlsPanel.getPreferredSize().height;
-        int remainingHeight = 600 - controlsPanelHeight;
-
-        if(remainingHeight < 300)
-            remainingHeight = 300;
-
-        loanTable = new JTable();
-        loanTablePanel = new ScrollableTablePanel(loanTable);
-        loanTablePanel.setPreferredSize(new Dimension(800, remainingHeight));
-        loanTabPanel = new LoanTabPanel(loanTablePanel, loanControlsPanel);
+        // TODO PAGE_START, PAGE_END each
     }
 
     @Override
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler handler) throws NullPointerException
     {
-        this.borrowerTabPanel.getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateBorrowerViewHandler(handler);
+        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setCreateBorrowerViewHandler(handler);
     }
 
     @Override
@@ -120,7 +62,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler handler)
     {
-        this.borrowerTabPanel.getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(handler);
+        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(handler);
     }
 
     @Override
@@ -165,7 +107,7 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void showMessage(String message) {
-        borrowerMessagePanel.getMessageLabel().setText(message);
+        messagePanel.getMessageLabel().setText(message);
     }
 
     @Override
@@ -230,6 +172,14 @@ public class SwingView extends JFrame implements IView
             data[i][8] = place;
             data[i][9] = zip;
         }
+
+        if(tabsPanel == null || tabsPanel.getBorrowerTabPanel() == null || tabsPanel.getBorrowerTabPanel().getDataTabPanel() == null)
+            return;
+
+        JTable borrowerTable = tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable();
+
+        if(borrowerTable == null)
+            return;
 
         if(borrowerTable.getModel() == null)
         {
@@ -301,6 +251,11 @@ public class SwingView extends JFrame implements IView
             data[i][5] = term;
             data[i][6] = borrowerID;
         }
+
+        if(tabsPanel == null || tabsPanel.getLoanTabPanel() == null || tabsPanel.getLoanTabPanel().getDataTabPanel() == null)
+            return;
+
+        JTable loanTable = tabsPanel.getLoanTabPanel().getDataTabPanel().getTable();
 
         if(loanTable.getModel() == null)
         {

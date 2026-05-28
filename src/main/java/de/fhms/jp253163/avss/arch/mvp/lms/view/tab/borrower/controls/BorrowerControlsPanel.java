@@ -14,23 +14,19 @@ public class BorrowerControlsPanel extends JPanel
 {
     private BorrowerCreateUpdatePanel createUpdatePanel;
     private BorrowerDeletePanel deletePanel;
-    private MessagePanel messagePanel;
 
-    public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerDeletePanel deletePanel, MessagePanel messagePanel)
+    public BorrowerControlsPanel(BorrowerCreateUpdatePanel createUpdatePanel, BorrowerDeletePanel deletePanel)
     {
         Objects.requireNonNull(createUpdatePanel);
         Objects.requireNonNull(deletePanel);
-        Objects.requireNonNull(messagePanel);
 
         this.createUpdatePanel = createUpdatePanel;
         this.deletePanel = deletePanel;
-        this.messagePanel = messagePanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         UIFactory.addComponentFor(this, createUpdatePanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, deletePanel, 0, 1, GridBagConstraints.CENTER, layoutResult.getConstraints());
-        UIFactory.addComponentFor(this, messagePanel, 0, 2, GridBagConstraints.CENTER, layoutResult.getConstraints());
     }
 
     public BorrowerCreateUpdatePanel getCreateUpdatePanel() {
@@ -39,10 +35,5 @@ public class BorrowerControlsPanel extends JPanel
 
     public BorrowerDeletePanel getDeletePanel() {
         return deletePanel;
-    }
-
-    public MessagePanel getMessagePanel()
-    {
-        return messagePanel;
     }
 }
