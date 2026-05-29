@@ -34,8 +34,8 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
             return;
         }
 
-        int loanID = iRequestDTOLoanRead.getLoanID();
         ILoan[] loans = null;
+        int loanID = iRequestDTOLoanRead.getLoanID();
 
         if(loanID == -1) // Read all
         {
@@ -54,6 +54,8 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
                     IDTOLoanSet loanSet = new DTOLoanSet(loan.getId(), loan.getAmount(), loan.getRemainingBalance(), loan.getInterestRate(), loan.getTerm(), loan.getRemainingTerm(), loan.getBorrower());
 
                     loanSets.add(loanSet);
+
+                    System.out.println(loan.toString()+"\n");
                 }
 
                 presenter.getView().setLoanData(loanSets);
@@ -65,15 +67,15 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
         }
         else
         {
-            loans = new ILoan[]{ loanRepository.readLoan(iRequestDTOLoanRead.getLoanID()) };
+            ILoan loan = loanRepository.readLoan(loanID);
 
-            if(loans[0] == null)
-                presenter.getView().showMessage("Could not find that loan!");
+            if(loan == null)
+                presenter.getView().showMessage("Could not find that loan or negative ID!");
             else
             {
                 ArrayList<IDTOLoanSet> loanSets = new ArrayList<IDTOLoanSet>();
 
-                IDTOLoanSet loanSet = new DTOLoanSet(loans[0].getId(), loans[0].getAmount(), loans[0].getRemainingBalance(), loans[0].getInterestRate(), loans[0].getTerm(), loans[0].getRemainingTerm(), loans[0].getBorrower());
+                IDTOLoanSet loanSet = new DTOLoanSet(loan.getId(), loan.getAmount(), loan.getRemainingBalance(), loan.getInterestRate(), loan.getTerm(), loan.getRemainingTerm(), loan.getBorrower());
 
                 loanSets.add(loanSet);
 
