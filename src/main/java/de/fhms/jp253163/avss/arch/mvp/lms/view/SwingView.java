@@ -223,18 +223,18 @@ public class SwingView extends JFrame implements IView
 
         JTable loanTable = tabsPanel.getLoanTabPanel().getDataTabPanel().getTable();
 
-        if(loanTable.getModel() == null)
-        {
-            TableModel model = new DefaultTableModel(data, columnNames);
+        if(loanTable == null)
+            return;
 
-            try
-            {
-                loanTable.setModel(model);
-            }
-            catch (IllegalArgumentException iae)
-            {
-                return;
-            }
+        TableModel model = new DefaultTableModel(data, columnNames);
+
+        try
+        {
+            loanTable.setModel(model);
+        }
+        catch (IllegalArgumentException iae)
+        {
+            return;
         }
 
         setPreferredSize(new Dimension(800, 600));
