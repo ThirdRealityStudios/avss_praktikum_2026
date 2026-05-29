@@ -241,6 +241,6 @@ public class SwingView extends JFrame implements IView
         setSize(new Dimension(800, 600));
         setVisible(true);
 
-        System.out.println("Updated BORROWER table and sizes of JFrame");
+        System.out.println("Updated LOAN table and sizes of JFrame");
     }
 }

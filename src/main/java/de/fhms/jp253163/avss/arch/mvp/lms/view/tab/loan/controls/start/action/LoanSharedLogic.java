@@ -8,6 +8,8 @@ public class LoanSharedLogic
 {
     public static RequestDTOLoanCreate genCreateLoanDTO(LoanTextfieldPanel textfieldPanel) throws NullPointerException
     {
+        textfieldPanel.getView().showMessage("");
+
         String borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText(),
                 amount = textfieldPanel.getAmout().getJTextField().getText(),
                 interestRate = textfieldPanel.getInterestRate().getJTextField().getText(),
@@ -95,6 +97,8 @@ public class LoanSharedLogic
 
     public static RequestDTOLoanUpdate genUpdateLoanDTO(LoanTextfieldPanel textfieldPanel, boolean bookInstallment) throws NullPointerException
     {
+        textfieldPanel.getView().showMessage("");
+
         String loanID = "-1", // TODO Get loan id from selected data table row / loan dataset
                 borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText();;
 
