@@ -20,7 +20,10 @@ public class DeleteLoanViewHandler implements IDeleteLoanViewHandler
     }
 
     @Override
-    public void invoke(IRequestDTOLoanDelete iRequestDTOLoanDelete) {
+    public void invoke(IRequestDTOLoanDelete iRequestDTOLoanDelete)
+    {
+        System.out.println("Starting invocation of loan deletion!");
+
         if(iRequestDTOLoanDelete == null)
         {
             presenter.getView().showMessage("Invalid deletion request!");

@@ -25,7 +25,10 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
     }
 
     @Override
-    public void invoke(IRequestDTOBorrowerUpdate iRequestDTOBorrowerUpdate) {
+    public void invoke(IRequestDTOBorrowerUpdate iRequestDTOBorrowerUpdate)
+    {
+        System.out.println("Starting invocation of borrower update!");
+
         if(iRequestDTOBorrowerUpdate == null)
         {
             presenter.getView().showMessage("Invalid update request!");

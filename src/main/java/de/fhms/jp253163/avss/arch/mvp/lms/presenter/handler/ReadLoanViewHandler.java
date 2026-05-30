@@ -27,6 +27,8 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
     @Override
     public void invoke(IRequestDTOLoanRead iRequestDTOLoanRead)
     {
+        System.out.println("Starting invocation of loan reading!");
+
         if(iRequestDTOLoanRead == null)
         {
             presenter.getView().showMessage("Invalid read request!");
