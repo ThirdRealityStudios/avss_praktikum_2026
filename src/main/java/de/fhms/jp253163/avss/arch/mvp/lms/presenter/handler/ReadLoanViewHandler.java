@@ -55,12 +55,12 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
 
                     loanSets.add(loanSet);
 
-                    System.out.println(loan.toString()+"\n");
+                    // System.out.println(loan.toString()+"\n");
                 }
 
                 presenter.getView().setLoanData(loanSets);
 
-                presenter.getView().showMessage("");
+                // presenter.getView().showMessage("");
             }
 
             return;
@@ -81,7 +81,7 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
 
                 presenter.getView().setLoanData(loanSets);
 
-                presenter.getView().showMessage("");
+                // presenter.getView().showMessage("");
             }
 
             return;

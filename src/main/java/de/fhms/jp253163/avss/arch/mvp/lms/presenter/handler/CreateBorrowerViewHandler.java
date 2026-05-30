@@ -56,7 +56,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (IllegalArgumentException e)
         {
-            presenter.getView().showMessage("Could not create borrower! (code 1: technical issue?)");
+            presenter.getView().showMessage("Could not create borrower!");
 
             return;
         }

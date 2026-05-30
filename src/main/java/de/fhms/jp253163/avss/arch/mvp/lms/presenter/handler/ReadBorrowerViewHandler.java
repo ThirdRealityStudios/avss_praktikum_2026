@@ -62,7 +62,7 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
 
                 presenter.getView().setBorrowerData(borrowerSets);
 
-                presenter.getView().showMessage("");
+                // presenter.getView().showMessage("");
             }
         }
         else
@@ -81,7 +81,7 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
 
                 presenter.getView().setBorrowerData(borrowerSets);
 
-                presenter.getView().showMessage("");
+                // presenter.getView().showMessage("");
             }
 
             return;
