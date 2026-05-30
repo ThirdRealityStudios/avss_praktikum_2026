@@ -6,33 +6,37 @@ import java.time.LocalDate;
 
 public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
 {
+    private int day, month, year;
     private int borrowerID, zip;
     private String firstname, lastname, street, no, place;
     private int[] loans;
-    private LocalDate birthday;
 
     /**
-     * Specify what values used to update the current value.
-     * Passing null for one single argument means that it simply does not get updated (ignored).
+     * Specify what values are used to update the current value.
+     * Passing null (or -1 for primitive data types) for one single argument means that it simply does not get updated (ignored).
      * So passing a value will update it.
      * Passing null is also valid for arguments (= don't update me).
      *
      * @param borrowerID
      * @param firstname
      * @param lastname
-     * @param birthday
+     * @param day
+     * @param month
+     * @param year
      * @param street
      * @param no
      * @param place
      * @param zip
      * @param loans
      */
-    public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip, int[] loans)
+    public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, int day, int month, int year, String street, String no, String place, int zip, int[] loans)
     {
         this.borrowerID = borrowerID;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.birthday = birthday;
+        this.day = day;
+        this.month = month;
+        this.year = year;
         this.street = street;
         this.no = no;
         this.place = place;
@@ -57,17 +61,17 @@ public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
 
     @Override
     public int getDayOfBirth() {
-        return birthday == null ? -1 : birthday.getDayOfMonth();
+        return day;
     }
 
     @Override
     public int getMonthOfBirth() {
-        return birthday == null ? -1 : birthday.getMonthValue();
+        return month;
     }
 
     @Override
     public int getYearOfBirth() {
-        return birthday == null ? -1 : birthday.getYear();
+        return year;
     }
 
     @Override

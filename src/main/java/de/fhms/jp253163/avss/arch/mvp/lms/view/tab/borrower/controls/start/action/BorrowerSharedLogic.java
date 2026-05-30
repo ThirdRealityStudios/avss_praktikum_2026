@@ -41,29 +41,35 @@ public class BorrowerSharedLogic
         }
 
         int yearParsed = -1, monthParsed = -1, dayParsed = -1;
-        LocalDate birthdayParsed = null;
 
         try
         {
             yearParsed = Integer.parseInt(year);
-            monthParsed = Integer.parseInt(month);
-            dayParsed = Integer.parseInt(day);
-
-            try
-            {
-                birthdayParsed = LocalDate.of(yearParsed, monthParsed, dayParsed);
-            }
-            catch (DateTimeException dte)
-            {
-                birthdayParsed = null;
-            }
         }
-        catch (NumberFormatException nfe)
+        catch (NumberFormatException e)
         {
-            birthdayParsed = null;
+            yearParsed = -1;
         }
 
-        return new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
+        try
+        {
+            monthParsed = Integer.parseInt(month);
+        }
+        catch (NumberFormatException e)
+        {
+            monthParsed = -1;
+        }
+
+        try
+        {
+            dayParsed = Integer.parseInt(day);
+        }
+        catch (NumberFormatException e)
+        {
+            dayParsed = -1;
+        }
+
+        return new RequestDTOBorrowerCreate(firstname, lastname, dayParsed, monthParsed, yearParsed, street, no, place, zipParsed);
     }
 
     public static RequestDTOBorrowerUpdate genUpdateBorrowerDTO(BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
@@ -80,17 +86,6 @@ public class BorrowerSharedLogic
         catch (NumberFormatException nfe)
         {
             idParsed = -1;
-        }
-
-        LocalDate birthdayParsed = null;
-
-        try
-        {
-            birthdayParsed = LocalDate.of(helpingDTO.getYearOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getDayOfBirth());
-        }
-        catch (DateTimeException e)
-        {
-            birthdayParsed = null;
         }
 
         return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), birthdayParsed, helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
