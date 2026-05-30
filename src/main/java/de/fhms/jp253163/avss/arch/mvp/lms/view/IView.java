@@ -81,7 +81,7 @@ public interface IView
     /**
      * Starts the view.
      *
-     * GUI: might initialize the window components and their event handlers.
+     * GUI: might initialize the window components and their event handlers. Note: initialize the read view handlers first.
      * Console: starts the actual program loop to 1. read user-input, 2. parse it, 3. interpret it and 3. invoke the corresponding event handlers set.
      */
     public void start();

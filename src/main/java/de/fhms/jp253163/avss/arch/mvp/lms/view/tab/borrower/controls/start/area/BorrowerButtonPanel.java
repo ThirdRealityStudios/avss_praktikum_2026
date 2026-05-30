@@ -7,7 +7,6 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrower
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerCreateActionListener;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerSharedLogic;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerUpdateActionListener;
 
 import javax.swing.*;
@@ -42,8 +41,8 @@ public class BorrowerButtonPanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        initCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
-        initUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
+        setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
+        setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
@@ -51,15 +50,15 @@ public class BorrowerButtonPanel extends JPanel
 
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
     {
-        initCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
+        setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
     }
 
     public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
     {
-        initUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
+        setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
     }
 
-    private void initCreateButton(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
+    private void setCreateButton(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
     {
         if(createButton == null)
             createButton = new JButton("Create");
@@ -72,7 +71,7 @@ public class BorrowerButtonPanel extends JPanel
         createButton.addActionListener(createActionListener);
     }
 
-    private void initUpdateButton(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
+    private void setUpdateButton(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
     {
         if(updateButton == null)
             updateButton = new JButton("Update");
