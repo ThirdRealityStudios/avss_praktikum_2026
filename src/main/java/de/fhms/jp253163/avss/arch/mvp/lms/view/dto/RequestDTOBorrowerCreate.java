@@ -12,11 +12,8 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
 
     private LocalDate birthday;
 
-    public RequestDTOBorrowerCreate(String firstname, String lastname, String street, String no, String place, int zip, LocalDate birthday) throws NullPointerException
+    public RequestDTOBorrowerCreate(String firstname, String lastname, String street, String no, String place, int zip, LocalDate birthday)
     {
-        if(firstname == null || lastname == null || street == null || no == null || place == null || birthday == null)
-            throw new NullPointerException();
-
         this.firstname = firstname;
         this.lastname = lastname;
 
@@ -40,17 +37,17 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
 
     @Override
     public int getDayOfBirth() {
-        return birthday.getDayOfMonth();
+        return birthday == null ? -1 : birthday.getDayOfMonth(); // if null = don't update (-1)
     }
 
     @Override
     public int getMonthOfBirth() {
-        return birthday.getMonthValue();
+        return birthday == null ? -1 : birthday.getMonthValue();
     }
 
     @Override
     public int getYearOfBirth() {
-        return birthday.getYear();
+        return birthday == null ? -1 : birthday.getYear();
     }
 
     @Override

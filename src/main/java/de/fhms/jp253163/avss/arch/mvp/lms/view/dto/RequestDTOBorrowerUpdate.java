@@ -42,56 +42,56 @@ public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
 
     @Override
     public int getBorrowerID() {
-        return 0;
+        return borrowerID;
     }
 
     @Override
     public String getFirstname() {
-        return "";
+        return firstname;
     }
 
     @Override
     public String getLastname() {
-        return "";
+        return lastname;
     }
 
     @Override
     public int getDayOfBirth() {
-        return 0;
+        return birthday == null ? -1 : birthday.getDayOfMonth();
     }
 
     @Override
     public int getMonthOfBirth() {
-        return 0;
+        return birthday == null ? -1 : birthday.getMonthValue();
     }
 
     @Override
     public int getYearOfBirth() {
-        return 0;
+        return birthday == null ? -1 : birthday.getYear();
     }
 
     @Override
     public String getStreet() {
-        return "";
+        return street;
     }
 
     @Override
     public String getNo() {
-        return "";
+        return no;
     }
 
     @Override
     public String getPlace() {
-        return "";
+        return place;
     }
 
     @Override
     public int getZip() {
-        return 0;
+        return zip;
     }
 
     @Override
     public int[] getLoans() {
-        return new int[0];
+        return loans;
     }
 }
