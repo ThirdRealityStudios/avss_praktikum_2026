@@ -52,7 +52,7 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 
         if(borrowerID < 0)
         {
-            presenter.getView().showMessage("Please fill in a valid borrower ID!");
+            presenter.getView().showMessage("Please select a borrower id! (dataset)");
             return;
         }
 
