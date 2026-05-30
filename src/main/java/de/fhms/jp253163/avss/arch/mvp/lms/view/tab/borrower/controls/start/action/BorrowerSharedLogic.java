@@ -88,6 +88,6 @@ public class BorrowerSharedLogic
             idParsed = -1;
         }
 
-        return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), birthdayParsed, helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
+        return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), helpingDTO.getDayOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getYearOfBirth(), helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
     }
 }
