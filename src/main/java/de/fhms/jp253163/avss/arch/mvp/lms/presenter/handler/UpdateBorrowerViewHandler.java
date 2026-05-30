@@ -45,7 +45,6 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
         int zip = iRequestDTOBorrowerUpdate.getZip();
 
         int day = iRequestDTOBorrowerUpdate.getDayOfBirth();
-        System.out.println("Day: " + day);
         int month = iRequestDTOBorrowerUpdate.getMonthOfBirth();
         int year = iRequestDTOBorrowerUpdate.getYearOfBirth();
 

@@ -39,6 +39,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         String lastname = iRequestDTOBorrowerCreate.getLastname();
 
         int day = iRequestDTOBorrowerCreate.getDayOfBirth();
+        System.out.println("Day: " + day);
         int month = iRequestDTOBorrowerCreate.getMonthOfBirth();
         int year = iRequestDTOBorrowerCreate.getYearOfBirth();
 
