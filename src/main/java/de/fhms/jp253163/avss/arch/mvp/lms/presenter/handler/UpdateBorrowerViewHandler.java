@@ -50,69 +50,143 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 
         int[] loans = iRequestDTOBorrowerUpdate.getLoans();
 
+        if(borrowerID < 0)
+        {
+            presenter.getView().showMessage("Please fill in a valid borrower ID!");
+            return;
+        }
+
+        if(firstname != null && firstname.isEmpty())
+        {
+            presenter.getView().showMessage("Please fill in firstname!");
+            return;
+        }
+
+        if(lastname != null && lastname.isEmpty())
+        {
+            presenter.getView().showMessage("Please fill in lastname!");
+            return;
+        }
+
+        if(day < 1)
+        {
+            presenter.getView().showMessage("Please fill in a valid day!");
+            return;
+        }
+
+        if(month < 1)
+        {
+            presenter.getView().showMessage("Please fill in a valid month!");
+            return;
+        }
+
+        if(year < 1910)
+        {
+            presenter.getView().showMessage("Please fill in a valid year!");
+            return;
+        }
+
+        if(street != null && street.isEmpty())
+        {
+            presenter.getView().showMessage("Please fill in street!");
+            return;
+        }
+
+        if(no != null && no.isEmpty())
+        {
+            presenter.getView().showMessage("Please fill in no!");
+            return;
+        }
+
+        if(place != null && place.isEmpty())
+        {
+            presenter.getView().showMessage("Please fill in place!");
+            return;
+        }
+
+        if(zip < 0)
+        {
+            presenter.getView().showMessage("Please fill in a valid zip!");
+            return;
+        }
+
         IBorrower currentBorrower = borrowerRepository.readBorrower(borrowerID);
 
         if(currentBorrower == null)
         {
             presenter.getView().showMessage("Could not find that borrower!");
-
             return;
         }
 
-        if(firstname != null)
-            currentBorrower.setFirstname(firstname);
+        // Below now: checks if values should stay the same, so use the old values where necessary
+        if(firstname == null) firstname = currentBorrower.getFirstname();
 
-        if(lastname != null)
-            currentBorrower.setLastname(lastname);
+        if(lastname == null) lastname = currentBorrower.getLastname();
 
         IResidentialAddress address = currentBorrower.getResidentialAddress();
 
-        if(address != null)
+        if(address == null)
         {
-            if(street != null)
-                address.setStreet(street);
-
-            if(no != null)
-                address.setNo(no);
-
-            if(place != null)
-                address.setPlace(place);
-
-            address.setZip(zip);
-
-            currentBorrower.setResidentialAddress(address);
+            presenter.getView().showMessage("Could not process old address!");
+            return;
         }
 
-        LocalDate birthday = currentBorrower.getDateOfBirth();
+        if(street == null) lastname = currentBorrower.getResidentialAddress().getStreet();
 
+        if(no == null) no = currentBorrower.getResidentialAddress().getNo();
+
+        if(place == null) place = currentBorrower.getResidentialAddress().getPlace();
+
+        if(loans == null) loans = currentBorrower.getLoans();
+
+        currentBorrower.setFirstname(firstname);
+        currentBorrower.setLastname(lastname);
+
+        address.setStreet(street);
+        address.setNo(no);
+        address.setPlace(place);
+        address.setZip(zip);
+
+        currentBorrower.setResidentialAddress(address);
+
+        // LocalDate birthday = currentBorrower.getDateOfBirth();
+
+        /*
         if(year < 1 || year > 9999)
+        {
             year = birthday.getYear();
+
+        }
 
         if(month < 1 || month > 12)
             month = birthday.getMonthValue();
 
         if(day < 1 || day > 31)
             day = birthday.getDayOfMonth();
+         */
+
+        LocalDate updatedBirthday = null;
 
         try
         {
-            LocalDate updatedBirthday = LocalDate.of(year, month, day);
-
-            currentBorrower.setDateOfBirth(updatedBirthday);
-
-            if(loans != null)
-            {
-                currentBorrower.setLoans(loans);
-            }
-
-            if(borrowerRepository.updateBorrower(currentBorrower))
-                presenter.getView().showMessage("Updated borrower successfully!");
-            else
-                presenter.getView().showMessage("Failed to update borrower!");
+            updatedBirthday = LocalDate.of(year, month, day);
         }
         catch(DateTimeException e)
         {
-
+            presenter.getView().showMessage("Could not process new birthday!");
+            return;
         }
+
+        currentBorrower.setDateOfBirth(updatedBirthday);
+
+        if(loans != null) // does not show message because it is ruled on the loan tab page.
+        {
+            currentBorrower.setLoans(loans);
+        }
+
+        if(borrowerRepository.updateBorrower(currentBorrower))
+            presenter.getView().showMessage("Updated borrower successfully!");
+        else
+            presenter.getView().showMessage("Failed to update borrower!");
     }
 }
