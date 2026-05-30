@@ -43,7 +43,7 @@ public class BorrowerUpdateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("BORROWER UPDATE failed!");
+            // view.showMessage("BORROWER UPDATE failed!");
 
             return;
         }

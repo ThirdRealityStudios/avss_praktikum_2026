@@ -40,7 +40,7 @@ public class LoanCreateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("LOAN CREATION failed!");
+            // view.showMessage("LOAN CREATION failed!");
 
             return;
         }

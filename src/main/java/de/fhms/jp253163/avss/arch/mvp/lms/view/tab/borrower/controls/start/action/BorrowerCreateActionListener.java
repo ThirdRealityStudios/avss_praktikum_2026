@@ -41,7 +41,7 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("BORROWER CREATION failed!");
+            // view.showMessage("BORROWER CREATION failed!");
 
             return;
         }

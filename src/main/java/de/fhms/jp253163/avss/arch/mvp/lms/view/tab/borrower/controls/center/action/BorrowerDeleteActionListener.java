@@ -47,7 +47,7 @@ public class BorrowerDeleteActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            deletePanel.getView().showMessage("BORROWER DELETION failed!");
+            // deletePanel.getView().showMessage("BORROWER DELETION failed!");
 
             return;
         }
