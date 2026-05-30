@@ -29,70 +29,6 @@ public class BorrowerSharedLogic
                 place = addressPanel.getPlace().getJTextField().getText(),
                 zip = addressPanel.getZip().getJTextField().getText();
 
-        if(firstname == null) firstname = "";
-        if(lastname == null) lastname = "";
-        if(day == null) day = "";
-        if(month == null) month = "";
-        if(year == null) year = "";
-        if(street == null) street = "";
-        if(no == null) no = "";
-        if(place == null) place = "";
-        if(zip == null) zip = "";
-
-        if(firstname.isEmpty())
-        {
-            view.showMessage("Please fill in firstname!");
-            return null;
-        }
-
-        if(lastname.isEmpty())
-        {
-            view.showMessage("Please fill in lastname!");
-            return null;
-        }
-
-        if(day.isEmpty())
-        {
-            view.showMessage("Please fill in day!");
-            return null;
-        }
-
-        if(month.isEmpty())
-        {
-            view.showMessage("Please fill in month!");
-            return null;
-        }
-
-        if(year.isEmpty())
-        {
-            view.showMessage("Please fill in year!");
-            return null;
-        }
-
-        if(street.isEmpty())
-        {
-            view.showMessage("Please fill in street!");
-            return null;
-        }
-
-        if(no.isEmpty())
-        {
-            view.showMessage("Please fill in no!");
-            return null;
-        }
-
-        if(place.isEmpty())
-        {
-            view.showMessage("Please fill in place!");
-            return null;
-        }
-
-        if(zip.isEmpty())
-        {
-            view.showMessage("Please fill in zip!");
-            return null;
-        }
-
         int zipParsed = -1;
 
         try
@@ -101,37 +37,30 @@ public class BorrowerSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            view.showMessage("Incorrect zip code! (not a number)");
-
-            return null;
+            zipParsed = -1;
         }
 
         int yearParsed = -1, monthParsed = -1, dayParsed = -1;
+        LocalDate birthdayParsed = null;
 
         try
         {
             yearParsed = Integer.parseInt(year);
             monthParsed = Integer.parseInt(month);
             dayParsed = Integer.parseInt(day);
+
+            try
+            {
+                birthdayParsed = LocalDate.of(yearParsed, monthParsed, dayParsed);
+            }
+            catch (DateTimeException dte)
+            {
+                birthdayParsed = null;
+            }
         }
         catch (NumberFormatException nfe)
         {
-            view.showMessage("Incorrect birthday! (not numbers everywhere)");
-
-            return null;
-        }
-
-        LocalDate birthdayParsed = null;
-
-        try
-        {
-            birthdayParsed = LocalDate.of(yearParsed, monthParsed, dayParsed);
-        }
-        catch (DateTimeException dte)
-        {
-            view.showMessage("Incorrect birthday! (not a valid date)");
-
-            return null;
+            birthdayParsed = null;
         }
 
         return new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
