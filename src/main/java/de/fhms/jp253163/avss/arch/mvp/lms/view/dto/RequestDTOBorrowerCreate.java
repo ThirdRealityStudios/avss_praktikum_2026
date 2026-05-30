@@ -10,19 +10,21 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
     private String street, no, place;
     private int zip;
 
-    private LocalDate birthday;
+    private int day, month, year;
 
-    public RequestDTOBorrowerCreate(String firstname, String lastname, String street, String no, String place, int zip, LocalDate birthday)
+    public RequestDTOBorrowerCreate(String firstname, String lastname, int day, int month, int year, String street, String no, String place, int zip)
     {
         this.firstname = firstname;
         this.lastname = lastname;
+
+        this.day = day;
+        this.month = month;
+        this.year = year;
 
         this.street = street;
         this.no = no;
         this.place = place;
         this.zip = zip;
-
-        this.birthday = birthday;
     }
 
     @Override
@@ -37,17 +39,17 @@ public class RequestDTOBorrowerCreate implements IRequestDTOBorrowerCreate
 
     @Override
     public int getDayOfBirth() {
-        return birthday == null ? -1 : birthday.getDayOfMonth(); // if null = don't update (-1)
+        return day; // if null = don't update (-1)
     }
 
     @Override
     public int getMonthOfBirth() {
-        return birthday == null ? -1 : birthday.getMonthValue();
+        return month;
     }
 
     @Override
     public int getYearOfBirth() {
-        return birthday == null ? -1 : birthday.getYear();
+        return year;
     }
 
     @Override
