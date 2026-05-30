@@ -70,11 +70,7 @@ public class BorrowerSharedLogic
     {
         RequestDTOBorrowerCreate helpingDTO = genCreateBorrowerDTO(view, textfieldPanel);
 
-        if(helpingDTO == null)
-            return null;
-
         String id = "-1"; // TODO createUpdatePanel.getView().get....getFocusedId();
-        if(id == null) id = "";
 
         int idParsed = -1;
         try
@@ -83,12 +79,20 @@ public class BorrowerSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            view.showMessage("Borrower ID is not a number!");
-            return null;
+            idParsed = -1;
         }
 
-        LocalDate birthday = LocalDate.of(helpingDTO.getYearOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getDayOfBirth());
+        LocalDate birthdayParsed = null;
 
-        return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), birthday, helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
+        try
+        {
+            birthdayParsed = LocalDate.of(helpingDTO.getYearOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getDayOfBirth());
+        }
+        catch (DateTimeException e)
+        {
+            birthdayParsed = null;
+        }
+
+        return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), birthdayParsed, helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
     }
 }
