@@ -29,8 +29,6 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
     @Override
     public void invoke(IRequestDTOBorrowerRead iRequestDTOBorrowerRead)
     {
-        System.out.println("Starting invocation of borrower reading!");
-
         if(iRequestDTOBorrowerRead == null)
         {
             presenter.getView().showMessage("Invalid read request!");

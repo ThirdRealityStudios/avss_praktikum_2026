@@ -27,8 +27,6 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
     @Override
     public void invoke(IRequestDTOBorrowerCreate iRequestDTOBorrowerCreate)
     {
-        System.out.println("Starting invocation of borrower creation!");
-
         if(iRequestDTOBorrowerCreate == null)
         {
             presenter.getView().showMessage("Invalid creation request!");

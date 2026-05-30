@@ -23,8 +23,6 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
     @Override
     public void invoke(IRequestDTOLoanUpdate iRequestDTOLoanUpdate)
     {
-        System.out.println("Starting invocation of loan creation!");
-
         if(iRequestDTOLoanUpdate == null)
         {
             presenter.getView().showMessage("Invalid update request!");

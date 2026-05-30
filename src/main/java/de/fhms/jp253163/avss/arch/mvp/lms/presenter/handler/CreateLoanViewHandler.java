@@ -23,8 +23,6 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
     @Override
     public void invoke(IRequestDTOLoanCreate iRequestDTOLoanCreate)
     {
-        System.out.println("Starting invocation of loan creation!");
-
         if(iRequestDTOLoanCreate == null)
         {
             presenter.getView().showMessage("Invalid creation request!");

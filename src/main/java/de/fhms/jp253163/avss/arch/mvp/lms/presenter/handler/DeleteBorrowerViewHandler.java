@@ -22,8 +22,6 @@ public class DeleteBorrowerViewHandler implements IDeleteBorrowerViewHandler
     @Override
     public void invoke(IRequestDTOBorrowerDelete iRequestDTOBorrowerDelete)
     {
-        System.out.println("Starting invocation of borrower deletion!");
-
         if(iRequestDTOBorrowerDelete == null)
         {
             presenter.getView().showMessage("Invalid deletion request!");
