@@ -110,7 +110,7 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void showMessage(String message) {
-        System.out.println("GUI should show message: " + message);
+        // System.out.println("GUI should show message: " + message);
         messagePanel.getMessageLabel().setForeground(Color.RED);
         messagePanel.getMessageLabel().setText(message);
     }
