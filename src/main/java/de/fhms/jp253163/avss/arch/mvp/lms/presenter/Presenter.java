@@ -32,17 +32,17 @@ public class Presenter implements IPresenter
 
         this.view = view;
 
-        ICreateBorrowerViewHandler createBorrowerViewHandler = new CreateBorrowerViewHandler(borrowerRepository, this);
-        getView().setCreateBorrowerViewHandler(createBorrowerViewHandler);
-
-        ICreateLoanViewHandler createLoanViewHandler = new CreateLoanViewHandler(loanRepository, this);
-        getView().setCreateLoanViewHandler(createLoanViewHandler);
-
         IReadBorrowerViewHandler readBorrowerViewHandler = new ReadBorrowerViewHandler(borrowerRepository, this);
         getView().setReadBorrowerViewHandler(readBorrowerViewHandler);
 
         IReadLoanViewHandler readLoanViewHandler = new ReadLoanViewHandler(loanRepository, this);
         getView().setReadLoanViewHandler(readLoanViewHandler);
+
+        ICreateBorrowerViewHandler createBorrowerViewHandler = new CreateBorrowerViewHandler(borrowerRepository, this);
+        getView().setCreateBorrowerViewHandler(createBorrowerViewHandler);
+
+        ICreateLoanViewHandler createLoanViewHandler = new CreateLoanViewHandler(loanRepository, this);
+        getView().setCreateLoanViewHandler(createLoanViewHandler);
 
         IUpdateBorrowerViewHandler updateBorrowerViewHandler = new UpdateBorrowerViewHandler(borrowerRepository, this);
         getView().setUpdateBorrowerViewHandler(updateBorrowerViewHandler);
