@@ -33,6 +33,8 @@ public class LoanUpdateActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        System.out.println("Recognizing LOAN UPDATE button CLICKED!");
+
         IRequestDTOLoanUpdate requestDTOLoanUpdate = null;
 
         JButton button = null;
@@ -54,15 +56,19 @@ public class LoanUpdateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("Loan update failed! (code: 0)");
+            view.showMessage("LOAN UPDATE failed!");
 
             return;
         }
 
+        System.out.println("Created valid request for LOAN UPDATE button CLICKED!");
+
         if(readLoanViewHandler != null && updateLoanViewHandler != null)
         {
+            System.out.println("Invoking view handler for LOAN UPDATE!");
             updateLoanViewHandler.invoke(requestDTOLoanUpdate);
 
+            System.out.println("Invoking view handler for LOAN READ!");
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
         }
     }

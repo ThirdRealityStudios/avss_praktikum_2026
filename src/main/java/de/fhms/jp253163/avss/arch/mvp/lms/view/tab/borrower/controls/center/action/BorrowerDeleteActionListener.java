@@ -35,6 +35,8 @@ public class BorrowerDeleteActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        System.out.println("Recognizing BORROWER DELETION button CLICKED!");
+
         int borrowerID = -1; // TODO Get the ID from the clicked element / table row and parse it to integer.
 
         IRequestDTOBorrowerDelete requestDTOBorrowerDelete = null;
@@ -45,15 +47,19 @@ public class BorrowerDeleteActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            deletePanel.getView().showMessage("Borrower creation failed! (technical issue)");
+            deletePanel.getView().showMessage("BORROWER DELETION failed!");
 
             return;
         }
 
+        System.out.println("Created valid request for BORROWER DELETION button CLICKED!");
+
         if(readBorrowerViewHandler != null && deleteBorrowerViewHandler != null)
         {
+            System.out.println("Invoking view handler for BORROWER DELETION!");
             deleteBorrowerViewHandler.invoke(requestDTOBorrowerDelete);
 
+            System.out.println("Invoking view handler for BORROWER READ!");
             readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
         }
     }

@@ -31,6 +31,7 @@ public class LoanCreateActionListener implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println("Recognizing LOAN CREATION button CLICKED!");
         IRequestDTOLoanCreate requestDTOLoanCreate = null;
 
         try
@@ -39,15 +40,19 @@ public class LoanCreateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            view.showMessage("Loan creation failed! (code: 0)");
+            view.showMessage("LOAN CREATION failed!");
 
             return;
         }
 
+        System.out.println("Created valid request for LOAN CREATION button CLICKED!");
+
         if(createViewHandler != null && readLoanViewHandler != null)
         {
+            System.out.println("Invoking view handler for LOAN CREATION!");
             createViewHandler.invoke(requestDTOLoanCreate);
 
+            System.out.println("Invoking view handler for LOAN READ!");
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
         }
     }

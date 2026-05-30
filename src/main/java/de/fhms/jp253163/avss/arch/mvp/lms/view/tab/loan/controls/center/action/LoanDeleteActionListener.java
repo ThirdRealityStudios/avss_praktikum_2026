@@ -35,14 +35,20 @@ public class LoanDeleteActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        System.out.println("Recognizing LOAN DELETION button CLICKED!");
+
         int loanID = -1; // TODO Get the ID from the clicked element / table row and parse it to integer.
 
         IRequestDTOLoanDelete requestDTOLoanDelete = new RequestDTOLoanDelete(loanID);
 
+        System.out.println("Created valid request for LOAN DELETION button CLICKED!");
+
         if(readLoanViewHandler != null && deleteLoanViewHandler != null)
         {
+            System.out.println("Invoking view handler for LOAN DELETION!");
             deleteLoanViewHandler.invoke(requestDTOLoanDelete);
 
+            System.out.println("Invoking view handler for LOAN READ!");
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
         }
     }
