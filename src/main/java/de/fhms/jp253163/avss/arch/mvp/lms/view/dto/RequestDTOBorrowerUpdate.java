@@ -27,7 +27,7 @@ public class RequestDTOBorrowerUpdate implements IRequestDTOBorrowerUpdate
      * @param zip
      * @param loans
      */
-    public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip, int[] loans) throws NullPointerException
+    public RequestDTOBorrowerUpdate(int borrowerID, String firstname, String lastname, LocalDate birthday, String street, String no, String place, int zip, int[] loans)
     {
         this.borrowerID = borrowerID;
         this.firstname = firstname;

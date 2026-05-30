@@ -39,7 +39,7 @@ public class BorrowerUpdateActionListener implements ActionListener
 
         try
         {
-            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateBorrowerDTO(view, textfieldPanel);
+            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateBorrowerDTO(textfieldPanel);
         }
         catch(NullPointerException npe)
         {

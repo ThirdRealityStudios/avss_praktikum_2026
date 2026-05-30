@@ -7,7 +7,7 @@ public class RequestDTOLoanCreate implements IRequestDTOLoanCreate
     private int borrowerID, term;
     private double amount, interestRate;
 
-    public RequestDTOLoanCreate(int borrowerID, double amount, double interestRate, int term) throws NullPointerException
+    public RequestDTOLoanCreate(int borrowerID, double amount, double interestRate, int term)
     {
         this.borrowerID = borrowerID;
         this.amount = amount;

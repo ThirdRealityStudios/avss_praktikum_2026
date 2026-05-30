@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 public class BorrowerSharedLogic
 {
-    public static RequestDTOBorrowerCreate genCreateBorrowerDTO(IView view, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public static RequestDTOBorrowerCreate genCreateBorrowerDTO(BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
         BorrowerNamePanel namePanel = textfieldPanel.getNamePanel();
         BorrowerBirthdayPanel birthdayPanel = textfieldPanel.getBirthdayPanel();
@@ -66,9 +66,9 @@ public class BorrowerSharedLogic
         return new RequestDTOBorrowerCreate(firstname, lastname, street, no, place, zipParsed, birthdayParsed);
     }
 
-    public static RequestDTOBorrowerUpdate genUpdateBorrowerDTO(IView view, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public static RequestDTOBorrowerUpdate genUpdateBorrowerDTO(BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
     {
-        RequestDTOBorrowerCreate helpingDTO = genCreateBorrowerDTO(view, textfieldPanel);
+        RequestDTOBorrowerCreate helpingDTO = genCreateBorrowerDTO(textfieldPanel);
 
         String id = "-1"; // TODO createUpdatePanel.getView().get....getFocusedId();
 
