@@ -51,29 +51,6 @@ public class BorrowerTabPanel extends JPanel
                     if(model == null)
                         return;
 
-                    /*
-                    Object borrowerIDObj = model.getValueAt(selectedRowID, 0);
-
-                    if(borrowerIDObj == null)
-                        return;
-
-                    String borrowerIDText = borrowerIDObj.toString();
-
-                    int borrowerIDParsed = -1;
-                    try
-                    {
-                        borrowerIDParsed = Integer.parseInt(borrowerIDText);
-                    }
-                    catch (NumberFormatException exc)
-                    {
-
-                    }
-
-                    if(borrowerIDParsed == -1)
-                        return;
-
-                     */
-
                     // Now put all data into the user input fields, using that Borrower ID.
 
                     Object firstnameObj = model.getValueAt(selectedRowID, 1),
