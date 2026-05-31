@@ -75,26 +75,11 @@ public interface ILoanRepository
     public boolean isValidTermForCreation(int term);
 
     /**
+     * The (attached) borrower ID is the only updatable / editable value of an existing loan
+     * (at least directly).
+     *
      * @param borrowerID
      * @return true if borrowerID is -1 (= do not update) or at least 0. Otherwise, false.
      */
     public boolean isValidBorrowerIDForUpdate(int borrowerID);
-
-    /**
-     * @param amount
-     * @return true if amount is -1 (= do not update) or at least 0.01. Otherwise, false.
-     */
-    public boolean isValidAmountForUpdate(double amount);
-
-    /**
-     * @param interestRate
-     * @return true if interestRate is -1 (= do not update) or ranges between 0.01 and 1. Otherwise, false.
-     */
-    public boolean isValidInterestRateForUpdate(double interestRate);
-
-    /**
-     * @param term
-     * @return true if term is -1 (= do not update) or at least 1. Otherwise, false.
-     */
-    public boolean isValidTermForUpdate(int term);
 }

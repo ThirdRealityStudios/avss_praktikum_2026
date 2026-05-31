@@ -343,19 +343,4 @@ public class LoanRepository implements ILoanRepository
     public boolean isValidBorrowerIDForUpdate(int borrowerID) {
         return borrowerID == -1 || borrowerID >= 0;
     }
-
-    @Override
-    public boolean isValidAmountForUpdate(double amount) {
-        return amount == -1 || amount >= 0.01;
-    }
-
-    @Override
-    public boolean isValidInterestRateForUpdate(double interestRate) {
-        return interestRate == -1 || interestRate >= 0.0001;
-    }
-
-    @Override
-    public boolean isValidTermForUpdate(int term) {
-        return term == -1 || term > 0;
-    }
 }
