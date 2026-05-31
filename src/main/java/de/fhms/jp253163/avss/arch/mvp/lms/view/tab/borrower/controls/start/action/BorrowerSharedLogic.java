@@ -107,7 +107,7 @@ public class BorrowerSharedLogic
         TableModel model = table != null ? table.getModel() : null;
         String borrowerID = "-1";
 
-        if(model != null)
+        if(model != null && selectedRowID != -1)
         {
             borrowerID = model.getValueAt(selectedRowID, 0).toString(); // select Borrower ID column.
             System.out.println("BORROWER ID FROM ROW IS: " + borrowerID);

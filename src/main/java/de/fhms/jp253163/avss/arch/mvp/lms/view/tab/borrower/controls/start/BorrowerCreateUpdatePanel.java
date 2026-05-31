@@ -17,6 +17,8 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Objects;
 
 public class BorrowerCreateUpdatePanel extends JPanel
@@ -40,6 +42,20 @@ public class BorrowerCreateUpdatePanel extends JPanel
 
         buttonPanel = new BorrowerButtonPanel(view, null, null, null, textfieldPanel, scrollableTablePanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
+
+        /*
+        scrollableTablePanel.getTable().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                e.
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        });
+         */
     }
 
     private BorrowerTextfieldPanel createTextfieldPanel() throws NullPointerException
