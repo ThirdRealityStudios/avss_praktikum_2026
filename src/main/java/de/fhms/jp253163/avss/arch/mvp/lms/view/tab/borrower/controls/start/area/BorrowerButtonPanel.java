@@ -44,18 +44,6 @@ public class BorrowerButtonPanel extends JPanel
         this.view = view;
         this.tabsPanel = tabsPanel;
 
-        BorrowerTabPanel tabPanel = tabsPanel.getBorrowerTabPanel();
-        Objects.requireNonNull(tabPanel);
-
-        BorrowerControlsPanel controlsPanel = tabPanel.getControlsPanel();
-        Objects.requireNonNull(controlsPanel);
-
-        BorrowerCreateUpdatePanel createUpdatePanel = controlsPanel.getCreateUpdatePanel();
-        Objects.requireNonNull(createUpdatePanel);
-
-        this.textfieldPanel = createUpdatePanel.getTextfieldPanel();
-        Objects.requireNonNull(textfieldPanel);
-
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
@@ -82,6 +70,21 @@ public class BorrowerButtonPanel extends JPanel
 
         if(createActionListener != null) // remove old action listener
             createButton.removeActionListener(createActionListener);
+
+        // Below the code part until this.textfieldPanel is here instead in the constructor (as planned before - but it caused NullPointerException).
+        // Needs to stay here because only during runtime you can safely determine the instance for variable "textfieldPanel".
+        // This is, because during call of constructor dependencies have not yet been initialized with ready instances (e.g. BorrowerCreateUpdatePanel).
+        BorrowerTabPanel tabPanel = tabsPanel.getBorrowerTabPanel();
+        Objects.requireNonNull(tabPanel);
+
+        BorrowerControlsPanel controlsPanel = tabPanel.getControlsPanel();
+        Objects.requireNonNull(controlsPanel);
+
+        BorrowerCreateUpdatePanel createUpdatePanel = controlsPanel.getCreateUpdatePanel();
+        Objects.requireNonNull(createUpdatePanel);
+
+        this.textfieldPanel = createUpdatePanel.getTextfieldPanel();
+        Objects.requireNonNull(textfieldPanel);
 
         // create (new) one and assign it
         createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler, readBorrowerViewHandler, textfieldPanel);
