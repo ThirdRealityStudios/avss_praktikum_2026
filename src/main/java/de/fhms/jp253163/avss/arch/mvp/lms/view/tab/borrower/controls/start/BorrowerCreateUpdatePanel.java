@@ -7,6 +7,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component.LabelledTextfield;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerSharedLogic;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerAddressPanel;
@@ -21,22 +22,25 @@ import java.util.Objects;
 public class BorrowerCreateUpdatePanel extends JPanel
 {
     private IView view;
+    private TabsPanel tabsPanel;
 
     private BorrowerTextfieldPanel textfieldPanel;
     private BorrowerButtonPanel buttonPanel;
 
-    public BorrowerCreateUpdatePanel(IView view) throws NullPointerException
+    public BorrowerCreateUpdatePanel(IView view, TabsPanel tabsPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
+        Objects.requireNonNull(tabsPanel);
 
         this.view = view;
+        this.tabsPanel = tabsPanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new BorrowerButtonPanel(view, null, null, null, textfieldPanel);
+        buttonPanel = new BorrowerButtonPanel(view, null, null, null, tabsPanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 

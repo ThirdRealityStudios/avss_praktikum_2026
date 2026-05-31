@@ -48,7 +48,7 @@ public class TabsPanel extends JTabbedPane
 
     private void initBorrowerTab()
     {
-        borrowerCreateUpdatePanel = new BorrowerCreateUpdatePanel(view);
+        borrowerCreateUpdatePanel = new BorrowerCreateUpdatePanel(view, this);
         borrowerDeletePanel = new BorrowerDeletePanel(view);
 
         borrowerControlsPanel = new BorrowerControlsPanel(borrowerCreateUpdatePanel, borrowerDeletePanel);

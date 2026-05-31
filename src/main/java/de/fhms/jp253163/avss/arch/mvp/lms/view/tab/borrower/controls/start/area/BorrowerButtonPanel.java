@@ -6,6 +6,10 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerVi
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerCreateActionListener;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerUpdateActionListener;
 
@@ -16,6 +20,7 @@ import java.util.Objects;
 public class BorrowerButtonPanel extends JPanel
 {
     private IView view;
+    private TabsPanel tabsPanel;
     private BorrowerTextfieldPanel textfieldPanel;
 
     private BorrowerCreateActionListener createActionListener;
@@ -31,13 +36,25 @@ public class BorrowerButtonPanel extends JPanel
      * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
      * @throws NullPointerException
      */
-    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, TabsPanel tabsPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(tabsPanel);
 
         this.view = view;
-        this.textfieldPanel = textfieldPanel;
+        this.tabsPanel = tabsPanel;
+
+        BorrowerTabPanel tabPanel = tabsPanel.getBorrowerTabPanel();
+        Objects.requireNonNull(tabPanel);
+
+        BorrowerControlsPanel controlsPanel = tabPanel.getControlsPanel();
+        Objects.requireNonNull(controlsPanel);
+
+        BorrowerCreateUpdatePanel createUpdatePanel = controlsPanel.getCreateUpdatePanel();
+        Objects.requireNonNull(createUpdatePanel);
+
+        this.textfieldPanel = createUpdatePanel.getTextfieldPanel();
+        Objects.requireNonNull(textfieldPanel);
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
@@ -80,7 +97,7 @@ public class BorrowerButtonPanel extends JPanel
             updateButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, readBorrowerViewHandler, textfieldPanel);
+        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, readBorrowerViewHandler, tabsPanel);
         updateButton.addActionListener(updateActionListener);
     }
 

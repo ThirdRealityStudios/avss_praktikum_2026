@@ -1,10 +1,15 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 
 import java.awt.event.ActionEvent;
@@ -14,20 +19,36 @@ import java.util.Objects;
 public class BorrowerUpdateActionListener implements ActionListener
 {
     private IView view;
+    private ScrollableTablePanel tablePanel;
+
     private IUpdateBorrowerViewHandler updateBorrowerViewHandler;
     private IReadBorrowerViewHandler readBorrowerViewHandler;
     private BorrowerTextfieldPanel textfieldPanel;
 
     // view, createBorrowerViewHandler, sharedLogic
-    public BorrowerUpdateActionListener(IView view, IUpdateBorrowerViewHandler updateBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public BorrowerUpdateActionListener(IView view, IUpdateBorrowerViewHandler updateBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, TabsPanel tabsPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(tabsPanel);
 
         this.view = view;
+
+        BorrowerTabPanel tabPanel = tabsPanel.getBorrowerTabPanel();
+        Objects.requireNonNull(tabPanel);
+        this.tablePanel = tabPanel.getDataTabPanel();
+        Objects.requireNonNull(this.tablePanel);
+
         this.updateBorrowerViewHandler = updateBorrowerViewHandler;
         this.readBorrowerViewHandler = readBorrowerViewHandler;
-        this.textfieldPanel = textfieldPanel;
+
+        BorrowerControlsPanel controlsPanel = tabPanel.getControlsPanel();
+        Objects.requireNonNull(controlsPanel);
+
+        BorrowerCreateUpdatePanel createUpdatePanel = controlsPanel.getCreateUpdatePanel();
+        Objects.requireNonNull(createUpdatePanel);
+
+        this.textfieldPanel = createUpdatePanel.getTextfieldPanel();
+        Objects.requireNonNull(this.textfieldPanel);
     }
 
     @Override
@@ -39,7 +60,7 @@ public class BorrowerUpdateActionListener implements ActionListener
 
         try
         {
-            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateBorrowerDTO(textfieldPanel);
+            requestDTOBorrowerUpdate = BorrowerSharedLogic.genUpdateBorrowerDTO(textfieldPanel, tablePanel);
         }
         catch(NullPointerException npe)
         {
