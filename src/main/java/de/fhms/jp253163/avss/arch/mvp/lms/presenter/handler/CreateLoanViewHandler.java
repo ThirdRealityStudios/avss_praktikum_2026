@@ -35,6 +35,30 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
         double amount = iRequestDTOLoanCreate.getAmount();
         int term = iRequestDTOLoanCreate.getTerm();
 
+        if(!loanRepository.isValidBorrowerIDForCreation(borrowerID))
+        {
+            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_BORROWER_ID);
+            return;
+        }
+
+        if(!loanRepository.isValidInterestRateForCreation(interestRate))
+        {
+            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_INTEREST_RATE);
+            return;
+        }
+
+        if(!loanRepository.isValidAmountForCreation(amount))
+        {
+            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_AMOUNT);
+            return;
+        }
+
+        if(!loanRepository.isValidTermForCreation(term))
+        {
+            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_TERM);
+            return;
+        }
+
                                  // createLoan(int borrowerID, double amount, double interestRate, int term)
         ILoan loan = loanRepository.createLoan(borrowerID, amount, interestRate, term);
 
