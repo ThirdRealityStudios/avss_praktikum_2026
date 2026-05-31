@@ -55,57 +55,57 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         if(no == null) no = "";
         if(place == null) place = "";
 
-        if(firstname.isEmpty())
+        if(!borrowerRepository.isValidFirstnameForCreation(firstname))
         {
-            presenter.getView().showMessage("Please fill in firstname!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_FIRSTNAME);
             return;
         }
 
-        if(lastname.isEmpty())
+        if(!borrowerRepository.isValidLastnameForCreation(lastname))
         {
-            presenter.getView().showMessage("Please fill in lastname!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_LASTNAME);
             return;
         }
 
-        if(day < 1)
+        if(!borrowerRepository.isValidDayOfBirthForCreation(day))
         {
-            presenter.getView().showMessage("Please fill in a valid day!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_DAY_OF_BIRTH);
             return;
         }
 
-        if(month < 1)
+        if(!borrowerRepository.isValidMonthOfBirthForCreation(month))
         {
-            presenter.getView().showMessage("Please fill in a valid month!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_MONTH_OF_BIRTH);
             return;
         }
 
-        if(year < 1910)
+        if(!borrowerRepository.isValidYearOfBirthForCreation(year))
         {
-            presenter.getView().showMessage("Please fill in a valid year!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_YEAR_OF_BIRTH);
             return;
         }
 
-        if(street.isEmpty())
+        if(!borrowerRepository.isValidStreetForCreation(street))
         {
-            presenter.getView().showMessage("Please fill in street!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_STREET);
             return;
         }
 
-        if(no.isEmpty())
+        if(!borrowerRepository.isValidNoForCreation(no))
         {
-            presenter.getView().showMessage("Please fill in no!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_NO);
             return;
         }
 
-        if(place.isEmpty())
+        if(!borrowerRepository.isValidPlaceForCreation(place))
         {
-            presenter.getView().showMessage("Please fill in place!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_PLACE);
             return;
         }
 
-        if(zip < 0)
+        if(!borrowerRepository.isValidZipForCreation(zip))
         {
-            presenter.getView().showMessage("Please fill in a valid zip!");
+            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_ZIP);
             return;
         }
 
@@ -115,7 +115,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (DateTimeException e)
         {
-            presenter.getView().showMessage("Could not process birthday!");
+            presenter.getView().showMessage("Could not process the provided birthday! Is it really correct?");
             return;
         }
 
@@ -127,7 +127,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (IllegalArgumentException e)
         {
-            presenter.getView().showMessage("Could not process address!");
+            presenter.getView().showMessage("Could not process the provided address!");
 
             return;
         }
