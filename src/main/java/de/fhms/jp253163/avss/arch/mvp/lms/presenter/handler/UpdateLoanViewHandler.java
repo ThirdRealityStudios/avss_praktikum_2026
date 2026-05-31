@@ -34,6 +34,12 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
         int borrowerIDAttached = iRequestDTOLoanUpdate.getBorrowerID();
         boolean bookInstallment = iRequestDTOLoanUpdate.isBookInstallmentWanted(); // has always priority (semantically)
 
+        if(!loanRepository.isValidBorrowerIDForUpdate(borrowerIDAttached))
+        {
+            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_BORROWER_ID);
+            return;
+        }
+
         ILoan currentLoan = loanRepository.readLoan(loanID);
 
         if(currentLoan == null)
