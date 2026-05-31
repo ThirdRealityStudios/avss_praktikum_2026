@@ -249,52 +249,102 @@ public class BorrowerRepository implements IBorrowerRepository
         }
     }
 
-    public boolean isValidFirstname(String firstname)
+    public boolean isValidFirstnameForCreation(String firstname)
+    {
+        return firstname != null && !firstname.isEmpty();
+    }
+
+    public boolean isValidLastnameForCreation(String lastname)
+    {
+        return lastname != null && !lastname.isEmpty();
+    }
+
+    public boolean isValidDayOfBirthForCreation(int day)
+    {
+        return day > 0 && day < 32;
+    }
+
+    public boolean isValidMonthOfBirthForCreation(int month)
+    {
+        return month > 0 && month < 13;
+    }
+
+    public boolean isValidYearOfBirthForCreation(int year)
+    {
+        return year > 1900 && year < Integer.MAX_VALUE;
+    }
+
+    public boolean isValidStreetForCreation(String street)
+    {
+        return street != null && !street.isEmpty();
+    }
+
+    public boolean isValidNoForCreation(String no)
+    {
+        return no != null && !no.isEmpty();
+    }
+
+    public boolean isValidPlaceForCreation(String place)
+    {
+        return place != null && !place.isEmpty();
+    }
+
+    public boolean isValidZipForCreation(int zip)
+    {
+        return zip >= 0 && zip <= 99999;
+    }
+
+    public boolean isValidSchufaScoreForCreation(double schufaScore)
+    {
+        return schufaScore >= 0 && schufaScore <= 1;
+    }
+
+    public boolean isValidFirstnameForUpdate(String firstname)
     {
         return firstname == null || !firstname.isEmpty();
     }
 
-    public boolean isValidLastname(String lastname)
+    public boolean isValidLastnameForUpdate(String lastname)
     {
         return lastname == null || !lastname.isEmpty();
     }
 
-    public boolean isValidDayOfBirth(int day)
+    public boolean isValidDayOfBirthForUpdate(int day)
     {
         return day == -1 || day > 0 && day < 32;
     }
 
-    public boolean isValidMonthOfBirth(int month)
+    public boolean isValidMonthOfBirthForUpdate(int month)
     {
         return month == -1 || month > 0 && month < 13;
     }
 
-    public boolean isValidYearOfBirth(int year)
+    public boolean isValidYearOfBirthForUpdate(int year)
     {
         return year == -1 || year > 1900 && year < Integer.MAX_VALUE;
     }
 
-    public boolean isValidStreet(String street)
+    public boolean isValidStreetForUpdate(String street)
     {
         return street == null || !street.isEmpty();
     }
 
-    public boolean isValidNo(String no)
+    public boolean isValidNoForUpdate(String no)
     {
         return no == null || !no.isEmpty();
     }
 
-    public boolean isValidPlace(String place)
+    public boolean isValidPlaceForUpdate(String place)
     {
         return place == null || !place.isEmpty();
     }
 
-    public boolean isValidZip(int zip)
+    public boolean isValidZipForUpdate(int zip)
     {
         return zip == -1 || zip >= 0 && zip <= 99999;
     }
 
-    public boolean isValidSchufaScore(double schufaScore)
+    public boolean isValidSchufaScoreForUpdate(double schufaScore)
     {
         return schufaScore == -1 || schufaScore >= 0 && schufaScore <= 1;
     }
