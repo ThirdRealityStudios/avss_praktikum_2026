@@ -318,4 +318,44 @@ public class LoanRepository implements ILoanRepository
             return false; // Still something left pay off from the borrower (at least 1 cent).
         }
     }
+
+    @Override
+    public boolean isValidBorrowerIDForCreation(int borrowerID) {
+        return borrowerID >= 0;
+    }
+
+    @Override
+    public boolean isValidAmountForCreation(double amount) {
+        return amount >= 0.01;
+    }
+
+    @Override
+    public boolean isValidInterestRateForCreation(double interestRate) {
+        return interestRate >= 0.0001;
+    }
+
+    @Override
+    public boolean isValidTermForCreation(int term) {
+        return term > 0;
+    }
+
+    @Override
+    public boolean isValidBorrowerIDForUpdate(int borrowerID) {
+        return borrowerID == -1 || borrowerID >= 0;
+    }
+
+    @Override
+    public boolean isValidAmountForUpdate(double amount) {
+        return amount == -1 || amount >= 0.01;
+    }
+
+    @Override
+    public boolean isValidInterestRateForUpdate(double interestRate) {
+        return interestRate == -1 || interestRate >= 0.0001;
+    }
+
+    @Override
+    public boolean isValidTermForUpdate(int term) {
+        return term == -1 || term > 0;
+    }
 }

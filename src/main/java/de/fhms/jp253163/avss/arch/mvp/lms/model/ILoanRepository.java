@@ -49,4 +49,52 @@ public interface ILoanRepository
      * @return true if the loan could be deleted. Otherwise, false.
      */
     public boolean deleteLoan(int id);
+
+    /**
+     * @param borrowerID
+     * @return true if borrowerID is at least 0. Otherwise, false.
+     */
+    public boolean isValidBorrowerIDForCreation(int borrowerID);
+
+    /**
+     * @param amount
+     * @return true if amount is at least 0.01. Otherwise, false.
+     */
+    public boolean isValidAmountForCreation(double amount);
+
+    /**
+     * @param interestRate
+     * @return true if interestRate ranges between 0.01 and 1. Otherwise, false.
+     */
+    public boolean isValidInterestRateForCreation(double interestRate);
+
+    /**
+     * @param term
+     * @return true if term is at least 1. Otherwise, false.
+     */
+    public boolean isValidTermForCreation(int term);
+
+    /**
+     * @param borrowerID
+     * @return true if borrowerID is -1 (= do not update) or at least 0. Otherwise, false.
+     */
+    public boolean isValidBorrowerIDForUpdate(int borrowerID);
+
+    /**
+     * @param amount
+     * @return true if amount is -1 (= do not update) or at least 0.01. Otherwise, false.
+     */
+    public boolean isValidAmountForUpdate(double amount);
+
+    /**
+     * @param interestRate
+     * @return true if interestRate is -1 (= do not update) or ranges between 0.01 and 1. Otherwise, false.
+     */
+    public boolean isValidInterestRateForUpdate(double interestRate);
+
+    /**
+     * @param term
+     * @return true if term is -1 (= do not update) or at least 1. Otherwise, false.
+     */
+    public boolean isValidTermForUpdate(int term);
 }
