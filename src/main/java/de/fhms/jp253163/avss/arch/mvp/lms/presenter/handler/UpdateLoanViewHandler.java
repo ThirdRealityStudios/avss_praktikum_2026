@@ -31,8 +31,15 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
         }
 
         int loanID = iRequestDTOLoanUpdate.getLoanID();
+
         int borrowerIDAttached = iRequestDTOLoanUpdate.getBorrowerID();
         boolean bookInstallment = iRequestDTOLoanUpdate.isBookInstallmentWanted(); // has always priority (semantically)
+
+        if(loanID < 0)
+        {
+            presenter.getView().showMessage("Please select a loan! (dataset for retrieving loan ID)");
+            return;
+        }
 
         if(!loanRepository.isValidBorrowerIDForUpdate(borrowerIDAttached))
         {
@@ -48,6 +55,9 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
 
             return;
         }
+
+        // Below now: checks if values should stay the same, so use the old values where necessary
+        if(borrowerIDAttached == -1) borrowerIDAttached = currentLoan.getBorrower();
 
         if(bookInstallment)
             currentLoan.payInstallment();

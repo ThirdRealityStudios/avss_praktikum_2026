@@ -52,7 +52,7 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 
         if(borrowerID < 0)
         {
-            presenter.getView().showMessage("Please select a borrower id! (dataset)");
+            presenter.getView().showMessage("Please select a borrower! (dataset for retrieving borrower ID)");
             return;
         }
 
@@ -148,22 +148,6 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
         address.setZip(zip);
 
         currentBorrower.setResidentialAddress(address);
-
-        // LocalDate birthday = currentBorrower.getDateOfBirth();
-
-        /*
-        if(year < 1 || year > 9999)
-        {
-            year = birthday.getYear();
-
-        }
-
-        if(month < 1 || month > 12)
-            month = birthday.getMonthValue();
-
-        if(day < 1 || day > 31)
-            day = birthday.getDayOfMonth();
-         */
 
         LocalDate updatedBirthday = null;
 
