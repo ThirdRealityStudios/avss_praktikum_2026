@@ -56,55 +56,55 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
             return;
         }
 
-        if(borrowerRepository.isValidFirstnameForUpdate(firstname))
+        if(!borrowerRepository.isValidFirstnameForUpdate(firstname))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_FIRSTNAME);
             return;
         }
 
-        if(borrowerRepository.isValidLastnameForUpdate(lastname))
+        if(!borrowerRepository.isValidLastnameForUpdate(lastname))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_LASTNAME);
             return;
         }
 
-        if(borrowerRepository.isValidDayOfBirthForUpdate(day))
+        if(!borrowerRepository.isValidDayOfBirthForUpdate(day))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_DAY_OF_BIRTH);
             return;
         }
 
-        if(borrowerRepository.isValidMonthOfBirthForUpdate(month))
+        if(!borrowerRepository.isValidMonthOfBirthForUpdate(month))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_MONTH_OF_BIRTH);
             return;
         }
 
-        if(borrowerRepository.isValidYearOfBirthForUpdate(year))
+        if(!borrowerRepository.isValidYearOfBirthForUpdate(year))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_YEAR_OF_BIRTH);
             return;
         }
 
-        if(borrowerRepository.isValidStreetForUpdate(street))
+        if(!borrowerRepository.isValidStreetForUpdate(street))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_STREET);
             return;
         }
 
-        if(borrowerRepository.isValidNoForUpdate(no))
+        if(!borrowerRepository.isValidNoForUpdate(no))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_NO);
             return;
         }
 
-        if(borrowerRepository.isValidPlaceForUpdate(place))
+        if(!borrowerRepository.isValidPlaceForUpdate(place))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_PLACE);
             return;
         }
 
-        if(borrowerRepository.isValidZipForUpdate(zip))
+        if(!borrowerRepository.isValidZipForUpdate(zip))
         {
             presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_ZIP);
             return;
