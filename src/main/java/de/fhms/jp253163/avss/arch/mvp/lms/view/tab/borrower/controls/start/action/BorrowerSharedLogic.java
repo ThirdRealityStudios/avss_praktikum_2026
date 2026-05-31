@@ -88,27 +88,43 @@ public class BorrowerSharedLogic
         int selectedRowsIDs[] = new int[0];
 
         if(table != null)
+        {
             selectedRowsIDs = table.getSelectedRows(); // TODO createUpdatePanel.getView().get....getFocusedId();
+        }
 
         int selectedRowID = -1;
 
         if(selectedRowsIDs.length > 0)
+        {
             selectedRowID = selectedRowsIDs[0]; // even though multiple maybe selected, only take the first one chosen.
+            System.out.println("THE FIRST ROW SELECTED IS: " + selectedRowID);
+        }
+        else
+        {
+            System.out.println("NO ROW SELECTED !!!!!!!!!!!!!!!!!!!!!!");
+        }
 
         TableModel model = table != null ? table.getModel() : null;
         String borrowerID = "-1";
 
         if(model != null)
+        {
             borrowerID = model.getValueAt(selectedRowID, 0).toString(); // select Borrower ID column.
+            System.out.println("BORROWER ID FROM ROW IS: " + borrowerID);
+        }
+        else
+            System.out.println("COULD NOT GET {BORROWER ID} FROM SELECTED ROW!!!!!!!!!!");
+
 
         int borrowerIDParsed = -1;
         try
         {
             borrowerIDParsed = Integer.parseInt(borrowerID);
+            System.out.println("CONVERTED {BORROWER ID} FROM ROW IS: " + borrowerIDParsed);
         }
         catch (NumberFormatException e)
         {
-
+            System.out.println("COULD NOT CONVERT THE {BORROWER ID} FROM THE ROW!!!!!!");
         }
 
         return new RequestDTOBorrowerUpdate(borrowerIDParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), helpingDTO.getDayOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getYearOfBirth(), helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
