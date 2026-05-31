@@ -39,18 +39,7 @@ public class BorrowerDeleteActionListener implements ActionListener
 
         int borrowerID = -1; // TODO Get the ID from the clicked element / table row and parse it to integer.
 
-        IRequestDTOBorrowerDelete requestDTOBorrowerDelete = null;
-
-        try
-        {
-            requestDTOBorrowerDelete = new RequestDTOBorrowerDelete(borrowerID);
-        }
-        catch(NullPointerException npe)
-        {
-            // deletePanel.getView().showMessage("BORROWER DELETION failed!");
-
-            return;
-        }
+        IRequestDTOBorrowerDelete requestDTOBorrowerDelete = new RequestDTOBorrowerDelete(borrowerID);
 
         System.out.println("Created valid request for BORROWER DELETION button CLICKED!");
 
