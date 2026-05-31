@@ -1,15 +1,12 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.BorrowerTabPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.BorrowerControlsPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerCreateActionListener;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerUpdateActionListener;
 
@@ -20,7 +17,6 @@ import java.util.Objects;
 public class BorrowerButtonPanel extends JPanel
 {
     private IView view;
-    private TabsPanel tabsPanel;
     private BorrowerTextfieldPanel textfieldPanel;
 
     private BorrowerCreateActionListener createActionListener;
@@ -36,21 +32,19 @@ public class BorrowerButtonPanel extends JPanel
      * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
      * @throws NullPointerException
      */
-    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, TabsPanel tabsPanel) throws NullPointerException
+    public BorrowerButtonPanel(IView view, ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, BorrowerTextfieldPanel textfieldPanel, ScrollableTablePanel scrollableTablePanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(tabsPanel);
+        Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(scrollableTablePanel);
 
         this.view = view;
-        this.tabsPanel = tabsPanel;
+        this.textfieldPanel = textfieldPanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        // setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
-        // setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
-
-        createButton = new JButton("Create");
-        updateButton = new JButton("Update");
+        setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
+        setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler, scrollableTablePanel);
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
@@ -61,9 +55,11 @@ public class BorrowerButtonPanel extends JPanel
         setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
     }
 
-    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
+    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, ScrollableTablePanel scrollableTablePanel) throws NullPointerException
     {
-        setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
+        Objects.requireNonNull(scrollableTablePanel);
+
+        setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler, scrollableTablePanel);
     }
 
     private void setCreateButton(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
@@ -74,28 +70,15 @@ public class BorrowerButtonPanel extends JPanel
         if(createActionListener != null) // remove old action listener
             createButton.removeActionListener(createActionListener);
 
-        // Below the code part until this.textfieldPanel is here instead in the constructor (as planned before - but it caused NullPointerException).
-        // Needs to stay here because only during runtime you can safely determine the instance for variable "textfieldPanel".
-        // This is, because during call of constructor dependencies have not yet been initialized with ready instances (e.g. BorrowerCreateUpdatePanel).
-        BorrowerTabPanel tabPanel = tabsPanel.getBorrowerTabPanel();
-        Objects.requireNonNull(tabPanel);
-
-        BorrowerControlsPanel controlsPanel = tabPanel.getControlsPanel();
-        Objects.requireNonNull(controlsPanel);
-
-        BorrowerCreateUpdatePanel createUpdatePanel = controlsPanel.getCreateUpdatePanel();
-        Objects.requireNonNull(createUpdatePanel);
-
-        this.textfieldPanel = createUpdatePanel.getTextfieldPanel();
-        Objects.requireNonNull(textfieldPanel);
-
         // create (new) one and assign it
         createActionListener = new BorrowerCreateActionListener(view, createBorrowerViewHandler, readBorrowerViewHandler, textfieldPanel);
         createButton.addActionListener(createActionListener);
     }
 
-    private void setUpdateButton(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler) throws NullPointerException
+    private void setUpdateButton(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, ScrollableTablePanel scrollableTablePanel) throws NullPointerException
     {
+        Objects.requireNonNull(scrollableTablePanel);
+
         if(updateButton == null)
             updateButton = new JButton("Update");
 
@@ -103,7 +86,7 @@ public class BorrowerButtonPanel extends JPanel
             updateButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, readBorrowerViewHandler, tabsPanel);
+        updateActionListener = new BorrowerUpdateActionListener(view, updateBorrowerViewHandler, readBorrowerViewHandler, textfieldPanel, scrollableTablePanel);
         updateButton.addActionListener(updateActionListener);
     }
 

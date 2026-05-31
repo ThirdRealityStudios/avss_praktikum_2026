@@ -1,13 +1,13 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component.LabelledTextfield;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerSharedLogic;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerAddressPanel;
@@ -22,25 +22,23 @@ import java.util.Objects;
 public class BorrowerCreateUpdatePanel extends JPanel
 {
     private IView view;
-    private TabsPanel tabsPanel;
 
     private BorrowerTextfieldPanel textfieldPanel;
     private BorrowerButtonPanel buttonPanel;
 
-    public BorrowerCreateUpdatePanel(IView view, TabsPanel tabsPanel) throws NullPointerException
+    public BorrowerCreateUpdatePanel(IView view, ScrollableTablePanel scrollableTablePanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(tabsPanel);
+        Objects.requireNonNull(scrollableTablePanel);
 
         this.view = view;
-        this.tabsPanel = tabsPanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
         textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new BorrowerButtonPanel(view, null, null, null, tabsPanel);
+        buttonPanel = new BorrowerButtonPanel(view, null, null, null, textfieldPanel, scrollableTablePanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
@@ -73,8 +71,8 @@ public class BorrowerCreateUpdatePanel extends JPanel
         buttonPanel.setCreateBorrowerViewHandler(createBorrowerViewHandler, readBorrowerViewHandler);
     }
 
-    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler)
+    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, ScrollableTablePanel scrollableTablePanel)
     {
-        buttonPanel.setUpdateBorrowerViewHandler(readBorrowerViewHandler, updateBorrowerViewHandler);
+        buttonPanel.setUpdateBorrowerViewHandler(readBorrowerViewHandler, updateBorrowerViewHandler, scrollableTablePanel);
     }
 }

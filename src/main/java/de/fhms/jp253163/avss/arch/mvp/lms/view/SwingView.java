@@ -50,7 +50,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setUpdateBorrowerViewHandler(IUpdateBorrowerViewHandler handler)
     {
-        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(readBorrowerViewHandler, handler);
+        this.tabsPanel.getBorrowerTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateBorrowerViewHandler(readBorrowerViewHandler, handler, this.tabsPanel.getBorrowerTabPanel().getDataTabPanel());
     }
 
     @Override
