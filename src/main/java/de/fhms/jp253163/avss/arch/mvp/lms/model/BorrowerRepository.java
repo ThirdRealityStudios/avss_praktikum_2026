@@ -248,4 +248,54 @@ public class BorrowerRepository implements IBorrowerRepository
             return false; // The corresponding borrower still has something to pay off.
         }
     }
+
+    public boolean isValidFirstname(String firstname)
+    {
+        return firstname == null || !firstname.isEmpty();
+    }
+
+    public boolean isValidLastname(String lastname)
+    {
+        return lastname == null || !lastname.isEmpty();
+    }
+
+    public boolean isValidDayOfBirth(int day)
+    {
+        return day == -1 || day > 0 && day < 32;
+    }
+
+    public boolean isValidMonthOfBirth(int month)
+    {
+        return month == -1 || month > 0 && month < 13;
+    }
+
+    public boolean isValidYearOfBirth(int year)
+    {
+        return year == -1 || year > 1900 && year < Integer.MAX_VALUE;
+    }
+
+    public boolean isValidStreet(String street)
+    {
+        return street == null || !street.isEmpty();
+    }
+
+    public boolean isValidNo(String no)
+    {
+        return no == null || !no.isEmpty();
+    }
+
+    public boolean isValidPlace(String place)
+    {
+        return place == null || !place.isEmpty();
+    }
+
+    public boolean isValidZip(int zip)
+    {
+        return zip == -1 || zip >= 0 && zip <= 99999;
+    }
+
+    public boolean isValidSchufaScore(double schufaScore)
+    {
+        return schufaScore == -1 || schufaScore >= 0 && schufaScore <= 1;
+    }
 }
