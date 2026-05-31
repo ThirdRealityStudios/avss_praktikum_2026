@@ -46,8 +46,11 @@ public class BorrowerButtonPanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
-        setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
+        // setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
+        // setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler);
+
+        createButton = new JButton("Create");
+        updateButton = new JButton("Update");
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
