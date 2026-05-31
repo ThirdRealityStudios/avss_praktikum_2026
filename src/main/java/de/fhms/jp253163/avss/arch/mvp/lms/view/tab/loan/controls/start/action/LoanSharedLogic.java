@@ -8,41 +8,10 @@ public class LoanSharedLogic
 {
     public static RequestDTOLoanCreate genCreateLoanDTO(LoanTextfieldPanel textfieldPanel) throws NullPointerException
     {
-        textfieldPanel.getView().showMessage("");
-
         String borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText(),
                 amount = textfieldPanel.getAmout().getJTextField().getText(),
                 interestRate = textfieldPanel.getInterestRate().getJTextField().getText(),
                 term = textfieldPanel.getTerm().getJTextField().getText();
-
-        if(borrowerID == null) borrowerID = "";
-        if(amount == null) amount = "";
-        if(interestRate == null) interestRate = "";
-        if(term == null) term = "";
-
-        if(borrowerID.isEmpty())
-        {
-            textfieldPanel.getView().showMessage("Please fill in borrower ID!");
-            return null;
-        }
-
-        if(amount.isEmpty())
-        {
-            textfieldPanel.getView().showMessage("Please fill in amount!");
-            return null;
-        }
-
-        if(interestRate.isEmpty())
-        {
-            textfieldPanel.getView().showMessage("Please fill in interest rate!");
-            return null;
-        }
-
-        if(term.isEmpty())
-        {
-            textfieldPanel.getView().showMessage("Please fill in term!");
-            return null;
-        }
 
         int borrowerIDParsed = -1;
         try
@@ -51,9 +20,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Borrower ID is not a number!");
-
-            return null;
+            borrowerIDParsed = -1;
         }
 
         double amountParsed = -1;
@@ -63,9 +30,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Amount is not a number (e.g. 1325.69)!");
-
-            return null;
+            amountParsed = -1;
         }
 
         double interestRateParsed = -1;
@@ -75,9 +40,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Interest rate is not a number (e.g. 0.01 for 1 percent)!");
-
-            return null;
+            interestRateParsed = -1;
         }
 
         int termParsed = -1;
@@ -87,9 +50,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Term is not a number (e.g. 7 for 7 months)!");
-
-            return null;
+            termParsed = -1;
         }
 
         return new RequestDTOLoanCreate(borrowerIDParsed, amountParsed, interestRateParsed, termParsed);
@@ -102,21 +63,6 @@ public class LoanSharedLogic
         String loanID = "-1", // TODO Get loan id from selected data table row / loan dataset
                 borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText();;
 
-        if(loanID == null) loanID = "";
-        if(borrowerID == null) borrowerID = "";
-
-        if(loanID.isEmpty())
-        {
-            textfieldPanel.getView().showMessage("Please fill in loan ID!");
-            return null;
-        }
-
-        if(borrowerID.isEmpty())
-        {
-            textfieldPanel.getView().showMessage("Please fill in borrower ID!");
-            return null;
-        }
-
         int loanIDParsed = -1;
         try
         {
@@ -124,9 +70,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Loan ID is not a number!");
-
-            return null;
+            loanIDParsed = -1;
         }
 
         int borrowerIDParsed = -1;
@@ -136,9 +80,7 @@ public class LoanSharedLogic
         }
         catch (NumberFormatException nfe)
         {
-            textfieldPanel.getView().showMessage("Borrower ID is not a number!");
-
-            return null;
+            borrowerIDParsed = -1;
         }
 
         return new RequestDTOLoanUpdate(loanIDParsed, borrowerIDParsed, bookInstallment);

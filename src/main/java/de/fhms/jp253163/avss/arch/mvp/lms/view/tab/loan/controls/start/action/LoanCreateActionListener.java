@@ -32,6 +32,7 @@ public class LoanCreateActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("Recognizing LOAN CREATION button CLICKED!");
+
         IRequestDTOLoanCreate requestDTOLoanCreate = null;
 
         try
