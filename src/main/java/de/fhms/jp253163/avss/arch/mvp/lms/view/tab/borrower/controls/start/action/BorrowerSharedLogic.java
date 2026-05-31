@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
@@ -8,8 +9,11 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerBirthdayPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerNamePanel;
 
+import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class BorrowerSharedLogic
 {
@@ -72,22 +76,41 @@ public class BorrowerSharedLogic
         return new RequestDTOBorrowerCreate(firstname, lastname, dayParsed, monthParsed, yearParsed, street, no, place, zipParsed);
     }
 
-    public static RequestDTOBorrowerUpdate genUpdateBorrowerDTO(BorrowerTextfieldPanel textfieldPanel) throws NullPointerException
+    public static RequestDTOBorrowerUpdate genUpdateBorrowerDTO(BorrowerTextfieldPanel textfieldPanel, ScrollableTablePanel tablePanel) throws NullPointerException
     {
+        Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(tablePanel, "table panel is null");
+
         RequestDTOBorrowerCreate helpingDTO = genCreateBorrowerDTO(textfieldPanel);
 
-        String id = "-1"; // TODO createUpdatePanel.getView().get....getFocusedId();
+        JTable table = tablePanel.getTable();
 
-        int idParsed = -1;
+        int selectedRowsIDs[] = new int[0];
+
+        if(table != null)
+            selectedRowsIDs = table.getSelectedRows(); // TODO createUpdatePanel.getView().get....getFocusedId();
+
+        int selectedRowID = -1;
+
+        if(selectedRowsIDs.length > 0)
+            selectedRowID = selectedRowsIDs[0]; // even though multiple maybe selected, only take the first one chosen.
+
+        TableModel model = table != null ? table.getModel() : null;
+        String borrowerID = "-1";
+
+        if(model != null)
+            borrowerID = model.getValueAt(selectedRowID, 0).toString(); // select Borrower ID column.
+
+        int borrowerIDParsed = -1;
         try
         {
-            idParsed = Integer.parseInt(id);
+            borrowerIDParsed = Integer.parseInt(borrowerID);
         }
-        catch (NumberFormatException nfe)
+        catch (NumberFormatException e)
         {
-            idParsed = -1;
+
         }
 
-        return new RequestDTOBorrowerUpdate(idParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), helpingDTO.getDayOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getYearOfBirth(), helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
+        return new RequestDTOBorrowerUpdate(borrowerIDParsed, helpingDTO.getFirstname(), helpingDTO.getLastname(), helpingDTO.getDayOfBirth(), helpingDTO.getMonthOfBirth(), helpingDTO.getYearOfBirth(), helpingDTO.getStreet(), helpingDTO.getNo(), helpingDTO.getPlace(), helpingDTO.getZip(), null);
     }
 }
