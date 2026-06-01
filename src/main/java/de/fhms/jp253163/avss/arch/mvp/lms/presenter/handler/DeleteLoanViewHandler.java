@@ -29,9 +29,11 @@ public class DeleteLoanViewHandler implements IDeleteLoanViewHandler
             return;
         }
 
+        if(iRequestDTOLoanDelete.getLoanID() == -1)
+            presenter.getView().showMessage("Please select a dataset!");
         if(loanRepository.deleteLoan(iRequestDTOLoanDelete.getLoanID()))
             presenter.getView().showMessage("Deleted loan successfully!");
         else
-            presenter.getView().showMessage("Deleting loan failed! (please select dataset)");
+            presenter.getView().showMessage("The loan needs to be paid first before deletion!");
     }
 }
