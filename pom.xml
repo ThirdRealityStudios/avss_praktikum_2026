@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fhms.jp253163.avss.arch.mvp.lms</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
     <artifactId>executable-gui-standalone</artifactId> <!-- This is basically how the resulting JAR should be named after successful deploy - whereas the JAR name will not only contain this but also other automatically generated information, e.g. date and time -->
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source> <!-- 21 represents the Java language level - it should be identical with the value taken in the project settings -->
@@ -20,21 +20,21 @@
         <dependency>
             <groupId>de.fhms.jp253163.avss.arch.mvp.lms.presenter</groupId>
             <artifactId>presenter</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>1.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>de.fhms.jp253163.avss.arch.mvp.lms.view</groupId>
             <artifactId>gui</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>1.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>de.fhms.jp253163.avss.arch.mvp.lms.model</groupId>
             <artifactId>logik</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>1.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
