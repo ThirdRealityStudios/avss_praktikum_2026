@@ -27,8 +27,8 @@ public class LoanUpdateActionListener implements ActionListener
         Objects.requireNonNull(textfieldPanel);
         Objects.requireNonNull(tabsPanel);
 
-        if(updateLoanViewHandler == null && readLoanViewHandler != null)
-            throw new NullPointerException("HERE");
+        Objects.requireNonNull(updateLoanViewHandler);
+        Objects.requireNonNull(readLoanViewHandler);
 
         this.view = view;
         this.updateLoanViewHandler = updateLoanViewHandler;
