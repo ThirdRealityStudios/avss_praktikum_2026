@@ -5,6 +5,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanUpda
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
 
 import javax.swing.*;
@@ -18,16 +19,19 @@ public class LoanUpdateActionListener implements ActionListener
     private IReadLoanViewHandler readLoanViewHandler;
     private IUpdateLoanViewHandler updateLoanViewHandler;
     private LoanTextfieldPanel textfieldPanel;
+    private TabsPanel tabsPanel;
 
-    public LoanUpdateActionListener(IView view, IUpdateLoanViewHandler updateLoanViewHandler, IReadLoanViewHandler readLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
+    public LoanUpdateActionListener(IView view, IUpdateLoanViewHandler updateLoanViewHandler, IReadLoanViewHandler readLoanViewHandler, LoanTextfieldPanel textfieldPanel, TabsPanel tabsPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(tabsPanel);
 
         this.view = view;
         this.updateLoanViewHandler = updateLoanViewHandler;
         this.readLoanViewHandler = readLoanViewHandler;
         this.textfieldPanel = textfieldPanel;
+        this.tabsPanel = tabsPanel;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class LoanUpdateActionListener implements ActionListener
 
             boolean bookInstallemnt = button.getText().toLowerCase().contains("installment") || button.getText().equalsIgnoreCase("book installment");
 
-            requestDTOLoanUpdate = LoanSharedLogic.genUpdateLoanDTO(textfieldPanel, bookInstallemnt);
+            requestDTOLoanUpdate = LoanSharedLogic.genUpdateLoanDTO(textfieldPanel, bookInstallemnt, tabsPanel);
         }
         catch(NullPointerException npe)
         {

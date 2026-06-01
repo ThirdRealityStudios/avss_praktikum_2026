@@ -65,7 +65,7 @@ public class TabsPanel extends JTabbedPane
         loanTable = new JTable();
         loanTablePanel = new ScrollableTablePanel(loanTable);
 
-        loanCreateUpdatePanel = new LoanCreateUpdatePanel(view);
+        loanCreateUpdatePanel = new LoanCreateUpdatePanel(view, this);
         loanDeletePanel = new LoanDeletePanel(view);
 
         loanControlsPanel = new LoanControlsPanel(loanCreateUpdatePanel, loanDeletePanel);

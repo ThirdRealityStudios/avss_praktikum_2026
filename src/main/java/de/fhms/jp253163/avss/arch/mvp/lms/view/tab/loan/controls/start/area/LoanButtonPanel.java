@@ -6,6 +6,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHa
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action.LoanCreateActionListener;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action.LoanRefreshActionListener;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action.LoanUpdateActionListener;
@@ -24,6 +25,7 @@ public class LoanButtonPanel extends JPanel
     private LoanUpdateActionListener bookInstallmentActionListener;
 
     private LoanTextfieldPanel textfieldPanel;
+    private TabsPanel tabsPanel;
     private JButton createButton, updateButton, refreshButton, bookInstallmentButton;
 
     /**
@@ -34,13 +36,15 @@ public class LoanButtonPanel extends JPanel
      * @param updateLoanViewHandler Or null allowed too (do nothing at this event)
      * @throws NullPointerException
      */
-    public LoanButtonPanel(IView view, IReadLoanViewHandler readLoanViewHandler, ICreateLoanViewHandler createLoanViewHandler, IUpdateLoanViewHandler updateLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
+    public LoanButtonPanel(IView view, IReadLoanViewHandler readLoanViewHandler, ICreateLoanViewHandler createLoanViewHandler, IUpdateLoanViewHandler updateLoanViewHandler, LoanTextfieldPanel textfieldPanel, TabsPanel tabsPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(tabsPanel);
 
         this.view = view;
         this.textfieldPanel = textfieldPanel;
+        this.tabsPanel = tabsPanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
@@ -97,7 +101,7 @@ public class LoanButtonPanel extends JPanel
             bookInstallmentButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel);
+        updateActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel, tabsPanel);
         bookInstallmentButton.addActionListener(updateActionListener);
     }
 
@@ -123,7 +127,7 @@ public class LoanButtonPanel extends JPanel
             updateButton.removeActionListener(updateActionListener);
 
         // create (new) one and assign it
-        updateActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel);
+        updateActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel, tabsPanel);
         updateButton.addActionListener(updateActionListener);
     }
 

@@ -2,6 +2,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
 
 public class LoanSharedLogic
@@ -56,7 +57,7 @@ public class LoanSharedLogic
         return new RequestDTOLoanCreate(borrowerIDParsed, amountParsed, interestRateParsed, termParsed);
     }
 
-    public static RequestDTOLoanUpdate genUpdateLoanDTO(LoanTextfieldPanel textfieldPanel, boolean bookInstallment) throws NullPointerException
+    public static RequestDTOLoanUpdate genUpdateLoanDTO(LoanTextfieldPanel textfieldPanel, boolean bookInstallment, TabsPanel tabsPanel) throws NullPointerException
     {
         String loanID = "-1", // TODO Get loan id from selected data table row / loan dataset
                 borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText();;
