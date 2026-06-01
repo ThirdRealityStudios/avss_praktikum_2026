@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.center.action;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerDelete;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteBorrowerViewHandler;

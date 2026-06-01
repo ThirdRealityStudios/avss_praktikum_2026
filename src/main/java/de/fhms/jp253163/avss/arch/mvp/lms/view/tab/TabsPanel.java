@@ -52,7 +52,7 @@ public class TabsPanel extends JTabbedPane
         borrowerTablePanel = new ScrollableTablePanel(borrowerTable);
 
         borrowerCreateUpdatePanel = new BorrowerCreateUpdatePanel(view, borrowerTablePanel);
-        borrowerDeletePanel = new BorrowerDeletePanel(view);
+        borrowerDeletePanel = new BorrowerDeletePanel(view, this);
 
         borrowerControlsPanel = new BorrowerControlsPanel(borrowerCreateUpdatePanel, borrowerDeletePanel);
         borrowerControlsPanel.setPreferredSize(new Dimension(800, borrowerControlsPanel.getPreferredSize().height));
