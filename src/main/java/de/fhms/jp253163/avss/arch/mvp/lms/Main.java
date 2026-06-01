@@ -42,7 +42,7 @@ public class Main
             ILoanRepository loanRepository = new LoanRepository(jfsLoan, exeutableDirectory, schufaRepo, borrowerRepository);
 
             IPresenter presenter = new Presenter(view, borrowerRepository, loanRepository);
-            presenter.setView(view)
+            presenter.setView(view);
 
             view.start();
         }
