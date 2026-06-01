@@ -6,7 +6,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.DTOLoanSet;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.DTOLoanSet;
 
 import java.util.ArrayList;
 
