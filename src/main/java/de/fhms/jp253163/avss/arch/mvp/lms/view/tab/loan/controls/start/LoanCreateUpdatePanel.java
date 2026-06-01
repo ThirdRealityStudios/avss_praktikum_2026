@@ -1,6 +1,9 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
@@ -34,7 +37,28 @@ public class LoanCreateUpdatePanel extends JPanel
         textfieldPanel = new LoanTextfieldPanel(view, new LabelledTextfield("Borrower ID:"), new LabelledTextfield("Amount (not updatable):"), new LabelledTextfield("Interest rate (not updatable):"), new LabelledTextfield("Term (not updatable):"));
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        buttonPanel = new LoanButtonPanel(view, null, null, null, textfieldPanel, tabsPanel);
+        IReadLoanViewHandler readLoanViewHandler = new IReadLoanViewHandler() {
+            @Override
+            public void invoke(IRequestDTOLoanRead readLoanDTO) {
+
+            }
+        };
+
+        ICreateLoanViewHandler createLoanViewHandler = new ICreateLoanViewHandler() {
+            @Override
+            public void invoke(IRequestDTOLoanCreate createLoanDTO) {
+
+            }
+        };
+
+        IUpdateLoanViewHandler updateLoanViewHandler = new IUpdateLoanViewHandler() {
+            @Override
+            public void invoke(IRequestDTOLoanUpdate loanUpdateDTO) {
+
+            }
+        };
+
+        buttonPanel = new LoanButtonPanel(view, readLoanViewHandler, createLoanViewHandler, updateLoanViewHandler, textfieldPanel, tabsPanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
