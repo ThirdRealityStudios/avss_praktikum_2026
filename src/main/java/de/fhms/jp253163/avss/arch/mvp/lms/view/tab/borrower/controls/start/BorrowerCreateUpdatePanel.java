@@ -42,20 +42,6 @@ public class BorrowerCreateUpdatePanel extends JPanel
 
         buttonPanel = new BorrowerButtonPanel(view, null, null, null, textfieldPanel, scrollableTablePanel);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
-
-        /*
-        scrollableTablePanel.getTable().addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                e.
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-
-            }
-        });
-         */
     }
 
     private BorrowerTextfieldPanel createTextfieldPanel() throws NullPointerException
