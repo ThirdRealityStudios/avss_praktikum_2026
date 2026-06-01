@@ -4,11 +4,9 @@ import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.DTOBorrowerSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.data.dto.DTOLoanSet;
 
 import java.util.ArrayList;
 
