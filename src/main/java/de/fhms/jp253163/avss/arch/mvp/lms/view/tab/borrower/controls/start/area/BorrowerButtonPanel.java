@@ -8,6 +8,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrower
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerCreateActionListener;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerRefreshActionListener;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.action.BorrowerUpdateActionListener;
 
 import javax.swing.*;
@@ -23,10 +24,11 @@ public class BorrowerButtonPanel extends JPanel
 
     private BorrowerUpdateActionListener updateActionListener;
 
-    private JButton createButton, updateButton;
+    private BorrowerRefreshActionListener refreshActionListener;
+
+    private JButton createButton, updateButton, refreshButton;
 
     /**
-     *
      * @param view
      * @param createBorrowerViewHandler Or null allowed too (do nothing at this event)
      * @param updateBorrowerViewHandler Or null allowed too (do nothing at this event)
@@ -45,9 +47,11 @@ public class BorrowerButtonPanel extends JPanel
 
         setCreateButton(createBorrowerViewHandler, readBorrowerViewHandler);
         setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler, scrollableTablePanel);
+        setRefreshButton(readBorrowerViewHandler);
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, refreshButton, 2, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
     }
 
     public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
@@ -60,6 +64,24 @@ public class BorrowerButtonPanel extends JPanel
         Objects.requireNonNull(scrollableTablePanel);
 
         setUpdateButton(readBorrowerViewHandler, updateBorrowerViewHandler, scrollableTablePanel);
+    }
+
+    public void setRefreshBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
+    {
+        setRefreshButton(readBorrowerViewHandler);
+    }
+
+    private void setRefreshButton(IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
+    {
+        if(refreshButton == null)
+            refreshButton = new JButton("Refresh");
+
+        if(refreshActionListener != null) // remove old action listener
+            refreshButton.removeActionListener(refreshActionListener);
+
+        // create (new) one and assign it
+        refreshActionListener = new BorrowerRefreshActionListener(readBorrowerViewHandler);
+        refreshButton.addActionListener(refreshActionListener);
     }
 
     private void setCreateButton(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler) throws NullPointerException
@@ -98,5 +120,10 @@ public class BorrowerButtonPanel extends JPanel
     public JButton getUpdateButton()
     {
         return updateButton;
+    }
+
+    public JButton getRefreshButton()
+    {
+        return refreshButton;
     }
 }
