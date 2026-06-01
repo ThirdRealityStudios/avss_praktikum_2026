@@ -7,6 +7,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanView
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action.LoanCreateActionListener;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action.LoanRefreshActionListener;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action.LoanUpdateActionListener;
 
 import javax.swing.*;
@@ -21,8 +22,10 @@ public class LoanButtonPanel extends JPanel
 
     private LoanUpdateActionListener updateActionListener;
 
+    private LoanRefreshActionListener refreshActionListener;
+
     private LoanTextfieldPanel textfieldPanel;
-    private JButton createButton, updateButton;
+    private JButton createButton, updateButton, refreshButton;
 
     /**
      *
@@ -44,9 +47,11 @@ public class LoanButtonPanel extends JPanel
 
         initCreateButton(createLoanViewHandler, readLoanViewHandler);
         initUpdateButton(readLoanViewHandler, updateLoanViewHandler);
+        initRefreshButton(readLoanViewHandler);
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, refreshButton, 2, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
     }
 
     public void setCreateLoanViewHandler(ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler) throws NullPointerException
@@ -57,6 +62,24 @@ public class LoanButtonPanel extends JPanel
     public void setUpdateLoanViewHandler(IReadLoanViewHandler readLoanViewHandler, IUpdateLoanViewHandler updateLoanViewHandler) throws NullPointerException
     {
         initUpdateButton(readLoanViewHandler, updateLoanViewHandler);
+    }
+
+    public void setRefreshLoanViewHandler(IReadLoanViewHandler readLoanViewHandler)
+    {
+        initRefreshButton(readLoanViewHandler);
+    }
+
+    private void initRefreshButton(IReadLoanViewHandler readLoanViewHandler)
+    {
+        if(refreshButton == null)
+            refreshButton = new JButton("Refresh");
+
+        if(refreshActionListener != null) // remove old action listener
+            refreshButton.removeActionListener(refreshActionListener);
+
+        // create (new) one and assign it
+        refreshActionListener = new LoanRefreshActionListener(readLoanViewHandler);
+        refreshButton.addActionListener(refreshActionListener);
     }
 
     private void initCreateButton(ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler) throws NullPointerException
