@@ -100,7 +100,7 @@ public class LoanDeleteActionListener implements ActionListener
             System.out.println("loanIDText = null");
         } catch(NumberFormatException exc){  }
 
-        System.out.println("");
+        System.out.println("loanIDText = " + loanIDParsed);
 
         IRequestDTOLoanDelete requestDTOLoanDelete = new RequestDTOLoanDelete(loanIDParsed);
 
