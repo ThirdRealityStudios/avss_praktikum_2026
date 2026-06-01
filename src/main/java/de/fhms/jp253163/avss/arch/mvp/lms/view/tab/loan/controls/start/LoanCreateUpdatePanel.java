@@ -31,7 +31,7 @@ public class LoanCreateUpdatePanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        textfieldPanel = new LoanTextfieldPanel(view, new LabelledTextfield("Borrower ID:"), new LabelledTextfield("Amount:"), new LabelledTextfield("Interest rate:"), new LabelledTextfield("Term:"));
+        textfieldPanel = new LoanTextfieldPanel(view, new LabelledTextfield("Borrower ID:"), new LabelledTextfield("Amount (not updatable):"), new LabelledTextfield("Interest rate (not updatable):"), new LabelledTextfield("Term (not updatable):"));
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
         buttonPanel = new LoanButtonPanel(view, null, null, null, textfieldPanel, tabsPanel);
