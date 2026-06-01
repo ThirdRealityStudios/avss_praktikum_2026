@@ -22,7 +22,6 @@ public class LoanButtonPanel extends JPanel
     private LoanCreateActionListener createActionListener;
     private LoanUpdateActionListener updateActionListener;
     private LoanRefreshActionListener refreshActionListener;
-    private LoanUpdateActionListener bookInstallmentActionListener;
 
     private LoanTextfieldPanel textfieldPanel;
     private JButton createButton, updateButton, refreshButton, bookInstallmentButton;

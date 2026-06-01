@@ -67,7 +67,7 @@ public class LoanUpdateActionListener implements ActionListener
 
         System.out.println("Created valid request for LOAN UPDATE button CLICKED!");
 
-        if(readLoanViewHandler != null && updateLoanViewHandler != null)
+        // if(readLoanViewHandler != null && updateLoanViewHandler != null)
         {
             System.out.println("Invoking view handler for LOAN UPDATE!");
             updateLoanViewHandler.invoke(requestDTOLoanUpdate);
