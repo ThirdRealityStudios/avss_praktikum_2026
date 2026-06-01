@@ -52,7 +52,7 @@ public class LoanDeletePanel extends JPanel
         deleteButton.addActionListener(deleteActionListener);
     }
 
-    public void setDeleteLoanViewHandler(IReadLoanViewHandler loanViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler)
+    public void setDeleteLoanViewHandler(IReadLoanViewHandler loanViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler, TabsPanel tabsPanel)
     {
         initDeleteButton(loanViewHandler, deleteLoanViewHandler, tabsPanel);
     }

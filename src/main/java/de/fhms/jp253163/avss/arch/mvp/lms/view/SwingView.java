@@ -80,7 +80,7 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setDeleteLoanViewHandler(IDeleteLoanViewHandler handler)
     {
-        this.tabsPanel.getLoanTabPanel().getControlsPanel().getDeletePanel().setDeleteLoanViewHandler(readLoanViewHandler, handler);
+        this.tabsPanel.getLoanTabPanel().getControlsPanel().getDeletePanel().setDeleteLoanViewHandler(readLoanViewHandler, handler, this.tabsPanel);
     }
 
     @Override
