@@ -40,21 +40,21 @@ public class LoanCreateUpdatePanel extends JPanel
         IReadLoanViewHandler readLoanViewHandler = new IReadLoanViewHandler() {
             @Override
             public void invoke(IRequestDTOLoanRead readLoanDTO) {
-
+                System.out.println("IReadLoanViewHandler: Default Idle Instance");
             }
         };
 
         ICreateLoanViewHandler createLoanViewHandler = new ICreateLoanViewHandler() {
             @Override
             public void invoke(IRequestDTOLoanCreate createLoanDTO) {
-
+                System.out.println("ICreateLoanViewHandler: Default Idle Instance");
             }
         };
 
         IUpdateLoanViewHandler updateLoanViewHandler = new IUpdateLoanViewHandler() {
             @Override
             public void invoke(IRequestDTOLoanUpdate loanUpdateDTO) {
-
+                System.out.println("IUpdateLoanViewHandler: Default Idle Instance");
             }
         };
 
