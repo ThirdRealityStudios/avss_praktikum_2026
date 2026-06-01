@@ -67,7 +67,7 @@ public class BorrowerDeleteActionListener implements ActionListener
 
         if(model != null && selectedRowID > -1) borrowerIDObj = model.getValueAt(selectedRowID, 0);
         if(borrowerIDObj != null) borrowerIDText = borrowerIDObj.toString();
-        if(borrowerIDText != null) try{borrowerIDParsed = Integer.parseInt(borrowerIDText)} catch(NumberFormatException exc){}
+        if(borrowerIDText != null) try{borrowerIDParsed = Integer.parseInt(borrowerIDText);} catch(NumberFormatException exc){}
 
         IRequestDTOBorrowerDelete requestDTOBorrowerDelete = new RequestDTOBorrowerDelete(borrowerIDParsed);
 
