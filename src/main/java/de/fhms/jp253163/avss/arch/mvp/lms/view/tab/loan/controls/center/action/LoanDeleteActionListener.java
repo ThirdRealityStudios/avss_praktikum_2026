@@ -55,18 +55,52 @@ public class LoanDeleteActionListener implements ActionListener
         String loanIDText = null;
         int loanIDParsed = -1;
 
-        tabPanel = tabsPanel.getLoanTabPanel();
-        if(tabPanel != null) tablePanel = tabPanel.getDataTabPanel();
-        if(tablePanel != null) table = tablePanel.getTable();
-        if(table != null) selectedRowsIDs = table.getSelectedRows();
-        if(selectedRowsIDs != null && selectedRowsIDs.length > 0) selectedRowIDObj = selectedRowsIDs[0];
-        if(selectedRowIDObj != null) selectedRowIDText = selectedRowIDObj.toString();
-        if(selectedRowIDText != null) try{ selectedRowIDParsed = Integer.parseInt(selectedRowIDText); } catch(NumberFormatException exc){}
+        System.out.println("");
 
-        if(table != null) model = table.getModel();
-        if(model != null && selectedRowIDParsed >= 0) loanIDObj = model.getValueAt(selectedRowIDParsed, 0);
-        if(loanIDObj != null) loanIDText = loanIDObj.toString();
-        if(loanIDText != null) try{ loanIDParsed = Integer.parseInt(loanIDText); } catch(NumberFormatException exc){  }
+        tabPanel = tabsPanel.getLoanTabPanel();
+        if(tabPanel != null) {
+            tablePanel = tabPanel.getDataTabPanel();
+            System.out.println("tabsPanel = null");
+        }
+        if(tablePanel != null) {
+            table = tablePanel.getTable();
+            System.out.println("tablePanel = null");
+        }
+        if(table != null) {
+            selectedRowsIDs = table.getSelectedRows();
+            System.out.println("table = null");
+        }
+        if(selectedRowsIDs != null && selectedRowsIDs.length > 0) {
+            selectedRowIDObj = selectedRowsIDs[0];
+            System.out.println("selectedRowsIDs = null OR empty");
+        }
+        if(selectedRowIDObj != null) {
+            selectedRowIDText = selectedRowIDObj.toString();
+            System.out.println("selectedRowIDObj = null");
+        }
+        if(selectedRowIDText != null) try{
+            selectedRowIDParsed = Integer.parseInt(selectedRowIDText);
+            System.out.println("selectedRowIDText = null");
+        } catch(NumberFormatException exc){}
+
+        if(table != null) {
+            model = table.getModel();
+            System.out.println("table = null");
+        }
+        if(model != null && selectedRowIDParsed >= 0) {
+            loanIDObj = model.getValueAt(selectedRowIDParsed, 0);
+            System.out.println("model = null OR selectedRowIDParsed negative");
+        }
+        if(loanIDObj != null) {
+            loanIDText = loanIDObj.toString();
+            System.out.println("loanIDObj = null");
+        }
+        if(loanIDText != null) try{
+            loanIDParsed = Integer.parseInt(loanIDText);
+            System.out.println("loanIDText = null");
+        } catch(NumberFormatException exc){  }
+
+        System.out.println("");
 
         IRequestDTOLoanDelete requestDTOLoanDelete = new RequestDTOLoanDelete(loanIDParsed);
 
