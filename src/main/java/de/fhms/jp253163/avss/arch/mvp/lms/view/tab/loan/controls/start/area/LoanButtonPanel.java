@@ -19,13 +19,12 @@ public class LoanButtonPanel extends JPanel
     private IView view;
 
     private LoanCreateActionListener createActionListener;
-
     private LoanUpdateActionListener updateActionListener;
-
     private LoanRefreshActionListener refreshActionListener;
+    private LoanUpdateActionListener bookInstallmentActionListener;
 
     private LoanTextfieldPanel textfieldPanel;
-    private JButton createButton, updateButton, refreshButton;
+    private JButton createButton, updateButton, refreshButton, bookInstallmentButton;
 
     /**
      *
@@ -48,10 +47,12 @@ public class LoanButtonPanel extends JPanel
         initCreateButton(createLoanViewHandler, readLoanViewHandler);
         initUpdateButton(readLoanViewHandler, updateLoanViewHandler);
         initRefreshButton(readLoanViewHandler);
+        initBookInstallmentButton(updateLoanViewHandler, readLoanViewHandler);
 
         UIFactory.addComponentFor(this, createButton, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, updateButton, 1, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
         UIFactory.addComponentFor(this, refreshButton, 2, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, bookInstallmentButton, 3, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
     }
 
     public void setCreateLoanViewHandler(ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler) throws NullPointerException
@@ -69,6 +70,11 @@ public class LoanButtonPanel extends JPanel
         initRefreshButton(readLoanViewHandler);
     }
 
+    public void setBookInstallmentLoanViewHandler(IUpdateLoanViewHandler updateLoanViewHandler, IReadLoanViewHandler readLoanViewHandler)
+    {
+        initBookInstallmentButton(updateLoanViewHandler, readLoanViewHandler);
+    }
+
     private void initRefreshButton(IReadLoanViewHandler readLoanViewHandler)
     {
         if(refreshButton == null)
@@ -80,6 +86,19 @@ public class LoanButtonPanel extends JPanel
         // create (new) one and assign it
         refreshActionListener = new LoanRefreshActionListener(readLoanViewHandler);
         refreshButton.addActionListener(refreshActionListener);
+    }
+
+    private void initBookInstallmentButton(IUpdateLoanViewHandler updateLoanViewHandler, IReadLoanViewHandler readLoanViewHandler) throws NullPointerException
+    {
+        if(bookInstallmentButton == null)
+            bookInstallmentButton = new JButton("Book Installment");
+
+        if(updateActionListener != null) // remove old action listener
+            bookInstallmentButton.removeActionListener(updateActionListener);
+
+        // create (new) one and assign it
+        updateActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel);
+        bookInstallmentButton.addActionListener(updateActionListener);
     }
 
     private void initCreateButton(ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler) throws NullPointerException
