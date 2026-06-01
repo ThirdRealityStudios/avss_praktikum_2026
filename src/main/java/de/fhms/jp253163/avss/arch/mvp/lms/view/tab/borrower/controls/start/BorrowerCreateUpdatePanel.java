@@ -81,17 +81,4 @@ public class BorrowerCreateUpdatePanel extends JPanel
     {
         return buttonPanel;
     }
-
-    /*
-    public void setCreateBorrowerViewHandler(ICreateBorrowerViewHandler createBorrowerViewHandler, IReadBorrowerViewHandler readBorrowerViewHandler)
-    {
-        buttonPanel.setCreateBorrowerViewHandler(createBorrowerViewHandler, readBorrowerViewHandler);
-    }
-
-    public void setUpdateBorrowerViewHandler(IReadBorrowerViewHandler readBorrowerViewHandler, IUpdateBorrowerViewHandler updateBorrowerViewHandler, ScrollableTablePanel scrollableTablePanel)
-    {
-        buttonPanel.setUpdateBorrowerViewHandler(readBorrowerViewHandler, updateBorrowerViewHandler, scrollableTablePanel);
-    }
-
-     */
 }

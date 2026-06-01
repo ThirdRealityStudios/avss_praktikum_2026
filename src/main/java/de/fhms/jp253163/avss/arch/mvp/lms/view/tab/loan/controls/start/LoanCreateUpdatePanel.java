@@ -50,14 +50,4 @@ public class LoanCreateUpdatePanel extends JPanel
     {
         return buttonPanel;
     }
-
-    public void setCreateBorrowerViewHandler(ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler)
-    {
-        buttonPanel.setCreateLoanViewHandler(createLoanViewHandler, readLoanViewHandler);
-    }
-
-    public void setUpdateBorrowerViewHandler(IReadLoanViewHandler readLoanViewHandler, IUpdateLoanViewHandler updateLoanViewHandler)
-    {
-        buttonPanel.setUpdateLoanViewHandler(readLoanViewHandler, updateLoanViewHandler);
-    }
 }
