@@ -60,7 +60,7 @@ public class LoanDeleteActionListener implements ActionListener
         tabPanel = tabsPanel.getLoanTabPanel();
         if(tabPanel != null) {
             tablePanel = tabPanel.getDataTabPanel();
-            System.out.println("tabsPanel = null");
+            System.out.println("tabPanel = null");
         }
         if(tablePanel != null) {
             table = tablePanel.getTable();

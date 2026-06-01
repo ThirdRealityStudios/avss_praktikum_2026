@@ -66,7 +66,7 @@ public class TabsPanel extends JTabbedPane
         loanTablePanel = new ScrollableTablePanel(loanTable);
 
         loanCreateUpdatePanel = new LoanCreateUpdatePanel(view);
-        loanDeletePanel = new LoanDeletePanel(view, this);
+        loanDeletePanel = new LoanDeletePanel(view);
 
         loanControlsPanel = new LoanControlsPanel(loanCreateUpdatePanel, loanDeletePanel);
         loanControlsPanel.setPreferredSize(new Dimension(800, loanControlsPanel.getPreferredSize().height));

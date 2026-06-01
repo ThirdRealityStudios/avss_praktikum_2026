@@ -18,16 +18,15 @@ public class LoanDeletePanel extends JPanel
     private JButton deleteButton;
     private LoanDeleteActionListener deleteActionListener;
 
-    public LoanDeletePanel(IView view, TabsPanel tabsPanel)
+    public LoanDeletePanel(IView view)
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(tabsPanel);
 
         this.view = view;
 
         LayoutResultDTO layoutDTO = UIFactory.createGridBagLayoutFor(this);
 
-        initDeleteButton(null, null, tabsPanel);
+        deleteButton = new JButton("Delete");
 
         UIFactory.addComponentFor(this, deleteButton, 0, 0, GridBagConstraints.PAGE_START, layoutDTO.getConstraints());
     }
