@@ -27,6 +27,9 @@ public class LoanUpdateActionListener implements ActionListener
         Objects.requireNonNull(textfieldPanel);
         Objects.requireNonNull(tabsPanel);
 
+        if(updateLoanViewHandler == null && readLoanViewHandler != null)
+            throw new NullPointerException("HERE");
+
         this.view = view;
         this.updateLoanViewHandler = updateLoanViewHandler;
         this.readLoanViewHandler = readLoanViewHandler;
@@ -70,7 +73,7 @@ public class LoanUpdateActionListener implements ActionListener
         // if(readLoanViewHandler != null && updateLoanViewHandler != null)
         {
             System.out.println("Invoking view handler for LOAN UPDATE!");
-            updateLoanViewHandler.invoke(requestDTOLoanUpdate);
+            updateLoanViewHandler.invoke(requestDTOLoanUpdate); // somehow ALWAYS null but shouldnt..
 
             System.out.println("Invoking view handler for LOAN READ!");
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
