@@ -27,6 +27,8 @@ public class LoanUpdateActionListener implements ActionListener
         Objects.requireNonNull(textfieldPanel);
         Objects.requireNonNull(tabsPanel);
 
+        Objects.requireNonNull(readLoanViewHandler);
+
         this.view = view;
         this.updateLoanViewHandler = updateLoanViewHandler;
         this.readLoanViewHandler = readLoanViewHandler;
