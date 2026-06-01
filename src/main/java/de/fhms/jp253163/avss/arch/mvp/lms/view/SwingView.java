@@ -76,6 +76,9 @@ public class SwingView extends JFrame implements IView
     @Override
     public void setUpdateLoanViewHandler(IUpdateLoanViewHandler updateLoanViewHandler)
     {
+        assert readLoanViewHandler != null;
+        assert updateLoanViewHandler != null;
+
         this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setUpdateLoanViewHandler(readLoanViewHandler, updateLoanViewHandler);
         this.tabsPanel.getLoanTabPanel().getControlsPanel().getCreateUpdatePanel().getButtonPanel().setBookInstallmentLoanViewHandler(updateLoanViewHandler, readLoanViewHandler);
     }
