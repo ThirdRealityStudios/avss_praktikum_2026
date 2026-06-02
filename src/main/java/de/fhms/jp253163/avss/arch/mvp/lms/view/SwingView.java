@@ -6,6 +6,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 
 import javax.swing.*;
@@ -26,6 +27,10 @@ public class SwingView extends JFrame implements IView
 
     public SwingView()
     {
+        setTitle("Loan Management System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(800, 600));
+
         messagePanel = new MessagePanel(this);
         tabsPanel = new TabsPanel(this);
 
@@ -33,51 +38,12 @@ public class SwingView extends JFrame implements IView
 
         JScrollPane pane = new JScrollPane(panel);
 
-        add(pane);
+        BorderLayout layout = new BorderLayout();
+        setLayout(layout);
 
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                JFrame swingFrame = null;
+        add(pane, BorderLayout.CENTER);
 
-                if(e.getSource() instanceof JFrame)
-                    swingFrame = (JFrame) e.getSource();
-                else
-                {
-                    System.out.println("Resizing source detection error");
-                    return;
-                }
-
-                Dimension contentPaneSize = swingFrame.getContentPane().getSize();
-
-                tabsPanel.getBorrowerTabPanel().setPreferredSize(contentPaneSize);
-                tabsPanel.getLoanTabPanel().setPreferredSize(contentPaneSize);
-
-                // borrowerControlsPanel.setPreferredSize(new Dimension(800, borrowerControlsPanel.getPreferredSize().height));
-                // loanControlsPanel.setPreferredSize(new Dimension(800, loanControlsPanel.getPreferredSize().height));
-
-                /*
-                setPreferredSize(new Dimension(800, 600));
-                setSize(new Dimension(800, 600));
-                setVisible(true);
-                 */
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
-        });
+        pack();
     }
 
     @Override
@@ -133,10 +99,6 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void start() {
-        setTitle("Loan Management System");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setResizable(false);
-
         // Notify view handler to load all datasets on every program start (into the tables)
         if(readBorrowerViewHandler != null)
             readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
@@ -159,7 +121,6 @@ public class SwingView extends JFrame implements IView
 
     @Override
     public void showMessage(String message) {
-        // System.out.println("GUI should show message: " + message);
         messagePanel.getMessageLabel().setForeground(Color.RED);
         messagePanel.getMessageLabel().setText(message);
     }
