@@ -26,12 +26,12 @@ public class ScrollableTablePanel extends JScrollPane
 
             @Override
             public void componentMoved(ComponentEvent e) {
-
+                setPreferredSize(new Dimension(getPreferredSize().width, table.getRowHeight()));
             }
 
             @Override
             public void componentShown(ComponentEvent e) {
-
+                setPreferredSize(new Dimension(getPreferredSize().width, table.getRowHeight()));
             }
 
             @Override
