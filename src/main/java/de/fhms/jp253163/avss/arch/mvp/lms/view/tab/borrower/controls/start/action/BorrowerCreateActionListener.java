@@ -52,10 +52,6 @@ public class BorrowerCreateActionListener implements ActionListener
         {
             System.out.println("Invoking view handler for BORROWER CREATION!");
             createBorrowerViewHandler.invoke(requestDTOBorrowerCreate);
-
-            // Just show all borrowers (in the table) after creating a new dataset
-            System.out.println("Invoking view handler for BORROWER READ!");
-            readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
         }
     }
 }
