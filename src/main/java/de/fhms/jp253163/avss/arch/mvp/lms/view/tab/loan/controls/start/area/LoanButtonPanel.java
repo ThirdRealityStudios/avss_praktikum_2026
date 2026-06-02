@@ -132,24 +132,4 @@ public class LoanButtonPanel extends JPanel
         bookInstallmentActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel, tableLoan);
         bookInstallmentButton.addActionListener(updateActionListener);
     }
-
-    public JButton getCreateButton()
-    {
-        return createButton;
-    }
-
-    public JButton getUpdateButton()
-    {
-        return updateButton;
-    }
-
-    public JButton getRefreshButton()
-    {
-        return refreshButton;
-    }
-
-    public JButton getBookInstallmentButton()
-    {
-        return bookInstallmentButton;
-    }
 }
