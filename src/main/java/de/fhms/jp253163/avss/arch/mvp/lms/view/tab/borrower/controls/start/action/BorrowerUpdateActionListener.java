@@ -59,10 +59,6 @@ public class BorrowerUpdateActionListener implements ActionListener
         {
             System.out.println("Invoking view handler for BORROWER UPDATE!");
             updateBorrowerViewHandler.invoke(requestDTOBorrowerUpdate);
-
-            // Just show all borrowers (in the table) after creating a new dataset
-            System.out.println("Invoking view handler for BORROWER READ!");
-            readBorrowerViewHandler.invoke(new RequestDTOBorrowerRead(-1));
         }
     }
 }

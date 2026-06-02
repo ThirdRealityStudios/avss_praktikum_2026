@@ -78,9 +78,6 @@ public class LoanDeleteActionListener implements ActionListener
         {
             System.out.println("Invoking view handler for LOAN DELETION!");
             deleteLoanViewHandler.invoke(requestDTOLoanDelete);
-
-            System.out.println("Invoking view handler for LOAN READ!");
-            readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
         }
     }
 }

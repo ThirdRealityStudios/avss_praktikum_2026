@@ -99,10 +99,6 @@ public class LoanUpdateActionListener implements ActionListener
         {
             System.out.println("Invoking view handler for LOAN UPDATE!");
             updateLoanViewHandler.invoke(requestDTOLoanUpdate);
-
-            // Just show all loans (in the table) after creating a new dataset
-            System.out.println("Invoking view handler for LOAN READ!");
-            readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
         }
     }
 }
