@@ -6,6 +6,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -169,7 +170,12 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
         }
 
         if(borrowerRepository.updateBorrower(currentBorrower))
+        {
+            // Make the borrower table show all datasets now.
+            new ReadBorrowerViewHandler(borrowerRepository, presenter).invoke(new RequestDTOBorrowerRead(-1));
+
             presenter.getView().showMessage("Updated borrower successfully!");
+        }
         else
             presenter.getView().showMessage("Failed to update borrower!");
     }

@@ -140,13 +140,11 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         if(borrower == null)
             presenter.getView().showMessage("Could not create borrower!");
         else
-            presenter.getView().showMessage("Created borrower successfully!");
-
-
-        if(borrowerRepository.readAllBorrowers().length > 0)
         {
             // Make the borrower table show all datasets now.
             new ReadBorrowerViewHandler(borrowerRepository, presenter).invoke(new RequestDTOBorrowerRead(-1));
+
+            presenter.getView().showMessage("Created borrower successfully!");
         }
     }
 }

@@ -5,6 +5,8 @@ import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 
 public class CreateLoanViewHandler implements ICreateLoanViewHandler
 {
@@ -65,6 +67,11 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
         if(loan == null)
             presenter.getView().showMessage("Creating loan failed");
         else
+        {
+            // Make the loan table show all datasets now.
+            new ReadLoanViewHandler(loanRepository, presenter).invoke(new RequestDTOLoanRead(-1));
+
             presenter.getView().showMessage("Created loan successfully");
+        }
     }
 }

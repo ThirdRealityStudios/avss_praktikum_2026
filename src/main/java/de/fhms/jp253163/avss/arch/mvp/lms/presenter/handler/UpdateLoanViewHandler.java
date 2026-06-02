@@ -5,6 +5,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 
 public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
 {
@@ -65,7 +66,12 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
             currentLoan.setBorrower(borrowerIDAttached);
 
         if(loanRepository.updateLoan(currentLoan))
+        {
+            // Make the loan table show all datasets now.
+            new ReadLoanViewHandler(loanRepository, presenter).invoke(new RequestDTOLoanRead(-1));
+
             presenter.getView().showMessage("Updated loan successfully!");
+        }
         else
             presenter.getView().showMessage("Updating loan failed!");
     }
