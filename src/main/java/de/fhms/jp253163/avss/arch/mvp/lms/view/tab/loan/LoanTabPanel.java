@@ -96,8 +96,6 @@ public class LoanTabPanel extends JPanel
 
     private void initLayout()
     {
-        // https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
-
         LayoutResultDTO dto = UIFactory.createGridBagLayoutFor(this);
 
         dto.getConstraints().fill = GridBagConstraints.HORIZONTAL;
@@ -106,7 +104,7 @@ public class LoanTabPanel extends JPanel
 
         dto.getConstraints().gridx = 0;
         dto.getConstraints().gridy = 0;
-        dto.getConstraints().anchor = GridBagConstraints.FIRST_LINE_START;
+        dto.getConstraints().anchor = GridBagConstraints.FIRST_LINE_START; // https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
         add(scrollableTablePanel, dto.getConstraints());
 
         dto.getConstraints().gridx = 0;
