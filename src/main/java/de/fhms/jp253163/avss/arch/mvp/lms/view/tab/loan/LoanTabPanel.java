@@ -101,14 +101,15 @@ public class LoanTabPanel extends JPanel
         dto.getConstraints().fill = GridBagConstraints.HORIZONTAL;
         dto.getConstraints().weightx = 1;
         dto.getConstraints().weighty = 1;
-        dto.getConstraints().anchor = GridBagConstraints.LINE_START;
 
         dto.getConstraints().gridx = 0;
         dto.getConstraints().gridy = 0;
+        dto.getConstraints().anchor = GridBagConstraints.PAGE_START;
         add(scrollableTablePanel, dto.getConstraints());
 
         dto.getConstraints().gridx = 0;
         dto.getConstraints().gridy = 1;
+        dto.getConstraints().anchor = GridBagConstraints.PAGE_END;
         add(controlsPanel, dto.getConstraints());
     }
 
