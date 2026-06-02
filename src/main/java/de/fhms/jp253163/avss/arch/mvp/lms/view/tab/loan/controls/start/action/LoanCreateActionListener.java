@@ -1,12 +1,9 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
 
 import java.awt.event.ActionEvent;
