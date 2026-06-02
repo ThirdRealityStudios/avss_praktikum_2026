@@ -34,6 +34,6 @@ public class DeleteLoanViewHandler implements IDeleteLoanViewHandler
         if(loanRepository.deleteLoan(iRequestDTOLoanDelete.getLoanID()))
             presenter.getView().showMessage("Deleted loan successfully!");
         else
-            presenter.getView().showMessage("The loan needs to be paid first before deletion!");
+            presenter.getView().showMessage("Borrower needs to pay the loan first before deletion!");
     }
 }

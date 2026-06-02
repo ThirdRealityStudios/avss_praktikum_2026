@@ -32,6 +32,6 @@ public class DeleteBorrowerViewHandler implements IDeleteBorrowerViewHandler
         if(borrowerRepository.deleteBorrower(iRequestDTOBorrowerDelete.getBorrowerID()))
             presenter.getView().showMessage("Deleted borrower successfully!");
         else
-            presenter.getView().showMessage("Deleting borrower failed! (please select dataset)");
+            presenter.getView().showMessage("Borrower still has active loans or nothing was selected!");
     }
 }
