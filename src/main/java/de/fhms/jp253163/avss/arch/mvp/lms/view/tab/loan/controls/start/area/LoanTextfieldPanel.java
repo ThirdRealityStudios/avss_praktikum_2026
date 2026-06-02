@@ -1,9 +1,9 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component.LabelledTextfield;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.textfield.LoanConditionsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.textfield.LoanUpdateIDPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,49 +11,28 @@ import java.util.Objects;
 
 public class LoanTextfieldPanel extends JPanel
 {
-    private IView view;
-    private LabelledTextfield borrowerID, amount, interestRate, term;
+    private LoanUpdateIDPanel updateIDPanel;
+    private LoanConditionsPanel conditionsPanel;
 
-    public LoanTextfieldPanel(IView view, LabelledTextfield borrowerID, LabelledTextfield amount, LabelledTextfield interestRate, LabelledTextfield term) throws NullPointerException
+    public LoanTextfieldPanel(LoanUpdateIDPanel updateIDPanel, LoanConditionsPanel conditionsPanel) throws NullPointerException
     {
-        Objects.requireNonNull(view);
-        Objects.requireNonNull(borrowerID);
-        Objects.requireNonNull(amount);
-        Objects.requireNonNull(interestRate);
-        Objects.requireNonNull(term);
+        Objects.requireNonNull(updateIDPanel);
+        Objects.requireNonNull(conditionsPanel);
 
-        this.view = view;
-        this.borrowerID = borrowerID;
-        this.amount = amount;
-        this.interestRate = interestRate;
-        this.term = term;
+        this.updateIDPanel = updateIDPanel;
+        this.conditionsPanel = conditionsPanel;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        UIFactory.addComponentFor(this, borrowerID, 0, 1, GridBagConstraints.LINE_START, layoutResult.getConstraints());
-        UIFactory.addComponentFor(this, amount, 0, 2, GridBagConstraints.LINE_START, layoutResult.getConstraints());
-        UIFactory.addComponentFor(this, interestRate, 0, 3, GridBagConstraints.LINE_START, layoutResult.getConstraints());
-        UIFactory.addComponentFor(this, term, 0, 4, GridBagConstraints.LINE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, updateIDPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, conditionsPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
     }
 
-    public IView getView()
-    {
-        return view;
+    public LoanUpdateIDPanel getUpdateIDPanel() {
+        return updateIDPanel;
     }
 
-    public LabelledTextfield getBorrowerID() {
-        return borrowerID;
-    }
-
-    public LabelledTextfield getAmout() {
-        return amount;
-    }
-
-    public LabelledTextfield getInterestRate() {
-        return interestRate;
-    }
-
-    public LabelledTextfield getTerm() {
-        return term;
+    public LoanConditionsPanel getConditionsPanel() {
+        return conditionsPanel;
     }
 }

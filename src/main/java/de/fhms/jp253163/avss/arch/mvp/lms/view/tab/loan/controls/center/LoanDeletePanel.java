@@ -5,7 +5,6 @@ import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteLoanView
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.center.action.LoanDeleteActionListener;
 
 import javax.swing.*;
@@ -18,15 +17,16 @@ public class LoanDeletePanel extends JPanel
     private JButton deleteButton;
     private LoanDeleteActionListener deleteActionListener;
 
-    public LoanDeletePanel(IView view)
+    public LoanDeletePanel(IView view, JTable loanTable)
     {
         Objects.requireNonNull(view);
+        Objects.requireNonNull(loanTable);
 
         this.view = view;
 
         LayoutResultDTO layoutDTO = UIFactory.createGridBagLayoutFor(this);
 
-        deleteButton = new JButton("Delete");
+        initDeleteButton(null, null, loanTable);
 
         UIFactory.addComponentFor(this, deleteButton, 0, 0, GridBagConstraints.PAGE_START, layoutDTO.getConstraints());
     }
@@ -36,7 +36,7 @@ public class LoanDeletePanel extends JPanel
         return this.view;
     }
 
-    private void initDeleteButton(IReadLoanViewHandler readBorrowerViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler, TabsPanel tabsPanel) throws NullPointerException
+    private void initDeleteButton(IReadLoanViewHandler readLoanViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler, JTable loanTable) throws NullPointerException
     {
         if(deleteButton == null)
             deleteButton = new JButton("Delete");
@@ -45,14 +45,12 @@ public class LoanDeletePanel extends JPanel
             deleteButton.removeActionListener(deleteActionListener);
 
         // create (new) one and assign it
-        deleteActionListener = new LoanDeleteActionListener(readBorrowerViewHandler, deleteLoanViewHandler, tabsPanel);
+        deleteActionListener = new LoanDeleteActionListener(readLoanViewHandler, deleteLoanViewHandler, this, loanTable);
         deleteButton.addActionListener(deleteActionListener);
     }
 
-    public void setDeleteLoanViewHandler(IReadLoanViewHandler loanViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler, TabsPanel tabsPanel)
+    public void setDeleteLoanViewHandler(IReadLoanViewHandler readLoanViewHandler, IDeleteLoanViewHandler deleteLoanViewHandler, JTable loanTable)
     {
-        Objects.requireNonNull(tabsPanel);
-
-        initDeleteButton(loanViewHandler, deleteLoanViewHandler, tabsPanel);
+        initDeleteButton(readLoanViewHandler, deleteLoanViewHandler, loanTable);
     }
 }

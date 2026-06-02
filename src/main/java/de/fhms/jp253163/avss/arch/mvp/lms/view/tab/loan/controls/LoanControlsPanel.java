@@ -1,6 +1,5 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.MessagePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.center.LoanDeletePanel;
@@ -29,13 +28,11 @@ public class LoanControlsPanel extends JPanel
         UIFactory.addComponentFor(this, deletePanel, 0, 1, GridBagConstraints.CENTER, layoutResult.getConstraints());
     }
 
-    public LoanCreateUpdatePanel getCreateUpdatePanel()
-    {
+    public LoanCreateUpdatePanel getCreateUpdatePanel() {
         return createUpdatePanel;
     }
 
-    public LoanDeletePanel getDeletePanel()
-    {
+    public LoanDeletePanel getDeletePanel() {
         return deletePanel;
     }
 }

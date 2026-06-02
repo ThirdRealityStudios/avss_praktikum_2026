@@ -1,15 +1,14 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component.LabelledTextfield;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.BorrowerCreateUpdatePanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.BorrowerTextfieldPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerAddressPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerBirthdayPanel;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.borrower.controls.start.area.textfield.BorrowerNamePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.LoanControlsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.LoanCreateUpdatePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.textfield.LoanConditionsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.textfield.LoanUpdateIDPanel;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -21,15 +20,15 @@ import java.util.Objects;
 public class LoanTabPanel extends JPanel
 {
     private ScrollableTablePanel scrollableTablePanel;
-    private LoanControlsPanel controlsTabPanel;
+    private LoanControlsPanel controlsPanel;
 
-    public LoanTabPanel(ScrollableTablePanel scrollableTablePanel, LoanControlsPanel controlsTabPanel)
+    public LoanTabPanel(ScrollableTablePanel scrollableTablePanel, LoanControlsPanel controlsPanel)
     {
         Objects.requireNonNull(scrollableTablePanel);
-        Objects.requireNonNull(controlsTabPanel);
+        Objects.requireNonNull(controlsPanel);
 
         this.scrollableTablePanel = scrollableTablePanel;
-        this.controlsTabPanel = controlsTabPanel;
+        this.controlsPanel = controlsPanel;
 
         initLayout();
 
@@ -39,6 +38,8 @@ public class LoanTabPanel extends JPanel
             table.addMouseListener(new MouseListener(){
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    // Only the borrower ID is updatable from a loan, so implement the copy logic here (from row to textfield)
+
                     int[] selectedRows = table.getSelectedRows();
 
                     if(selectedRows == null || selectedRows.length == 0)
@@ -51,19 +52,21 @@ public class LoanTabPanel extends JPanel
                     if(model == null)
                         return;
 
-                    // Now put all data into the user input fields, using that Borrower ID.
+                    // Now put all data into the user input fields, using that Loan ID.
 
                     Object borrowerIDObj = model.getValueAt(selectedRowID, 4);
-
                     String borrowerIDText = borrowerIDObj != null ? borrowerIDObj.toString() : "";
 
-                    LoanCreateUpdatePanel createUpdatePanel = controlsTabPanel.getCreateUpdatePanel();
+                    LoanCreateUpdatePanel createUpdatePanel = controlsPanel.getCreateUpdatePanel();
                     if(createUpdatePanel == null) return;
 
                     LoanTextfieldPanel textfieldPanel = createUpdatePanel.getTextfieldPanel();
                     if(textfieldPanel == null) return;
 
-                    LabelledTextfield borrowerIDField = textfieldPanel.getBorrowerID();
+                    LoanUpdateIDPanel updateIdPanel = textfieldPanel.getUpdateIDPanel();
+                    if(updateIdPanel == null) return;
+
+                    LabelledTextfield borrowerIDField = updateIdPanel.getBorrowerID();
                     if(borrowerIDField == null) return;
 
                     borrowerIDField.getJTextField().setText(borrowerIDText);
@@ -93,24 +96,21 @@ public class LoanTabPanel extends JPanel
 
     private void initLayout()
     {
-        GridBagLayout layout = new GridBagLayout();
+        LayoutResultDTO dto = UIFactory.createGridBagLayoutFor(this);
 
-        GridBagConstraints constraints = new GridBagConstraints();
-        layout.setConstraints(this, constraints);
-        setLayout(layout);
+        Insets insets = new Insets(30, 30, 0, 30);
 
-        Insets insets = new Insets(0, 30, 30, 30);
+        dto.getConstraints().gridx = 0;
+        dto.getConstraints().gridy = 0;
+        dto.getConstraints().anchor = GridBagConstraints.PAGE_START;
+        dto.getConstraints().insets = insets;
+        add(scrollableTablePanel, dto.getConstraints());
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.NORTH;
-        constraints.insets = insets;
-        add(scrollableTablePanel, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.SOUTH;
-        add(controlsTabPanel, constraints);
+        dto.getConstraints().gridx = 0;
+        dto.getConstraints().gridy = 1;
+        dto.getConstraints().anchor = GridBagConstraints.PAGE_END;
+        dto.getConstraints().insets = new Insets(30, 30, 30, 30);
+        add(controlsPanel, dto.getConstraints());
     }
 
     public ScrollableTablePanel getDataTabPanel()
@@ -120,6 +120,6 @@ public class LoanTabPanel extends JPanel
 
     public LoanControlsPanel getControlsPanel()
     {
-        return controlsTabPanel;
+        return controlsPanel;
     }
 }

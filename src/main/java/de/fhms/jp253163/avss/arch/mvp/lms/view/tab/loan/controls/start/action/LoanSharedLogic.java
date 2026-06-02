@@ -2,17 +2,20 @@ package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanUpdate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
+
+import javax.swing.*;
+import javax.swing.table.TableModel;
+import java.util.Objects;
 
 public class LoanSharedLogic
 {
     public static RequestDTOLoanCreate genCreateLoanDTO(LoanTextfieldPanel textfieldPanel) throws NullPointerException
     {
-        String borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText(),
-                amount = textfieldPanel.getAmout().getJTextField().getText(),
-                interestRate = textfieldPanel.getInterestRate().getJTextField().getText(),
-                term = textfieldPanel.getTerm().getJTextField().getText();
+        String borrowerID = textfieldPanel.getUpdateIDPanel().getBorrowerID().getJTextField().getText(),
+                amount = textfieldPanel.getConditionsPanel().getAmount().getJTextField().getText(),
+                interestRate = textfieldPanel.getConditionsPanel().getInterestRate().getJTextField().getText(),
+                term = textfieldPanel.getConditionsPanel().getTerm().getJTextField().getText();
 
         int borrowerIDParsed = -1;
         try
@@ -57,31 +60,53 @@ public class LoanSharedLogic
         return new RequestDTOLoanCreate(borrowerIDParsed, amountParsed, interestRateParsed, termParsed);
     }
 
-    public static RequestDTOLoanUpdate genUpdateLoanDTO(LoanTextfieldPanel textfieldPanel, boolean bookInstallment, TabsPanel tabsPanel) throws NullPointerException
+    private static int getSelectedRowID(JTable table)
     {
-        String loanID = "-1", // TODO Get loan id from selected data table row / loan dataset
-                borrowerID = textfieldPanel.getBorrowerID().getJTextField().getText();;
+        Objects.requireNonNull(table);
 
+        int[] selectedRowsIDs = table.getSelectedRows();
+
+        int selectedRowID = -1;
+
+        if(selectedRowsIDs != null && selectedRowsIDs.length > 0)
+        {
+            selectedRowID = selectedRowsIDs[0]; // even though multiple maybe selected, only take the first one chosen.
+        }
+
+        return selectedRowID;
+    }
+
+    public static RequestDTOLoanUpdate genUpdateLoanDTO(LoanTextfieldPanel textfieldPanel, boolean bookInstallment, JTable tableLoan) throws NullPointerException
+    {
+        Objects.requireNonNull(textfieldPanel);
+        Objects.requireNonNull(tableLoan, "table is null");
+
+        RequestDTOLoanCreate helpingDTO = genCreateLoanDTO(textfieldPanel);
+
+        TableModel model = tableLoan.getModel();
+
+        if(model == null) return new RequestDTOLoanUpdate(-1, helpingDTO.getBorrower(), bookInstallment);
+
+        // int[] selectedRowsIDs = null;
+        int selectedRowID = -1;
+        Object loanIDObj = null;
+        String loanIDText = null;
         int loanIDParsed = -1;
-        try
-        {
-            loanIDParsed = Integer.parseInt(loanID);
-        }
-        catch (NumberFormatException nfe)
-        {
-            loanIDParsed = -1;
-        }
+        int borrowerID = -1;
 
-        int borrowerIDParsed = -1;
-        try
-        {
-            borrowerIDParsed = Integer.parseInt(borrowerID);
-        }
-        catch (NumberFormatException nfe)
-        {
-            borrowerIDParsed = -1;
-        }
+        selectedRowID = getSelectedRowID(tableLoan);
 
-        return new RequestDTOLoanUpdate(loanIDParsed, borrowerIDParsed, bookInstallment);
+                // selectedRowsIDs = tableLoan.getSelectedRows();
+        // if(selectedRowsIDs != null) selectedRowID = selectedRowsIDs[0];
+
+        if(selectedRowID < 0) return new RequestDTOLoanUpdate(-1, helpingDTO.getBorrower(), bookInstallment);
+
+        loanIDObj = model.getValueAt(selectedRowID, 0);
+        loanIDText = loanIDObj.toString();
+        try { loanIDParsed = Integer.parseInt(loanIDText); } catch(NumberFormatException exc) {  }
+
+        borrowerID = helpingDTO.getBorrower();
+
+        return new RequestDTOLoanUpdate(loanIDParsed, borrowerID, bookInstallment);
     }
 }

@@ -10,15 +10,16 @@ public class LoanRefreshActionListener implements ActionListener
 {
     private IReadLoanViewHandler readLoanViewHandler;
 
-    public LoanRefreshActionListener(IReadLoanViewHandler readLoanViewHandler)
+    public LoanRefreshActionListener(IReadLoanViewHandler readLoanViewHandler) throws NullPointerException
     {
         this.readLoanViewHandler = readLoanViewHandler;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e) {
         if(readLoanViewHandler != null)
+        {
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
+        }
     }
 }

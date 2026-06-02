@@ -1,9 +1,11 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.action;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
 
@@ -14,17 +16,17 @@ import java.util.Objects;
 public class LoanCreateActionListener implements ActionListener
 {
     private IView view;
-    private ICreateLoanViewHandler createViewHandler;
+    private ICreateLoanViewHandler createLoanViewHandler;
     private IReadLoanViewHandler readLoanViewHandler;
     private LoanTextfieldPanel textfieldPanel;
 
-    public LoanCreateActionListener(IView view, ICreateLoanViewHandler createViewHandler, IReadLoanViewHandler readLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
+    public LoanCreateActionListener(IView view, ICreateLoanViewHandler createLoanViewHandler, IReadLoanViewHandler readLoanViewHandler, LoanTextfieldPanel textfieldPanel) throws NullPointerException
     {
         Objects.requireNonNull(view);
         Objects.requireNonNull(textfieldPanel);
 
         this.view = view;
-        this.createViewHandler = createViewHandler;
+        this.createLoanViewHandler = createLoanViewHandler;
         this.readLoanViewHandler = readLoanViewHandler;
         this.textfieldPanel = textfieldPanel;
     }
@@ -48,11 +50,12 @@ public class LoanCreateActionListener implements ActionListener
 
         System.out.println("Created valid request for LOAN CREATION button CLICKED!");
 
-        if(createViewHandler != null && readLoanViewHandler != null)
+        if(createLoanViewHandler != null && readLoanViewHandler != null)
         {
             System.out.println("Invoking view handler for LOAN CREATION!");
-            createViewHandler.invoke(requestDTOLoanCreate);
+            createLoanViewHandler.invoke(requestDTOLoanCreate);
 
+            // Just show all loans (in the table) after creating a new dataset
             System.out.println("Invoking view handler for LOAN READ!");
             readLoanViewHandler.invoke(new RequestDTOLoanRead(-1));
         }

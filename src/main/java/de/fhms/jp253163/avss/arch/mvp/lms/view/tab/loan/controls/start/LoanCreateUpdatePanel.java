@@ -1,18 +1,14 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanUpdate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component.LabelledTextfield;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.TabsPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanButtonPanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.LoanTextfieldPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.textfield.LoanConditionsPanel;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start.area.textfield.LoanUpdateIDPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,41 +21,28 @@ public class LoanCreateUpdatePanel extends JPanel
     private LoanTextfieldPanel textfieldPanel;
     private LoanButtonPanel buttonPanel;
 
-    public LoanCreateUpdatePanel(IView view, TabsPanel tabsPanel) throws NullPointerException
+    public LoanCreateUpdatePanel(IView view, JTable tableLoan) throws NullPointerException
     {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(tabsPanel);
+        Objects.requireNonNull(tableLoan);
 
         this.view = view;
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        textfieldPanel = new LoanTextfieldPanel(view, new LabelledTextfield("Borrower ID:"), new LabelledTextfield("Amount (not updatable):"), new LabelledTextfield("Interest rate (not updatable):"), new LabelledTextfield("Term (not updatable):"));
+        textfieldPanel = createTextfieldPanel();
         UIFactory.addComponentFor(this, textfieldPanel, 0, 0, GridBagConstraints.PAGE_START, layoutResult.getConstraints());
 
-        IReadLoanViewHandler readLoanViewHandler = new IReadLoanViewHandler() {
-            @Override
-            public void invoke(IRequestDTOLoanRead readLoanDTO) {
-                System.out.println("IReadLoanViewHandler: Default Idle Instance");
-            }
-        };
-
-        ICreateLoanViewHandler createLoanViewHandler = new ICreateLoanViewHandler() {
-            @Override
-            public void invoke(IRequestDTOLoanCreate createLoanDTO) {
-                System.out.println("ICreateLoanViewHandler: Default Idle Instance");
-            }
-        };
-
-        IUpdateLoanViewHandler updateLoanViewHandler = new IUpdateLoanViewHandler() {
-            @Override
-            public void invoke(IRequestDTOLoanUpdate loanUpdateDTO) {
-                System.out.println("IUpdateLoanViewHandler: Default Idle Instance");
-            }
-        };
-
-        buttonPanel = new LoanButtonPanel(view, readLoanViewHandler, createLoanViewHandler, updateLoanViewHandler, textfieldPanel, tabsPanel);
+        buttonPanel = new LoanButtonPanel(view, null, null, null, textfieldPanel, tableLoan);
         UIFactory.addComponentFor(this, buttonPanel, 0, 1, GridBagConstraints.PAGE_END, layoutResult.getConstraints());
+    }
+
+    private LoanTextfieldPanel createTextfieldPanel() throws NullPointerException
+    {
+        LoanUpdateIDPanel updateIDPanel = new LoanUpdateIDPanel(new LabelledTextfield("Borrower ID:"));
+        LoanConditionsPanel conditionsPanel = new LoanConditionsPanel(new LabelledTextfield("Amount (not updatable):"), new LabelledTextfield("Interest rate (not updatable):"), new LabelledTextfield("Term (not updatable):"));
+
+        return new LoanTextfieldPanel(updateIDPanel, conditionsPanel);
     }
 
     public IView getView()
