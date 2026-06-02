@@ -148,6 +148,7 @@ public class SwingView extends JFrame implements IView
         else
             showMessage("Cannot invoke loan read request!");
 
+        setVisible(true);
         /*
         tabsPanel.getLoanTabPanel().getDataTabPanel().getTable().setVisible(true);
         tabsPanel.getBorrowerTabPanel().getDataTabPanel().getTable().setVisible(true);
