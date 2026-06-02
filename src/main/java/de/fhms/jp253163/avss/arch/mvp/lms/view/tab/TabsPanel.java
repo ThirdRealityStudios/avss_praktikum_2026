@@ -42,8 +42,8 @@ public class TabsPanel extends JTabbedPane
         initBorrowerTab();
         initLoanTab();
 
-        addTab("Borrowers", borrowerTabPanel);
         addTab("Loans", loanTabPanel);
+        addTab("Borrowers", borrowerTabPanel);
     }
 
     private void initBorrowerTab()
