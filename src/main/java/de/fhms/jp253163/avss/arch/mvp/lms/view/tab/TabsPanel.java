@@ -39,6 +39,8 @@ public class TabsPanel extends JTabbedPane
     {
         this.view = view;
 
+        setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+
         initBorrowerTab();
         initLoanTab();
 
@@ -57,6 +59,7 @@ public class TabsPanel extends JTabbedPane
         borrowerControlsPanel = new BorrowerControlsPanel(borrowerCreateUpdatePanel, borrowerDeletePanel);
 
         borrowerTabPanel = new BorrowerTabPanel(borrowerTablePanel, borrowerControlsPanel);
+        borrowerTabPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
     }
 
     private void initLoanTab()
@@ -70,6 +73,7 @@ public class TabsPanel extends JTabbedPane
         loanControlsPanel = new LoanControlsPanel(loanCreateUpdatePanel, loanDeletePanel);
 
         loanTabPanel = new LoanTabPanel(loanTablePanel, loanControlsPanel);
+        loanTabPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
     }
 
     public BorrowerTabPanel getBorrowerTabPanel()
