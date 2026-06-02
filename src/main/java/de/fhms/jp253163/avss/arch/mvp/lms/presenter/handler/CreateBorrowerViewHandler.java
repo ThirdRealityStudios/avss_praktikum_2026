@@ -7,6 +7,7 @@ import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ResidentialAddress;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -140,5 +141,12 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
             presenter.getView().showMessage("Could not create borrower!");
         else
             presenter.getView().showMessage("Created borrower successfully!");
+
+
+        if(borrowerRepository.readAllBorrowers().length > 0)
+        {
+            // Make the borrower table show all datasets now.
+            new ReadBorrowerViewHandler(borrowerRepository, presenter).invoke(new RequestDTOBorrowerRead(-1));
+        }
     }
 }
