@@ -125,11 +125,11 @@ public class LoanButtonPanel extends JPanel
         if(bookInstallmentButton == null)
             bookInstallmentButton = new JButton("Book Installment");
 
-        if(bookInstallmentActionListener != null) // remove old action listener
-            bookInstallmentButton.removeActionListener(updateActionListener);
+        if(bookInstallmentActionListener != null) // remove old action listeners
+            bookInstallmentButton.removeActionListener(bookInstallmentActionListener);
 
         // create (new) one and assign it (note here that the LoanUpdateActionListener is enough - it can handle both: update button and book installment button)
         bookInstallmentActionListener = new LoanUpdateActionListener(view, updateLoanViewHandler, readLoanViewHandler, textfieldPanel, tableLoan);
-        bookInstallmentButton.addActionListener(updateActionListener);
+        bookInstallmentButton.addActionListener(bookInstallmentActionListener);
     }
 }
