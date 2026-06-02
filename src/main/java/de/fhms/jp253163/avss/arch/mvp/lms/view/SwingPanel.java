@@ -18,7 +18,7 @@ public class SwingPanel extends JPanel
 
         LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
 
-        UIFactory.addComponentFor(this, tabsPanel, 0, 0, GridBagConstraints.LINE_START, layoutResult.getConstraints());
-        UIFactory.addComponentFor(this, messagePanel, 0, 1, GridBagConstraints.LINE_END, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, messagePanel, 0, 1, GridBagConstraints.LINE_START, layoutResult.getConstraints());
+        UIFactory.addComponentFor(this, tabsPanel, 0, 0, GridBagConstraints. LINE_END, layoutResult.getConstraints());
     }
 }
