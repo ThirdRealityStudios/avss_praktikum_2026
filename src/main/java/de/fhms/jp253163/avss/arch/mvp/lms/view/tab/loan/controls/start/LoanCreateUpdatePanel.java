@@ -1,7 +1,6 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.view.tab.loan.controls.start;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.components.controls.end.ScrollableTablePanel;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.LayoutResultDTO;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.UIFactory;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.factory.component.LabelledTextfield;
