@@ -17,28 +17,6 @@ public class ScrollableTablePanel extends JScrollPane
         Objects.requireNonNull(table);
 
         this.table = table;
-
-        table.addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                setPreferredSize(new Dimension(getPreferredSize().width, table.getRowHeight()));
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                setPreferredSize(new Dimension(getPreferredSize().width, table.getRowHeight()));
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                setPreferredSize(new Dimension(getPreferredSize().width, table.getRowHeight()));
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
-        });
     }
 
     public JTable getTable()
