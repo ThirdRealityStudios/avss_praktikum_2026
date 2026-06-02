@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 
 public class SwingView extends JFrame implements IView
@@ -33,6 +34,50 @@ public class SwingView extends JFrame implements IView
         JScrollPane pane = new JScrollPane(panel);
 
         add(pane);
+
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                JFrame swingFrame = null;
+
+                if(e.getSource() instanceof JFrame)
+                    swingFrame = (JFrame) e.getSource();
+                else
+                {
+                    System.out.println("Resizing source detection error");
+                    return;
+                }
+
+                Dimension contentPaneSize = swingFrame.getContentPane().getSize();
+
+                tabsPanel.getBorrowerTabPanel().setPreferredSize(contentPaneSize);
+                tabsPanel.getLoanTabPanel().setPreferredSize(contentPaneSize);
+
+                // borrowerControlsPanel.setPreferredSize(new Dimension(800, borrowerControlsPanel.getPreferredSize().height));
+                // loanControlsPanel.setPreferredSize(new Dimension(800, loanControlsPanel.getPreferredSize().height));
+
+                /*
+                setPreferredSize(new Dimension(800, 600));
+                setSize(new Dimension(800, 600));
+                setVisible(true);
+                 */
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
     }
 
     @Override
@@ -90,7 +135,7 @@ public class SwingView extends JFrame implements IView
     public void start() {
         setTitle("Loan Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        // setResizable(false);
 
         // Notify view handler to load all datasets on every program start (into the tables)
         if(readBorrowerViewHandler != null)
@@ -178,10 +223,6 @@ public class SwingView extends JFrame implements IView
             return;
         }
 
-        setPreferredSize(new Dimension(800, 600));
-        setSize(new Dimension(800, 600));
-        setVisible(true);
-
         System.out.println("Updated BORROWER table and sizes of JFrame");
     }
 
@@ -240,10 +281,6 @@ public class SwingView extends JFrame implements IView
         {
             return;
         }
-
-        setPreferredSize(new Dimension(800, 600));
-        setSize(new Dimension(800, 600));
-        setVisible(true);
 
         System.out.println("Updated LOAN table and sizes of JFrame");
     }

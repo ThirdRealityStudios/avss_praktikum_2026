@@ -55,7 +55,6 @@ public class TabsPanel extends JTabbedPane
         borrowerDeletePanel = new BorrowerDeletePanel(view, this);
 
         borrowerControlsPanel = new BorrowerControlsPanel(borrowerCreateUpdatePanel, borrowerDeletePanel);
-        borrowerControlsPanel.setPreferredSize(new Dimension(800, borrowerControlsPanel.getPreferredSize().height));
 
         borrowerTabPanel = new BorrowerTabPanel(borrowerTablePanel, borrowerControlsPanel);
     }
@@ -69,7 +68,6 @@ public class TabsPanel extends JTabbedPane
         loanDeletePanel = new LoanDeletePanel(view, loanTable);
 
         loanControlsPanel = new LoanControlsPanel(loanCreateUpdatePanel, loanDeletePanel);
-        loanControlsPanel.setPreferredSize(new Dimension(800, loanControlsPanel.getPreferredSize().height));
 
         loanTabPanel = new LoanTabPanel(loanTablePanel, loanControlsPanel);
     }
