@@ -146,11 +146,17 @@ public class BorrowerTabPanel extends JPanel
         dto.getConstraints().gridy = 0;
         dto.getConstraints().anchor = GridBagConstraints.LINE_START;
         dto.getConstraints().insets = insets;
+        dto.getConstraints().fill = GridBagConstraints.HORIZONTAL;
+        dto.getConstraints().weightx = 1;
+        dto.getConstraints().weighty = 1;
         add(scrollableTablePanel, dto.getConstraints());
 
         dto.getConstraints().gridx = 0;
         dto.getConstraints().gridy = 1;
         dto.getConstraints().anchor = GridBagConstraints.LINE_START;
+        dto.getConstraints().fill = GridBagConstraints.HORIZONTAL;
+        dto.getConstraints().weightx = 1;
+        dto.getConstraints().weighty = 1;
         dto.getConstraints().insets = new Insets(0, 30, 30, 30);
         add(controlsPanel, dto.getConstraints());
     }
