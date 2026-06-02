@@ -15,14 +15,6 @@ public class ScrollableTablePanel extends JScrollPane
         Objects.requireNonNull(table);
 
         this.table = table;
-
-        // ScrollPaneLayout layout = new ScrollPaneLayout();
-        // layout.
-
-        // LayoutResultDTO layoutResult = UIFactory.createGridBagLayoutFor(this);
-
-        // UIFactory.addComponentFor(this, table, 0, 0, GridBagConstraints.CENTER, layoutResult.getConstraints());
-        // setLayout(layout);
     }
 
     public JTable getTable()
