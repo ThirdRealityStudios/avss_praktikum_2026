@@ -190,7 +190,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
             ResultSet resultSet = readStmt.executeQuery();
 
-            if(resultSet.first())
+            if(resultSet.next())
             {
                 json = resultSet.getString("Json");
             }
