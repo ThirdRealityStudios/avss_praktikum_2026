@@ -116,23 +116,38 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         // Btw: you cannot use question mark placeholder in sql statement for a table name!
         // Only where normal values would be expected.
 
-        String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(Code) VALUES(?, ?)";
+        String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(ID, Code) VALUES(?, ?)";
 
         // UPDATE CompanyModel SET $name=? WHERE CompanyModel.ID=?
-        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Code=?";
+        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Code=? WHERE " + qualifiedTableName + ".ID = ?";
 
-        try(PreparedStatement stmt = mySQLAdapter.getConnection().prepareStatement(sqlInsertJson))
+        try(PreparedStatement stmtInsert = mySQLAdapter.getConnection().prepareStatement(sqlInsertJson))
         {
-            stmt.setString(1, json);
+            stmtInsert.setInt(1, id);
+            stmtInsert.setString(2, json);
 
-            int rowsAffected = stmt.executeUpdate();
+            int insertRowsAffected = stmtInsert.executeUpdate();
 
             // See if there is yet a dataset (so no rows affected by insertion):
-            if(rowsAffected == 0)
+            if(insertRowsAffected == 0)
             {
                 // Need to make an update instead:
-                stmt = mySQLAdapter.getConnection().prepareStatement();
-                // TODO Implement
+                try(PreparedStatement stmtUpdate = mySQLAdapter.getConnection().prepareStatement(sqlUpdateJson))
+                {
+                    stmtUpdate.setString(1, json);
+                    stmtUpdate.setInt(2, id);
+
+                    int updateRowsAffected = stmtUpdate.executeUpdate();
+
+                    if(updateRowsAffected == 1)
+                    {
+
+                    }
+                }
+                catch (Exception exc)
+                {
+                    return -1;
+                }
             }
         }
         catch (Exception exc)

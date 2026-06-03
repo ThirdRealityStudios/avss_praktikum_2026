@@ -30,6 +30,20 @@ public class MySQLAdapter
     }
 
     /**
+     * Connects to the DB,
+     * using autoCommit = false.
+     * So you can work as normal,
+     * change values etc.
+     * But you can use e.g. con.rollback() in order to revert corrupt changes before writing them in real to the DB.
+     * If CRUD operations are ok,
+     * then simply use con.commit() in the end.
+     * Note: you can do multiple CRUD operations one by another.
+     *       You can also see the theoretical changes in between the operations
+     *       (just like you would execute the CRUD operations directly in realtime).
+     *       But in difference to without autoCommit = true,
+     *       you can still revert changes especially.
+     *       In the end just use con.commit() to write all changes in reality to the DB.
+     *
      * @param user
      * @param password
      * @return True if connected successfully. Otherwise, false.
@@ -39,7 +53,7 @@ public class MySQLAdapter
         try
         {
             con = DriverManager.getConnection(connectionString, user, password);
-            con.setAutoCommit(true);
+            con.setAutoCommit(false);
 
             return true;
         }
