@@ -4,41 +4,43 @@ public interface IJsonSQLService<T>
 {
     /**
      * Saves the given object serialized as a JSON string to the database.
+     * The target table is determined by the canonical name of the given object and existence is ensured before saving.
      * Automatically detects the type of your object.
+     * An ID is required to save (ignoring creation or update here).
+     * Ideally, you would use the same ID as for your domain objects (if matters).
      *
+     * @param id The ID to use for saving the object (about the equivalent to the filepath in IJsonFileService).
      * @param obj The object to save.
      * @return The ID of the created object dataset after success. On failure, returns -1 (could not create dataset - for whatever reason).
      */
-    public int save(String table, Object obj);
+    public int save(int id, Object obj);
 
     /**
      * Reads a desired object from your database as a object with the given type.
+     * The source table is determined by the canonical name of the given object and existence is ensured before reading.
      *
-     * @param table The name of the table in that database
      * @param id The ID to load the desired object.
      * @param className Type of the object to read it properly.
      * @return The object from that given ID. Otherwise, null (e.g. if dataset not found or technical issues).
      */
-    public T read(String table, int id, Class<T> className);
+    public T read(int id, Class<T> className);
 
     /**
      * Deletes the given object.
-     * Although you could delete any file with this method
-     * (which it was not intended for).
+     * The target table is determined by the canonical name of the given object and existence is ensured before deletion.
      *
      * @param id The ID of the dataset object.
      * @return On success of deletion, true is returned. Otherwise, false.
      */
-    public boolean delete(String table, int id);
+    public boolean delete(int id);
 
     /**
-     * Returns all IDs of datasets from that given table.
+     * Returns all IDs of datasets from the determined table.
+     * The source table is determined by the canonical name of the given object and existence is ensured before reading.
      * If there are no datasets,
      * then an empty ID array is returned.
      *
-     * @param table Table to read all IDs from.
-     * @return All IDs of datasets from that given table.
-     * @throws IllegalArgumentException E.g. the given table is invalid.
+     * @return All IDs of datasets for the given object type.
      */
-    public int[] listNumericJsonDatasets(String table) throws IllegalArgumentException;
+    public int[] listNumericJsonDatasets(Class<T> entityClass);
 }

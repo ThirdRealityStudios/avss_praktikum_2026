@@ -4,7 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.Base64;
+import java.util.Objects;
 
 public class JsonSQLService<T> implements IJsonSQLService<T>
 {
@@ -28,20 +32,119 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             throw new SQLException("Connection failed!");
     }
 
-    @Override
-    public int save(String table, Object obj)
+    private String genTableNameFrom(Object obj)
     {
-        String json = null;
+        Objects.requireNonNull(obj);
 
-        json = gson.toJson(obj);
+        String classCanonicalName = obj.getClass().getCanonicalName();
 
-        mySQLAdapter.getConnection().
+        /**
+         * E.g. java.util.HashMap.SimpleEntry.class (nested class)
+         *
+         * Calling now getCanonicalName() would return:
+         *
+         * java.util.AbstractMap.SimpleEntry
+         *
+         * But after genTableNameFrom(..) it is:
+         *
+         * java_util_AbstractMap_SimpleEntry
+         */
+        return classCanonicalName.replace('.', '_');
+    }
+
+    /**
+     * Should be called before any CRUD action in this class
+     * which requires corresponding access.
+     *
+     * @param obj
+     * @throws NullPointerException
+     * @throws SQLException
+     */
+    private void ensureTableFor(Object obj) throws NullPointerException, SQLException
+    {
+        Objects.requireNonNull(obj);
+
+        String tableName = genTableNameFrom(obj);
+
+        Objects.requireNonNull(tableName);
+
+        if(tableName.isEmpty())
+            throw new NullPointerException("Table name cannot be empty (internal error)");
+
+        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) AUTO_INCREMENT PRIMARY KEY UNIQUE, Hash , Json TEXT NOT NULL );";
+
+        Statement stmt = null;
+        stmt = mySQLAdapter.getConnection().createStatement();
+        if(stmt != null)
+        {
+            stmt.executeUpdate(sqlCreateTable);
+            stmt.close();
+        }
+    }
+
+    private String hash(String str) throws NoSuchAlgorithmException
+    {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        byte[] digest = md.digest(str.getBytes());
+
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+    }
+
+    @Override
+    public int save(int id, Object obj)
+    {
+        Objects.requireNonNull(obj);
+
+        try
+        {
+            ensureTableFor(obj);
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+
+            return -1;
+        }
+
+        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(obj);
+
+        String json = gson.toJson(obj);
+
+        // Tutorial: https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html
+        //
+        // Btw: you cannot use question mark placeholder in sql statement for a table name!
+        // Only where normal values would be expected.
+
+        String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(Code) VALUES(?, ?)";
+
+        // UPDATE CompanyModel SET $name=? WHERE CompanyModel.ID=?
+        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Code=?";
+
+        try(PreparedStatement stmt = mySQLAdapter.getConnection().prepareStatement(sqlInsertJson))
+        {
+            stmt.setString(1, json);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            // See if there is yet a dataset (so no rows affected by insertion):
+            if(rowsAffected == 0)
+            {
+                // Need to make an update instead:
+                stmt = mySQLAdapter.getConnection().prepareStatement();
+                // TODO Implement
+            }
+        }
+        catch (Exception exc)
+        {
+            return -1; // error, could not save.
+        }
 
         return -1;
     }
 
     @Override
-    public T read(String table, int id, Class<T> className)
+    public T read(int id, Class<T> className)
     {
         T obj = null;
 
@@ -62,13 +165,13 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     }
 
     @Override
-    public boolean delete(String table, int id)
+    public boolean delete(int id)
     {
         return false;
     }
 
     @Override
-    public int[] listNumericJsonDatasets(String table) throws IllegalArgumentException
+    public int[] listNumericJsonDatasets(Class<T> entityClass) throws IllegalArgumentException
     {
         return new int[0];
     }

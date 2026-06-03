@@ -2,10 +2,13 @@ package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Objects;
 
 public class MySQLAdapter
 {
     private String connectionString;
+    private String host, databaseName;
     private Connection con;
 
     /**
@@ -14,6 +17,12 @@ public class MySQLAdapter
      */
     public MySQLAdapter(String host, String databaseName)
     {
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(databaseName);
+
+        this.databaseName = databaseName;
+        this.host = host;
+
         // $this -> pdo = new PDO("mysql:host={$host};dbname={$databaseName};charset=utf8mb4", $username, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
         connectionString = "jdbc:mysql://" + host + "/" + databaseName;
 
@@ -25,11 +34,12 @@ public class MySQLAdapter
      * @param password
      * @return True if connected successfully. Otherwise, false.
      */
-    public boolean connect(String user, String password)
+    public boolean connect(String user, String password) throws SQLException
     {
         try
         {
             con = DriverManager.getConnection(connectionString, user, password);
+            con.setAutoCommit(true);
 
             return true;
         }
@@ -42,5 +52,15 @@ public class MySQLAdapter
     public Connection getConnection()
     {
         return con;
+    }
+
+    public String getHost()
+    {
+        return host;
+    }
+
+    public String getDatabaseName()
+    {
+        return databaseName;
     }
 }
