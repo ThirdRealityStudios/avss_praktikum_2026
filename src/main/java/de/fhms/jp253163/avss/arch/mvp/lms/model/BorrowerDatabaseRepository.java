@@ -46,34 +46,23 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
             return null;
         }
 
-        try
+        currentBorrowerId = jsonSQLService.getNewestNumberFromJsons(Borrower.class);
+
+        System.out.println("Detected " + currentBorrowerId + " for current highest JSON file!");
+
+        if(currentBorrowerId == -2) // an error occurred while determining.
         {
-            currentBorrowerId = jsonFileService.getNewestNumberFromJsons(this.borrowerDirectoryFile);
-
-            System.out.println("Detected " + currentBorrowerId + " for current highest JSON file!");
-
-            if(currentBorrowerId == -2) // an error occurred while determining.
-            {
-                return null;
-            }
-
-            newBorrowerId = currentBorrowerId + 1;
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-
             return null;
         }
+
+        newBorrowerId = currentBorrowerId + 1;
 
         try
         {
             borrower = new Borrower(newBorrowerId, firstname, lastname, dateOfBirth, residentialAddress, schufaScore, new int[]{});
 
-            jsonFilepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + newBorrowerId + ".json";
-
             // Also save the created Borrower as a JSON file (https://www.geeksforgeeks.org/java/file-getabsolutepath-method-in-java-with-examples/)
-            if(!jsonFileService.save(jsonFilepath, borrower))
+            if(!jsonSQLService.save(newBorrowerId, borrower))
             {
                 System.out.println("Cannot save borrower as a JSON file!");
 
@@ -105,26 +94,19 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
     @Override
     public IBorrower readBorrower(int id)
     {
-        File[] numericJsonFiles = null;
-        String filenameNumber = null;
+        int[] allIDs = null;
+        int foundBorrowerID = -1;
         IBorrower borrower = null;
 
-        try
-        {
-            numericJsonFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
-        }
-        catch(IOException e)
-        {
-            return null;
-        }
+        allIDs = jsonSQLService.listNumericJsonDatasets(Borrower.class);
 
-        for(File jsonFile : numericJsonFiles)
+        for(int currentID : allIDs)
         {
-            filenameNumber = jsonFileService.getNumberFromJsonName(jsonFile);
+            foundBorrowerID = currentID;
 
-            if(filenameNumber.equalsIgnoreCase("" + id)) // Found that JSON file for the given Borrower.
+            if(foundBorrowerID == id) // Found that JSON file for the given Borrower.
             {
-                borrower = jsonFileService.read(jsonFile.getAbsolutePath(), Borrower.class);
+                borrower = jsonSQLService.read(id, Borrower.class);
 
                 return borrower;
             }
@@ -138,23 +120,14 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
     {
         ArrayList<Borrower> borrowers = new ArrayList<>();
 
-        File[] numericJsonFiles = null;
+        int[] numericJsonFiles = null;
         Borrower borrower = null;
 
-        try
-        {
-            numericJsonFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
+        numericJsonFiles = jsonSQLService.listNumericJsonDatasets(Borrower.class);
 
-            return new IBorrower[0];
-        }
-
-        for(File jsonFile : numericJsonFiles)
+        for(int jsonFile : numericJsonFiles)
         {
-            borrower = jsonFileService.read(jsonFile.getAbsolutePath(), Borrower.class);
+            borrower = jsonSQLService.read(jsonFile, Borrower.class);
 
             if(borrower == null)
             {
@@ -170,34 +143,15 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
     @Override
     public boolean updateBorrower(IBorrower borrower)
     {
-        File[] borrowerFiles = null;
-        String jsonFilename = null;
+        int[] allIDs = jsonSQLService.listNumericJsonDatasets(Borrower.class);
 
-        try
+        for(int currentID : allIDs)
         {
-            borrowerFiles = jsonFileService.listNumericJsonFiles(borrowerDirectoryFile);
-        }
-        catch(IOException e)
-        {
-            // e.printStackTrace();
-
-            return false;
-        }
-
-        for(File jsonFile : borrowerFiles)
-        {
-            jsonFilename = jsonFileService.getNumberFromJsonName(jsonFile);
-
-            if(jsonFilename == null)
-            {
-                continue;
-            }
-
-            if(jsonFilename.equalsIgnoreCase(borrower.getId()+""))
+            if(currentID == borrower.getId())
             {
                 // Borrower file found, so update it.
 
-                return jsonFileService.save(jsonFile.getAbsolutePath(), borrower);
+                return jsonSQLService.save(currentID, borrower);
             }
         }
 
@@ -207,18 +161,14 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
-        IBorrower borrower = null;
-
-        borrower = readBorrower(id);
+        IBorrower borrower = readBorrower(id);
 
         if(borrower == null)
             return false;
 
         if(borrower.getLoans().length == 0) // If no loan left to pay off, then delete the borrower (account) from the system.
         {
-            String filepath = borrowerDirectoryFile.getAbsolutePath() + FileSystems.getDefault().getSeparator() + id + ".json";
-
-            return jsonFileService.delete(filepath);
+            return jsonSQLService.delete(id, Borrower.class);
         }
         else
         {
