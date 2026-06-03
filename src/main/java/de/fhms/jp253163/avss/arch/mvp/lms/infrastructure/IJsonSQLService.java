@@ -11,9 +11,9 @@ public interface IJsonSQLService<T>
      *
      * @param id The ID to use for saving the object (about the equivalent to the filepath in IJsonFileService).
      * @param obj The object to save.
-     * @return The ID of the created object dataset after success. On failure, returns -1 (could not create dataset - for whatever reason).
+     * @return If object could be saved, then true is returned. On failure, returns false (could not create dataset - for whatever reason).
      */
-    public int save(int id, Object obj);
+    public boolean save(int id, Object obj);
 
     /**
      * Reads a desired object from your database as a object with the given type.

@@ -73,26 +73,17 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) AUTO_INCREMENT PRIMARY KEY UNIQUE, Hash , Json TEXT NOT NULL );";
 
-        Statement stmt = null;
-        stmt = mySQLAdapter.getConnection().createStatement();
+        Statement stmt = mySQLAdapter.getConnection().createStatement();
         if(stmt != null)
         {
             stmt.executeUpdate(sqlCreateTable);
+            stmt.getConnection().commit();
             stmt.close();
         }
     }
 
-    private String hash(String str) throws NoSuchAlgorithmException
-    {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-        byte[] digest = md.digest(str.getBytes());
-
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
-    }
-
     @Override
-    public int save(int id, Object obj)
+    public boolean save(int id, Object obj)
     {
         Objects.requireNonNull(obj);
 
@@ -104,7 +95,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         {
             exc.printStackTrace();
 
-            return -1;
+            return false;
         }
 
         String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(obj);
@@ -141,21 +132,41 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
                     if(updateRowsAffected == 1)
                     {
+                        mySQLAdapter.getConnection().commit();
 
+                        stmtInsert.close();
+                        stmtUpdate.close();
+
+                        return true;
+                    }
+                    else
+                    {
+                        mySQLAdapter.getConnection().rollback();
                     }
                 }
                 catch (Exception exc)
                 {
-                    return -1;
+                    mySQLAdapter.getConnection().rollback();
                 }
+                finally
+                {
+                    stmtInsert.getConnection().close();
+                }
+
+                return false;
             }
+
+            stmtInsert.getConnection().commit();
+            stmtInsert.close();
+
+            return true;
         }
         catch (Exception exc)
         {
-            return -1; // error, could not save.
+
         }
 
-        return -1;
+        return false; // error, could not save.
     }
 
     @Override
