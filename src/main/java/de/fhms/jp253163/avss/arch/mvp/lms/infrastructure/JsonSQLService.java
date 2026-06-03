@@ -83,7 +83,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         if(tableName.isEmpty())
             throw new NullPointerException("Table name cannot be empty (internal error)");
 
-        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) AUTO_INCREMENT PRIMARY KEY UNIQUE , Json TEXT NOT NULL );";
+        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) PRIMARY KEY UNIQUE , Json TEXT NOT NULL );";
 
         try(Statement stmt = mySQLAdapter.getConnection().createStatement())
         {
