@@ -90,12 +90,14 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) AUTO_INCREMENT PRIMARY KEY UNIQUE , Json TEXT NOT NULL );";
 
-        Statement stmt = mySQLAdapter.getConnection().createStatement();
-        if(stmt != null)
+        try(Statement stmt = mySQLAdapter.getConnection().createStatement())
         {
             stmt.executeUpdate(sqlCreateTable);
             stmt.getConnection().commit();
-            stmt.close();
+        }
+        catch (SQLException exc)
+        {
+
         }
     }
 
@@ -124,61 +126,30 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         // Btw: you cannot use question mark placeholder in sql statement for a table name!
         // Only where normal values would be expected.
 
-        String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(ID, Json) VALUES(?, ?)";
+        // If you see: INSERT + UPDATE fallback logic 👉 replace it with: ON DUPLICATE KEY UPDATE almost every time in MySQL.
+        String sqlUpsertJson = "INSERT INTO " + qualifiedTableName + "(ID, Json) VALUES(?, ?) ON DUPLICATE KEY UPDATE Json=VALUES(Json)";
 
-        // UPDATE CompanyModel SET $name=? WHERE CompanyModel.ID=?
-        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Json=? WHERE ID = ?";
-
-        try(PreparedStatement stmtInsert = mySQLAdapter.getConnection().prepareStatement(sqlInsertJson))
+        try(PreparedStatement stmtInsert = mySQLAdapter.getConnection().prepareStatement(sqlUpsertJson))
         {
             stmtInsert.setInt(1, id);
             stmtInsert.setString(2, json);
 
             int insertRowsAffected = stmtInsert.executeUpdate();
 
-            // See if there is yet a dataset (so no rows affected by insertion):
-            if(insertRowsAffected == 0)
-            {
-                // Need to make an update instead:
-                try(PreparedStatement stmtUpdate = mySQLAdapter.getConnection().prepareStatement(sqlUpdateJson))
-                {
-                    stmtUpdate.setString(1, json);
-                    stmtUpdate.setInt(2, id);
+            mySQLAdapter.getConnection().commit();
 
-                    int updateRowsAffected = stmtUpdate.executeUpdate();
-
-                    if(updateRowsAffected == 1)
-                    {
-                        mySQLAdapter.getConnection().commit();
-
-                        stmtInsert.close();
-                        stmtUpdate.close();
-
-                        return true;
-                    }
-                    else
-                    {
-                        mySQLAdapter.getConnection().rollback();
-                    }
-                }
-                catch (Exception exc)
-                {
-                    mySQLAdapter.getConnection().rollback();
-                }
-                finally
-                {
-                    stmtInsert.getConnection().close();
-                }
-
-                return false;
-            }
-
-            stmtInsert.getConnection().commit();
-            stmtInsert.close();
-
-            return true;
+            return insertRowsAffected == 1;
         }
         catch (Exception exc)
+        {
+            exc.printStackTrace();
+        }
+
+        try
+        {
+            mySQLAdapter.getConnection().rollback();
+        }
+        catch (SQLException exc)
         {
             exc.printStackTrace();
         }
@@ -201,14 +172,13 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         {
             readStmt.setInt(1, id);
 
-            ResultSet resultSet = readStmt.executeQuery();
-
-            if(resultSet.next())
+            try(ResultSet resultSet = readStmt.executeQuery())
             {
-                json = resultSet.getString("Json");
+                if(resultSet.next())
+                {
+                    json = resultSet.getString("Json");
+                }
             }
-
-            resultSet.close();
         }
         catch (SQLException exc)
         {
@@ -253,8 +223,6 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
                 success = rowsAffected == 1;
             }
-
-            deleteStmt.close();
         }
         catch(SQLException exc)
         {
@@ -280,8 +248,6 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             {
                 IDs.add(rs.getInt("ID"));
             }
-
-            readStmt.close();
         }
         catch (SQLException exc)
         {
