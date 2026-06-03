@@ -3,15 +3,10 @@ package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import org.apache.commons.lang3.ArrayUtils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Objects;
-import java.util.function.ToIntFunction;
 
 public class JsonSQLService<T> implements IJsonSQLService<T>
 {
@@ -97,7 +92,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         }
         catch (SQLException exc)
         {
-
+            exc.printStackTrace();
         }
     }
 
