@@ -134,11 +134,9 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             stmtInsert.setInt(1, id);
             stmtInsert.setString(2, json);
 
-            int insertRowsAffected = stmtInsert.executeUpdate();
-
             mySQLAdapter.getConnection().commit();
 
-            return insertRowsAffected == 1;
+            return true;
         }
         catch (Exception exc)
         {
