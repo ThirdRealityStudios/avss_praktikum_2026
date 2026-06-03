@@ -2,7 +2,9 @@ package de.fhms.jp253163.avss.arch.mvp.lms;
 
 import com.google.gson.GsonBuilder;
 import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonFileService;
+import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonSQLService;
 import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.JsonFileService;
+import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.JsonSQLService;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Loan;
@@ -25,7 +27,7 @@ public class Main
 
         try
         {
-            IJsonFileService<Borrower> jfsBorrower = new JsonFileService<>(builder);
+            IJsonSQLService<Borrower> jssBorrower = new JsonSQLService<>(builder);
             String executableDirectoryString = System.getProperty("user.dir");
 
             if(executableDirectoryString == null)
@@ -35,7 +37,7 @@ public class Main
 
             File exeutableDirectory = new File(executableDirectoryString);
 
-            IBorrowerRepository borrowerRepository = new BorrowerRepository(jfsBorrower, exeutableDirectory);
+            IBorrowerRepository borrowerRepository = new BorrowerDatabaseRepository(jssBorrower);
 
             IJsonFileService<Loan> jfsLoan = new JsonFileService<>(builder);
             ISchufaRepository schufaRepo = new SchufaRepository();
