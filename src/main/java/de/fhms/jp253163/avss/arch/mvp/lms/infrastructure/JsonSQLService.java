@@ -26,7 +26,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         this.gson = gsonBuilder.create();
 
-        mySQLAdapter = new MySQLAdapter("localhost:33060", "lms");
+        mySQLAdapter = new MySQLAdapter("localhost:3306", "lms");
 
         if(!mySQLAdapter.connect("root", "password"))
             throw new SQLException("Connection failed!");
