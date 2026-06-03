@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -249,5 +251,28 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         }
 
         return IDs.stream().mapToInt(value -> value).toArray();
+    }
+
+    @Override
+    public int getNewestNumberFromJsons(Class<T> entityClass)
+    {
+        int[] numericJsonDatasets = listNumericJsonDatasets(entityClass);
+
+        if(numericJsonDatasets.length == 0)
+        {
+            return -1; // No JSON datasets do exist yet for any domain object.
+        }
+
+        int highestIdFound = Integer.MIN_VALUE;
+
+        for(int dataset : numericJsonDatasets)
+        {
+            if(dataset > highestIdFound)
+            {
+                highestIdFound = dataset;
+            }
+        }
+
+        return highestIdFound;
     }
 }

@@ -1,5 +1,8 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
 
+import java.io.File;
+import java.io.IOException;
+
 public interface IJsonSQLService<T>
 {
     /**
@@ -44,4 +47,13 @@ public interface IJsonSQLService<T>
      * @return All IDs of datasets for the given object type.
      */
     public int[] listNumericJsonDatasets(Class<T> entityClass);
+
+    /**
+     * Returns the highest ID found for a domain object saved as a JSON file.
+     *
+     * @param entityClass Determines the table where to look at.
+     * @return Highest Borrower ID known to the system (judging by the dataset IDs simply). If there is no domain object saved yet, then -1 is returned (you can freely choose ID).
+     * @throws IOException
+     */
+    int getNewestNumberFromJsons(Class<T> entityClass);
 }
