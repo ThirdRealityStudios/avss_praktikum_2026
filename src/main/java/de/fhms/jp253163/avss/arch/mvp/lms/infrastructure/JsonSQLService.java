@@ -208,7 +208,6 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
                 json = resultSet.getString("Json");
             }
 
-            mySQLAdapter.getConnection().commit();
             resultSet.close();
         }
         catch (SQLException exc)
@@ -282,7 +281,6 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
                 IDs.add(rs.getInt("ID"));
             }
 
-            mySQLAdapter.getConnection().commit();
             readStmt.close();
         }
         catch (SQLException exc)
