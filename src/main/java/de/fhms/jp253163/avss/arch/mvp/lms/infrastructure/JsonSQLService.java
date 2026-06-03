@@ -3,6 +3,7 @@ package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,11 +33,11 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             throw new SQLException("Connection failed!");
     }
 
-    private String genTableNameFrom(Object obj)
+    private <E> String genTableNameFrom(Class<E> className)
     {
-        Objects.requireNonNull(obj);
+        Objects.requireNonNull(className);
 
-        String classCanonicalName = obj.getClass().getCanonicalName();
+        String classCanonicalName = className.getCanonicalName();
 
         /**
          * E.g. java.util.HashMap.SimpleEntry.class (nested class)
@@ -64,14 +65,14 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     {
         Objects.requireNonNull(obj);
 
-        String tableName = genTableNameFrom(obj);
+        String tableName = genTableNameFrom(obj.getClass());
 
         Objects.requireNonNull(tableName);
 
         if(tableName.isEmpty())
             throw new NullPointerException("Table name cannot be empty (internal error)");
 
-        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) AUTO_INCREMENT PRIMARY KEY UNIQUE, Hash , Json TEXT NOT NULL );";
+        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName + "( ID INT(8) AUTO_INCREMENT PRIMARY KEY UNIQUE , Json TEXT NOT NULL );";
 
         Statement stmt = mySQLAdapter.getConnection().createStatement();
         if(stmt != null)
@@ -98,7 +99,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             return false;
         }
 
-        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(obj);
+        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(obj.getClass());
 
         String json = gson.toJson(obj);
 
@@ -110,7 +111,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(ID, Code) VALUES(?, ?)";
 
         // UPDATE CompanyModel SET $name=? WHERE CompanyModel.ID=?
-        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Code=? WHERE " + qualifiedTableName + ".ID = ?";
+        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Code=? WHERE ID = ?";
 
         try(PreparedStatement stmtInsert = mySQLAdapter.getConnection().prepareStatement(sqlInsertJson))
         {
@@ -163,42 +164,125 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         }
         catch (Exception exc)
         {
-
+            exc.printStackTrace();
         }
 
         return false; // error, could not save.
     }
 
     @Override
-    public T read(int id, Class<T> className)
+    public T read(int id, Class<T> entityClass)
     {
         T obj = null;
 
         String json = "";
 
+        String tableName = genTableNameFrom(entityClass);
+        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + tableName;
+
+        String sqlReadDataset = "SELECT Json FROM " + qualifiedTableName + " WHERE ID=?";
+
+        try(PreparedStatement readStmt = mySQLAdapter.getConnection().prepareStatement(sqlReadDataset))
+        {
+            readStmt.setInt(1, id);
+
+            ResultSet resultSet = readStmt.executeQuery();
+
+            if(resultSet.first())
+            {
+                json = resultSet.getString("Json");
+            }
+
+            mySQLAdapter.getConnection().commit();
+            resultSet.close();
+        }
+        catch (SQLException exc)
+        {
+            exc.printStackTrace();
+        }
+
         try
         {
-            obj = gson.fromJson(json, className);
+            obj = gson.fromJson(json, entityClass);
         }
         catch(JsonSyntaxException e)
         {
             e.printStackTrace();
-
-            return null;
         }
 
+        // Null if:
+        // 1. no dataset was found with that given ID or
+        // 2. there are more datasets with the same ID which is nearly impossible (assuming table schema correct)
         return obj;
     }
 
     @Override
-    public boolean delete(int id)
+    public boolean delete(int id, Class<T> entityClass)
     {
-        return false;
+        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(entityClass);
+        String sqlDelete = "DELETE FROM " + qualifiedTableName + " WHERE ID=?";
+        boolean success = false;
+
+        try(PreparedStatement deleteStmt = mySQLAdapter.getConnection().prepareStatement(sqlDelete))
+        {
+            deleteStmt.setInt(1, id);
+
+            int rowsAffected = deleteStmt.executeUpdate();
+
+            if(rowsAffected > 1)
+            {
+                mySQLAdapter.getConnection().rollback();
+            }
+            else
+            {
+                mySQLAdapter.getConnection().commit();
+
+                success = rowsAffected == 1;
+            }
+
+            deleteStmt.close();
+        }
+        catch(SQLException exc)
+        {
+            exc.printStackTrace();
+        }
+
+        return success;
     }
 
     @Override
     public int[] listNumericJsonDatasets(Class<T> entityClass) throws IllegalArgumentException
     {
-        return new int[0];
+        String qualifiedTableName = genTableNameFrom(entityClass);
+        String sqlReadAll = "SELECT ID FROM " + qualifiedTableName;
+
+        int[] IDs = new int[0];
+        int index = 0;
+
+        try(Statement readStmt = mySQLAdapter.getConnection().createStatement())
+        {
+            ResultSet rs = readStmt.executeQuery(sqlReadAll);
+
+            IDs = new int[rs.getFetchSize()];
+
+            if(rs.first())
+            {
+                do
+                {
+                    IDs[index] = rs.getInt("ID");
+                    index++;
+                }
+                while(rs.next());
+            }
+
+            mySQLAdapter.getConnection().commit();
+            readStmt.close();
+        }
+        catch (SQLException exc)
+        {
+            exc.printStackTrace();
+        }
+
+        return IDs;
     }
 }

@@ -30,9 +30,10 @@ public interface IJsonSQLService<T>
      * The target table is determined by the canonical name of the given object and existence is ensured before deletion.
      *
      * @param id The ID of the dataset object.
+     * @param className Type of the object to find and delete it properly.
      * @return On success of deletion, true is returned. Otherwise, false.
      */
-    public boolean delete(int id);
+    public boolean delete(int id, Class<T> className);
 
     /**
      * Returns all IDs of datasets from the determined table.
