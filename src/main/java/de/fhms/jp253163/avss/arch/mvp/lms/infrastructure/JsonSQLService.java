@@ -56,6 +56,20 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     }
 
     /**
+     * Additionally to genTableNameFrom(..),
+     * this also adds the database name before the "canonical" table name.
+     * This helps your DB runtime environment to know which database is selected for executions.
+     *
+     * @param className
+     * @return database name + . + "canonical" table name
+     * @param <E>
+     */
+    private <E> String genQualifiedTableNameFrom(Class<E> className)
+    {
+        return mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(className);
+    }
+
+    /**
      * Should be called before any CRUD action in this class
      * which requires corresponding access.
      *
@@ -101,7 +115,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             return false;
         }
 
-        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(obj.getClass());
+        String qualifiedTableName = genQualifiedTableNameFrom(obj.getClass());
 
         String json = gson.toJson(obj);
 
@@ -179,8 +193,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         String json = "";
 
-        String tableName = genTableNameFrom(entityClass);
-        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + tableName;
+        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
 
         String sqlReadDataset = "SELECT Json FROM " + qualifiedTableName + " WHERE ID=?";
 
@@ -221,7 +234,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     @Override
     public boolean delete(int id, Class<T> entityClass)
     {
-        String qualifiedTableName = mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(entityClass);
+        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
         String sqlDelete = "DELETE FROM " + qualifiedTableName + " WHERE ID=?";
         boolean success = false;
 
@@ -255,7 +268,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     @Override
     public int[] listNumericJsonDatasets(Class<T> entityClass) throws IllegalArgumentException
     {
-        String qualifiedTableName = genTableNameFrom(entityClass);
+        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
         String sqlReadAll = "SELECT ID FROM " + qualifiedTableName;
 
         ArrayList<Integer> IDs = new ArrayList<>();
