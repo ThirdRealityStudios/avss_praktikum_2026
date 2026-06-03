@@ -235,11 +235,12 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         try(Statement readStmt = mySQLAdapter.getConnection().createStatement())
         {
-            ResultSet rs = readStmt.executeQuery(sqlReadAll);
-
-            while(rs.next())
+            try(ResultSet rs = readStmt.executeQuery(sqlReadAll))
             {
-                IDs.add(rs.getInt("ID"));
+                while(rs.next())
+                {
+                    IDs.add(rs.getInt("ID"));
+                }
             }
         }
         catch (SQLException exc)
