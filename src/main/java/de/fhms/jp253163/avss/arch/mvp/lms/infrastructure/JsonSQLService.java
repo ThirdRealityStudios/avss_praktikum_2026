@@ -8,8 +8,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 public class JsonSQLService<T> implements IJsonSQLService<T>
 {
@@ -108,10 +110,10 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         // Btw: you cannot use question mark placeholder in sql statement for a table name!
         // Only where normal values would be expected.
 
-        String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(ID, Code) VALUES(?, ?)";
+        String sqlInsertJson = "INSERT IGNORE INTO " + qualifiedTableName + "(ID, Json) VALUES(?, ?)";
 
         // UPDATE CompanyModel SET $name=? WHERE CompanyModel.ID=?
-        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Code=? WHERE ID = ?";
+        String sqlUpdateJson = "UPDATE " + qualifiedTableName + " SET Json=? WHERE ID = ?";
 
         try(PreparedStatement stmtInsert = mySQLAdapter.getConnection().prepareStatement(sqlInsertJson))
         {
@@ -256,23 +258,15 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         String qualifiedTableName = genTableNameFrom(entityClass);
         String sqlReadAll = "SELECT ID FROM " + qualifiedTableName;
 
-        int[] IDs = new int[0];
-        int index = 0;
+        ArrayList<Integer> IDs = new ArrayList<>();
 
         try(Statement readStmt = mySQLAdapter.getConnection().createStatement())
         {
             ResultSet rs = readStmt.executeQuery(sqlReadAll);
 
-            IDs = new int[rs.getFetchSize()];
-
-            if(rs.first())
+            while(rs.next())
             {
-                do
-                {
-                    IDs[index] = rs.getInt("ID");
-                    index++;
-                }
-                while(rs.next());
+                IDs.add(rs.getInt("ID"));
             }
 
             mySQLAdapter.getConnection().commit();
@@ -283,6 +277,6 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             exc.printStackTrace();
         }
 
-        return IDs;
+        return IDs.stream().mapToInt(value -> value).toArray();
     }
 }
