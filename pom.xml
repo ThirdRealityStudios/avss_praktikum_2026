@@ -38,6 +38,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>de.fhms.jp253163.avss.arch.mvp.lms.infrastructure</groupId>
+            <artifactId>datenbank</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <distributionManagement>
