@@ -38,8 +38,6 @@ public class BorrowerUpdateActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("Recognizing BORROWER UPDATE button CLICKED!");
-
         IRequestDTOBorrowerUpdate requestDTOBorrowerUpdate = null;
 
         try
@@ -53,11 +51,8 @@ public class BorrowerUpdateActionListener implements ActionListener
             return;
         }
 
-        System.out.println("Created valid request for BORROWER UPDATE button CLICKED!");
-
         if(updateBorrowerViewHandler != null && readBorrowerViewHandler != null)
         {
-            System.out.println("Invoking view handler for BORROWER UPDATE!");
             updateBorrowerViewHandler.invoke(requestDTOBorrowerUpdate);
         }
     }

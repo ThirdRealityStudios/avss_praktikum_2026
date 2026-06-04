@@ -49,8 +49,6 @@ public class LoanDeleteActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("Recognizing LOAN DELETION button CLICKED!");
-
         TableModel model = null;
         int[] selectedRowsIDs = new int[0];
         int selectedRowID = -1;
@@ -72,11 +70,8 @@ public class LoanDeleteActionListener implements ActionListener
 
         IRequestDTOLoanDelete requestDTOLoanDelete = new RequestDTOLoanDelete(loanIDParsed);
 
-        System.out.println("Created valid request for LOAN DELETION button CLICKED!");
-
         if(readLoanViewHandler != null && deleteLoanViewHandler != null)
         {
-            System.out.println("Invoking view handler for LOAN DELETION!");
             deleteLoanViewHandler.invoke(requestDTOLoanDelete);
         }
     }

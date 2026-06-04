@@ -43,8 +43,6 @@ public class BorrowerDeleteActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("Recognizing BORROWER DELETION button CLICKED!");
-
         BorrowerTabPanel tabPanel = null;
         ScrollableTablePanel scrollableTablePanel = null;
         JTable table = null;
@@ -70,11 +68,8 @@ public class BorrowerDeleteActionListener implements ActionListener
 
         IRequestDTOBorrowerDelete requestDTOBorrowerDelete = new RequestDTOBorrowerDelete(borrowerIDParsed);
 
-        System.out.println("Created valid request for BORROWER DELETION button CLICKED!");
-
         if(readBorrowerViewHandler != null && deleteBorrowerViewHandler != null)
         {
-            System.out.println("Invoking view handler for BORROWER DELETION!");
             deleteBorrowerViewHandler.invoke(requestDTOBorrowerDelete);
         }
     }

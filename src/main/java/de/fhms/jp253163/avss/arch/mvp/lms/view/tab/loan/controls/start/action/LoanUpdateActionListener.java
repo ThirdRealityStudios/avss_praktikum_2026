@@ -31,7 +31,6 @@ public class LoanUpdateActionListener implements ActionListener
     private LoanTextfieldPanel textfieldPanel;
     private JTable tableLoan;
 
-    // view, createLoanViewHandler, sharedLogic
     public LoanUpdateActionListener(IView view, IUpdateLoanViewHandler updateLoanViewHandler, IReadLoanViewHandler readLoanViewHandler, LoanTextfieldPanel textfieldPanel, JTable tableLoan) throws NullPointerException
     {
         Objects.requireNonNull(view);
@@ -66,16 +65,10 @@ public class LoanUpdateActionListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("Recognizing LOAN UPDATE button CLICKED!");
-
         JButton buttonClicked = getButtonInstance(e);
         boolean bookInstallment = false;
 
-        if(buttonClicked == null)
-        {
-            System.out.println("Expected button instance but got nothing (LoanUpdateActionListener)");
-        }
-        else
+        if(buttonClicked != null)
         {
             bookInstallment = buttonClicked.getText().toLowerCase().contains("book installment");
         }
@@ -88,16 +81,11 @@ public class LoanUpdateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            // view.showMessage("LOAN UPDATE failed!");
-
             return;
         }
 
-        System.out.println("Created valid request for LOAN UPDATE button CLICKED!");
-
         if(updateLoanViewHandler != null && readLoanViewHandler != null)
         {
-            System.out.println("Invoking view handler for LOAN UPDATE!");
             updateLoanViewHandler.invoke(requestDTOLoanUpdate);
         }
     }

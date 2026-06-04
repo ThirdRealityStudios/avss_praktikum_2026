@@ -31,8 +31,6 @@ public class BorrowerCreateActionListener implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Recognizing BORROWER CREATION button CLICKED!");
-
         IRequestDTOBorrowerCreate requestDTOBorrowerCreate = null;
 
         try
@@ -41,16 +39,11 @@ public class BorrowerCreateActionListener implements ActionListener
         }
         catch(NullPointerException npe)
         {
-            // view.showMessage("BORROWER CREATION failed!");
-
             return;
         }
 
-        System.out.println("Created valid request for BORROWER CREATION button CLICKED!");
-
         if(createBorrowerViewHandler != null && readBorrowerViewHandler != null)
         {
-            System.out.println("Invoking view handler for BORROWER CREATION!");
             createBorrowerViewHandler.invoke(requestDTOBorrowerCreate);
         }
     }

@@ -87,7 +87,6 @@ public class LoanSharedLogic
 
         if(model == null) return new RequestDTOLoanUpdate(-1, helpingDTO.getBorrower(), bookInstallment);
 
-        // int[] selectedRowsIDs = null;
         int selectedRowID = -1;
         Object loanIDObj = null;
         String loanIDText = null;
@@ -96,11 +95,7 @@ public class LoanSharedLogic
 
         selectedRowID = getSelectedRowID(tableLoan);
 
-                // selectedRowsIDs = tableLoan.getSelectedRows();
-        // if(selectedRowsIDs != null) selectedRowID = selectedRowsIDs[0];
-
         if(selectedRowID < 0) {
-            System.out.println("Function getSelectedRowID says no row seleected");
             return new RequestDTOLoanUpdate(-1, helpingDTO.getBorrower(), bookInstallment);
         }
 
