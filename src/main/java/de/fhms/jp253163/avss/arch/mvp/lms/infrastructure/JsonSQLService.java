@@ -32,11 +32,11 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             throw new SQLException("Connection failed!");
     }
 
-    private <E> String genTableNameFrom(Class<E> className)
+    private <E> String genTableNameFrom(Class<E> entityClass)
     {
-        Objects.requireNonNull(className);
+        Objects.requireNonNull(entityClass);
 
-        String classCanonicalName = className.getCanonicalName();
+        String classCanonicalName = entityClass.getCanonicalName();
 
         /**
          * E.g. java.util.HashMap.SimpleEntry.class (nested class)
@@ -57,28 +57,28 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
      * this also adds the database name before the "canonical" table name.
      * This helps your DB runtime environment to know which database is selected for executions.
      *
-     * @param className
+     * @param entityClass
      * @return database name + . + "canonical" table name
      * @param <E>
      */
-    private <E> String genQualifiedTableNameFrom(Class<E> className)
+    private <E> String genQualifiedTableNameFrom(Class<E> entityClass)
     {
-        return mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(className);
+        return mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(entityClass);
     }
 
     /**
      * Should be called before any CRUD action in this class
      * which requires corresponding access.
      *
-     * @param obj
+     * @param entityClass
      * @throws NullPointerException
      * @throws SQLException
      */
-    private void ensureTableFor(Object obj) throws NullPointerException, SQLException
+    private <E> void ensureTableFor(Class<E> entityClass) throws NullPointerException, SQLException
     {
-        Objects.requireNonNull(obj);
+        Objects.requireNonNull(entityClass);
 
-        String qualifiedTableName = genQualifiedTableNameFrom(obj.getClass());
+        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
 
         Objects.requireNonNull(qualifiedTableName);
 
@@ -107,7 +107,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         try
         {
-            ensureTableFor(obj);
+            ensureTableFor(obj.getClass());
         }
         catch (Exception exc)
         {
@@ -232,6 +232,17 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     @Override
     public int[] listNumericJsonDatasets(Class<T> entityClass) throws IllegalArgumentException
     {
+        try
+        {
+            ensureTableFor(entityClass);
+        }
+        catch (SQLException exc)
+        {
+            exc.printStackTrace();
+
+            return new int[0];
+        }
+
         String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
         String sqlReadAll = "SELECT ID FROM " + qualifiedTableName;
 
