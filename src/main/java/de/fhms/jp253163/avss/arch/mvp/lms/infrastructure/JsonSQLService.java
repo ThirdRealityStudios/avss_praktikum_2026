@@ -3,12 +3,13 @@ package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 public class JsonSQLService<T> implements IJsonSQLService<T>
 {
@@ -32,24 +33,32 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             throw new SQLException("Connection failed!");
     }
 
-    private <E> String genTableNameFrom(Class<E> entityClass)
+    /**
+     * @param entityClass
+     * @return The SHA-256 hash as a hexadecimal string. Or null if creation went wrong.
+     * @param <E>
+     * @throws NoSuchAlgorithmException If SHA-256 could not be found.
+     */
+    private <E> String hash(Class<E> entityClass) throws NoSuchAlgorithmException
+    {
+        byte[] nameInBytes = entityClass.getName().getBytes(StandardCharsets.UTF_8);
+        byte[] hashCode = MessageDigest.getInstance("SHA-256").digest(nameInBytes);
+
+        String hashHex = "";
+
+        for(byte hashByte : hashCode)
+        {
+            hashHex += String.format("%02x", hashByte);
+        }
+
+        return hashHex.isEmpty() ? null : hashHex;
+    }
+
+    private <E> String genTableNameFrom(Class<E> entityClass) throws NoSuchAlgorithmException
     {
         Objects.requireNonNull(entityClass);
 
-        String classCanonicalName = entityClass.getCanonicalName();
-
-        /**
-         * E.g. java.util.HashMap.SimpleEntry.class (nested class)
-         *
-         * Calling now getCanonicalName() would return:
-         *
-         * java.util.AbstractMap.SimpleEntry
-         *
-         * But after genTableNameFrom(..) it is:
-         *
-         * java_util_AbstractMap_SimpleEntry
-         */
-        return classCanonicalName.replace('.', '_');
+        return hash(entityClass);
     }
 
     /**
@@ -61,7 +70,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
      * @return database name + . + "canonical" table name
      * @param <E>
      */
-    private <E> String genQualifiedTableNameFrom(Class<E> entityClass)
+    private <E> String genQualifiedTableNameFrom(Class<E> entityClass) throws NoSuchAlgorithmException
     {
         return mySQLAdapter.getDatabaseName() + "." + genTableNameFrom(entityClass);
     }
@@ -74,7 +83,7 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
      * @throws NullPointerException
      * @throws SQLException
      */
-    private <E> void ensureTableFor(Class<E> entityClass) throws NullPointerException, SQLException
+    private <E> void ensureTableFor(Class<E> entityClass) throws NullPointerException, SQLException, NoSuchAlgorithmException
     {
         Objects.requireNonNull(entityClass);
 
@@ -85,13 +94,11 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         if(qualifiedTableName.isEmpty())
             throw new NullPointerException("Table name cannot be empty (internal error)");
 
-        String sqlCreateDB = "CREATE DATABASE IF NOT EXISTS lms;";
         String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + qualifiedTableName + "( ID INT(8) PRIMARY KEY UNIQUE , Json TEXT NOT NULL );";
-        String sql = sqlCreateDB + sqlCreateTable;
 
         try(Statement stmt = mySQLAdapter.getConnection().createStatement())
         {
-            stmt.executeUpdate(sql);
+            stmt.executeUpdate(sqlCreateTable);
             stmt.getConnection().commit();
         }
         catch (SQLException exc)
@@ -116,7 +123,18 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             return false;
         }
 
-        String qualifiedTableName = genQualifiedTableNameFrom(obj.getClass());
+        String qualifiedTableName = null;
+
+        try
+        {
+            qualifiedTableName = genQualifiedTableNameFrom(obj.getClass());
+        }
+        catch (NoSuchAlgorithmException exc)
+        {
+            exc.printStackTrace();
+
+            return false;
+        }
 
         String json = gson.toJson(obj);
 
@@ -132,6 +150,8 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         {
             stmtInsert.setInt(1, id);
             stmtInsert.setString(2, json);
+
+            stmtInsert.executeUpdate();
 
             mySQLAdapter.getConnection().commit();
 
@@ -161,7 +181,17 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
         String json = "";
 
-        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
+        String qualifiedTableName = null;
+
+        try {
+            qualifiedTableName = genQualifiedTableNameFrom(entityClass);
+        }
+        catch (NoSuchAlgorithmException exc)
+        {
+            exc.printStackTrace();
+
+            return null;
+        }
 
         String sqlReadDataset = "SELECT Json FROM " + qualifiedTableName + " WHERE ID=?";
 
@@ -200,9 +230,21 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     @Override
     public boolean delete(int id, Class<T> entityClass)
     {
-        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
-        String sqlDelete = "DELETE FROM " + qualifiedTableName + " WHERE ID=?";
+        String qualifiedTableName = null;
         boolean success = false;
+
+        try
+        {
+            qualifiedTableName = genQualifiedTableNameFrom(entityClass);
+        }
+        catch (NoSuchAlgorithmException exc)
+        {
+            exc.printStackTrace();
+
+            return false;
+        }
+
+        String sqlDelete = "DELETE FROM " + qualifiedTableName + " WHERE ID=?";
 
         try(PreparedStatement deleteStmt = mySQLAdapter.getConnection().prepareStatement(sqlDelete))
         {
@@ -210,15 +252,17 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
 
             int rowsAffected = deleteStmt.executeUpdate();
 
-            if(rowsAffected > 1)
+            if(rowsAffected == 0)
             {
                 mySQLAdapter.getConnection().rollback();
+
+                success = false;
             }
             else
             {
                 mySQLAdapter.getConnection().commit();
 
-                success = rowsAffected == 1;
+                success = true;
             }
         }
         catch(SQLException exc)
@@ -232,18 +276,21 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
     @Override
     public int[] listNumericJsonDatasets(Class<T> entityClass) throws IllegalArgumentException
     {
+        String qualifiedTableName = null;
+
         try
         {
             ensureTableFor(entityClass);
+
+            qualifiedTableName = genQualifiedTableNameFrom(entityClass);
         }
-        catch (SQLException exc)
+        catch (Exception exc)
         {
             exc.printStackTrace();
 
             return new int[0];
         }
 
-        String qualifiedTableName = genQualifiedTableNameFrom(entityClass);
         String sqlReadAll = "SELECT ID FROM " + qualifiedTableName;
 
         ArrayList<Integer> IDs = new ArrayList<>();
