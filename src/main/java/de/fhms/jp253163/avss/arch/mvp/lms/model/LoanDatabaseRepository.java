@@ -56,7 +56,6 @@ public class LoanDatabaseRepository implements ILoanRepository
 
         if(currentLoadId == -2) // an error occurred while determining
         {
-            System.out.println("COULD NOT LOAD NEWEST JSON NUMBER (1)!");
             return null;
         }
 
@@ -71,7 +70,7 @@ public class LoanDatabaseRepository implements ILoanRepository
             }
             else
             {
-                System.out.println("Loan denied (missing creditworthiness)");
+                // Loan denied (missing creditworthiness)
                 return null;
             }
 
@@ -80,7 +79,8 @@ public class LoanDatabaseRepository implements ILoanRepository
         }
         catch(IllegalArgumentException e)
         {
-            System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT (2)");
+            e.printStackTrace();
+
             return null;
         }
 

@@ -73,7 +73,6 @@ public class LoanRepository implements ILoanRepository
 
             if(currentLoadId == -2) // an error occurred while determining
             {
-                System.out.println("COULD NOT LOAD NEWEST JSON NUMBER (1)!");
                 return null;
             }
 
@@ -83,7 +82,6 @@ public class LoanRepository implements ILoanRepository
         {
             e.printStackTrace();
 
-            System.out.println("COULD NOT LOAD NEWEST JSON NUMBER (2)!");
             return null;
         }
 
@@ -96,7 +94,7 @@ public class LoanRepository implements ILoanRepository
             }
             else
             {
-                System.out.println("Loan denied (missing creditworthiness)");
+                // Loan denied (missing creditworthiness)
                 return null;
             }
 
@@ -107,7 +105,8 @@ public class LoanRepository implements ILoanRepository
         }
         catch(IllegalArgumentException e)
         {
-            System.out.println("COULD NOT CREATE OBJECT! CONSTRUCTOR VALUES CORRUPT (2)");
+            e.printStackTrace();
+
             return null;
         }
 
@@ -144,6 +143,8 @@ public class LoanRepository implements ILoanRepository
         }
         catch(IOException e)
         {
+            e.printStackTrace();
+
             return null;
         }
 
@@ -256,7 +257,7 @@ public class LoanRepository implements ILoanRepository
         }
         catch(IOException e)
         {
-            // e.printStackTrace();
+            e.printStackTrace();
 
             return false;
         }
