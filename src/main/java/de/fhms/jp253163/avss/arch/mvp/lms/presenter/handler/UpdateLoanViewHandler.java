@@ -36,7 +36,7 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
         int borrowerIDAttached = iRequestDTOLoanUpdate.getBorrowerID();
         boolean bookInstallment = iRequestDTOLoanUpdate.isBookInstallmentWanted(); // has always priority (semantically)
 
-        if(loanID < 0) // TODO Books the installment but somehow here the loanID is negative???? So shows the message below
+        if(loanID < 0)
         {
             presenter.getView().showMessage("Please select a loan! (dataset for retrieving loan ID)");
             return;

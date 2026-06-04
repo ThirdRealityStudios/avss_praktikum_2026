@@ -54,13 +54,9 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
                     IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrower.getId(), borrower.getFirstname(), borrower.getLastname(), borrower.getDateOfBirth(), borrower.getResidentialAddress().getStreet(), borrower.getResidentialAddress().getNo(), borrower.getResidentialAddress().getPlace(), borrower.getResidentialAddress().getZip());
 
                     borrowerSets.add(borrowerSet);
-
-                    System.out.println(borrower.toString()+"\n");
                 }
 
                 presenter.getView().setBorrowerData(borrowerSets);
-
-                // presenter.getView().showMessage("");
             }
         }
         else
@@ -78,8 +74,6 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
                 borrowerSets.add(borrowerSet);
 
                 presenter.getView().setBorrowerData(borrowerSets);
-
-                // presenter.getView().showMessage("");
             }
 
             return;

@@ -61,7 +61,6 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
             return;
         }
 
-                                 // createLoan(int borrowerID, double amount, double interestRate, int term)
         ILoan loan = loanRepository.createLoan(borrowerID, amount, interestRate, term);
 
         if(loan == null)

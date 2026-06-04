@@ -54,13 +54,9 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
                     IDTOLoanSet loanSet = new DTOLoanSet(loan.getId(), loan.getAmount(), loan.getRemainingBalance(), loan.getInterestRate(), loan.getTerm(), loan.getRemainingTerm(), loan.getBorrower());
 
                     loanSets.add(loanSet);
-
-                    // System.out.println(loan.toString()+"\n");
                 }
 
                 presenter.getView().setLoanData(loanSets);
-
-                // presenter.getView().showMessage("");
             }
 
             return;
@@ -80,8 +76,6 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
                 loanSets.add(loanSet);
 
                 presenter.getView().setLoanData(loanSets);
-
-                // presenter.getView().showMessage("");
             }
 
             return;
