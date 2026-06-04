@@ -35,13 +35,11 @@ public class Main
                 return;
             }
 
-            File exeutableDirectory = new File(executableDirectoryString);
-
             IBorrowerRepository borrowerRepository = new BorrowerDatabaseRepository(jssBorrower);
 
-            IJsonFileService<Loan> jfsLoan = new JsonFileService<>(builder);
+            IJsonSQLService<Loan> jssLoan = new JsonSQLService<>(builder);
             ISchufaRepository schufaRepo = new SchufaRepository();
-            ILoanRepository loanRepository = new LoanRepository(jfsLoan, exeutableDirectory, schufaRepo, borrowerRepository);
+            ILoanRepository loanRepository = new LoanDatabaseRepository(jssLoan, schufaRepo, borrowerRepository);
 
             IPresenter presenter = new Presenter(view, borrowerRepository, loanRepository);
             presenter.setView(view);
