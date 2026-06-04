@@ -17,7 +17,7 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
     private IJsonSQLService<Borrower> jsonSQLService;
 
     /**
-     * Initializes the loan repository.
+     * Initializes the borrower repository.
      *
      * @param jsonSQLService
      * @throws IllegalArgumentException
@@ -35,7 +35,6 @@ public class BorrowerDatabaseRepository implements IBorrowerRepository
     public IBorrower createBorrower(String firstname, String lastname, LocalDate dateOfBirth, IResidentialAddress residentialAddress, double schufaScore)
     {
         IBorrower borrower = null;
-        String jsonFilepath = null;
 
         int currentBorrowerId = -1, newBorrowerId = -1;
 
