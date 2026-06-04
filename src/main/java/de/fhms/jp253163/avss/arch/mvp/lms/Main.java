@@ -20,7 +20,7 @@ public class Main
 {
     public static void main(String[] args)
     {
-        IView view = new SwingView(); // TODO Instantiate GUI implementation here instead
+        IView view = new SwingView();
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
