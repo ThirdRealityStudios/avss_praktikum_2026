@@ -23,7 +23,7 @@ public interface ICreateBorrowerViewHandler
      * 13: "Created borrower successfully!"
      *
      * @param createBorrowerDTO
-     * @return
+     * @return Code for HTTP response
      */
     public int invoke(IRequestDTOBorrowerCreate createBorrowerDTO);
 }
