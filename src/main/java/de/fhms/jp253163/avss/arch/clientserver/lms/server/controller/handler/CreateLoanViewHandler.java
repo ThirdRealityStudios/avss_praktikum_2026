@@ -1,35 +1,30 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.ICreateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
+
+import java.util.Objects;
 
 public class CreateLoanViewHandler implements ICreateLoanViewHandler
 {
     private ILoanRepository loanRepository;
-    private IPresenter presenter;
 
-    public CreateLoanViewHandler(ILoanRepository loanRepository, IPresenter presenter) throws NullPointerException
+    public CreateLoanViewHandler(ILoanRepository loanRepository) throws NullPointerException
     {
-        if(loanRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(loanRepository);
 
         this.loanRepository = loanRepository;
-        this.presenter = presenter;
     }
 
     @Override
-    public void invoke(IRequestDTOLoanCreate iRequestDTOLoanCreate)
+    public int invoke(IRequestDTOLoanCreate iRequestDTOLoanCreate)
     {
         if(iRequestDTOLoanCreate == null)
         {
-            presenter.getView().showMessage("Invalid creation request!");
-
-            return;
+            return 0;
         }
 
         int borrowerID = iRequestDTOLoanCreate.getBorrower();
@@ -39,38 +34,34 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
 
         if(!loanRepository.isValidBorrowerIDForCreation(borrowerID))
         {
-            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_BORROWER_ID);
-            return;
+            return 1;
         }
 
         if(!loanRepository.isValidInterestRateForCreation(interestRate))
         {
-            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_INTEREST_RATE);
-            return;
+            return 2;
         }
 
         if(!loanRepository.isValidAmountForCreation(amount))
         {
-            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_AMOUNT);
-            return;
+            return 3;
         }
 
         if(!loanRepository.isValidTermForCreation(term))
         {
-            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_TERM);
-            return;
+            return 4;
         }
 
         ILoan loan = loanRepository.createLoan(borrowerID, amount, interestRate, term);
 
         if(loan == null)
-            presenter.getView().showMessage("Creating loan failed");
+            return 5;
         else
         {
             // Make the loan table show all datasets now.
-            new ReadLoanViewHandler(loanRepository, presenter).invoke(new RequestDTOLoanRead(-1));
+            new ReadLoanViewHandler(loanRepository).invoke(new RequestDTOLoanRead(-1));
 
-            presenter.getView().showMessage("Created loan successfully");
+           return 6;
         }
     }
 }
