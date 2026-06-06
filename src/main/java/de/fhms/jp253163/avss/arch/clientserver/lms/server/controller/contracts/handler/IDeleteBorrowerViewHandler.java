@@ -4,5 +4,5 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 
 public interface IDeleteBorrowerViewHandler
 {
-    public void invoke(IRequestDTOBorrowerDelete deleteBorrowerDTO);
+    public int invoke(IRequestDTOBorrowerDelete deleteBorrowerDTO);
 }

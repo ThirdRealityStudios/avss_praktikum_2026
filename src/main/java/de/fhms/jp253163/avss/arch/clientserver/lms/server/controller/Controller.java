@@ -4,6 +4,8 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler.CreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 
@@ -58,6 +60,7 @@ public class Controller implements IController
 
     @Override
     public boolean postBorrower(String action, String id, String data) {
+        new CreateBorrowerViewHandler(borrowerRepository, this).invoke(new RequestDTOBorrowerCreate());
         return false;
     }
 

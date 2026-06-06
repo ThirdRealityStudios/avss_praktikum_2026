@@ -4,5 +4,5 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 
 public interface IDeleteLoanViewHandler
 {
-    public void invoke(IRequestDTOLoanDelete deleteLoanDTO);
+    public int invoke(IRequestDTOLoanDelete deleteLoanDTO);
 }

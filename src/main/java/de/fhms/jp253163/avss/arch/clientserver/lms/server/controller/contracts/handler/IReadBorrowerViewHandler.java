@@ -10,5 +10,5 @@ public interface IReadBorrowerViewHandler
      *
      * @param readBorrowerDTO
      */
-    public void invoke(IRequestDTOBorrowerRead readBorrowerDTO);
+    public int invoke(IRequestDTOBorrowerRead readBorrowerDTO);
 }

@@ -1,6 +1,12 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.IController;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.ICreateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ResidentialAddress;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -8,7 +14,6 @@ import java.time.LocalDate;
 public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
-    private IController presenter;
 
     public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository, IController presenter) throws NullPointerException
     {
@@ -16,17 +21,14 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
             throw new NullPointerException();
 
         this.borrowerRepository = borrowerRepository;
-        this.presenter = presenter;
     }
 
     @Override
-    public void invoke(IRequestDTOBorrowerCreate iRequestDTOBorrowerCreate)
+    public int invoke(IRequestDTOBorrowerCreate iRequestDTOBorrowerCreate)
     {
         if(iRequestDTOBorrowerCreate == null)
         {
-            presenter.getView().showMessage("Invalid creation request!");
-
-            return;
+            return 0;
         }
 
         String firstname = iRequestDTOBorrowerCreate.getFirstname();
@@ -51,56 +53,47 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 
         if(!borrowerRepository.isValidFirstnameForCreation(firstname))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_FIRSTNAME);
-            return;
+            return 1;
         }
 
         if(!borrowerRepository.isValidLastnameForCreation(lastname))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_LASTNAME);
-            return;
+            return 2;
         }
 
         if(!borrowerRepository.isValidDayOfBirthForCreation(day))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_DAY_OF_BIRTH);
-            return;
+            return 3;
         }
 
         if(!borrowerRepository.isValidMonthOfBirthForCreation(month))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_MONTH_OF_BIRTH);
-            return;
+            return 4;
         }
 
         if(!borrowerRepository.isValidYearOfBirthForCreation(year))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_YEAR_OF_BIRTH);
-            return;
+            return 5;
         }
 
         if(!borrowerRepository.isValidStreetForCreation(street))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_STREET);
-            return;
+            return 6;
         }
 
         if(!borrowerRepository.isValidNoForCreation(no))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_NO);
-            return;
+            return 7;
         }
 
         if(!borrowerRepository.isValidPlaceForCreation(place))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_PLACE);
-            return;
+            return 8;
         }
 
         if(!borrowerRepository.isValidZipForCreation(zip))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_ZIP);
-            return;
+            return 9;
         }
 
         try
@@ -109,8 +102,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (DateTimeException e)
         {
-            presenter.getView().showMessage("Could not process the provided birthday! Is it really correct?");
-            return;
+            return 10;
         }
 
         IResidentialAddress residentialAddress = null;
@@ -121,9 +113,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (IllegalArgumentException e)
         {
-            presenter.getView().showMessage("Could not process the provided address!");
-
-            return;
+            return 11;
         }
 
         double schufaScore = 0.9d; // TODO Check if valid
@@ -131,13 +121,11 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         IBorrower borrower = borrowerRepository.createBorrower(firstname, lastname, birthday, residentialAddress, schufaScore);
 
         if(borrower == null)
-            presenter.getView().showMessage("Could not create borrower!");
+            return 12;
         else
         {
             // Make the borrower table show all datasets now.
-            new ReadBorrowerViewHandler(borrowerRepository, presenter).invoke(new RequestDTOBorrowerRead(-1));
-
-            presenter.getView().showMessage("Created borrower successfully!");
+            return 13;
         }
     }
 }

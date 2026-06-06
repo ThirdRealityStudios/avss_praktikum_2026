@@ -4,5 +4,5 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 
 public interface ICreateLoanViewHandler
 {
-    public void invoke(IRequestDTOLoanCreate createLoanDTO);
+    public int invoke(IRequestDTOLoanCreate createLoanDTO);
 }

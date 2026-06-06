@@ -10,5 +10,5 @@ public interface IReadLoanViewHandler
      *
      * @param readLoanDTO
      */
-    public void invoke(IRequestDTOLoanRead readLoanDTO);
+    public int invoke(IRequestDTOLoanRead readLoanDTO);
 }

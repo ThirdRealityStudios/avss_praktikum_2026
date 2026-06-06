@@ -4,5 +4,5 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 
 public interface IUpdateLoanViewHandler
 {
-    public void invoke(IRequestDTOLoanUpdate loanUpdateDTO);
+    public int invoke(IRequestDTOLoanUpdate loanUpdateDTO);
 }
