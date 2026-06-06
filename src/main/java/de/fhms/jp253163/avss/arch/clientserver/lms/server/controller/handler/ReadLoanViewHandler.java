@@ -1,27 +1,21 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.DTOLoanSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IReadLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ReadLoanViewHandler implements IReadLoanViewHandler
 {
     private ILoanRepository loanRepository;
-    private IPresenter presenter;
 
-    public ReadLoanViewHandler(ILoanRepository loanRepository, IPresenter presenter) throws NullPointerException
+    public ReadLoanViewHandler(ILoanRepository loanRepository) throws NullPointerException
     {
-        if(loanRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(loanRepository);
 
         this.loanRepository = loanRepository;
-        this.presenter = presenter;
     }
 
     @Override
