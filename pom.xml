@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.fhms.jp253163.avss.arch.mvp.lms.infrastructure</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
+    <groupId>de.fhms.jp253163.avss.arch.clientserver.server.lms.data</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
     <artifactId>datenbank</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source> <!-- 21 represents the Java language level - it should be identical with the value taken in the project settings -->
