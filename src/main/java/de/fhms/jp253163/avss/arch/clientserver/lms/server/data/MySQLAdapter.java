@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

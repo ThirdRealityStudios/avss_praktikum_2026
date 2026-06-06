@@ -1,9 +1,8 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.infrastructure;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
