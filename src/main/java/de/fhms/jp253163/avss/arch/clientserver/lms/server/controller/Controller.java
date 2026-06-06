@@ -1,5 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller;
 
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -8,6 +9,10 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.BindException;
+import java.net.InetSocketAddress;
+import java.util.Objects;
+import java.util.logging.Logger;
 
 public class Controller implements IController
 {
@@ -15,12 +20,17 @@ public class Controller implements IController
     private IBorrowerRepository borrowerRepository;
     private ILoanRepository loanRepository;
 
-    public Controller(HttpServer server, IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws NullPointerException
-    {
-        if(borrowerRepository == null || loanRepository == null)
-            throw new NullPointerException();
+    private HttpServer server;
+    private HttpContext context;
 
-        HttpHandler handler;
+    public Controller(IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws IOException, BindException
+    {
+        Objects.requireNonNull(borrowerRepository);
+        Objects.requireNonNull(loanRepository);
+
+        InetSocketAddress socketAddress = new InetSocketAddress(80);
+        this.server = HttpServer.create(socketAddress, 0);
+        this.server.setExecutor(null);
 
         new HttpHandler(){
 
@@ -39,10 +49,51 @@ public class Controller implements IController
         this.borrowerRepository = borrowerRepository;
         this.loanRepository = loanRepository;
 
+        /*
         if(!setView(view))
             throw new NullPointerException();
+
+         */
     }
 
+    @Override
+    public boolean postBorrower(String action, String id, String data) {
+        return false;
+    }
+
+    @Override
+    public String[] getBorrower(String id) {
+        return new String[0];
+    }
+
+    @Override
+    public void postLoan(String action, String id, String json) {
+
+    }
+
+    @Override
+    public String[] getLoan(String id) {
+        return new String[0];
+    }
+
+    @Override
+    public void setPostHandler(HttpHandler handler) {
+        Objects.requireNonNull(handler);
+
+        if(this.context != null)
+            this.server.removeContext(context);
+
+        this.context = this.server.createContext("/", handler);
+    }
+
+    @Override
+    public void start() {
+        this.server.start();
+    }
+
+
+
+    /*
     @Override
     public boolean setView(IView view)
     {
@@ -82,4 +133,6 @@ public class Controller implements IController
     public IView getView() {
         return view;
     }
+
+     */
 }
