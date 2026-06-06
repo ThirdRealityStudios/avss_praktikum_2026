@@ -1,7 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.model;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonFileService;
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonSQLService;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.data.IJsonSQLService;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Loan;
