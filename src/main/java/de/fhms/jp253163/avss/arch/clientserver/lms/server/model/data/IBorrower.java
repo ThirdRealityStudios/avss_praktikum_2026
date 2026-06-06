@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.model.data;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data;
 
 import java.time.LocalDate;
 

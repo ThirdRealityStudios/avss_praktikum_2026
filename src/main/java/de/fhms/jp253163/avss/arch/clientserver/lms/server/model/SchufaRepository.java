@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.model;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.model;
 
 public class SchufaRepository implements ISchufaRepository
 {
