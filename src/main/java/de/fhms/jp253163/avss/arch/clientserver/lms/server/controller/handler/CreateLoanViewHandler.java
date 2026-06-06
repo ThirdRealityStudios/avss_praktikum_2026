@@ -1,5 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.ICreateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanRead;
@@ -24,7 +25,7 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
     {
         if(iRequestDTOLoanCreate == null)
         {
-            return 0;
+            return GlobalResponseCode.CREATE_LOAN_INVALID_CREATION_REQUEST.ordinal();
         }
 
         int borrowerID = iRequestDTOLoanCreate.getBorrower();
@@ -34,34 +35,34 @@ public class CreateLoanViewHandler implements ICreateLoanViewHandler
 
         if(!loanRepository.isValidBorrowerIDForCreation(borrowerID))
         {
-            return 1;
+            return GlobalResponseCode.CREATE_LOAN_INVALID_BORROWER_ID.ordinal();
         }
 
         if(!loanRepository.isValidInterestRateForCreation(interestRate))
         {
-            return 2;
+            return GlobalResponseCode.CREATE_LOAN_INVALID_INTEREST_RATE.ordinal();
         }
 
         if(!loanRepository.isValidAmountForCreation(amount))
         {
-            return 3;
+            return GlobalResponseCode.CREATE_LOAN_INVALID_AMOUNT.ordinal();
         }
 
         if(!loanRepository.isValidTermForCreation(term))
         {
-            return 4;
+            return GlobalResponseCode.CREATE_LOAN_INVALID_TERM.ordinal();
         }
 
         ILoan loan = loanRepository.createLoan(borrowerID, amount, interestRate, term);
 
         if(loan == null)
-            return 5;
+            return GlobalResponseCode.CREATE_LOAN_CREATION_ERROR.ordinal();
         else
         {
             // Make the loan table show all datasets now.
             new ReadLoanViewHandler(loanRepository).invoke(new RequestDTOLoanRead(-1));
 
-           return 6;
+           return GlobalResponseCode.CREATE_LOAN_CREATION_SUCCESS.ordinal();
         }
     }
 }
