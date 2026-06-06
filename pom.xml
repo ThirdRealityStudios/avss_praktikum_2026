@@ -18,13 +18,6 @@
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 
         <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.client.view</groupId>
-            <artifactId>gui</artifactId>
-            <version>1.6-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.server.model</groupId>
             <artifactId>logik</artifactId>
             <version>1.6-SNAPSHOT</version>

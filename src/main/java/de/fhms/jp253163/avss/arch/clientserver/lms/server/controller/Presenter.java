@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -9,13 +9,13 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class Presenter implements IPresenter
+public class Controller implements IController
 {
-    private IView view;
+    private IController controller;
     private IBorrowerRepository borrowerRepository;
     private ILoanRepository loanRepository;
 
-    public Presenter(HttpServer server, IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws NullPointerException
+    public Controller(HttpServer server, IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws NullPointerException
     {
         if(borrowerRepository == null || loanRepository == null)
             throw new NullPointerException();

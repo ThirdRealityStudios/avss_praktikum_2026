@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
 public interface BorrowerFieldErrorMessage
 {

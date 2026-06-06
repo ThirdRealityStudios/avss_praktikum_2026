@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller;
 
 import com.sun.net.httpserver.HttpHandler;
 

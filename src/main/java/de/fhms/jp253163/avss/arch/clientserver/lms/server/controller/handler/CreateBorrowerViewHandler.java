@@ -1,13 +1,6 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ResidentialAddress;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -15,9 +8,9 @@ import java.time.LocalDate;
 public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
-    private IPresenter presenter;
+    private IController presenter;
 
-    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository, IPresenter presenter) throws NullPointerException
+    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository, IController presenter) throws NullPointerException
     {
         if(borrowerRepository == null || presenter == null)
             throw new NullPointerException();
