@@ -29,7 +29,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
     {
         if(iRequestDTOBorrowerCreate == null)
         {
-            return GlobalResponseCode.BORROWER_INVALID_CREATION_REQUEST.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_CREATION_REQUEST.ordinal();
         }
 
         String firstname = iRequestDTOBorrowerCreate.getFirstname();
@@ -54,47 +54,47 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 
         if(!borrowerRepository.isValidFirstnameForCreation(firstname))
         {
-            return GlobalResponseCode.BORROWER_INVALID_FIRSTNAME.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_FIRSTNAME.ordinal();
         }
 
         if(!borrowerRepository.isValidLastnameForCreation(lastname))
         {
-            return GlobalResponseCode.BORROWER_INVALID_LASTNAME.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_LASTNAME.ordinal();
         }
 
         if(!borrowerRepository.isValidDayOfBirthForCreation(day))
         {
-            return GlobalResponseCode.BORROWER_INVALID_DAY_OF_BIRTH.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_DAY_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidMonthOfBirthForCreation(month))
         {
-            return GlobalResponseCode.BORROWER_INVALID_MONTH_OF_BIRTH.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_MONTH_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidYearOfBirthForCreation(year))
         {
-            return GlobalResponseCode.BORROWER_INVALID_YEAR_OF_BIRTH.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_YEAR_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidStreetForCreation(street))
         {
-            return GlobalResponseCode.BORROWER_INVALID_STREET.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_STREET.ordinal();
         }
 
         if(!borrowerRepository.isValidNoForCreation(no))
         {
-            return GlobalResponseCode.BORROWER_INVALID_NO.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_NO.ordinal();
         }
 
         if(!borrowerRepository.isValidPlaceForCreation(place))
         {
-            return GlobalResponseCode.BORROWER_INVALID_PLACE.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_PLACE.ordinal();
         }
 
         if(!borrowerRepository.isValidZipForCreation(zip))
         {
-            return GlobalResponseCode.BORROWER_INVALID_ZIP.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_INVALID_ZIP.ordinal();
         }
 
         try
@@ -103,7 +103,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (DateTimeException e)
         {
-            return GlobalResponseCode.BORROWER_BIRTHDAY_PARSE_ERROR.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_BIRTHDAY_PARSE_ERROR.ordinal();
         }
 
         IResidentialAddress residentialAddress = null;
@@ -114,7 +114,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (IllegalArgumentException e)
         {
-            return GlobalResponseCode.BORROWER_ADDRESS_PARSE_ERROR.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_ADDRESS_PARSE_ERROR.ordinal();
         }
 
         double schufaScore = 0.9d; // TODO Check if valid
@@ -122,11 +122,11 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         IBorrower borrower = borrowerRepository.createBorrower(firstname, lastname, birthday, residentialAddress, schufaScore);
 
         if(borrower == null)
-            return GlobalResponseCode.BORROWER_CREATION_ERROR.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_CREATION_ERROR.ordinal();
         else
         {
             // Make the borrower table show all datasets now.
-            return GlobalResponseCode.BORROWER_CREATION_SUCCESS.ordinal();
+            return GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS.ordinal();
         }
     }
 }
