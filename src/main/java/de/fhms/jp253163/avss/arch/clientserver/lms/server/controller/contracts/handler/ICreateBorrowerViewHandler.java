@@ -5,22 +5,23 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 public interface ICreateBorrowerViewHandler
 {
     /**
-     * Return codes explained:
+     * Returns the following response codes
+     * (from enum GlobalResponseCode):
      *
-     * 0: Invalid creation request!
-     * 1: BorrowerFieldErrorMessage.INVALID_FIRSTNAME
-     * 2: BorrowerFieldErrorMessage.INVALID_LASTNAME
-     * 3: BorrowerFieldErrorMessage.INVALID_DAY_OF_BIRTH
-     * 4: BorrowerFieldErrorMessage.INVALID_MONTH_OF_BIRTH
-     * 5: BorrowerFieldErrorMessage.INVALID_YEAR_OF_BIRTH
-     * 6: BorrowerFieldErrorMessage.INVALID_STREET
-     * 7: BorrowerFieldErrorMessage.INVALID_NO
-     * 8: BorrowerFieldErrorMessage.INVALID_PLACE
-     * 9: BorrowerFieldErrorMessage.INVALID_ZIP
-     * 10: "Could not process the provided birthday! Is it really correct?"
-     * 11: "Could not process the provided address!"
-     * 12: "Could not create borrower!"
-     * 13: "Created borrower successfully!"
+     * BORROWER_INVALID_CREATION_REQUEST,
+     * BORROWER_INVALID_FIRSTNAME,
+     * BORROWER_INVALID_LASTNAME,
+     * BORROWER_INVALID_DAY_OF_BIRTH,
+     * BORROWER_INVALID_MONTH_OF_BIRTH,
+     * BORROWER_INVALID_YEAR_OF_BIRTH,
+     * BORROWER_INVALID_STREET,
+     * BORROWER_INVALID_NO,
+     * BORROWER_INVALID_PLACE,
+     * BORROWER_INVALID_ZIP,
+     * BORROWER_BIRTHDAY_PARSE_ERROR,
+     * BORROWER_ADDRESS_PARSE_ERROR,
+     * BORROWER_CREATION_ERROR,
+     * BORROWER_CREATION_SUCCESS
      *
      * @param createBorrowerDTO
      * @return Code for HTTP response

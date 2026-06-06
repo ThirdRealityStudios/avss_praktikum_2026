@@ -3,6 +3,7 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IReadLoanViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 
 import java.util.ArrayList;
 import java.util.Objects;

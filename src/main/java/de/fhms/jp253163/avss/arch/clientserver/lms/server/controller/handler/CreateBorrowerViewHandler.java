@@ -1,6 +1,7 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.IController;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
@@ -28,7 +29,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
     {
         if(iRequestDTOBorrowerCreate == null)
         {
-            return 0;
+            return GlobalResponseCode.BORROWER_INVALID_CREATION_REQUEST.ordinal();
         }
 
         String firstname = iRequestDTOBorrowerCreate.getFirstname();
@@ -53,47 +54,47 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
 
         if(!borrowerRepository.isValidFirstnameForCreation(firstname))
         {
-            return 1;
+            return GlobalResponseCode.BORROWER_INVALID_FIRSTNAME.ordinal();
         }
 
         if(!borrowerRepository.isValidLastnameForCreation(lastname))
         {
-            return 2;
+            return GlobalResponseCode.BORROWER_INVALID_LASTNAME.ordinal();
         }
 
         if(!borrowerRepository.isValidDayOfBirthForCreation(day))
         {
-            return 3;
+            return GlobalResponseCode.BORROWER_INVALID_DAY_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidMonthOfBirthForCreation(month))
         {
-            return 4;
+            return GlobalResponseCode.BORROWER_INVALID_MONTH_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidYearOfBirthForCreation(year))
         {
-            return 5;
+            return GlobalResponseCode.BORROWER_INVALID_YEAR_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidStreetForCreation(street))
         {
-            return 6;
+            return GlobalResponseCode.BORROWER_INVALID_STREET.ordinal();
         }
 
         if(!borrowerRepository.isValidNoForCreation(no))
         {
-            return 7;
+            return GlobalResponseCode.BORROWER_INVALID_NO.ordinal();
         }
 
         if(!borrowerRepository.isValidPlaceForCreation(place))
         {
-            return 8;
+            return GlobalResponseCode.BORROWER_INVALID_PLACE.ordinal();
         }
 
         if(!borrowerRepository.isValidZipForCreation(zip))
         {
-            return 9;
+            return GlobalResponseCode.BORROWER_INVALID_ZIP.ordinal();
         }
 
         try
@@ -102,7 +103,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (DateTimeException e)
         {
-            return 10;
+            return GlobalResponseCode.BORROWER_BIRTHDAY_PARSE_ERROR.ordinal();
         }
 
         IResidentialAddress residentialAddress = null;
@@ -113,7 +114,7 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         }
         catch (IllegalArgumentException e)
         {
-            return 11;
+            return GlobalResponseCode.BORROWER_ADDRESS_PARSE_ERROR.ordinal();
         }
 
         double schufaScore = 0.9d; // TODO Check if valid
@@ -121,11 +122,11 @@ public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
         IBorrower borrower = borrowerRepository.createBorrower(firstname, lastname, birthday, residentialAddress, schufaScore);
 
         if(borrower == null)
-            return 12;
+            return GlobalResponseCode.BORROWER_CREATION_ERROR.ordinal();
         else
         {
             // Make the borrower table show all datasets now.
-            return 13;
+            return GlobalResponseCode.BORROWER_CREATION_SUCCESS.ordinal();
         }
     }
 }
