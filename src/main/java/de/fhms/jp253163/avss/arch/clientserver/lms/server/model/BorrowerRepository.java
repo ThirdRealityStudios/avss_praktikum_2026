@@ -1,5 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.model;
 
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.data.IJsonFileService;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
