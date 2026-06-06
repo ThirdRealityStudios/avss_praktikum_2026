@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ResidentialAddress;
