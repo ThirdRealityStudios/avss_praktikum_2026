@@ -4,6 +4,8 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
 
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.data;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;

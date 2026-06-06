@@ -3,8 +3,6 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.model;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.*; // in this line you can see how the built Maven artifact should be detected correctly for the data layer.
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.*;
 
 import java.io.File;
 import java.io.IOException;
