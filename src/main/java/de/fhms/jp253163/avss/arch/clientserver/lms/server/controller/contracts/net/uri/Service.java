@@ -23,6 +23,9 @@ public class Service
         getName(); // initialize necessary global vars
     }
 
+    /**
+     * @return Can be null if there is no service in the given URI. Otherwise, the service name is returned.
+     */
     public String getName()
     {
         if(this.serviceName != null)
@@ -46,6 +49,9 @@ public class Service
         }
     }
 
+    /**
+     * @return Not null. Never. Always returns an Action instance.
+     */
     public Action getAction()
     {
         return this.action;

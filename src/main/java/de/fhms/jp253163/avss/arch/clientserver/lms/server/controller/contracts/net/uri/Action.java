@@ -21,6 +21,9 @@ public class Action
         getName(); // initializes global vars automatically
     }
 
+    /**
+     * @return Can be null if there is no action in the URI (e.g. if there is also no service yet). Otherwise, returns the corresponding action name, e.g. "create".
+     */
     public String getName()
     {
         String serviceTruncatedPath = null;
@@ -65,6 +68,9 @@ public class Action
         }
     }
 
+    /**
+     * @return Can be null if there is no value in the given URI. Otherwise returns the corresponding value.
+     */
     public String getValue()
     {
         return value;
