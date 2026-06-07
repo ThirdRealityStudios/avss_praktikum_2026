@@ -39,7 +39,7 @@ public class Action
 
             // E.g. you have "/loan/update/43". It will shrink to "update/43" only.
             if(serviceNameSkippedIndex < path.length())
-                serviceNameRemovedPath = path.substring(serviceNameSkippedIndex, path.length() - 1);
+                serviceNameRemovedPath = path.substring(serviceNameSkippedIndex);
 
             if(serviceNameRemovedPath == null) return null;
 
