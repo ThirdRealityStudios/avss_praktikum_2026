@@ -34,7 +34,14 @@ public class Service
         if(this.path.startsWith("/"))
         {
             if(StringUtils.countMatches(path, "/") > 1)
-                return this.serviceName = StringUtils.substringBetween(path, "/");
+            {
+                this.serviceName = StringUtils.substringBetween(path, "/");
+
+                if(this.serviceName.isEmpty())
+                    return null;
+
+                return this.serviceName;
+            }
 
             this.serviceName = StringUtils.substringAfter(path, "/");
 
