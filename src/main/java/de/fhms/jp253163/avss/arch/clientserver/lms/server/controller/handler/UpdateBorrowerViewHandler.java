@@ -2,9 +2,9 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
