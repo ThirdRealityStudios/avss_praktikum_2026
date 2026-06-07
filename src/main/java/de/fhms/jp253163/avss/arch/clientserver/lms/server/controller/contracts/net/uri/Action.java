@@ -44,6 +44,8 @@ public class Action
             // E.g. you have "/loan/update/43". It will truncate to "update/43" only.
             serviceTruncatedPath = StringUtils.truncate(path, pathTruncationWidth);
 
+            System.out.println("serviceTruncatedPath: " + serviceTruncatedPath);
+
             if(serviceTruncatedPath.isEmpty())
                 return null; // No action
 
