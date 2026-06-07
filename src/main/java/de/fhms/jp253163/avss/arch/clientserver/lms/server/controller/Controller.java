@@ -128,6 +128,12 @@ public class Controller implements IController
                  * E.g. "///loan/crete/dfs" would be "/loan/crete/dfs" instead.
                  * Or "////loan/crete/dfs" would be "//loan/crete/dfs" instead.
                  * Or "//loan/crete/dfs" would be "/loan/crete/dfs" instead.
+                 *
+                 * So this webserver works as expected because
+                 * URI java class simply follows the conventions.
+                 *
+                 * Hence,
+                 * sender needs to know these conventions!
                  */
                 URI uri = exchange.getRequestURI();
 
