@@ -43,10 +43,6 @@ public class Action
 
             if(serviceNameRemovedPath == null) return null;
 
-            System.out.println("serviceTruncatedPath: " + serviceNameRemovedPath);
-
-            if(serviceNameRemovedPath.isEmpty()) return null; // No action
-
             // E.g. "update/43" remaining for serviceTruncatedPath
             if(StringUtils.countMatches(serviceNameRemovedPath, "/") > 0)
             {
