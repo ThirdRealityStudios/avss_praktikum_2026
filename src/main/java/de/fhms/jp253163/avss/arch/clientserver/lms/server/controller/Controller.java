@@ -105,48 +105,54 @@ public class Controller implements IController
         return new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) throws IOException {
-                String response = null;
-                int responseCode = -1;
                 URI uri = exchange.getRequestURI();
                 Objects.requireNonNull(uri);
 
                 ParsedURI requestParsedUri = new ParsedURI(uri);
                 Service requestService = requestParsedUri.getService();
+
                 String requestServiceName = requestService.getName();
+                boolean isServiceMissing = requestServiceName == null;
+                if(isServiceMissing)
+                {
+                    response(exchange, 400, "Invalid Request (Service Missing)");
+                    return;
+                }
 
                 int trustedServiceIndex = isTrusted(TrustedPath.directories, requestServiceName);
-                boolean isTrustedService = trustedServiceIndex != -1;
+                boolean isServiceUnknown = trustedServiceIndex == -1;
 
                 ArrayList<TrustedDirectory> trustedActions = null;
-                if(isTrustedService)
+                if(isServiceUnknown) // Check if service is known to the system.
                 {
-                    trustedActions = TrustedPath.directories.get(trustedServiceIndex).getNext();
-                }
-                else // no service called, e.g. only "/" as entry point.
-                {
-                    response(exchange, 404, "Not Found (Service)");
+                    // no service called, e.g. only "/" as entry point.
+                    response(exchange, 404, "Not Found (Unknown Service)");
                     return;
                 }
 
-                // Check if service is known to the system.
+                trustedActions = TrustedPath.directories.get(trustedServiceIndex).getNext();
+
                 Action action = requestService.getAction();
                 String actionName = action.getName();
-
-                int trustedActionIndex = trustedActions != null ? isTrusted(trustedActions, actionName) : -1;
-                boolean isTrustedAction = trustedActionIndex != -1;
-
-                String actionValue = null;
-                if(isTrustedAction)
+                boolean isActionMissing = actionName == null;
+                if(isActionMissing)
                 {
-                    actionValue = action.getValue();
-                }
-                else
-                {
-                    // invalid or missing action for that service
-                    response(exchange, 404, "Not Found (Action)");
+                    response(exchange, 400, "Invalid Request (Action Missing)");
                     return;
                 }
 
+                int trustedActionIndex = trustedActions != null ? isTrusted(trustedActions, actionName) : -1;
+                boolean isActionUnknown = trustedActionIndex == -1;
+
+                String actionValue = null;
+                if(isActionUnknown)
+                {
+                    // action given but not known to the system (for that given service)
+                    response(exchange, 404, "Not Found (Unknown Action)");
+                    return;
+                }
+
+                actionValue = action.getValue();
                 if(actionValue != null)
                 {
                     // All request details were fulfilled
