@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.fhms.jp253163.avss.arch.mvp.lms</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
-    <artifactId>executable-gui-standalone</artifactId> <!-- This is basically how the resulting JAR should be named after successful deploy - whereas the JAR name will not only contain this but also other automatically generated information, e.g. date and time -->
-    <version>1.5-SNAPSHOT</version>
+    <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.server</groupId> <!-- Make sure, the project code ALWAYS is inside directory src/main/java/... because that is the mandatory standard! -->
+    <artifactId>executable-server</artifactId> <!-- This is basically how the resulting JAR should be named after successful deploy - whereas the JAR name will not only contain this but also other automatically generated information, e.g. date and time -->
+    <version>1.6-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source> <!-- 21 represents the Java language level - it should be identical with the value taken in the project settings -->
@@ -18,30 +18,23 @@
         <!-- Source: https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 
         <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.mvp.lms.presenter</groupId>
-            <artifactId>presenter</artifactId>
-            <version>1.5-SNAPSHOT</version>
+            <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.server.controller</groupId>
+            <artifactId>controller</artifactId>
+            <version>1.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.mvp.lms.view</groupId>
-            <artifactId>gui</artifactId>
-            <version>1.5-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.mvp.lms.model</groupId>
+            <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.server.model</groupId>
             <artifactId>logik</artifactId>
-            <version>1.5-SNAPSHOT</version>
+            <version>1.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.mvp.lms.infrastructure</groupId>
+            <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.server.data</groupId>
             <artifactId>datenbank</artifactId>
-            <version>1.5-SNAPSHOT</version>
+            <version>1.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
@@ -73,7 +66,7 @@
 
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>de.fhms.jp253163.avss.arch.mvp.lms.Main</mainClass> <!-- This dotted path notation should point to the de.fhms.jp253163.avss.arch.mvp.Main class, so always something like "my.project.de.fhms.jp253163.avss.arch.mvp.Main" -->
+                                    <mainClass>de.fhms.jp253163.avss.arch.clientserver.lms.server.Main</mainClass> <!-- This dotted path notation should point to the de.fhms.jp253163.avss.arch.mvp.Main class, so always something like "my.project.de.fhms.jp253163.avss.arch.mvp.Main" -->
                                 </transformer>
                             </transformers>
                         </configuration>

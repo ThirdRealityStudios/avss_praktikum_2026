@@ -1,9 +1,7 @@
-package de.fhms.jp253163.avss.arch.mvp.lms;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server;
 
 import com.google.gson.GsonBuilder;
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonFileService;
 import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonSQLService;
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.JsonFileService;
 import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.JsonSQLService;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.*;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Borrower;
@@ -12,9 +10,6 @@ import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.presenter.Presenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.SwingView;
-
-import javax.swing.*;
-import java.io.File;
 
 public class Main
 {
