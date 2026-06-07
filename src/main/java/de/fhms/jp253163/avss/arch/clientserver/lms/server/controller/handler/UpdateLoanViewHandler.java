@@ -1,34 +1,30 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanUpdate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IUpdateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
+
+import java.util.Objects;
 
 public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
 {
     private ILoanRepository loanRepository;
-    private IPresenter presenter;
 
-    public UpdateLoanViewHandler(ILoanRepository loanRepository, IPresenter presenter) throws NullPointerException
+    public UpdateLoanViewHandler(ILoanRepository loanRepository) throws NullPointerException
     {
-        if(loanRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(loanRepository);
 
         this.loanRepository = loanRepository;
-        this.presenter = presenter;
     }
 
     @Override
-    public void invoke(IRequestDTOLoanUpdate iRequestDTOLoanUpdate)
+    public int invoke(IRequestDTOLoanUpdate iRequestDTOLoanUpdate)
     {
         if(iRequestDTOLoanUpdate == null)
         {
-            presenter.getView().showMessage("Invalid update request!");
-
-            return;
+            return GlobalResponseCode.UPDATE_LOAN_INVALID_REQUEST.ordinal();
         }
 
         int loanID = iRequestDTOLoanUpdate.getLoanID();
@@ -38,23 +34,19 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
 
         if(loanID < 0)
         {
-            presenter.getView().showMessage("Please select a loan! (dataset for retrieving loan ID)");
-            return;
+            return GlobalResponseCode.UPDATE_LOAN_NO_SELECTED_DATASET.ordinal();
         }
 
         if(!loanRepository.isValidBorrowerIDForUpdate(borrowerIDAttached))
         {
-            presenter.getView().showMessage(LoanFieldErrorMessage.INVALID_BORROWER_ID);
-            return;
+            return GlobalResponseCode.UPDATE_LOAN_INVALID_BORROWER_ID.ordinal();
         }
 
         ILoan currentLoan = loanRepository.readLoan(loanID);
 
         if(currentLoan == null)
         {
-            presenter.getView().showMessage("Could not find that loan!");
-
-            return;
+            return GlobalResponseCode.UPDATE_LOAN_NOT_FOUND.ordinal();
         }
 
         // Below now: checks if values should stay the same, so use the old values where necessary
@@ -67,12 +59,9 @@ public class UpdateLoanViewHandler implements IUpdateLoanViewHandler
 
         if(loanRepository.updateLoan(currentLoan))
         {
-            // Make the loan table show all datasets now.
-            new ReadLoanViewHandler(loanRepository, presenter).invoke(new RequestDTOLoanRead(-1));
-
-            presenter.getView().showMessage("Updated loan successfully!");
+            return GlobalResponseCode.UPDATE_LOAN_SUCCESS.ordinal();
         }
         else
-            presenter.getView().showMessage("Updating loan failed!");
+            return GlobalResponseCode.UPDATE_LOAN_ERROR.ordinal();
     }
 }

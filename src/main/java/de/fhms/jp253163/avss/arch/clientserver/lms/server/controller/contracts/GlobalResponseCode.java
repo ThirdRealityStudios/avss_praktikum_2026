@@ -60,6 +60,13 @@ public enum GlobalResponseCode
     UPDATE_BORROWER_SUCCESS, // "Updated borrower successfully!"
     UPDATE_BORROWER_ERROR, // "Failed to update borrower!"
 
+    UPDATE_LOAN_INVALID_REQUEST, // "Invalid update request!"
+    UPDATE_LOAN_NO_SELECTED_DATASET, // "Please select a loan! (dataset for retrieving loan ID)"
+    UPDATE_LOAN_INVALID_BORROWER_ID, // LoanFieldErrorMessage.INVALID_BORROWER_ID
+    UPDATE_LOAN_NOT_FOUND, // "Could not find that loan!"
+    UPDATE_LOAN_SUCCESS, // "Updated loan successfully!"
+    UPDATE_LOAN_ERROR, // "Updating loan failed!"
+
     DELETE_BORROWER_INVALID_REQUEST, // "Invalid deletion request!"
     DELETE_BORROWER_SUCCESS, // "Deleted borrower successfully!"
     DELETE_BORROWER_ERROR, // "Borrower still has active loans or nothing was selected!"
