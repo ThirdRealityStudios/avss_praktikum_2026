@@ -36,6 +36,7 @@ public class Service
             if(StringUtils.countMatches(path, "/") > 1)
             {
                 this.serviceName = StringUtils.substringBetween(path, "/");
+                System.out.println("Service (code 0): " + this.serviceName); // TODO Delete debug log
 
                 if(this.serviceName.isEmpty())
                     return null;
@@ -44,6 +45,7 @@ public class Service
             }
 
             this.serviceName = StringUtils.substringAfter(path, "/");
+            System.out.println("Service (code 1): " + this.serviceName); // TODO Delete debug log
 
             if(this.serviceName.isEmpty())
                 return null; // no service (only entry point called)

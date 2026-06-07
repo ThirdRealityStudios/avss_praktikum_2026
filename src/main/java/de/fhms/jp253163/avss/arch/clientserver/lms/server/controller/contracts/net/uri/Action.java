@@ -51,9 +51,11 @@ public class Action
             if(StringUtils.countMatches(serviceTruncatedPath, "/") > 0)
             {
                 this.name = StringUtils.substringBefore(serviceTruncatedPath, "/");
+                System.out.println("Action: " + name); // TODO Delete debug log
 
                 // So also directly parse the value, e.g. with "update/43" it is "43" (but it could also be non-numeric or contain more slashes!)
                 this.value = StringUtils.substringAfter(serviceTruncatedPath, "/");
+                System.out.println("Value: " + name); // TODO Delete debug log
 
                 return name;
             }
