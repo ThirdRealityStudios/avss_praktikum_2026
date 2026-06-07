@@ -16,11 +16,17 @@ public class TrustedDirectory
         this.next = new ArrayList<>();
     }
 
+    /**
+     * @return Never null. But can be an empty or filled array list.
+     */
     public ArrayList<TrustedDirectory> getNext()
     {
         return this.next;
     }
 
+    /**
+     * @return Never null. Always a string. But could be empty technically.
+     */
     public String getValue()
     {
         return this.value;

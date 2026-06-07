@@ -144,6 +144,10 @@ public class Controller implements IController
                 }
 
                 trustedActions = TrustedPath.directories.get(trustedServiceIndex).getNext();
+                if(trustedActions == null || )
+                {
+
+                }
 
                 Action action = requestService.getAction();
                 String actionName = action.getName();
@@ -154,7 +158,7 @@ public class Controller implements IController
                     return;
                 }
 
-                int trustedActionIndex = trustedActions != null ? isTrusted(trustedActions, actionName) : -1;
+                int trustedActionIndex = isTrusted(trustedActions, actionName);
                 boolean isActionUnknown = trustedActionIndex == -1;
 
                 String actionValue = null;
