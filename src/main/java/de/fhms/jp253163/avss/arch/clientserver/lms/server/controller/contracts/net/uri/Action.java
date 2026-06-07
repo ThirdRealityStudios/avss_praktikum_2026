@@ -1,7 +1,5 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.URI;
 import java.util.Objects;
 
@@ -26,38 +24,27 @@ public class Action
      */
     public String getName()
     {
-        String serviceNameRemovedPath = null;
-        int serviceNameSkippedIndex = -1;
-
         if(name != null)
             return name;
 
-        if(path.startsWith("/") && StringUtils.countMatches(path, "/") >= 2)
+        if(path.startsWith("/"))
         {
-            // Indices for service name inclusive both forward slashes
-            serviceNameSkippedIndex = path.indexOf("/", 1) + 1;
+            String[] strs = path.split("/");
 
-            // E.g. you have "/loan/update/43". It will shrink to "update/43" only.
-            if(serviceNameSkippedIndex < path.length())
-                serviceNameRemovedPath = path.substring(serviceNameSkippedIndex);
-
-            if(serviceNameRemovedPath == null) return null;
-
-            // E.g. "update/43" remaining for serviceTruncatedPath
-            if(StringUtils.countMatches(serviceNameRemovedPath, "/") > 0)
+            if(strs.length >= 3 && !strs[2].isEmpty())
             {
-                this.name = StringUtils.substringBefore(serviceNameRemovedPath, "/");
-                System.out.println("Action: " + name); // TODO Delete debug log
+                this.name = strs[2];
 
-                // So also directly parse the value, e.g. with "update/43" it is "43" (but it could also be non-numeric or contain more slashes!)
-                this.value = StringUtils.substringAfter(serviceNameRemovedPath, "/");
-                System.out.println("Value: " + value); // TODO Delete debug log
+                if(strs.length >= 4 && !strs[3].isEmpty())
+                {
+                    this.value = strs[3];
+                }
 
-                return name;
+                return this.name;
             }
             else
             {
-                return name = serviceNameRemovedPath;
+                return null;
             }
         }
         else
