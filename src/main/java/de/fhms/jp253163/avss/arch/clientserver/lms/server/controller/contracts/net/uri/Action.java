@@ -28,7 +28,6 @@ public class Action
     {
         String serviceNameRemovedPath = null;
         int serviceNameSkippedIndex = -1;
-        int pathTruncationWidth = 0;
 
         if(name != null)
             return name;
@@ -38,11 +37,9 @@ public class Action
             // Indices for service name inclusive both forward slashes
             serviceNameSkippedIndex = path.indexOf("/", 1) + 1;
 
+            // E.g. you have "/loan/update/43". It will shrink to "update/43" only.
             if(serviceNameSkippedIndex < path.length())
                 serviceNameRemovedPath = path.substring(serviceNameSkippedIndex, path.length() - 1);
-
-            // E.g. you have "/loan/update/43". It will truncate to "update/43" only.
-            serviceNameRemovedPath = StringUtils.substring(path, pathTruncationWidth);
 
             System.out.println("serviceTruncatedPath: " + serviceNameRemovedPath);
 
