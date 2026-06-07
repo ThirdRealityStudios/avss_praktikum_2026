@@ -33,24 +33,12 @@ public class Service
 
         if(this.path.startsWith("/"))
         {
-            if(StringUtils.countMatches(path, "/") > 1)
-            {
-                this.serviceName = StringUtils.substringBetween(path, "/");
-                System.out.println("Service (code 0): " + this.serviceName); // TODO Delete debug log
+            String[] strs = path.split("/");
 
-                if(this.serviceName.isEmpty())
-                    return null;
+            if(strs[1].isEmpty())
+                return null;
 
-                return this.serviceName;
-            }
-
-            this.serviceName = StringUtils.substringAfter(path, "/");
-            System.out.println("Service (code 1): " + this.serviceName); // TODO Delete debug log
-
-            if(this.serviceName.isEmpty())
-                return null; // no service (only entry point called)
-
-            return this.serviceName;
+            return this.serviceName = strs[1];
         }
         else
         {
