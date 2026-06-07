@@ -8,6 +8,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.h
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -48,7 +49,7 @@ public class Controller implements IController
         this.borrowerRepository = borrowerRepository;
         this.loanRepository = loanRepository;
 
-        createBorrowerViewHandler = new CreateBorrowerViewHandler(borrowerRepository, this);
+        createBorrowerViewHandler = new CreateBorrowerRequestHandler(borrowerRepository, this);
         createLoanViewHandler = new CreateLoanViewHandler(loanRepository);
 
         readBorrowerViewHandler = new ReadBorrowerViewHandler(borrowerRepository);
@@ -79,21 +80,67 @@ public class Controller implements IController
                     response = "Not Found";
                     responseCode = 404;
                 }
-                else if(path.toLowerCase().startsWith("/borrower"))
+                else if(path.toLowerCase().startsWith(ENTRY_POINT_BORROWER.toLowerCase()))
                 {
-                    response = "Here borrowers will be shown";
-                    responseCode = 200;
+                    if(path.length() == ENTRY_POINT_BORROWER.length())
+                    {
+                        response = "Invalid Request";
+                        responseCode = 400;
+                    }
+                    else
+                    {
+                        if(path.toLowerCase().startsWith(ENTRY_POINT_BORROWER_CREATE.toLowerCase()))
+                        {
+                            String numberPromptUri = ENTRY_POINT_BORROWER_CREATE + "/";
+
+                            if(path.toLowerCase().startsWith(numberPromptUri.toLowerCase()))
+                            {
+                                String borrowerNumber = StringUtils.truncate(path, 0, ENTRY_POINT_BORROWER_CREATE.length());
+
+
+                            }
+                        }
+                        else if(path.toLowerCase().startsWith(ENTRY_POINT_BORROWER_READ.toLowerCase()))
+                        {
+
+                        }
+                        else if(path.toLowerCase().startsWith(ENTRY_POINT_BORROWER_UPDATE.toLowerCase()))
+                        {
+
+                        }
+                        else if(path.toLowerCase().startsWith(ENTRY_POINT_BORROWER_DELETE.toLowerCase()))
+                        {
+                            response = "Here borrowers will be shown";
+                            responseCode = 200;
+                        }
+                        else
+                        {
+                            response = "Invalid Request";
+                            responseCode = 400;
+                        }
+                    }
                 }
-                else if(path.toLowerCase().startsWith("/loan"))
+                else if(path.toLowerCase().startsWith(ENTRY_POINT_LOAN.toLowerCase()))
                 {
-                    response = "Here loans will be shown";
-                    responseCode = 200;
+                    if(path.length() == ENTRY_POINT_LOAN.length())
+                    {
+                        response = "Invalid Request";
+                        responseCode = 400;
+                    }
+                    else
+                    {
+                        response = "Here loans will be shown";
+                        responseCode = 200;
+                    }
                 }
                 else
                 {
                     response = "Not Implemented. Sorry.";
                     responseCode = 501;
                 }
+
+                // NumericQueryHandler(String entryPoint)
+                // bind()
 
                 exchange.sendResponseHeaders(responseCode, response.length());
 

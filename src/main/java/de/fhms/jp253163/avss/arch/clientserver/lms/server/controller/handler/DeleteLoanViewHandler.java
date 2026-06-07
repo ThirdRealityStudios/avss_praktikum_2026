@@ -1,9 +1,8 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IDeleteLoanViewHandler;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 
 import java.util.Objects;

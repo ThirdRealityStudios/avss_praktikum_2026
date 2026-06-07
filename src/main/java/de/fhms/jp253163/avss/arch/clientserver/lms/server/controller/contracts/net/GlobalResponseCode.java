@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net;
 
 public enum GlobalResponseCode
 {

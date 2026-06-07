@@ -1,7 +1,7 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.IController;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.ICreateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
@@ -12,11 +12,11 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Residential
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-public class CreateBorrowerViewHandler implements ICreateBorrowerViewHandler
+public class CreateBorrowerRequestHandler implements ICreateBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
 
-    public CreateBorrowerViewHandler(IBorrowerRepository borrowerRepository, IController presenter) throws NullPointerException
+    public CreateBorrowerRequestHandler(IBorrowerRepository borrowerRepository, IController presenter) throws NullPointerException
     {
         if(borrowerRepository == null || presenter == null)
             throw new NullPointerException();

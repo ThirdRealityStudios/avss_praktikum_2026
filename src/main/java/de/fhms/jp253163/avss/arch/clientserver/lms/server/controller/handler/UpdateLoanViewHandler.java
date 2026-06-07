@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IUpdateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
