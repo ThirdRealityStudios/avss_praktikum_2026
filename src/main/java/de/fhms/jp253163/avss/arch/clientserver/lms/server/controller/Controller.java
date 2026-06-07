@@ -126,7 +126,7 @@ public class Controller implements IController
                 if(isServiceUnknown) // Check if service is known to the system.
                 {
                     // no service called, e.g. only "/" as entry point.
-                    response(exchange, 404, "Not Found (Unknown Service)");
+                    response(exchange, 404, "Not Found (Unknown Service: " + requestServiceName + ")");
                     return;
                 }
 
@@ -148,7 +148,7 @@ public class Controller implements IController
                 if(isActionUnknown)
                 {
                     // action given but not known to the system (for that given service)
-                    response(exchange, 404, "Not Found (Unknown Action)");
+                    response(exchange, 404, "Not Found (Unknown Action: " + actionName + ")");
                     return;
                 }
 
