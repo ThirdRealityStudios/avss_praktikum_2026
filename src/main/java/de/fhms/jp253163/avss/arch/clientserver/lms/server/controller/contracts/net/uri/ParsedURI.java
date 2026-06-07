@@ -14,6 +14,8 @@ public class ParsedURI
         Objects.requireNonNull(uri.getPath(), "URI path must not be null!");
 
         this.path = uri.getPath();
+        System.out.println("Path: " + path);
+
         this.service = new Service(uri);
     }
 
