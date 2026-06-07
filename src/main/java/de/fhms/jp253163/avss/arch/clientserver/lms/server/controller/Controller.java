@@ -124,7 +124,7 @@ public class Controller implements IController
                 }
                 else // no service called, e.g. only "/" as entry point.
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, "Not Found (Service)");
                     return;
                 }
 
@@ -143,7 +143,7 @@ public class Controller implements IController
                 else
                 {
                     // invalid or missing action for that service
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, "Not Found (Action)");
                     return;
                 }
 
@@ -156,7 +156,7 @@ public class Controller implements IController
                 else
                 {
                     // missing value for that action
-                    response(exchange, 400, "Invalid Request");
+                    response(exchange, 400, "Invalid Request (No Value For Action)");
                     return;
                 }
             }
