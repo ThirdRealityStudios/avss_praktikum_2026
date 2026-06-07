@@ -35,6 +35,9 @@ public class Service
         {
             String[] strs = path.split("/");
 
+            if(strs.length <= 1)
+                return null;
+
             if(strs[1].isEmpty())
                 return null;
 
