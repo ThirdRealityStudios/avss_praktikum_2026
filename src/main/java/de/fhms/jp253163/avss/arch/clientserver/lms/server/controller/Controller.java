@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.ParsedURI;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
@@ -70,7 +71,12 @@ public class Controller implements IController
             @Override
             public void handle(HttpExchange exchange) throws IOException {
                 URI uri = exchange.getRequestURI();
-                String path = uri.getPath();
+
+                Objects.requireNonNull(uri);
+
+                ParsedURI parsedUri = new ParsedURI(uri);
+
+                parsedUri.
 
                 String response = null;
                 int responseCode = -1;

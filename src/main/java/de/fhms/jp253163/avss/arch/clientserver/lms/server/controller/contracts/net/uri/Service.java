@@ -19,19 +19,26 @@ public class Service
 
         this.path = uri.getPath();
         this.action = new Action(uri);
+
+        getName(); // initialize necessary global vars
     }
 
     public String getName()
     {
-        if(serviceName != null)
-            return serviceName;
+        if(this.serviceName != null)
+            return this.serviceName;
 
-        if(path.startsWith("/"))
+        if(this.path.startsWith("/"))
         {
             if(StringUtils.countMatches(path, "/") > 1)
                 return this.serviceName = StringUtils.substringBetween(path, "/");
 
-            return this.serviceName = StringUtils.substringAfter(path, "/");
+            this.serviceName = StringUtils.substringAfter(path, "/");
+
+            if(this.serviceName.isEmpty())
+                return null; // no service (only entry point called)
+
+            return this.serviceName;
         }
         else
         {
@@ -41,6 +48,6 @@ public class Service
 
     public Action getAction()
     {
-        return action;
+        return this.action;
     }
 }
