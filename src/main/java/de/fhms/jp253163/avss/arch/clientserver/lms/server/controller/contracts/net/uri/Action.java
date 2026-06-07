@@ -26,9 +26,8 @@ public class Action
      */
     public String getName()
     {
-        String serviceTruncatedPath = null;
-        int serviceNameFromIndex = -1;
-        int serviceNameEndIndex = -1;
+        String serviceNameRemovedPath = null;
+        int serviceNameSkippedIndex = -1;
         int pathTruncationWidth = 0;
 
         if(name != null)
@@ -37,33 +36,34 @@ public class Action
         if(path.startsWith("/") && StringUtils.countMatches(path, "/") >= 2)
         {
             // Indices for service name inclusive both forward slashes
-            serviceNameFromIndex = 0;
-            serviceNameEndIndex = path.indexOf("/", 1);
-            pathTruncationWidth = serviceNameEndIndex - serviceNameFromIndex + 1;
+            serviceNameSkippedIndex = path.indexOf("/", 1) + 1;
+
+            if(serviceNameSkippedIndex < path.length())
+                serviceNameRemovedPath = path.substring(serviceNameSkippedIndex, path.length() - 1);
 
             // E.g. you have "/loan/update/43". It will truncate to "update/43" only.
-            serviceTruncatedPath = StringUtils.truncate(path, pathTruncationWidth);
+            serviceNameRemovedPath = StringUtils.substring(path, pathTruncationWidth);
 
-            System.out.println("serviceTruncatedPath: " + serviceTruncatedPath);
+            System.out.println("serviceTruncatedPath: " + serviceNameRemovedPath);
 
-            if(serviceTruncatedPath.isEmpty())
+            if(serviceNameRemovedPath.isEmpty())
                 return null; // No action
 
             // E.g. "update/43" remaining for serviceTruncatedPath
-            if(StringUtils.countMatches(serviceTruncatedPath, "/") > 0)
+            if(StringUtils.countMatches(serviceNameRemovedPath, "/") > 0)
             {
-                this.name = StringUtils.substringBefore(serviceTruncatedPath, "/");
+                this.name = StringUtils.substringBefore(serviceNameRemovedPath, "/");
                 System.out.println("Action: " + name); // TODO Delete debug log
 
                 // So also directly parse the value, e.g. with "update/43" it is "43" (but it could also be non-numeric or contain more slashes!)
-                this.value = StringUtils.substringAfter(serviceTruncatedPath, "/");
+                this.value = StringUtils.substringAfter(serviceNameRemovedPath, "/");
                 System.out.println("Value: " + name); // TODO Delete debug log
 
                 return name;
             }
             else
             {
-                return name = serviceTruncatedPath;
+                return name = serviceNameRemovedPath;
             }
         }
         else
