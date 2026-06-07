@@ -118,7 +118,19 @@ public class Controller implements IController
         return new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) throws IOException {
+                /**
+                 * Note!!!
+                 *
+                 * Due to the part authority part in URIs and so on,
+                 * a maximum of 3 forward slashes is being shrunken from the beginning
+                 * to only one forward slash
+                 * (when sent - no matter if browser, curl etc.).
+                 * E.g. "///loan/crete/dfs" would be "/loan/crete/dfs" instead.
+                 * Or "////loan/crete/dfs" would be "//loan/crete/dfs" instead.
+                 * Or "//loan/crete/dfs" would be "/loan/crete/dfs" instead.
+                 */
                 URI uri = exchange.getRequestURI();
+
                 Objects.requireNonNull(uri);
 
                 ParsedURI requestParsedUri = new ParsedURI(uri);
