@@ -1,22 +1,12 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server;
 
 import com.google.gson.GsonBuilder;
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.IJsonSQLService;
-import de.fhms.jp253163.avss.arch.mvp.lms.infrastructure.JsonSQLService;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.*;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Borrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.Loan;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.Presenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.SwingView;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        IView view = new SwingView();
-
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
 
