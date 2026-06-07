@@ -1,7 +1,13 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server;
 
 import com.google.gson.GsonBuilder;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.Controller;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.IController;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.data.IJsonSQLService;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.data.JsonSQLService;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Loan;
 
 public class Main
 {
@@ -26,10 +32,9 @@ public class Main
             ISchufaRepository schufaRepo = new SchufaRepository();
             ILoanRepository loanRepository = new LoanDatabaseRepository(jssLoan, schufaRepo, borrowerRepository);
 
-            IPresenter presenter = new Presenter(view, borrowerRepository, loanRepository);
-            presenter.setView(view);
+            IController controller = new Controller(borrowerRepository, loanRepository);
 
-            view.start();
+            controller.start();
         }
         catch (Exception e)
         {
