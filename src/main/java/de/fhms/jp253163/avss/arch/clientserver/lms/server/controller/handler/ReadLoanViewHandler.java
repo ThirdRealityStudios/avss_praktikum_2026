@@ -1,7 +1,10 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IReadLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.DTOLoanSet;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 
@@ -11,22 +14,23 @@ import java.util.Objects;
 public class ReadLoanViewHandler implements IReadLoanViewHandler
 {
     private ILoanRepository loanRepository;
+    private ArrayList<IDTOLoanSet> loanSets;
 
     public ReadLoanViewHandler(ILoanRepository loanRepository) throws NullPointerException
     {
         Objects.requireNonNull(loanRepository);
 
         this.loanRepository = loanRepository;
+
+        this.loanSets = new ArrayList<>();
     }
 
     @Override
-    public void invoke(IRequestDTOLoanRead iRequestDTOLoanRead)
+    public int invoke(IRequestDTOLoanRead iRequestDTOLoanRead)
     {
         if(iRequestDTOLoanRead == null)
         {
-            presenter.getView().showMessage("Invalid read request!");
-
-            return;
+            return GlobalResponseCode.READ_LOAN_INVALID_REQUEST.ordinal();
         }
 
         ILoan[] loans = null;
@@ -38,12 +42,10 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
 
             if(loans == null || loans.length == 0)
             {
-                presenter.getView().showMessage("Could not find any loans!");
+                return GlobalResponseCode.READ_LOAN_EMPTY_DATABASE.ordinal();
             }
             else
             {
-                ArrayList<IDTOLoanSet> loanSets = new ArrayList<IDTOLoanSet>();
-
                 for(ILoan loan : loans)
                 {
                     IDTOLoanSet loanSet = new DTOLoanSet(loan.getId(), loan.getAmount(), loan.getRemainingBalance(), loan.getInterestRate(), loan.getTerm(), loan.getRemainingTerm(), loan.getBorrower());
@@ -51,30 +53,37 @@ public class ReadLoanViewHandler implements IReadLoanViewHandler
                     loanSets.add(loanSet);
                 }
 
-                presenter.getView().setLoanData(loanSets);
+                return GlobalResponseCode.READ_LOAN_FOUND_SUCCESS.ordinal();
             }
-
-            return;
         }
         else
         {
             ILoan loan = loanRepository.readLoan(loanID);
 
             if(loan == null)
-                presenter.getView().showMessage("Could not find that loan or negative ID!");
+                return GlobalResponseCode.READ_LOAN_NOT_FOUND.ordinal();
             else
             {
-                ArrayList<IDTOLoanSet> loanSets = new ArrayList<IDTOLoanSet>();
-
                 IDTOLoanSet loanSet = new DTOLoanSet(loan.getId(), loan.getAmount(), loan.getRemainingBalance(), loan.getInterestRate(), loan.getTerm(), loan.getRemainingTerm(), loan.getBorrower());
 
                 loanSets.add(loanSet);
 
-                presenter.getView().setLoanData(loanSets);
+                return GlobalResponseCode.READ_LOAN_FOUND_SUCCESS.ordinal();
             }
+        }
+    }
 
-            return;
+    @Override
+    public ArrayList<IDTOLoanSet> getResponseData() {
+        ArrayList<IDTOLoanSet> list = new ArrayList<>();
+
+        for(IDTOLoanSet set : loanSets)
+        {
+            list.add(new DTOLoanSet(set.getID(), set.getAmount(), set.getRemainingBalance(), set.getInterestRate(), set.getTerm(), set.getRemainingTerm(), set.getBorrower()));
         }
 
+        this.loanSets.clear();
+
+        return list;
     }
 }

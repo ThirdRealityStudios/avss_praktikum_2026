@@ -2,6 +2,14 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts;
 
 public enum GlobalResponseCode
 {
+    /**
+     * DO NEVER CHANGE THE ORDER OR DELETE ENUMS!
+     * ONLY ADDING NEW LINES / ENUMS IS ALLOWED AFTER
+     * THE LAST ENUM AT THE BOTTOM!
+     * OTHERWISE CLIENT / SERVER COMMUNICATION WILL FAIL
+     * DUE TO CHANGED ORDINAL VALUES!!!
+     */
+
     CREATE_BORROWER_INVALID_CREATION_REQUEST,
     CREATE_BORROWER_INVALID_FIRSTNAME,
     CREATE_BORROWER_INVALID_LASTNAME,
@@ -23,5 +31,42 @@ public enum GlobalResponseCode
     CREATE_LOAN_INVALID_AMOUNT,
     CREATE_LOAN_INVALID_TERM,
     CREATE_LOAN_CREATION_ERROR,
-    CREATE_LOAN_CREATION_SUCCESS
+    CREATE_LOAN_CREATION_SUCCESS,
+
+    READ_BORROWER_INVALID_REQUEST,
+    READ_BORROWER_EMPTY_DATABASE, // "Could not find any borrowers!"
+    READ_BORROWER_NOT_FOUND, // "Could not find that borrower or negative ID!"
+    READ_BORROWER_FOUND_SUCCESS,
+
+    READ_LOAN_INVALID_REQUEST, // "Invalid read request!"
+    READ_LOAN_EMPTY_DATABASE, // "Could not find any loans!"
+    READ_LOAN_FOUND_SUCCESS,
+    READ_LOAN_NOT_FOUND, // "Could not find that loan or negative ID!"
+
+    UPDATE_BORROWER_INVALID_REQUEST,
+    UPDATE_BORROWER_NO_SELECTED_DATASET, // "Please select a borrower! (dataset for retrieving borrower ID)"
+    UPDATE_BORROWER_INVALID_FIRSTNAME, // BorrowerFieldErrorMessage.INVALID_FIRSTNAME
+    UPDATE_BORROWER_INVALID_LASTNAME, // BorrowerFieldErrorMessage.INVALID_LASTNAME
+    UPDATE_BORROWER_INVALID_DAY_OF_BIRTH, // BorrowerFieldErrorMessage.INVALID_DAY_OF_BIRTH
+    UPDATE_BORROWER_INVALID_MONTH_OF_BIRTH, // BorrowerFieldErrorMessage.INVALID_MONTH_OF_BIRTH
+    UPDATE_BORROWER_INVALID_YEAR_OF_BIRTH, // BorrowerFieldErrorMessage.INVALID_YEAR_OF_BIRTH
+    UPDATE_BORROWER_INVALID_STREET, // BorrowerFieldErrorMessage.INVALID_STREET
+    UPDATE_BORROWER_INVALID_NO, // BorrowerFieldErrorMessage.INVALID_NO
+    UPDATE_BORROWER_INVALID_PLACE, // BorrowerFieldErrorMessage.INVALID_PLACE
+    UPDATE_BORROWER_INVALID_ZIP, // BorrowerFieldErrorMessage.INVALID_ZIP
+    UPDATE_BORROWER_NOT_FOUND, // "Could not find that borrower!"
+    UPDATE_BORROWER_ADDRESS_PARSE_ERROR, // "Could not process old address!"
+    UPDATE_BORROWER_BIRTHDAY_PARSE_ERROR, // "Could not process new birthday!"
+    UPDATE_BORROWER_SUCCESS, // "Updated borrower successfully!"
+    UPDATE_BORROWER_ERROR, // "Failed to update borrower!"
+
+    DELETE_BORROWER_INVALID_REQUEST, // "Invalid deletion request!"
+    DELETE_BORROWER_SUCCESS, // "Deleted borrower successfully!"
+    DELETE_BORROWER_ERROR, // "Borrower still has active loans or nothing was selected!"
+
+    DELETE_LOAN_INVALID_REQUEST, // "Invalid deletion request!"
+    DELETE_LOAN_NO_SELECTED_DATASET, // "Please select a dataset!"
+    DELETE_LOAN_SUCCESS, // "Deleted loan successfully!"
+    DELETE_LOAN_NOT_PAID // "Borrower needs to pay the loan first before deletion!"
+
 }

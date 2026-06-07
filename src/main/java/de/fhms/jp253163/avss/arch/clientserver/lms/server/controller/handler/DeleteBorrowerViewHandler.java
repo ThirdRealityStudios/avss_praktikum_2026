@@ -1,43 +1,36 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IDeleteBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
+
+import java.util.Objects;
 
 public class DeleteBorrowerViewHandler implements IDeleteBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
-    private IPresenter presenter;
 
-    public DeleteBorrowerViewHandler(IBorrowerRepository borrowerRepository, IPresenter presenter) throws NullPointerException
+    public DeleteBorrowerViewHandler(IBorrowerRepository borrowerRepository) throws NullPointerException
     {
-        if(borrowerRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(borrowerRepository);
 
         this.borrowerRepository = borrowerRepository;
-        this.presenter = presenter;
     }
 
     @Override
-    public void invoke(IRequestDTOBorrowerDelete iRequestDTOBorrowerDelete)
+    public int invoke(IRequestDTOBorrowerDelete iRequestDTOBorrowerDelete)
     {
         if(iRequestDTOBorrowerDelete == null)
         {
-            presenter.getView().showMessage("Invalid deletion request!");
-
-            return;
+            return GlobalResponseCode.DELETE_BORROWER_INVALID_REQUEST.ordinal();
         }
 
         if(borrowerRepository.deleteBorrower(iRequestDTOBorrowerDelete.getBorrowerID()))
         {
-            // Make the borrower table show all datasets now.
-            new ReadBorrowerViewHandler(borrowerRepository, presenter).invoke(new RequestDTOBorrowerRead(-1));
-
-            presenter.getView().showMessage("Deleted borrower successfully!");
+            return GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal();
         }
         else
-            presenter.getView().showMessage("Borrower still has active loans or nothing was selected!");
+            return GlobalResponseCode.DELETE_BORROWER_ERROR.ordinal();
     }
 }

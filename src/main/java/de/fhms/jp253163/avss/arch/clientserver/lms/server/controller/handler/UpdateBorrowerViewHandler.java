@@ -1,38 +1,32 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
-    private IPresenter presenter;
 
-    public UpdateBorrowerViewHandler(IBorrowerRepository borrowerRepository, IPresenter presenter) throws NullPointerException
+    public UpdateBorrowerViewHandler(IBorrowerRepository borrowerRepository) throws NullPointerException
     {
-        if(borrowerRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(borrowerRepository);
 
         this.borrowerRepository = borrowerRepository;
-        this.presenter = presenter;
     }
 
     @Override
-    public void invoke(IRequestDTOBorrowerUpdate iRequestDTOBorrowerUpdate)
+    public int invoke(IRequestDTOBorrowerUpdate iRequestDTOBorrowerUpdate)
     {
         if(iRequestDTOBorrowerUpdate == null)
         {
-            presenter.getView().showMessage("Invalid update request!");
-
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_REQUEST.ordinal();
         }
 
         int borrowerID = iRequestDTOBorrowerUpdate.getBorrowerID();
@@ -53,70 +47,59 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 
         if(borrowerID < 0)
         {
-            presenter.getView().showMessage("Please select a borrower! (dataset for retrieving borrower ID)");
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_NO_SELECTED_DATASET.ordinal();
         }
 
         if(!borrowerRepository.isValidFirstnameForUpdate(firstname))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_FIRSTNAME);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_FIRSTNAME.ordinal();
         }
 
         if(!borrowerRepository.isValidLastnameForUpdate(lastname))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_LASTNAME);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_LASTNAME.ordinal();
         }
 
         if(!borrowerRepository.isValidDayOfBirthForUpdate(day))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_DAY_OF_BIRTH);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_DAY_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidMonthOfBirthForUpdate(month))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_MONTH_OF_BIRTH);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_MONTH_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidYearOfBirthForUpdate(year))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_YEAR_OF_BIRTH);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_YEAR_OF_BIRTH.ordinal();
         }
 
         if(!borrowerRepository.isValidStreetForUpdate(street))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_STREET);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_STREET.ordinal();
         }
 
         if(!borrowerRepository.isValidNoForUpdate(no))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_NO);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_NO.ordinal();
         }
 
         if(!borrowerRepository.isValidPlaceForUpdate(place))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_PLACE);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_PLACE.ordinal();
         }
 
         if(!borrowerRepository.isValidZipForUpdate(zip))
         {
-            presenter.getView().showMessage(BorrowerFieldErrorMessage.INVALID_ZIP);
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_INVALID_ZIP.ordinal();
         }
 
         IBorrower currentBorrower = borrowerRepository.readBorrower(borrowerID);
 
         if(currentBorrower == null)
         {
-            presenter.getView().showMessage("Could not find that borrower!");
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_NOT_FOUND.ordinal();
         }
 
         // Below now: checks if values should stay the same, so use the old values where necessary
@@ -128,8 +111,7 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 
         if(address == null)
         {
-            presenter.getView().showMessage("Could not process old address!");
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_ADDRESS_PARSE_ERROR.ordinal();
         }
 
         if(street == null) lastname = currentBorrower.getResidentialAddress().getStreet();
@@ -158,8 +140,7 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
         }
         catch(DateTimeException e)
         {
-            presenter.getView().showMessage("Could not process new birthday!");
-            return;
+            return GlobalResponseCode.UPDATE_BORROWER_BIRTHDAY_PARSE_ERROR.ordinal();
         }
 
         currentBorrower.setDateOfBirth(updatedBirthday);
@@ -171,12 +152,9 @@ public class UpdateBorrowerViewHandler implements IUpdateBorrowerViewHandler
 
         if(borrowerRepository.updateBorrower(currentBorrower))
         {
-            // Make the borrower table show all datasets now.
-            new ReadBorrowerViewHandler(borrowerRepository, presenter).invoke(new RequestDTOBorrowerRead(-1));
-
-            presenter.getView().showMessage("Updated borrower successfully!");
+            return GlobalResponseCode.UPDATE_BORROWER_SUCCESS.ordinal();
         }
         else
-            presenter.getView().showMessage("Failed to update borrower!");
+            return GlobalResponseCode.UPDATE_BORROWER_ERROR.ordinal();
     }
 }

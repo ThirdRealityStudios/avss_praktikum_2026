@@ -1,37 +1,53 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.DTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IDTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IReadBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.DTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
 {
     private IBorrowerRepository borrowerRepository;
-    private IPresenter presenter;
+    private ArrayList<IDTOBorrowerSet> borrowerSets;
 
-    public ReadBorrowerViewHandler(IBorrowerRepository borrowerRepository, IPresenter presenter) throws NullPointerException
+    public ReadBorrowerViewHandler(IBorrowerRepository borrowerRepository) throws NullPointerException
     {
-        if(borrowerRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(borrowerRepository);
 
         this.borrowerRepository = borrowerRepository;
-        this.presenter = presenter;
+
+        borrowerSets = new ArrayList<>();
+    }
+
+    public ArrayList<IDTOBorrowerSet> getResponseData()
+    {
+        ArrayList<IDTOBorrowerSet> list = new ArrayList<>();
+
+        for(IDTOBorrowerSet set : borrowerSets)
+        {
+            LocalDate birthday = LocalDate.of(set.getYearOfBirth(), set.getMonthOfBirth(), set.getDayOfBirth());
+
+            list.add(new DTOBorrowerSet(set.getID(), set.getFirstname(), set.getLastname(), birthday, set.getStreet(), set.getNo(), set.getPlace(), set.getZip()));
+        }
+
+        this.borrowerSets.clear();
+
+        return list;
     }
 
     @Override
-    public void invoke(IRequestDTOBorrowerRead iRequestDTOBorrowerRead)
+    public int invoke(IRequestDTOBorrowerRead iRequestDTOBorrowerRead)
     {
         if(iRequestDTOBorrowerRead == null)
         {
-            presenter.getView().showMessage("Invalid read request!");
-
-            return;
+            return GlobalResponseCode.READ_BORROWER_INVALID_REQUEST.ordinal();
         }
 
         IBorrower[] borrowers = null;
@@ -43,20 +59,18 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
 
             if(borrowers == null || borrowers.length == 0)
             {
-                presenter.getView().showMessage("Could not find any borrowers!");
+                return GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE.ordinal();
             }
             else
             {
-                ArrayList<IDTOBorrowerSet> borrowerSets = new ArrayList<IDTOBorrowerSet>();
-
                 for(IBorrower borrower : borrowers)
                 {
                     IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrower.getId(), borrower.getFirstname(), borrower.getLastname(), borrower.getDateOfBirth(), borrower.getResidentialAddress().getStreet(), borrower.getResidentialAddress().getNo(), borrower.getResidentialAddress().getPlace(), borrower.getResidentialAddress().getZip());
 
-                    borrowerSets.add(borrowerSet);
+                    this.borrowerSets.add(borrowerSet);
                 }
 
-                presenter.getView().setBorrowerData(borrowerSets);
+                return GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal();
             }
         }
         else
@@ -64,19 +78,15 @@ public class ReadBorrowerViewHandler implements IReadBorrowerViewHandler
             IBorrower borrower = borrowerRepository.readBorrower(borrowerID);
 
             if(borrower == null)
-                presenter.getView().showMessage("Could not find that borrower or negative ID!");
+                return GlobalResponseCode.READ_BORROWER_NOT_FOUND.ordinal();
             else
             {
-                ArrayList<IDTOBorrowerSet> borrowerSets = new ArrayList<IDTOBorrowerSet>();
-
                 IDTOBorrowerSet borrowerSet = new DTOBorrowerSet(borrower.getId(), borrower.getFirstname(), borrower.getLastname(), borrower.getDateOfBirth(), borrower.getResidentialAddress().getStreet(), borrower.getResidentialAddress().getNo(), borrower.getResidentialAddress().getPlace(), borrower.getResidentialAddress().getZip());
 
-                borrowerSets.add(borrowerSet);
+                this.borrowerSets.add(borrowerSet);
 
-                presenter.getView().setBorrowerData(borrowerSets);
+                return GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal();
             }
-
-            return;
         }
     }
 }

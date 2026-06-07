@@ -1,45 +1,39 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanDelete;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IDeleteLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.IDeleteLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+
+import java.util.Objects;
 
 public class DeleteLoanViewHandler implements IDeleteLoanViewHandler
 {
     private ILoanRepository loanRepository;
-    private IPresenter presenter;
 
-    public DeleteLoanViewHandler(ILoanRepository loanRepository, IPresenter presenter) throws NullPointerException
+    public DeleteLoanViewHandler(ILoanRepository loanRepository) throws NullPointerException
     {
-        if(loanRepository == null || presenter == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(loanRepository);
 
         this.loanRepository = loanRepository;
-        this.presenter = presenter;
     }
 
     @Override
-    public void invoke(IRequestDTOLoanDelete iRequestDTOLoanDelete)
+    public int invoke(IRequestDTOLoanDelete iRequestDTOLoanDelete)
     {
         if(iRequestDTOLoanDelete == null)
         {
-            presenter.getView().showMessage("Invalid deletion request!");
-
-            return;
+            return GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST.ordinal();
         }
 
         if(iRequestDTOLoanDelete.getLoanID() == -1)
-            presenter.getView().showMessage("Please select a dataset!");
+            return GlobalResponseCode.DELETE_LOAN_NO_SELECTED_DATASET.ordinal();
         else if(loanRepository.deleteLoan(iRequestDTOLoanDelete.getLoanID()))
         {
-            // Make the loan table show all datasets now.
-            new ReadLoanViewHandler(loanRepository, presenter).invoke(new RequestDTOLoanRead(-1));
-
-            presenter.getView().showMessage("Deleted loan successfully!");
+            return GlobalResponseCode.DELETE_LOAN_SUCCESS.ordinal();
         }
         else
-            presenter.getView().showMessage("Borrower needs to pay the loan first before deletion!");
+            return GlobalResponseCode.DELETE_LOAN_NOT_PAID.ordinal();
     }
 }
