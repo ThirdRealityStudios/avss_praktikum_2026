@@ -146,7 +146,7 @@ public class Controller implements IController
                 trustedActions = TrustedPath.directories.get(trustedServiceIndex).getNext();
                 if(trustedActions.isEmpty())
                 {
-                    response(exchange, 503, "Not Implemented (No Action Implemented For That Service)");
+                    response(exchange, 501, "Not Implemented (No Action Implemented For That Service)");
                     return;
                 }
 
