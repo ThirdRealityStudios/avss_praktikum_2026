@@ -51,7 +51,7 @@ public class Action
 
                 // So also directly parse the value, e.g. with "update/43" it is "43" (but it could also be non-numeric or contain more slashes!)
                 this.value = StringUtils.substringAfter(serviceNameRemovedPath, "/");
-                System.out.println("Value: " + name); // TODO Delete debug log
+                System.out.println("Value: " + value); // TODO Delete debug log
 
                 return name;
             }
