@@ -75,11 +75,19 @@ public class Controller implements IController
 
         for(int i = 0; i < directories.size(); i++)
         {
-            if(directories.get(i) == null) continue;
+            if(directories.get(i) == null)
+            {
+                System.out.println("Trusted directory is null. Skipping.");
+                continue;
+            }
 
             trustedServiceName = directories.get(i).getValue();
 
-            if(trustedServiceName == null) continue;
+            if(trustedServiceName == null)
+            {
+                System.out.println("Trusted directory value is null. Skipping.");
+                continue;
+            }
 
             System.out.println("Comparing known \""+trustedServiceName+"\" with \""+directoryName+"\"");
 
