@@ -41,6 +41,8 @@ public class Action
             if(serviceNameSkippedIndex < path.length())
                 serviceNameRemovedPath = path.substring(serviceNameSkippedIndex, path.length() - 1);
 
+            if(serviceNameRemovedPath == null) return null;
+
             System.out.println("serviceTruncatedPath: " + serviceNameRemovedPath);
 
             if(serviceNameRemovedPath.isEmpty())
