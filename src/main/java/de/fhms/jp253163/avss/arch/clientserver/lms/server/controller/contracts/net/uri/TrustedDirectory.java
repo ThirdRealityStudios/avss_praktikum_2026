@@ -12,6 +12,7 @@ public class TrustedDirectory
     {
         Objects.requireNonNull(value);
 
+        this.value = value;
         this.next = new ArrayList<>();
     }
 

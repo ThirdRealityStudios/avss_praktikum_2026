@@ -70,18 +70,21 @@ public class Controller implements IController
     private int isTrusted(ArrayList<TrustedDirectory> directories, String directoryName)
     {
         String trustedServiceName = null;
+        TrustedDirectory trustedDir = null;
 
         if(directoryName == null) return -1;
 
         for(int i = 0; i < directories.size(); i++)
         {
-            if(directories.get(i) == null)
+            trustedDir = directories.get(i);
+
+            if(trustedDir == null)
             {
                 System.out.println("Trusted directory is null. Skipping.");
                 continue;
             }
 
-            trustedServiceName = directories.get(i).getValue();
+            trustedServiceName = trustedDir.getValue();
 
             if(trustedServiceName == null)
             {
