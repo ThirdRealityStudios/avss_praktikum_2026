@@ -81,6 +81,8 @@ public class Controller implements IController
 
             if(trustedServiceName == null) continue;
 
+            System.out.println("Comparing known \""+trustedServiceName+"\" with \""+directoryName+"\"");
+
             if(trustedServiceName.equalsIgnoreCase(directoryName))
                 return i;
         }
