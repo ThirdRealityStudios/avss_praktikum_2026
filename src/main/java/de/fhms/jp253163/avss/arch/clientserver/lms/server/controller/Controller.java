@@ -626,11 +626,11 @@ public class Controller implements IController
         {
             testable = str.substring(1, str.length() - 1);
 
-            return isInteger(testable);
+            return StringUtils.isNumeric(testable);
         }
         else
         {
-            return isInteger(str);
+            return StringUtils.isNumeric(str);
         }
     }
 
