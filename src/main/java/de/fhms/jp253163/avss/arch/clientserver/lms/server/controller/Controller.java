@@ -384,9 +384,9 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                boolean isInteger = isInteger(action.getValue());
+                boolean isInvalidID = !StringUtils.isNumeric(action.getValue());
 
-                if(!isInteger)
+                if(isInvalidID)
                 {
                     response(exchange, 400, "Bad Request");
                     return;
@@ -419,9 +419,9 @@ public class Controller implements IController
     {
         try
         {
-            boolean isInteger = isInteger(action.getValue());
+            boolean isInvalidID = !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
 
-            if(!isInteger)
+            if(isInvalidID)
             {
                 response(exchange, 400, "Bad Request");
                 return;
@@ -556,9 +556,9 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                boolean isInteger = isInteger(action.getValue());
+                boolean isInvalidID = !StringUtils.isNumeric(action.getValue());
 
-                if(!isInteger)
+                if(isInvalidID)
                 {
                     response(exchange, 400, "Bad Request");
                     return;
@@ -600,48 +600,14 @@ public class Controller implements IController
         }
     }
 
-    /**
-     * A function which directly checks the given string is an integer,
-     * no matter if negative (leading dash) or positive.
-     * This function is better than e.g. the Apache Commons isNumeric function
-     * because it cannot treat negative numbers.
-     * Only positive numbers.
-     * Hence,
-     * this function is better in specific cases.
-     *
-     * @param str String to test.
-     * @return True if "str" is an integer. Otherwise, false.
-     */
-    private boolean isInteger(String str)
-    {
-        String testable = null;
-
-        if(str.isEmpty())
-            return false;
-
-        if(str.equalsIgnoreCase("-"))
-            return false;
-
-        if(str.startsWith("-"))
-        {
-            testable = str.substring(1, str.length() - 1);
-
-            return StringUtils.isNumeric(testable);
-        }
-        else
-        {
-            return StringUtils.isNumeric(str);
-        }
-    }
-
     @Override
     public void getLoan(HttpExchange exchange, Action action)
     {
         try
         {
-            boolean isInteger = isInteger(action.getValue());
+            boolean isInvalidID = !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
 
-            if(!isInteger)
+            if(isInvalidID)
             {
                 response(exchange, 400, "Bad Request");
                 return;
