@@ -22,7 +22,6 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerReposit
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,19 +38,6 @@ public class Controller implements IController
     private ILoanRepository loanRepository;
 
     private HttpServer server;
-    private HttpContext context;
-
-    private ICreateBorrowerViewHandler createBorrowerViewHandler;
-    private ICreateLoanViewHandler createLoanViewHandler;
-
-    private IReadBorrowerViewHandler readBorrowerViewHandler;
-    private IReadLoanViewHandler readLoanViewHandler;
-
-    private IUpdateBorrowerViewHandler updateBorrowerViewHandler;
-    private IUpdateLoanViewHandler updateLoanViewHandler;
-
-    private IDeleteBorrowerViewHandler deleteBorrowerViewHandler;
-    private IDeleteLoanViewHandler deleteLoanViewHandler;
 
     private Gson gson;
 
@@ -68,18 +54,6 @@ public class Controller implements IController
         this.gson = gson;
         this.borrowerRepository = borrowerRepository;
         this.loanRepository = loanRepository;
-
-        createBorrowerViewHandler = new CreateBorrowerRequestHandler(borrowerRepository, this);
-        createLoanViewHandler = new CreateLoanViewHandler(loanRepository);
-
-        readBorrowerViewHandler = new ReadBorrowerViewHandler(borrowerRepository);
-        readLoanViewHandler = new ReadLoanViewHandler(loanRepository);
-
-        updateBorrowerViewHandler = new UpdateBorrowerViewHandler(borrowerRepository);
-        updateLoanViewHandler = new UpdateLoanViewHandler(loanRepository);
-
-        deleteBorrowerViewHandler = new DeleteBorrowerViewHandler(borrowerRepository);
-        deleteLoanViewHandler = new DeleteLoanViewHandler(loanRepository);
 
         this.server.createContext("/", genHttpHandler());
     }
