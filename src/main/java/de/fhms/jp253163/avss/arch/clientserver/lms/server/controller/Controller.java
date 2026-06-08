@@ -553,11 +553,20 @@ public class Controller implements IController
                 }
             }
         }
-        catch(Exception e)
+        catch(Exception e0)
         {
-            e.printStackTrace();
+            e0.printStackTrace();
 
-            return;
+            try
+            {
+                response(exchange, 400, "Bad Request");
+                return;
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+                return;
+            }
         }
     }
 
