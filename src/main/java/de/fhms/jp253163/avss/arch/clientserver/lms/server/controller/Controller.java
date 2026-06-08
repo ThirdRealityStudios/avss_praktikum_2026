@@ -150,6 +150,13 @@ public class Controller implements IController
                     return;
                 }
 
+                boolean noServiceImplemented = TrustedPath.directories == null || TrustedPath.directories.isEmpty();
+                if(noServiceImplemented)
+                {
+                    response(exchange, 501, "Not Implemented (Service Not Implemented)");
+                    return;
+                }
+
                 int trustedServiceIndex = isTrusted(TrustedPath.directories, requestServiceName);
                 boolean isServiceUnknown = trustedServiceIndex == -1;
 
@@ -162,7 +169,8 @@ public class Controller implements IController
                 }
 
                 trustedActions = TrustedPath.directories.get(trustedServiceIndex).getNext();
-                if(trustedActions.isEmpty())
+                boolean noActionImplemented = trustedActions == null || trustedActions.isEmpty();
+                if(noActionImplemented)
                 {
                     response(exchange, 501, "Not Implemented (No Action Implemented For That Service)");
                     return;
