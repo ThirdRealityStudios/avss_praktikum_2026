@@ -286,7 +286,10 @@ public class Controller implements IController
 
         boolean cud = action.getName().equalsIgnoreCase("create") || action.getName().equalsIgnoreCase("update") || action.getName().equalsIgnoreCase("delete");
 
-        if(action.getName().equalsIgnoreCase("read") && StringUtils.isNumeric(action.getValue()))
+        boolean isNumeric = StringUtils.isNumeric(action.getValue());
+        boolean r = action.getName().equalsIgnoreCase("read") && isNumeric;
+
+        if(r)
         {
             String loansJson = getLoan(exchange, action);
 
