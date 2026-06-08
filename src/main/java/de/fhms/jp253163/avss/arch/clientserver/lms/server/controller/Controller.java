@@ -489,7 +489,7 @@ public class Controller implements IController
             {
                 borrowers = borrowerRepository.readAllBorrowers();
 
-                if(borrowers == null)
+                if(borrowers == null || borrowers.length == 0)
                 {
                     response(exchange, 404, GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE.ordinal()+"");
                     return;
@@ -727,7 +727,7 @@ public class Controller implements IController
             {
                 loans = loanRepository.readAllLoans();
 
-                if(loans == null)
+                if(loans == null || loans.length == 0)
                 {
                     response(exchange, 404, GlobalResponseCode.READ_LOAN_EMPTY_DATABASE.ordinal()+"");
                     return;
