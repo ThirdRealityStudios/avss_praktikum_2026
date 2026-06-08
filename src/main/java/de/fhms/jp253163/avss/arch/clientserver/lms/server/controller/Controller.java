@@ -537,8 +537,16 @@ public class Controller implements IController
                     return;
                 }
             }
-            else if(action.getName().equalsIgnoreCase("delete") && StringUtils.isNumeric(action.getValue()))
+            else if(action.getName().equalsIgnoreCase("delete"))
             {
+                boolean isNumeric = StringUtils.isNumeric(action.getValue());
+
+                if(isNumeric)
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
+
                 id = Integer.parseInt(action.getValue());
 
                 if(loanRepository.deleteLoan(id))
@@ -551,6 +559,11 @@ public class Controller implements IController
                     response(exchange, 404, "Not Found");
                     return;
                 }
+            }
+            else
+            {
+                response(exchange, 400, "Bad Request");
+                return;
             }
         }
         catch(Exception e0)
