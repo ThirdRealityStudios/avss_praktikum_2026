@@ -1,6 +1,8 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer;
 
-public class SchufaRepository implements ISchufaRepository
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ISchufaRepository;
+
+public class SchufaConsumer implements ISchufaRepository
 {
     @Override
     public double readSchufaScore(int borrower)
