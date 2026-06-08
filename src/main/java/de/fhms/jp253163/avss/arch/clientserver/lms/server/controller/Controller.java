@@ -211,19 +211,25 @@ public class Controller implements IController
                     return;
                 }
 
-                actionValue = action.getValue();
-                if(actionValue != null)
+                String body = new String(exchange.getRequestBody().readAllBytes());
+
+                if(requestServiceName.equalsIgnoreCase("borrower"))
                 {
-                    // All request details were fulfilled
-                    response(exchange, 200, "OK");
+                    routeBorrower(exchange, action, body);
+
                     return;
                 }
-                else
+                else if(requestServiceName.equalsIgnoreCase("loan"))
                 {
-                    // missing value for that action
-                    response(exchange, 400, "Invalid Request (No Value For Action)");
+                    routeLoan(exchange, action, body);
+
                     return;
                 }
+
+                // Normally a route function should be called.
+                // If call goes to here then something went wrong with the trusted or non-implemented services.
+                response(exchange, 501, "Not Implemented");
+                return;
             }
         };
     }
@@ -258,6 +264,44 @@ public class Controller implements IController
         else if(cud)
         {
             postBorrower(exchange, action, body);
+        }
+        else
+        {
+            response(exchange, 501, "Not Implemented (No Action Implemented For That Service)");
+            return;
+        }
+    }
+
+    /**
+     * Requires validation of the parameter "action" in advance (if valid).
+     *
+     * @param action
+     * @param body
+     */
+    private void routeLoan(HttpExchange exchange, Action action, String body) throws IOException
+    {
+        Objects.requireNonNull(exchange);
+        Objects.requireNonNull(action);
+        Objects.requireNonNull(body);
+
+        boolean cud = action.getName().equalsIgnoreCase("create") || action.getName().equalsIgnoreCase("update") || action.getName().equalsIgnoreCase("delete");
+
+        if(action.getName().equalsIgnoreCase("read") && StringUtils.isNumeric(action.getValue()))
+        {
+            String loansJson = getLoan(exchange, action);
+
+            if(loansJson == null)
+            {
+                response(exchange, 404, "Not Found");
+                return;
+            }
+
+            response(exchange, 200, loansJson);
+            return;
+        }
+        else if(cud)
+        {
+            postLoan(exchange, action, body);
         }
         else
         {
