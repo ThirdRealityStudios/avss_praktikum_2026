@@ -1,13 +1,10 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.*;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.*;
