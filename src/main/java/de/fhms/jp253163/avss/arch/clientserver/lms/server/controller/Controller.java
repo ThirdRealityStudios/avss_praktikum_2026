@@ -564,34 +564,57 @@ public class Controller implements IController
     @Override
     public void getLoan(HttpExchange exchange, Action action)
     {
-        int id = -1;
-
         try
         {
-            id = Integer.parseInt(action.getValue());
+            int id = Integer.parseInt(action.getValue());
+
+            ILoan[] loans = null;
+            String sendableBody = null;
+
+            if(id == -1)
+            {
+                loans = loanRepository.readAllLoans();
+
+                if(loans == null)
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+
+                sendableBody = gson.toJson(loans);
+                response(exchange, 200, sendableBody);
+                return;
+            }
+            else
+            {
+                loans = new ILoan[]{ loanRepository.readLoan(id) };
+
+                if(loans[0] == null)
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+
+                sendableBody = gson.toJson(loans);
+                response(exchange, 200, sendableBody);
+                return;
+            }
         }
-        catch (NumberFormatException e)
+        catch (Exception e0)
         {
-            return null;
-        }
+            e0.printStackTrace();
 
-        ILoan[] loans = null;
+            try
+            {
+                response(exchange, 400, "Bad Request");
+                return;
+            }
+            catch (Exception e1)
+            {
+                e1.printStackTrace();
 
-        if(id == -1)
-        {
-            loans = loanRepository.readAllLoans();
-
-            if(loans == null) return null;
-
-            return gson.toJson(loans);
-        }
-        else
-        {
-            loans = new ILoan[]{ loanRepository.readLoan(id) };
-
-            if(loans[0] == null) return null;
-
-            return gson.toJson(loans);
+                return;
+            }
         }
     }
 
