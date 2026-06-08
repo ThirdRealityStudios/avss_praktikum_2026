@@ -481,7 +481,7 @@ public class Controller implements IController
 
                 if(borrowerRepository.deleteBorrower(id))
                 {
-                    response(exchange, 200, "OK");
+                    response(exchange, 200, GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal()+"");
                     return;
                 }
                 else
@@ -682,7 +682,7 @@ public class Controller implements IController
 
                 if(loanRepository.updateLoan(loan))
                 {
-                    response(exchange, 200, "OK");
+                    response(exchange, 200, GlobalResponseCode.UPDATE_LOAN_SUCCESS.ordinal()+"");
                     return;
                 }
                 else
