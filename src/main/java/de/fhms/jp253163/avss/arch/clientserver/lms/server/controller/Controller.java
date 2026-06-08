@@ -332,6 +332,12 @@ public class Controller implements IController
             {
                 IRequestDTOBorrowerCreate obj = gson.fromJson(body, RequestDTOBorrowerCreate.class);
 
+                if(obj == null) // E.g. called create action but not gave new dataset information in body
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
+
                 firstname = obj.getFirstname();
                 lastname = obj.getLastname();
 
@@ -347,6 +353,12 @@ public class Controller implements IController
             else if(action.getName().equalsIgnoreCase("update"))
             {
                 IRequestDTOBorrowerUpdate obj = gson.fromJson(body, RequestDTOBorrowerUpdate.class);
+
+                if(obj == null) // E.g. called update action but not gave update data
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
 
                 id = obj.getBorrowerID();
                 firstname = obj.getFirstname();
@@ -459,6 +471,12 @@ public class Controller implements IController
             {
                 IRequestDTOLoanCreate obj = gson.fromJson(body, RequestDTOLoanCreate.class);
 
+                if(obj == null) // E.g. called create action but not gave new dataset information in body
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
+
                 borrower = obj.getBorrower();
                 amount = obj.getAmount();
                 interestRate = obj.getInterestRate();
@@ -472,6 +490,12 @@ public class Controller implements IController
             else if(action.getName().equalsIgnoreCase("update"))
             {
                 IRequestDTOLoanUpdate obj = gson.fromJson(body, RequestDTOLoanUpdate.class);
+
+                if(obj == null) // E.g. called update action but not gave update data
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
 
                 loan = loanRepository.readLoan(obj.getLoanID());
 
