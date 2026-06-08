@@ -1,6 +1,6 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.model;
+package de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer.data.ILoan;
 
 public interface ILoanRepository
 {

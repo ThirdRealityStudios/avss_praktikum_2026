@@ -1,7 +1,7 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.model;
+package de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer.data.IBorrower;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer.data.IResidentialAddress;
 
 import java.time.LocalDate;
 
