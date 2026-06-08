@@ -11,6 +11,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerUpdate;
@@ -295,6 +296,75 @@ public class Controller implements IController
         }
     }
 
+    private boolean abortOnInvalidBirthday(HttpExchange exchange, int day, int month, int year) throws IOException
+    {
+        if(!borrowerRepository.isValidDayOfBirthForUpdate(day))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_DAY_OF_BIRTH.ordinal()+"");
+            return true;
+        }
+
+        if(!borrowerRepository.isValidMonthOfBirthForUpdate(month))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_MONTH_OF_BIRTH.ordinal()+"");
+            return true;
+        }
+
+        if(!borrowerRepository.isValidYearOfBirthForUpdate(year))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_YEAR_OF_BIRTH.ordinal()+"");
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean abortOnInvalidNames(HttpExchange exchange, String firstname, String lastname) throws IOException
+    {
+        if(!borrowerRepository.isValidFirstnameForUpdate(firstname))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_FIRSTNAME.ordinal()+"");
+            return true;
+        }
+
+        if(!borrowerRepository.isValidLastnameForUpdate(lastname))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_LASTNAME.ordinal()+"");
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean abortOnInvalidAddress(HttpExchange exchange, String street, String no, String place, int zip) throws IOException
+    {
+        if(!borrowerRepository.isValidStreetForUpdate(street))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_STREET.ordinal()+"");
+            return true;
+        }
+
+        if(!borrowerRepository.isValidNoForUpdate(no))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_NO.ordinal()+"");
+            return true;
+        }
+
+        if(!borrowerRepository.isValidPlaceForUpdate(place))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_PLACE.ordinal()+"");
+            return true;
+        }
+
+        if(!borrowerRepository.isValidZipForUpdate(zip))
+        {
+            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_ZIP.ordinal()+"");
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void postBorrower(HttpExchange exchange, Action action, String body)
     {
@@ -323,10 +393,16 @@ public class Controller implements IController
                     return;
                 }
 
-                firstname = obj.getFirstname();
-                lastname = obj.getLastname();
+                if(abortOnInvalidNames(exchange, obj.getFirstname(), obj.getLastname()))
+                    return;
+
+                if(abortOnInvalidBirthday(exchange, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
+                    return;
 
                 birthday = LocalDate.of(obj.getYearOfBirth(), obj.getMonthOfBirth(), obj.getDayOfBirth());
+
+                if(abortOnInvalidAddress(exchange, obj.getStreet(), obj.getNo(), obj.getPlace(), obj.getZip()))
+                    return;
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
 
@@ -346,10 +422,17 @@ public class Controller implements IController
                 }
 
                 id = obj.getBorrowerID();
-                firstname = obj.getFirstname();
-                lastname = obj.getLastname();
+
+                if(abortOnInvalidNames(exchange, obj.getFirstname(), obj.getLastname()))
+                    return;
+
+                if(abortOnInvalidBirthday(exchange, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
+                    return;
 
                 birthday = LocalDate.of(obj.getYearOfBirth(), obj.getMonthOfBirth(), obj.getDayOfBirth());
+
+                if(abortOnInvalidAddress(exchange, obj.getStreet(), obj.getNo(), obj.getPlace(), obj.getZip()))
+                    return;
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
 
@@ -374,7 +457,7 @@ public class Controller implements IController
                 }
                 else
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_REQUEST.ordinal()+"");
                     return;
                 }
             }
@@ -384,7 +467,7 @@ public class Controller implements IController
 
                 if(isInvalidID)
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.DELETE_BORROWER_INVALID_REQUEST.ordinal()+"");
                     return;
                 }
 
@@ -397,7 +480,7 @@ public class Controller implements IController
                 }
                 else
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.DELETE_BORROWER_ERROR.ordinal()+"");
                     return;
                 }
             }
@@ -419,7 +502,7 @@ public class Controller implements IController
 
             if(isInvalidID)
             {
-                response(exchange, 400, "Bad Request");
+                response(exchange, 400, GlobalResponseCode.READ_BORROWER_INVALID_REQUEST.ordinal()+"");
                 return;
             }
 
@@ -434,7 +517,7 @@ public class Controller implements IController
 
                 if(borrowers == null)
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE.ordinal()+"");
                     return;
                 }
 
@@ -448,7 +531,7 @@ public class Controller implements IController
 
                 if(borrowers[0] == null)
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.READ_BORROWER_NOT_FOUND.ordinal()+"");
                     return;
                 }
 
@@ -463,7 +546,7 @@ public class Controller implements IController
 
             try
             {
-                response(exchange, 400, "Bad Request");
+                response(exchange, 400, GlobalResponseCode.READ_BORROWER_INVALID_REQUEST.ordinal()+"");
                 return;
             }
             catch(Exception e1)
