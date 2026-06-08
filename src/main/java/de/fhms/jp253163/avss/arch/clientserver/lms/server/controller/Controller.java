@@ -389,7 +389,7 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called create action but not gave new dataset information in body
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.CREATE_BORROWER_INVALID_CREATION_REQUEST.ordinal()+"");
                     return;
                 }
 
@@ -420,7 +420,7 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called update action but not gave update data
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_NO_SELECTED_DATASET.ordinal()+"");
                     return;
                 }
 
@@ -447,7 +447,7 @@ public class Controller implements IController
 
                 if(borrower == null)
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.UPDATE_BORROWER_NOT_FOUND.ordinal()+"");
                     return;
                 }
 
@@ -639,6 +639,12 @@ public class Controller implements IController
 
                 loans = new ILoan[]{ loanRepository.createLoan(borrower, amount, interestRate, term) };
 
+                if(loans[0] == null)
+                {
+                    response(exchange, 400, GlobalResponseCode.CREATE_LOAN_CREATION_ERROR.ordinal()+"");
+                    return;
+                }
+
                 response(exchange, 200, gson.toJson(loans));
                 return;
             }
@@ -648,7 +654,7 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called update action but not gave update data
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_NO_SELECTED_DATASET.ordinal()+"");
                     return;
                 }
 
@@ -656,7 +662,7 @@ public class Controller implements IController
 
                 if(loan == null)
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.UPDATE_LOAN_NOT_FOUND.ordinal()+"");
                     return;
                 }
 
@@ -670,7 +676,7 @@ public class Controller implements IController
 
                 if(obj.isBookInstallmentWanted() && !loanUpdated.payInstallment())
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_ERROR.ordinal()+"");
                     return;
                 }
 
@@ -681,7 +687,7 @@ public class Controller implements IController
                 }
                 else
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_ERROR.ordinal()+"");
                     return;
                 }
             }
@@ -691,7 +697,7 @@ public class Controller implements IController
 
                 if(isInvalidID)
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST.ordinal()+"");
                     return;
                 }
 
@@ -699,12 +705,12 @@ public class Controller implements IController
 
                 if(loanRepository.deleteLoan(id))
                 {
-                    response(exchange, 200, "OK");
+                    response(exchange, 200, GlobalResponseCode.DELETE_LOAN_SUCCESS.ordinal()+"");
                     return;
                 }
                 else
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST.ordinal()+"");
                     return;
                 }
             }
@@ -740,7 +746,7 @@ public class Controller implements IController
 
             if(isInvalidID)
             {
-                response(exchange, 400, "Bad Request");
+                response(exchange, 400, GlobalResponseCode.READ_LOAN_INVALID_REQUEST.ordinal()+"");
                 return;
             }
 
@@ -755,7 +761,7 @@ public class Controller implements IController
 
                 if(loans == null)
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.READ_LOAN_EMPTY_DATABASE.ordinal()+"");
                     return;
                 }
 
@@ -769,7 +775,7 @@ public class Controller implements IController
 
                 if(loans[0] == null)
                 {
-                    response(exchange, 404, "Not Found");
+                    response(exchange, 404, GlobalResponseCode.READ_LOAN_NOT_FOUND.ordinal()+"");
                     return;
                 }
 
