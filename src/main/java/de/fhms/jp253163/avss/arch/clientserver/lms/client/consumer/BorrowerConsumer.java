@@ -10,6 +10,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentia
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -63,10 +64,27 @@ public class BorrowerConsumer implements IBorrowerRepository
         String json = gson.toJson(borrowerCreateDTO);
 
         HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
-
         HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
 
-        return null;
+        HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
+        HttpResponse resp = null;
+
+        try
+        {
+            resp = client.send(req, handl);
+
+            if(resp.statusCode() == 200)
+            {
+                
+            }
+
+            return null;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
