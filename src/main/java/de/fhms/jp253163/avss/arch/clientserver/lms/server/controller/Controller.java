@@ -418,6 +418,14 @@ public class Controller implements IController
     {
         try
         {
+            boolean isNumeric = StringUtils.isNumeric(action.getValue());
+
+            if(!isNumeric)
+            {
+                response(exchange, 400, "Bad Request");
+                return;
+            }
+
             int id = Integer.parseInt(action.getValue());
 
             IBorrower[] borrowers = null;
@@ -596,6 +604,14 @@ public class Controller implements IController
     {
         try
         {
+            boolean isNumeric = StringUtils.isNumeric(action.getValue());
+
+            if(!isNumeric)
+            {
+                response(exchange, 400, "Bad Request");
+                return;
+            }
+
             int id = Integer.parseInt(action.getValue());
 
             ILoan[] loans = null;
