@@ -247,27 +247,21 @@ public class Controller implements IController
         Objects.requireNonNull(body);
 
         boolean cud = action.getName().equalsIgnoreCase("create") || action.getName().equalsIgnoreCase("update") || action.getName().equalsIgnoreCase("delete");
+        boolean r = action.getName().equalsIgnoreCase("read");
 
-        if(action.getName().equalsIgnoreCase("read") && StringUtils.isNumeric(action.getValue()))
+        if(r)
         {
-            String borrowersJson = getBorrower(exchange, action);
-
-            if(borrowersJson == null)
-            {
-                response(exchange, 404, "Not Found");
-                return;
-            }
-
-            response(exchange, 200, borrowersJson);
+            getBorrower(exchange, action);
             return;
         }
         else if(cud)
         {
             postBorrower(exchange, action, body);
+            return;
         }
         else
         {
-            response(exchange, 501, "Not Implemented (Action Not Implemented For That Service - Code 0)");
+            response(exchange, 501, "Not Implemented (Action Not Implemented For That Service)");
             return;
         }
     }
@@ -285,30 +279,21 @@ public class Controller implements IController
         Objects.requireNonNull(body);
 
         boolean cud = action.getName().equalsIgnoreCase("create") || action.getName().equalsIgnoreCase("update") || action.getName().equalsIgnoreCase("delete");
-
-        boolean isNumeric = StringUtils.isNumeric(action.getValue());
-        boolean r = action.getName().equalsIgnoreCase("read") && isNumeric;
+        boolean r = action.getName().equalsIgnoreCase("read");
 
         if(r)
         {
-            String loansJson = getLoan(exchange, action);
-
-            if(loansJson == null)
-            {
-                response(exchange, 404, "Not Found");
-                return;
-            }
-
-            response(exchange, 200, loansJson);
+            getLoan(exchange, action);
             return;
         }
         else if(cud)
         {
             postLoan(exchange, action, body);
+            return;
         }
         else
         {
-            response(exchange, 501, "Not Implemented (Action Not Implemented For That Service - Code 1, read? " + r + ", value numeric? " + isNumeric + ")");
+            response(exchange, 501, "Not Implemented (Action Not Implemented For That Service)");
             return;
         }
     }
@@ -421,35 +406,58 @@ public class Controller implements IController
     }
 
     @Override
-    public String getBorrower(HttpExchange exchange, Action action) {
-        int id = -1;
-
+    public void getBorrower(HttpExchange exchange, Action action)
+    {
         try
         {
-            id = Integer.parseInt(action.getValue());
+            int id = Integer.parseInt(action.getValue());
+
+            IBorrower[] borrowers = null;
+            String bodySendable = null;
+
+            if(id == -1)
+            {
+                borrowers = borrowerRepository.readAllBorrowers();
+
+                if (borrowers == null)
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+
+                bodySendable = gson.toJson(borrowers);
+                response(exchange, 200, bodySendable);
+                return;
+            }
+            else
+            {
+                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(id) };
+
+                if(borrowers[0] == null)
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+
+                bodySendable = gson.toJson(borrowers);
+                response(exchange, 200, bodySendable);
+                return;
+            }
         }
-        catch (NumberFormatException e)
+        catch (Exception e0)
         {
-            return null;
-        }
+            e0.printStackTrace();
 
-        IBorrower[] borrowers = null;
-
-        if(id == -1)
-        {
-            borrowers = borrowerRepository.readAllBorrowers();
-
-            if(borrowers == null) return null;
-
-            return gson.toJson(borrowers);
-        }
-        else
-        {
-            borrowers = new IBorrower[]{ borrowerRepository.readBorrower(id) };
-
-            if(borrowers[0] == null) return null;
-
-            return gson.toJson(borrowers);
+            try
+            {
+                response(exchange, 400, "Bad Request");
+                return;
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+                return;
+            }
         }
     }
 
@@ -554,7 +562,7 @@ public class Controller implements IController
     }
 
     @Override
-    public String getLoan(HttpExchange exchange, Action action)
+    public void getLoan(HttpExchange exchange, Action action)
     {
         int id = -1;
 

@@ -6,10 +6,10 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.n
 public interface IController
 {
     public void postBorrower(HttpExchange exchange, Action action, String body);
-    public String getBorrower(HttpExchange exchange, Action action);
+    public void getBorrower(HttpExchange exchange, Action action);
 
     public void postLoan(HttpExchange exchange, Action action, String body);
-    public String getLoan(HttpExchange exchange, Action action);
+    public void getLoan(HttpExchange exchange, Action action);
 
     public void start();
 }
