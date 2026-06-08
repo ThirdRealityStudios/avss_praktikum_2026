@@ -96,7 +96,6 @@ public class Controller implements IController
 
             if(trustedDir == null)
             {
-                System.out.println("Trusted directory is null. Skipping.");
                 continue;
             }
 
@@ -104,11 +103,8 @@ public class Controller implements IController
 
             if(trustedServiceName == null)
             {
-                System.out.println("Trusted directory value is null. Skipping.");
                 continue;
             }
-
-            System.out.println("Comparing known \""+trustedServiceName+"\" with \""+directoryName+"\"");
 
             if(trustedServiceName.equalsIgnoreCase(directoryName))
                 return i;
