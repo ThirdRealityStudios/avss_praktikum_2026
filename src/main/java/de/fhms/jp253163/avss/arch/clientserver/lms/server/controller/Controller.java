@@ -308,7 +308,7 @@ public class Controller implements IController
         }
         else
         {
-            response(exchange, 501, "Not Implemented (Action Not Implemented For That Service - Code 1)");
+            response(exchange, 501, "Not Implemented (Action Not Implemented For That Service - Code 1, read? " + r + ", value numeric? " + isNumeric + ")");
             return;
         }
     }
