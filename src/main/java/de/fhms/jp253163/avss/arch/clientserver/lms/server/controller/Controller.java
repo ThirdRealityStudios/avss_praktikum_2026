@@ -1,16 +1,25 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -18,6 +27,7 @@ import java.io.OutputStream;
 import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -230,30 +240,24 @@ public class Controller implements IController
         Objects.requireNonNull(action);
         Objects.requireNonNull(body);
 
-        if(action.getName().equalsIgnoreCase("create"))
-        {
+        boolean cud = action.getName().equalsIgnoreCase("create") || action.getName().equalsIgnoreCase("update") || action.getName().equalsIgnoreCase("delete");
 
-        }
-        else if(action.getName().equalsIgnoreCase("read") && StringUtils.isNumeric(action.getValue()))
+        if(action.getName().equalsIgnoreCase("read") && StringUtils.isNumeric(action.getValue()))
         {
-            String borrowersJson = getBorrower(action);
+            String borrowersJson = getBorrower(exchange, action);
 
             if(borrowersJson == null)
             {
-                response(exchange, 404, "Not Found (Borrower(s))");
+                response(exchange, 404, "Not Found");
                 return;
             }
 
             response(exchange, 200, borrowersJson);
             return;
         }
-        else if(action.getName().equalsIgnoreCase("update"))
+        else if(cud)
         {
-
-        }
-        else if(action.getName().equalsIgnoreCase("delete"))
-        {
-
+            postBorrower(exchange, action, body);
         }
         else
         {
@@ -263,12 +267,102 @@ public class Controller implements IController
     }
 
     @Override
-    public boolean postBorrower(Action action, String body) {
-        return false;
+    public void postBorrower(HttpExchange exchange, Action action, String body)
+    {
+        Objects.requireNonNull(action);
+        Objects.requireNonNull(body);
+
+        int id = -1;
+        String firstname = null, lastname = null;
+        LocalDate birthday = null;
+        IResidentialAddress address = null;
+        double schufaScore = -1;
+        int[] loans = null;
+
+        IBorrower[] borrowers = null;
+        IBorrower borrower = null;
+
+        try
+        {
+            if(action.getName().equalsIgnoreCase("create"))
+            {
+                IRequestDTOBorrowerCreate obj = gson.fromJson(body, RequestDTOBorrowerCreate.class);
+
+                firstname = obj.getFirstname();
+                lastname = obj.getLastname();
+
+                birthday = LocalDate.of(obj.getYearOfBirth(), obj.getMonthOfBirth(), obj.getDayOfBirth());
+
+                address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
+
+                borrowers = new IBorrower[]{ borrowerRepository.createBorrower(firstname, lastname, birthday, address, 0.9d) };
+
+                response(exchange, 200, gson.toJson(borrowers));
+                return;
+            }
+            else if(action.getName().equalsIgnoreCase("update"))
+            {
+                IRequestDTOBorrowerUpdate obj = gson.fromJson(body, RequestDTOBorrowerUpdate.class);
+
+                id = obj.getBorrowerID();
+                firstname = obj.getFirstname();
+                lastname = obj.getLastname();
+
+                birthday = LocalDate.of(obj.getYearOfBirth(), obj.getMonthOfBirth(), obj.getDayOfBirth());
+
+                address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
+
+                borrower = borrowerRepository.readBorrower(id);
+                loans = obj.getLoans();
+
+                if(borrower == null)
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+
+                // cannot be updated directly
+                schufaScore = borrower.getSchufaScore();
+
+                borrower = new Borrower(id, firstname, lastname, birthday, address, schufaScore, loans);
+
+                if(borrowerRepository.updateBorrower(borrower))
+                {
+                    response(exchange, 200, gson.toJson(borrowers));
+                    return;
+                }
+                else
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
+            }
+            else if(action.getName().equalsIgnoreCase("delete") && StringUtils.isNumeric(action.getValue()))
+            {
+                id = Integer.parseInt(action.getValue());
+
+                if(borrowerRepository.deleteBorrower(id))
+                {
+                    response(exchange, 200, "OK");
+                    return;
+                }
+                else
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+
+            return;
+        }
     }
 
     @Override
-    public String getBorrower(Action action) {
+    public String getBorrower(HttpExchange exchange, Action action) {
         int id = -1;
 
         try
@@ -301,18 +395,102 @@ public class Controller implements IController
     }
 
     @Override
-    public void postLoan(Action action, String body) {
+    public void postLoan(HttpExchange exchange, Action action, String body)
+    {
+        Objects.requireNonNull(action);
+        Objects.requireNonNull(body);
 
+        int id = -1;
+        int borrower = -1;
+        double amount = -1;
+        double interestRate = -1;
+        int term = -1;
+
+        ILoan[] loans = null;
+        ILoan loan = null;
+
+        try
+        {
+            if(action.getName().equalsIgnoreCase("create"))
+            {
+                IRequestDTOLoanCreate obj = gson.fromJson(body, RequestDTOLoanCreate.class);
+
+                borrower = obj.getBorrower();
+                amount = obj.getAmount();
+                interestRate = obj.getInterestRate();
+                term = obj.getTerm();
+
+                loans = new ILoan[]{ loanRepository.createLoan(borrower, amount, interestRate, term) };
+
+                response(exchange, 200, gson.toJson(loans));
+                return;
+            }
+            else if(action.getName().equalsIgnoreCase("update"))
+            {
+                IRequestDTOLoanUpdate obj = gson.fromJson(body, RequestDTOLoanUpdate.class);
+
+                loan = loanRepository.readLoan(obj.getLoanID());
+
+                if(loan == null)
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+
+                borrower = obj.isBookInstallmentWanted() ? loan.getBorrower() : obj.getBorrowerID();
+
+                ILoan loanUpdated = new Loan(id, loan.getAmount(), loan.getInterestRate(), loan.getTerm(), borrower);
+
+                if(obj.isBookInstallmentWanted() && !loanUpdated.payInstallment())
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
+
+                if(loanRepository.updateLoan(loan))
+                {
+                    response(exchange, 200, "OK");
+                    return;
+                }
+                else
+                {
+                    response(exchange, 400, "Bad Request");
+                    return;
+                }
+            }
+            else if(action.getName().equalsIgnoreCase("delete") && StringUtils.isNumeric(action.getValue()))
+            {
+                id = Integer.parseInt(action.getValue());
+
+                if(loanRepository.deleteLoan(id))
+                {
+                    response(exchange, 200, "OK");
+                    return;
+                }
+                else
+                {
+                    response(exchange, 404, "Not Found");
+                    return;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+
+            return;
+        }
     }
 
     @Override
-    public String getLoan(Action action) {
-        return new String[0];
+    public String getLoan(HttpExchange exchange, Action action)
+    {
+        return null;
     }
 
     @Override
-    public void start() {
-
+    public void start()
+    {
         this.server.start();
     }
 }
