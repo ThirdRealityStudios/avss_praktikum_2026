@@ -3,7 +3,6 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.client.view;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.*;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 
 import java.util.List;
 

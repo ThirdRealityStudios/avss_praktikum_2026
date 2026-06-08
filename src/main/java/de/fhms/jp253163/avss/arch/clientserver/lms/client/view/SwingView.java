@@ -4,7 +4,6 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.components.contro
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IDTOBorrowerSet;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IDTOLoanSet;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.*;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.dto.RequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.dto.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.tab.TabsPanel;
