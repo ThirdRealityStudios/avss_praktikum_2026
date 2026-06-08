@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts;
 
 public interface LoanFieldErrorMessage
 {
