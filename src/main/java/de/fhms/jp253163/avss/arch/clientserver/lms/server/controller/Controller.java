@@ -529,7 +529,35 @@ public class Controller implements IController
     @Override
     public String getLoan(HttpExchange exchange, Action action)
     {
-        return null;
+        int id = -1;
+
+        try
+        {
+            id = Integer.parseInt(action.getValue());
+        }
+        catch (NumberFormatException e)
+        {
+            return null;
+        }
+
+        ILoan[] loans = null;
+
+        if(id == -1)
+        {
+            loans = loanRepository.readAllLoans();
+
+            if(loans == null) return null;
+
+            return gson.toJson(loans);
+        }
+        else
+        {
+            loans = new ILoan[]{ loanRepository.readLoan(id) };
+
+            if(loans[0] == null) return null;
+
+            return gson.toJson(loans);
+        }
     }
 
     @Override
