@@ -75,7 +75,8 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(resp.statusCode() == 200)
             {
-                
+                // TODO Implement ResponseDTOBorrowerCreate, telling you the business response code (GlobalResponseCode enum or such)
+                // TODO and the created object.
             }
 
             return null;
