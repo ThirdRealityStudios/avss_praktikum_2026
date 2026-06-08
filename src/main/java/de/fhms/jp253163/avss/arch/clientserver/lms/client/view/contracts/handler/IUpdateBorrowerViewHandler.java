@@ -1,0 +1,8 @@
+package de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler;
+
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IRequestDTOBorrowerUpdate;
+
+public interface IUpdateBorrowerViewHandler
+{
+    public void invoke(IRequestDTOBorrowerUpdate updateBorrowerDTO);
+}
