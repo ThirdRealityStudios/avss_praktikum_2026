@@ -385,7 +385,7 @@ public class Controller implements IController
             {
                 boolean isNumeric = StringUtils.isNumeric(action.getValue());
 
-                if(isNumeric)
+                if(!isNumeric)
                 {
                     response(exchange, 400, "Bad Request");
                     return;
@@ -427,7 +427,7 @@ public class Controller implements IController
             {
                 borrowers = borrowerRepository.readAllBorrowers();
 
-                if (borrowers == null)
+                if(borrowers == null)
                 {
                     response(exchange, 404, "Not Found");
                     return;
@@ -549,7 +549,7 @@ public class Controller implements IController
             {
                 boolean isNumeric = StringUtils.isNumeric(action.getValue());
 
-                if(isNumeric)
+                if(!isNumeric)
                 {
                     response(exchange, 400, "Bad Request");
                     return;
