@@ -6,17 +6,11 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerUpdate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.*;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerUpdate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
@@ -443,15 +437,15 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                boolean isInvalidID = !StringUtils.isNumeric(action.getValue());
+                IRequestDTOBorrowerDelete obj = gson.fromJson(body, RequestDTOBorrowerDelete.class);
 
-                if(isInvalidID)
+                if(obj == null)
                 {
                     response(exchange, 400, GlobalResponseCode.DELETE_BORROWER_INVALID_REQUEST.ordinal()+"");
                     return;
                 }
 
-                id = Integer.parseInt(action.getValue());
+                id = obj.getBorrowerID();
 
                 if(borrowerRepository.deleteBorrower(id))
                 {
@@ -667,15 +661,15 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                boolean isInvalidID = !StringUtils.isNumeric(action.getValue());
+                IRequestDTOLoanDelete obj = gson.fromJson(body, RequestDTOLoanDelete.class);
 
-                if(isInvalidID)
+                if(obj == null) // E.g. called delete action but not gave deletion data
                 {
-                    response(exchange, 400, GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST.ordinal()+"");
+                    response(exchange, 400, GlobalResponseCode.DELETE_LOAN_NO_SELECTED_DATASET.ordinal()+"");
                     return;
                 }
 
-                id = Integer.parseInt(action.getValue());
+                id = obj.getLoanID();
 
                 if(loanRepository.deleteLoan(id))
                 {
