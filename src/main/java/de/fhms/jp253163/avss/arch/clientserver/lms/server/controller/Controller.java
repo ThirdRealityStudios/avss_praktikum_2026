@@ -441,7 +441,7 @@ public class Controller implements IController
 
                 if(obj == null)
                 {
-                    response(exchange, 400, GlobalResponseCode.DELETE_BORROWER_INVALID_REQUEST.ordinal()+"");
+                    response(exchange, 400, GlobalResponseCode.DELETE_BORROWER_ERROR.ordinal()+"");
                     return;
                 }
 
