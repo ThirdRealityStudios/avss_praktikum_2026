@@ -32,7 +32,7 @@ public class Main
             ISchufaRepository schufaRepo = new SchufaRepository();
             ILoanRepository loanRepository = new LoanDatabaseRepository(jssLoan, schufaRepo, borrowerRepository);
 
-            IController controller = new Controller(borrowerRepository, loanRepository);
+            IController controller = new Controller(builder.create(), borrowerRepository, loanRepository);
 
             controller.start();
         }
