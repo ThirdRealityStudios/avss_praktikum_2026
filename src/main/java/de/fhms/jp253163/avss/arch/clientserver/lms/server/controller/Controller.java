@@ -472,7 +472,7 @@ public class Controller implements IController
     {
         try
         {
-            boolean isInvalidID = !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
+            boolean isInvalidID = action.getValue() == null || !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
 
             if(isInvalidID)
             {
@@ -710,7 +710,7 @@ public class Controller implements IController
     {
         try
         {
-            boolean isInvalidID = !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
+            boolean isInvalidID = action.getValue() == null || !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
 
             if(isInvalidID)
             {
