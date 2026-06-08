@@ -21,6 +21,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerReposit
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -383,9 +384,9 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                boolean isNumeric = StringUtils.isNumeric(action.getValue());
+                boolean isInteger = isInteger(action.getValue());
 
-                if(!isNumeric)
+                if(!isInteger)
                 {
                     response(exchange, 400, "Bad Request");
                     return;
@@ -418,9 +419,9 @@ public class Controller implements IController
     {
         try
         {
-            boolean isNumeric = StringUtils.isNumeric(action.getValue());
+            boolean isInteger = isInteger(action.getValue());
 
-            if(!isNumeric)
+            if(!isInteger)
             {
                 response(exchange, 400, "Bad Request");
                 return;
@@ -555,9 +556,9 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                boolean isNumeric = StringUtils.isNumeric(action.getValue());
+                boolean isInteger = isInteger(action.getValue());
 
-                if(!isNumeric)
+                if(!isInteger)
                 {
                     response(exchange, 400, "Bad Request");
                     return;
@@ -599,14 +600,48 @@ public class Controller implements IController
         }
     }
 
+    /**
+     * A function which directly checks the given string is an integer,
+     * no matter if negative (leading dash) or positive.
+     * This function is better than e.g. the Apache Commons isNumeric function
+     * because it cannot treat negative numbers.
+     * Only positive numbers.
+     * Hence,
+     * this function is better in specific cases.
+     *
+     * @param str String to test.
+     * @return True if "str" is an integer. Otherwise, false.
+     */
+    private boolean isInteger(String str)
+    {
+        String testable = null;
+
+        if(str.isEmpty())
+            return false;
+
+        if(str.equalsIgnoreCase("-"))
+            return false;
+
+        if(str.startsWith("-"))
+        {
+            testable = str.substring(1, str.length() - 1);
+
+            return isInteger(testable);
+        }
+        else
+        {
+            return isInteger(str);
+        }
+    }
+
     @Override
     public void getLoan(HttpExchange exchange, Action action)
     {
         try
         {
-            boolean isNumeric = StringUtils.isNumeric(action.getValue());
+            boolean isInteger = isInteger(action.getValue());
 
-            if(!isNumeric)
+            if(!isInteger)
             {
                 response(exchange, 400, "Bad Request");
                 return;
