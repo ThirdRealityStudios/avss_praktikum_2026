@@ -1,5 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -9,7 +10,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.n
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
-import org.apache.commons.lang3.ArrayUtils;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -40,8 +41,11 @@ public class Controller implements IController
     private IDeleteBorrowerViewHandler deleteBorrowerViewHandler;
     private IDeleteLoanViewHandler deleteLoanViewHandler;
 
-    public Controller(IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws IOException, BindException
+    private Gson gson;
+
+    public Controller(Gson gson, IBorrowerRepository borrowerRepository, ILoanRepository loanRepository) throws IOException, BindException
     {
+        Objects.requireNonNull(gson);
         Objects.requireNonNull(borrowerRepository);
         Objects.requireNonNull(loanRepository);
 
@@ -49,6 +53,7 @@ public class Controller implements IController
         this.server = HttpServer.create(socketAddress, 0);
         this.server.setExecutor(null);
 
+        this.gson = gson;
         this.borrowerRepository = borrowerRepository;
         this.loanRepository = loanRepository;
 
@@ -213,14 +218,86 @@ public class Controller implements IController
         };
     }
 
+    /**
+     * Requires validation of the parameter "action" in advance (if valid).
+     *
+     * @param action
+     * @param body
+     */
+    private void routeBorrower(HttpExchange exchange, Action action, String body) throws IOException
+    {
+        Objects.requireNonNull(exchange);
+        Objects.requireNonNull(action);
+        Objects.requireNonNull(body);
+
+        if(action.getName().equalsIgnoreCase("create"))
+        {
+
+        }
+        else if(action.getName().equalsIgnoreCase("read") && StringUtils.isNumeric(action.getValue()))
+        {
+            String borrowersJson = getBorrower(action);
+
+            if(borrowersJson == null)
+            {
+                response(exchange, 404, "Not Found (Borrower(s))");
+                return;
+            }
+
+            response(exchange, 200, borrowersJson);
+            return;
+        }
+        else if(action.getName().equalsIgnoreCase("update"))
+        {
+
+        }
+        else if(action.getName().equalsIgnoreCase("delete"))
+        {
+
+        }
+        else
+        {
+            response(exchange, 501, "Not Implemented (No Action Implemented For That Service)");
+            return;
+        }
+    }
+
     @Override
     public boolean postBorrower(Action action, String body) {
         return false;
     }
 
     @Override
-    public String[] getBorrower(Action action) {
-        return new String[0];
+    public String getBorrower(Action action) {
+        int id = -1;
+
+        try
+        {
+            id = Integer.parseInt(action.getValue());
+        }
+        catch (NumberFormatException e)
+        {
+            return null;
+        }
+
+        IBorrower[] borrowers = null;
+
+        if(id == -1)
+        {
+            borrowers = borrowerRepository.readAllBorrowers();
+
+            if(borrowers == null) return null;
+
+            return gson.toJson(borrowers);
+        }
+        else
+        {
+            borrowers = new IBorrower[]{ borrowerRepository.readBorrower(id) };
+
+            if(borrowers[0] == null) return null;
+
+            return gson.toJson(borrowers);
+        }
     }
 
     @Override
@@ -229,7 +306,7 @@ public class Controller implements IController
     }
 
     @Override
-    public String[] getLoan(Action action) {
+    public String getLoan(Action action) {
         return new String[0];
     }
 
