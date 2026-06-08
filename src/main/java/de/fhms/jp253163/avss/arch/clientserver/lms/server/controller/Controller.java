@@ -563,6 +563,45 @@ public class Controller implements IController
         }
     }
 
+    private boolean abortOnInvalidLoanBaseData(HttpExchange exchange, boolean isUpdate, int borrower, double amount, double interestRate, int term) throws IOException
+    {
+        if(isUpdate)
+        {
+            if(!loanRepository.isValidBorrowerIDForUpdate(borrower))
+            {
+                response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_INVALID_BORROWER_ID.ordinal()+"");
+            }
+        }
+        else
+        {
+            if(!loanRepository.isValidBorrowerIDForCreation(borrower))
+            {
+                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_BORROWER_ID.ordinal()+"");
+                return true;
+            }
+
+            if(!loanRepository.isValidAmountForCreation(amount))
+            {
+                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_AMOUNT.ordinal()+"");
+                return true;
+            }
+
+            if(!loanRepository.isValidInterestRateForCreation(interestRate))
+            {
+                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_INTEREST_RATE.ordinal()+"");
+                return true;
+            }
+
+            if(!loanRepository.isValidTermForCreation(term))
+            {
+                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_TERM.ordinal()+"");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public void postLoan(HttpExchange exchange, Action action, String body)
     {
@@ -586,7 +625,7 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called create action but not gave new dataset information in body
                 {
-                    response(exchange, 400, "Bad Request");
+                    response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_CREATION_REQUEST.ordinal()+"");
                     return;
                 }
 
@@ -594,6 +633,9 @@ public class Controller implements IController
                 amount = obj.getAmount();
                 interestRate = obj.getInterestRate();
                 term = obj.getTerm();
+
+                if(abortOnInvalidLoanBaseData(exchange, false, borrower, amount, interestRate, term))
+                    return;
 
                 loans = new ILoan[]{ loanRepository.createLoan(borrower, amount, interestRate, term) };
 
@@ -619,6 +661,10 @@ public class Controller implements IController
                 }
 
                 borrower = obj.isBookInstallmentWanted() ? loan.getBorrower() : obj.getBorrowerID();
+
+                // Will only check if "borrower" above is as it should be. The others are ignored.
+                if(abortOnInvalidLoanBaseData(exchange, true, borrower, amount, interestRate, term))
+                    return;
 
                 ILoan loanUpdated = new Loan(id, loan.getAmount(), loan.getInterestRate(), loan.getTerm(), borrower);
 
