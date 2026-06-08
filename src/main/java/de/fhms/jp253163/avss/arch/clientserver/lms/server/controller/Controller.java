@@ -214,22 +214,22 @@ public class Controller implements IController
     }
 
     @Override
-    public boolean postBorrower(String action, String id, String data) {
+    public boolean postBorrower(Action action, String body) {
         return false;
     }
 
     @Override
-    public String[] getBorrower(String id) {
+    public String[] getBorrower(Action action) {
         return new String[0];
     }
 
     @Override
-    public void postLoan(String action, String id, String json) {
+    public void postLoan(Action action, String body) {
 
     }
 
     @Override
-    public String[] getLoan(String id) {
+    public String[] getLoan(Action action) {
         return new String[0];
     }
 
