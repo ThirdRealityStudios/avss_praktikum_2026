@@ -396,6 +396,9 @@ public class Controller implements IController
                 if(abortOnInvalidNames(exchange, obj.getFirstname(), obj.getLastname()))
                     return;
 
+                firstname = obj.getFirstname();
+                lastname = obj.getLastname();
+
                 if(abortOnInvalidBirthday(exchange, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
                     return;
 
@@ -425,6 +428,9 @@ public class Controller implements IController
 
                 if(abortOnInvalidNames(exchange, obj.getFirstname(), obj.getLastname()))
                     return;
+
+                firstname = obj.getFirstname();
+                lastname = obj.getLastname();
 
                 if(abortOnInvalidBirthday(exchange, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
                     return;
