@@ -132,17 +132,17 @@ public class LoanConsumer implements ILoanRepository
     }
 
     @Override
-    public ILoan readLoan(int loan)
+    public ILoan readLoan(int id)
     {
-        String loanActionURI = authority + "/loan/read/";
+        String loanActionURI = authority + "/loan/read/" + id;
         URI uri = URI.create(loanActionURI);
 
-        IRequestDTOLoanRead loanReadDTO = new RequestDTOLoanRead(loan);
+        // IRequestDTOLoanRead loanReadDTO = new RequestDTOLoanRead(id);
 
-        String json = gson.toJson(loanReadDTO);
+        // String json = gson.toJson(loanReadDTO);
 
-        HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
-        HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
+        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> resp = null;
@@ -193,15 +193,15 @@ public class LoanConsumer implements ILoanRepository
     @Override
     public ILoan[] readAllLoans()
     {
-        String loanActionURI = authority + "/loan/read/";
+        String loanActionURI = authority + "/loan/read/-1";
         URI uri = URI.create(loanActionURI);
 
-        IRequestDTOLoanRead loanReadDTO = new RequestDTOLoanRead(-1);
+        // IRequestDTOLoanRead loanReadDTO = new RequestDTOLoanRead(-1);
 
-        String json = gson.toJson(loanReadDTO);
+        // String json = gson.toJson(loanReadDTO);
 
-        HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
-        HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
+        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> resp = null;

@@ -128,15 +128,15 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower readBorrower(int id)
     {
-        String borrowerActionURI = authority + "/borrower/read/";
+        String borrowerActionURI = authority + "/borrower/read/" + id;
         URI uri = URI.create(borrowerActionURI);
 
-        IRequestDTOBorrowerRead borrowerReadDTO = new RequestDTOBorrowerRead(id);
+        // IRequestDTOBorrowerRead borrowerReadDTO = new RequestDTOBorrowerRead(id);
 
-        String json = gson.toJson(borrowerReadDTO);
+        // String json = gson.toJson(borrowerReadDTO);
 
-        HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
-        HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
+        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> resp = null;
@@ -187,15 +187,15 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower[] readAllBorrowers()
     {
-        String borrowerActionURI = authority + "/borrower/read/";
+        String borrowerActionURI = authority + "/borrower/read/-1";
         URI uri = URI.create(borrowerActionURI);
 
-        IRequestDTOBorrowerRead borrowerReadDTO = new RequestDTOBorrowerRead(-1);
+        // IRequestDTOBorrowerRead borrowerReadDTO = new RequestDTOBorrowerRead(-1);
 
-        String json = gson.toJson(borrowerReadDTO);
+        // String json = gson.toJson(borrowerReadDTO);
 
-        HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
-        HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
+        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> resp = null;
