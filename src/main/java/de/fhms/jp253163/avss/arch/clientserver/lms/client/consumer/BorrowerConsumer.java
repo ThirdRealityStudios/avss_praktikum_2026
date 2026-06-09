@@ -21,6 +21,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.respons
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ResidentialAddress;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -324,7 +325,10 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidFirstnameForCreation(String firstname)
     {
-        createBorrower();
+        LocalDate sampleBirthday = LocalDate.of(IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_DAY_OF_BIRTH);
+        IResidentialAddress address = new ResidentialAddress(IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_PLACE);
+
+        createBorrower(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, sampleBirthday, address, IBorrower.EXAMPLE_SCHUFA_SCORE);
 
         return false;
     }
