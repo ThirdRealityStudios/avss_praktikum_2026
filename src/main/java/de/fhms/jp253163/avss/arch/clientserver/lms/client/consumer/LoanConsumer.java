@@ -303,7 +303,7 @@ public class LoanConsumer implements ILoanRepository
 
         String json = gson.toJson(loanDeleteDTO);
 
-        if(json.isEmpty())
+        if(json.isEmpty()) // was accidentally inverted logic
         {
             System.out.println("Trying to send EMPTY (BODY) request to server!");
 
