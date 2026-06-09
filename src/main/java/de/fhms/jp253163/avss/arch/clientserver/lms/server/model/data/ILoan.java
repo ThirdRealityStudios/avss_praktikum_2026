@@ -2,6 +2,14 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data;
 
 public interface ILoan
 {
+    public static final double
+            EXAMPLE_AMOUNT = 110,
+            EXAMPLE_INTEREST_RATE = 0.01;
+
+    public static final int
+            EXAMPLE_TERM = 12,
+            EXAMPLE_BORROWER = 0;
+
     public int getId();
     /**
      * Sets the ID for the loan but only once.
