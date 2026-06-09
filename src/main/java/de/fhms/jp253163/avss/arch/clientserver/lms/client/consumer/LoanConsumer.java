@@ -303,6 +303,13 @@ public class LoanConsumer implements ILoanRepository
 
         String json = gson.toJson(loanDeleteDTO);
 
+        if(!json.isEmpty())
+        {
+            System.out.println("Trying to send request to server:\n\n"+json+"\n\n");
+
+            return false;
+        }
+
         HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
 
@@ -319,7 +326,6 @@ public class LoanConsumer implements ILoanRepository
             resp = client.send(req, handl);
 
             if(resp == null) return false;
-
 
             respObj = resp.body();
 
