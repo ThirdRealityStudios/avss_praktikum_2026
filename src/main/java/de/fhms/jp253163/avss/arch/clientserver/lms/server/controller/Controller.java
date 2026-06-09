@@ -119,6 +119,8 @@ public class Controller implements IController
         OutputStream outputStream = exchange.getResponseBody();
         outputStream.write(byteCode);
         outputStream.close();
+
+        System.out.println("Responding with:\n\n"+responseData+"\n\n");
     }
 
     private HttpHandler genHttpHandler()
