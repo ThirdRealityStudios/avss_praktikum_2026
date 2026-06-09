@@ -1,16 +1,14 @@
-# Praktikum SS 2026 Termin 3 No 2 (LMS With GUI)
+# Praktikum SS 2026 Termin 4 No 1 (Client With GUI)
 
 ## About
 
-Goal is it turn the appointment 2 architecture into an MVP architecture
-(but with GUI in the 2nd exercise)
-
-## Result
-
-Seems to be ok at least imo.
-It works with MySQL driver,
-no SQL errors.
-File service easy replacable by database service at all.
+Goal is it turn the appointment 3 architecture into a "hybrid" MVP / ModelConsumer architecture,
+so a client communicates with the server via HTTP.
+The ModelConsumer acts as a "simulated" model component because it does not know
+business logic directly.
+It does instead establish a HTTP connection to the server,
+including the real business logic which takes the final decisions in the end
+(e.g. whether to create a new borrower domain object persistently in DB or not).
 
 ## Docker + MySQL Setup
 
