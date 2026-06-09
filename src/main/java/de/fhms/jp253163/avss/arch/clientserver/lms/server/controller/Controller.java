@@ -10,6 +10,8 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerCreate;
@@ -18,6 +20,8 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
@@ -270,69 +274,104 @@ public class Controller implements IController
         }
     }
 
-    private boolean abortOnInvalidBirthday(HttpExchange exchange, int day, int month, int year) throws IOException
+    /**
+     * @param exchange
+     * @param isCreation If 'true', then creation is meant (respond with borrower creation response JSON). Otherwise, an update error response is meant.
+     * @param code
+     * @param httpResponseCode E.g. 400, 404
+     * @throws IOException
+     */
+    private void sendBorrowerCUErrorResponse(HttpExchange exchange, boolean isCreation, GlobalResponseCode code, int httpResponseCode) throws IOException
+    {
+        String json = null;
+
+        if(isCreation)
+        {
+            IResponseDTOBorrowerCreate resp = new ResponseDTOBorrowerCreate(null, code);
+            json = gson.toJson(resp);
+
+        }
+        else // is update
+        {
+            IResponseDTOBorrowerUpdate resp = new ResponseDTOBorrowerUpdate(code);
+            json = gson.toJson(resp);
+        }
+
+        response(exchange, httpResponseCode, json);
+    }
+
+    /**
+     * @param exchange
+     * @param isCreation If 'true' then a borrower create response object will be sent back. Otherwise, an update is assumed, sending back a borrower update response.
+     * @param day
+     * @param month
+     * @param year
+     * @return
+     * @throws IOException
+     */
+    private boolean abortOnInvalidBirthday(HttpExchange exchange, boolean isCreation, int day, int month, int year) throws IOException
     {
         if(!borrowerRepository.isValidDayOfBirthForUpdate(day))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_DAY_OF_BIRTH.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_DAY_OF_BIRTH, 400);
             return true;
         }
 
         if(!borrowerRepository.isValidMonthOfBirthForUpdate(month))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_MONTH_OF_BIRTH.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_MONTH_OF_BIRTH, 400);
             return true;
         }
 
         if(!borrowerRepository.isValidYearOfBirthForUpdate(year))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_YEAR_OF_BIRTH.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_YEAR_OF_BIRTH, 400);
             return true;
         }
 
         return false;
     }
 
-    private boolean abortOnInvalidNames(HttpExchange exchange, String firstname, String lastname) throws IOException
+    private boolean abortOnInvalidNames(HttpExchange exchange, boolean isCreation, String firstname, String lastname) throws IOException
     {
         if(!borrowerRepository.isValidFirstnameForUpdate(firstname))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_FIRSTNAME.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_FIRSTNAME, 400);
             return true;
         }
 
         if(!borrowerRepository.isValidLastnameForUpdate(lastname))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_LASTNAME.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_LASTNAME, 400);
             return true;
         }
 
         return false;
     }
 
-    private boolean abortOnInvalidAddress(HttpExchange exchange, String street, String no, String place, int zip) throws IOException
+    private boolean abortOnInvalidAddress(HttpExchange exchange, boolean isCreation, String street, String no, String place, int zip) throws IOException
     {
         if(!borrowerRepository.isValidStreetForUpdate(street))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_STREET.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_STREET, 400);
             return true;
         }
 
         if(!borrowerRepository.isValidNoForUpdate(no))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_NO.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_NO, 400);
             return true;
         }
 
         if(!borrowerRepository.isValidPlaceForUpdate(place))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_PLACE.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_PLACE, 400);
             return true;
         }
 
         if(!borrowerRepository.isValidZipForUpdate(zip))
         {
-            response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_ZIP.ordinal()+"");
+            sendBorrowerCUErrorResponse(exchange, isCreation, GlobalResponseCode.UPDATE_BORROWER_INVALID_ZIP, 400);
             return true;
         }
 
@@ -363,22 +402,22 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called create action but not gave new dataset information in body
                 {
-                    response(exchange, 400, GlobalResponseCode.CREATE_BORROWER_INVALID_CREATION_REQUEST.ordinal()+"");
+                    sendBorrowerCUErrorResponse(exchange, true, GlobalResponseCode.CREATE_BORROWER_INVALID_CREATION_REQUEST, 400);
                     return;
                 }
 
-                if(abortOnInvalidNames(exchange, obj.getFirstname(), obj.getLastname()))
+                if(abortOnInvalidNames(exchange, true, obj.getFirstname(), obj.getLastname()))
                     return;
 
                 firstname = obj.getFirstname();
                 lastname = obj.getLastname();
 
-                if(abortOnInvalidBirthday(exchange, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
+                if(abortOnInvalidBirthday(exchange, true, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
                     return;
 
                 birthday = LocalDate.of(obj.getYearOfBirth(), obj.getMonthOfBirth(), obj.getDayOfBirth());
 
-                if(abortOnInvalidAddress(exchange, obj.getStreet(), obj.getNo(), obj.getPlace(), obj.getZip()))
+                if(abortOnInvalidAddress(exchange, true, obj.getStreet(), obj.getNo(), obj.getPlace(), obj.getZip()))
                     return;
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
@@ -394,24 +433,24 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called update action but not gave update data
                 {
-                    response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_NO_SELECTED_DATASET.ordinal()+"");
+                    sendBorrowerCUErrorResponse(exchange, false, GlobalResponseCode.UPDATE_BORROWER_NO_SELECTED_DATASET, 400);
                     return;
                 }
 
                 id = obj.getBorrowerID();
 
-                if(abortOnInvalidNames(exchange, obj.getFirstname(), obj.getLastname()))
+                if(abortOnInvalidNames(exchange, false, obj.getFirstname(), obj.getLastname()))
                     return;
 
                 firstname = obj.getFirstname();
                 lastname = obj.getLastname();
 
-                if(abortOnInvalidBirthday(exchange, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
+                if(abortOnInvalidBirthday(exchange, false, obj.getDayOfBirth(), obj.getMonthOfBirth(), obj.getYearOfBirth()))
                     return;
 
                 birthday = LocalDate.of(obj.getYearOfBirth(), obj.getMonthOfBirth(), obj.getDayOfBirth());
 
-                if(abortOnInvalidAddress(exchange, obj.getStreet(), obj.getNo(), obj.getPlace(), obj.getZip()))
+                if(abortOnInvalidAddress(exchange, false, obj.getStreet(), obj.getNo(), obj.getPlace(), obj.getZip()))
                     return;
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
@@ -421,7 +460,7 @@ public class Controller implements IController
 
                 if(borrower == null)
                 {
-                    response(exchange, 404, GlobalResponseCode.UPDATE_BORROWER_NOT_FOUND.ordinal()+"");
+                    sendBorrowerCUErrorResponse(exchange, false, GlobalResponseCode.UPDATE_BORROWER_NOT_FOUND, 404);
                     return;
                 }
 
@@ -437,7 +476,7 @@ public class Controller implements IController
                 }
                 else
                 {
-                    response(exchange, 400, GlobalResponseCode.UPDATE_BORROWER_INVALID_REQUEST.ordinal()+"");
+                    sendBorrowerCUErrorResponse(exchange, false, GlobalResponseCode.UPDATE_BORROWER_INVALID_REQUEST, 400);
                     return;
                 }
             }
