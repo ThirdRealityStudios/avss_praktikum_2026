@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower;
 
 /**
  * Is returned when a borrower was processed by presenter and given to the corresponding view.

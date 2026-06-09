@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanDelete;
 
 public class RequestDTOLoanDelete implements IRequestDTOLoanDelete
 {

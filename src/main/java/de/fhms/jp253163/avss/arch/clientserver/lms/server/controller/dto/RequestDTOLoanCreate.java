@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanCreate;
 
 public class RequestDTOLoanCreate implements IRequestDTOLoanCreate
 {

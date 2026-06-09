@@ -1,6 +1,6 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto;
 
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerRead;
 
 public class RequestDTOBorrowerRead implements IRequestDTOBorrowerRead
 {
