@@ -2,13 +2,15 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.respon
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Loan;
 
 import java.util.Objects;
 
 public class ResponseDTOLoanCreate implements IResponseDTOLoanCreate
 {
-    private ILoan loan;
+    private Loan loan;
     private int globalResponseCode;
 
     /**
@@ -19,7 +21,9 @@ public class ResponseDTOLoanCreate implements IResponseDTOLoanCreate
     {
         Objects.requireNonNull(code);
 
-        this.loan = loan;
+        if(loan != null && !(loan instanceof Loan)) throw new IllegalArgumentException("loan not a supported ILoan instance");
+
+        this.loan = (Loan) loan;
         this.globalResponseCode = code.ordinal();
     }
 

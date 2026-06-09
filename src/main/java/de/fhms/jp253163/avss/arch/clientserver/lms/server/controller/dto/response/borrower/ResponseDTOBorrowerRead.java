@@ -2,13 +2,14 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.respon
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 
 import java.util.Objects;
 
 public class ResponseDTOBorrowerRead implements IResponseDTOBorrowerRead
 {
-    private IBorrower[] borrowers;
+    private Borrower[] borrowers;
     private int globalResponseCode;
 
     /**
@@ -20,7 +21,9 @@ public class ResponseDTOBorrowerRead implements IResponseDTOBorrowerRead
         Objects.requireNonNull(borrowers);
         Objects.requireNonNull(code);
 
-        this.borrowers = borrowers;
+        if(!(borrowers instanceof Borrower[])) throw new IllegalArgumentException("borrowers not a supported IBorrower[] instance");
+
+        this.borrowers = (Borrower[]) borrowers;
         this.globalResponseCode = code.ordinal();
     }
 

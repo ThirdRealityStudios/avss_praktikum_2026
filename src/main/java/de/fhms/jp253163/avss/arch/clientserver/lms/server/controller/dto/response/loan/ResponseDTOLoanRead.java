@@ -2,7 +2,9 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.respon
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Loan;
 
 import java.util.Objects;
 
@@ -19,6 +21,8 @@ public class ResponseDTOLoanRead implements IResponseDTOLoanRead
     {
         Objects.requireNonNull(loans);
         Objects.requireNonNull(code);
+
+        if(!(loans instanceof Loan[])) throw new IllegalArgumentException("loans not a supported ILoan[] instance");
 
         this.loans = loans;
         this.globalResponseCode = code.ordinal();
