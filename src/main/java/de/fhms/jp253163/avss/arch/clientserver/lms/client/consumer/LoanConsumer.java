@@ -407,7 +407,9 @@ public class LoanConsumer implements ILoanRepository
     {
         loan.setRemainingBalance(0); // clear remaining balances to enable deletion
         loan.setRemainingTerm(0);
-        deleteLoan(loan.getId());
+
+        if(!deleteLoan(loan.getId()))
+            System.out.println("Force deletion failed for loan:\n\n"+loan.toString()+"\n\n");
     }
 
     @Override
