@@ -443,7 +443,7 @@ public class Controller implements IController
 
                 IResponseDTOBorrowerCreate resp = new ResponseDTOBorrowerCreate(borrower, GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS);
                 String json = gson.toJson(resp);
-                response(exchange, 200, gson.toJson(json));
+                response(exchange, 200, json);
                 return;
             }
             else if(action.getName().equalsIgnoreCase("update"))
@@ -492,7 +492,7 @@ public class Controller implements IController
                 {
                     IResponseDTOBorrowerUpdate resp = new ResponseDTOBorrowerUpdate(GlobalResponseCode.UPDATE_BORROWER_SUCCESS);
                     String json = gson.toJson(resp);
-                    response(exchange, 200, gson.toJson(json));
+                    response(exchange, 200, json);
                     return;
                 }
                 else
