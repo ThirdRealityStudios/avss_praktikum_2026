@@ -17,6 +17,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.respons
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 
 import java.net.URI;
@@ -35,18 +36,21 @@ import java.util.Objects;
  */
 public class LoanConsumer implements ILoanRepository
 {
+    private BorrowerConsumer borrowerConsumer;
     private Gson gson;
     private HttpClient client;
     private String authority;
 
-    public LoanConsumer(Gson gson, HttpClient client, String authority)
+    public LoanConsumer(BorrowerConsumer borrowerConsumer, Gson gson, HttpClient client, String authority)
     {
+        Objects.requireNonNull(borrowerConsumer);
         Objects.requireNonNull(gson);
         Objects.requireNonNull(client);
         Objects.requireNonNull(authority);
 
         if(authority.isEmpty()) throw new IllegalArgumentException("authority can't be empty");
 
+        this.borrowerConsumer = borrowerConsumer;
         this.gson = gson;
         this.client = client;
         this.authority = authority;
@@ -342,6 +346,8 @@ public class LoanConsumer implements ILoanRepository
 
             if(loan == null) return false;
 
+            while(loan.payInstallment()); // clear remaining balances to enable deletion
+
             deleteLoan(loan.getId());
 
             return true;
@@ -352,7 +358,10 @@ public class LoanConsumer implements ILoanRepository
         }
 
         if(loan != null)
+        {
+            while(loan.payInstallment()); // clear remaining balances to enable deletion
             deleteLoan(loan.getId());
+        }
 
         return false;
     }
@@ -396,6 +405,9 @@ public class LoanConsumer implements ILoanRepository
             return false;
 
         updatable = updateLoan(sample);
+
+        // You need book sufficient installments to delete the loan.
+        while(sample.payInstallment());
 
         // Delete created test object again from server (don't care if successful)
         deleteLoan(sample.getId());

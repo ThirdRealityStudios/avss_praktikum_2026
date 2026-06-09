@@ -474,7 +474,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, schufaScore);
     }
 
-    private IBorrower sampleBorrower()
+    public IBorrower sampleBorrower()
     {
         return createBorrower(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, sampleBirthday(), sampleAddress(), 0.9d);
     }
