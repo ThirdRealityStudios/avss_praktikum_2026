@@ -309,6 +309,10 @@ public class LoanConsumer implements ILoanRepository
 
             return false;
         }
+        else
+        {
+            System.out.println("Trying to send EMPTY (BODY) request to server!");
+        }
 
         HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
