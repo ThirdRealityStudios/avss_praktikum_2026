@@ -130,11 +130,6 @@ public class BorrowerConsumer implements IBorrowerRepository
         String borrowerActionURI = authority + "/borrower/read/" + id;
         URI uri = URI.create(borrowerActionURI);
 
-        // IRequestDTOBorrowerRead borrowerReadDTO = new RequestDTOBorrowerRead(id);
-
-        // String json = gson.toJson(borrowerReadDTO);
-
-        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
@@ -189,11 +184,6 @@ public class BorrowerConsumer implements IBorrowerRepository
         String borrowerActionURI = authority + "/borrower/read/-1";
         URI uri = URI.create(borrowerActionURI);
 
-        // IRequestDTOBorrowerRead borrowerReadDTO = new RequestDTOBorrowerRead(-1);
-
-        // String json = gson.toJson(borrowerReadDTO);
-
-        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();

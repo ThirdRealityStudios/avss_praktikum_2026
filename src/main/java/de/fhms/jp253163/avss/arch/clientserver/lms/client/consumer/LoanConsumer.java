@@ -1,51 +1,29 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer;
 
 import com.google.gson.Gson;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanUpdate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanUpdate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ResidentialAddress;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -137,11 +115,6 @@ public class LoanConsumer implements ILoanRepository
         String loanActionURI = authority + "/loan/read/" + id;
         URI uri = URI.create(loanActionURI);
 
-        // IRequestDTOLoanRead loanReadDTO = new RequestDTOLoanRead(id);
-
-        // String json = gson.toJson(loanReadDTO);
-
-        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
@@ -196,11 +169,6 @@ public class LoanConsumer implements ILoanRepository
         String loanActionURI = authority + "/loan/read/-1";
         URI uri = URI.create(loanActionURI);
 
-        // IRequestDTOLoanRead loanReadDTO = new RequestDTOLoanRead(-1);
-
-        // String json = gson.toJson(loanReadDTO);
-
-        // HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().GET().uri(uri).build();
 
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
@@ -252,7 +220,7 @@ public class LoanConsumer implements ILoanRepository
     @Override
     public boolean updateLoan(ILoan loan)
     {
-        Objects.requireNonNull(loan);
+        if(loan == null) return false;
 
         int id = loan.getId();
 
