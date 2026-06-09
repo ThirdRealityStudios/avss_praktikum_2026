@@ -20,6 +20,8 @@ public interface IBorrower
 
     public static int EXAMPLE_ZIP = 98765;
 
+    public static double EXAMPLE_SCHUFA_SCORE = 0.9d;
+
     public int getId();
     public boolean setId(int id);
 
