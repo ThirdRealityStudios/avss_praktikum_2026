@@ -322,102 +322,124 @@ public class BorrowerConsumer implements IBorrowerRepository
     }
 
     @Override
-    public boolean isValidFirstnameForCreation(String s) {
+    public boolean isValidFirstnameForCreation(String firstname)
+    {
+        createBorrower();
+
         return false;
     }
 
     @Override
-    public boolean isValidLastnameForCreation(String s) {
+    public boolean isValidLastnameForCreation(String lastname)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidDayOfBirthForCreation(int i) {
+    public boolean isValidDayOfBirthForCreation(int day)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidMonthOfBirthForCreation(int i) {
+    public boolean isValidMonthOfBirthForCreation(int month)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidYearOfBirthForCreation(int i) {
+    public boolean isValidYearOfBirthForCreation(int year)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidStreetForCreation(String s) {
+    public boolean isValidStreetForCreation(String street)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidNoForCreation(String s) {
+    public boolean isValidNoForCreation(String no)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidPlaceForCreation(String s) {
+    public boolean isValidPlaceForCreation(String place)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidZipForCreation(int i) {
+    public boolean isValidZipForCreation(int zip)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidSchufaScoreForCreation(double v) {
+    public boolean isValidSchufaScoreForCreation(double schufaScore)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidFirstnameForUpdate(String s) {
+    public boolean isValidFirstnameForUpdate(String firstname)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidLastnameForUpdate(String s) {
+    public boolean isValidLastnameForUpdate(String lastname)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidDayOfBirthForUpdate(int i) {
+    public boolean isValidDayOfBirthForUpdate(int day)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidMonthOfBirthForUpdate(int i) {
+    public boolean isValidMonthOfBirthForUpdate(int month)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidYearOfBirthForUpdate(int i) {
+    public boolean isValidYearOfBirthForUpdate(int year)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidStreetForUpdate(String s) {
+    public boolean isValidStreetForUpdate(String street)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidNoForUpdate(String s) {
+    public boolean isValidNoForUpdate(String no)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidPlaceForUpdate(String s) {
+    public boolean isValidPlaceForUpdate(String place)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidZipForUpdate(int i) {
+    public boolean isValidZipForUpdate(int zip)
+    {
         return false;
     }
 
     @Override
-    public boolean isValidSchufaScoreForUpdate(double v) {
+    public boolean isValidSchufaScoreForUpdate(double schufaScore)
+    {
         return false;
     }
 }
