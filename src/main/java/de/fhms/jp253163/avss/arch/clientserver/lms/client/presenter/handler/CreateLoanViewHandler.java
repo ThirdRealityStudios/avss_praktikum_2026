@@ -5,6 +5,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IRe
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.ICreateLoanViewHandler;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.dto.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 
 public class CreateLoanViewHandler implements ICreateLoanViewHandler
 {
