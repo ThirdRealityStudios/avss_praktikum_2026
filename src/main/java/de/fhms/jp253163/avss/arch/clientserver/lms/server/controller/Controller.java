@@ -46,6 +46,7 @@ import java.io.OutputStream;
 import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -111,7 +112,7 @@ public class Controller implements IController
         Objects.requireNonNull(exchange);
         Objects.requireNonNull(responseData);
 
-        byte[] byteCode = responseData.getBytes();
+        byte[] byteCode = responseData.getBytes(StandardCharsets.UTF_8);
 
         exchange.sendResponseHeaders(responseCode, byteCode.length);
 
