@@ -1,8 +1,11 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer;
 
 import com.google.gson.Gson;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.IRequestDTOBorrowerCreate;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
@@ -69,14 +72,26 @@ public class BorrowerConsumer implements IBorrowerRepository
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
         HttpResponse resp = null;
 
+        Object respObj = null;
+        String respJson = null;
+        IResponseDTOBorrowerCreate respBorrowerCreate = null;
+
         try
         {
             resp = client.send(req, handl);
 
             if(resp.statusCode() == 200)
             {
-                // TODO Implement ResponseDTOBorrowerCreate, telling you the business response code (GlobalResponseCode enum or such)
-                // TODO and the created object.
+                respObj = resp.body();
+
+                if(respObj == null) return null;
+                respJson = respObj.toString();
+                respBorrowerCreate = gson.fromJson(respJson, ResponseDTOBorrowerCreate.class);
+
+                if(respBorrowerCreate == null) return null;
+                if(respBorrowerCreate.getGlobalResponseCode() != GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS.ordinal()) return null;
+
+                return respBorrowerCreate.getBorrower();
             }
 
             return null;
