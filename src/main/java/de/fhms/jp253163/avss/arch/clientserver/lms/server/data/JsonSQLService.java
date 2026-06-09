@@ -243,22 +243,33 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
             return false;
         }
 
+        System.out.println("Database got the following SQL to execute:\n\n");
+
         String sqlDelete = "DELETE FROM " + qualifiedTableName + " WHERE ID=?";
+
+        System.out.println(sqlDelete+"\n\n");
 
         try(PreparedStatement deleteStmt = mySQLAdapter.getConnection().prepareStatement(sqlDelete))
         {
+            System.out.println("Preparing statement to make it safe...");
             deleteStmt.setInt(1, id);
 
+            System.out.println("Executing command locally...");
             int rowsAffected = deleteStmt.executeUpdate();
-
+            System.out.println(rowsAffected + " row(s) now affected by update.");
+// TODO Maybe cannot find Loan dataset because forgot somewhere to call commit() ???
+            // TODO Maybe where I call createLoan(..) ??? lOOOK THERE!!!
             if(rowsAffected == 0)
             {
+                System.out.println("Reverting changes (no need to update)...");
+
                 mySQLAdapter.getConnection().rollback();
 
                 success = false;
             }
             else
             {
+                System.out.println("Making changes globally (committing)...");
                 mySQLAdapter.getConnection().commit();
 
                 success = true;
@@ -268,6 +279,8 @@ public class JsonSQLService<T> implements IJsonSQLService<T>
         {
             exc.printStackTrace();
         }
+
+        System.out.println("Deletion success status: " + success);
 
         return success;
     }
