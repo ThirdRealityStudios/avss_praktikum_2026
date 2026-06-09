@@ -108,6 +108,8 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(respJson.isEmpty()) return null;
 
+            System.out.println("Incoming response:\n\n"+respJson+"\n\n");
+
             respBorrowerCreate = gson.fromJson(respJson, ResponseDTOBorrowerCreate.class);
 
             if(respBorrowerCreate == null) return null;
