@@ -242,7 +242,7 @@ public class LoanConsumer implements ILoanRepository
         // changes of other values (via the text user fields normally).
         ILoan serverLoanVersion = readLoan(id);
         if(serverLoanVersion == null) return false;
-        bookInstallment = serverLoanVersion.getRemainingBalance() != loan.getRemainingBalance();
+        bookInstallment = serverLoanVersion.getRemainingBalance() != loan.getRemainingBalance() || serverLoanVersion.getRemainingTerm() != loan.getRemainingTerm();
 
         IRequestDTOLoanUpdate loanUpdateDTO = new RequestDTOLoanUpdate(id, borrower, bookInstallment);
 
@@ -357,9 +357,7 @@ public class LoanConsumer implements ILoanRepository
 
             if(loan == null) return false;
 
-            while(loan.payInstallment()); // clear remaining balances to enable deletion
-
-            deleteLoan(loan.getId());
+            forceDelete(loan);
 
             return true;
         }
@@ -370,8 +368,7 @@ public class LoanConsumer implements ILoanRepository
 
         if(loan != null)
         {
-            while(loan.payInstallment()); // clear remaining balances to enable deletion
-            deleteLoan(loan.getId());
+            forceDelete(loan);
         }
 
         return false;
@@ -406,6 +403,13 @@ public class LoanConsumer implements ILoanRepository
         return createLoan(ILoan.EXAMPLE_BORROWER, ILoan.EXAMPLE_AMOUNT, ILoan.EXAMPLE_INTEREST_RATE, ILoan.EXAMPLE_TERM);
     }
 
+    private void forceDelete(ILoan loan)
+    {
+        loan.setRemainingBalance(0); // clear remaining balances to enable deletion
+        loan.setRemainingTerm(0);
+        deleteLoan(loan.getId());
+    }
+
     @Override
     public boolean isValidBorrowerIDForUpdate(int borrower)
     {
@@ -414,19 +418,14 @@ public class LoanConsumer implements ILoanRepository
 
         if(!sample.setBorrower(borrower))
         {
-            while(sample.payInstallment()); // clear remaining balances to enable deletion
-            deleteLoan(sample.getId());
+            forceDelete(sample);
 
             return false;
         }
 
         updatable = updateLoan(sample);
 
-        // You need book sufficient installments to delete the loan.
-        while(sample.payInstallment());
-
-        // Delete created test object again from server (don't care if successful)
-        deleteLoan(sample.getId());
+        forceDelete(sample);
 
         return updatable;
     }
