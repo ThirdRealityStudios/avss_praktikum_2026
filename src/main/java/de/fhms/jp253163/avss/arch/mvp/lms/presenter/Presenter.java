@@ -1,10 +1,8 @@
 package de.fhms.jp253163.avss.arch.mvp.lms.presenter;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler.*;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.IView;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.IView;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler.*;
 
 public class Presenter implements IPresenter
 {
@@ -60,7 +58,8 @@ public class Presenter implements IPresenter
     }
 
     @Override
-    public IView getView() {
+    public IView getView()
+    {
         return view;
     }
 }

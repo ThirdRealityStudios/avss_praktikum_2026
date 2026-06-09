@@ -25,7 +25,7 @@
         </dependency>
 
         <dependency>
-            <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.client.model</groupId>
+            <groupId>de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer</groupId>
             <artifactId>consumer</artifactId>
             <version>1.6-SNAPSHOT</version>
             <scope>compile</scope>
