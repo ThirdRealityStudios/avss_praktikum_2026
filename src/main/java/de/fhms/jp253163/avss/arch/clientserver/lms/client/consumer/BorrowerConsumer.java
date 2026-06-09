@@ -27,7 +27,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -43,9 +42,6 @@ public class BorrowerConsumer implements IBorrowerRepository
     private Gson gson;
     private HttpClient client;
     private String authority;
-
-    // For between CRUD actions and field validation logic used.
-    private int tempGlobalResponseCode = -1;
 
     public BorrowerConsumer(Gson gson, HttpClient client, String authority) throws IllegalArgumentException
     {
@@ -66,7 +62,6 @@ public class BorrowerConsumer implements IBorrowerRepository
         Objects.requireNonNull(lastname);
         Objects.requireNonNull(birthday);
         Objects.requireNonNull(address);
-        tempGlobalResponseCode = -1;
 
         int day = birthday.getDayOfMonth();
         int month = birthday.getMonthValue();
@@ -100,6 +95,8 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(resp == null) return null;
 
+            if(resp.statusCode() != 200) return null;
+
             respObj = resp.body();
 
             if(respObj == null) return null;
@@ -111,8 +108,6 @@ public class BorrowerConsumer implements IBorrowerRepository
             respBorrowerCreate = gson.fromJson(respJson, ResponseDTOBorrowerCreate.class);
 
             if(respBorrowerCreate == null) return null;
-
-            tempGlobalResponseCode = respBorrowerCreate.getGlobalResponseCode();
 
             if(respBorrowerCreate.getGlobalResponseCode() != GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS.ordinal()) return null;
 
@@ -128,8 +123,6 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower readBorrower(int id)
     {
-        tempGlobalResponseCode = -1;
-
         String borrowerActionURI = authority + "/borrower/read/";
         URI uri = URI.create(borrowerActionURI);
 
@@ -151,6 +144,10 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             resp = client.send(req, handl);
 
+            if(resp == null) return null;
+
+            if(resp.statusCode() != 200) return null;
+
             respObj = resp.body();
 
             if(respObj == null) return null;
@@ -162,8 +159,6 @@ public class BorrowerConsumer implements IBorrowerRepository
             respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
 
             if(respBorrowerRead == null) return null;
-
-            tempGlobalResponseCode = respBorrowerRead.getGlobalResponseCode();
 
             if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
 
@@ -182,8 +177,6 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower[] readAllBorrowers()
     {
-        tempGlobalResponseCode = -1;
-
         String borrowerActionURI = authority + "/borrower/read/";
         URI uri = URI.create(borrowerActionURI);
 
@@ -205,30 +198,27 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             resp = client.send(req, handl);
 
-            if(resp.statusCode() == 200)
-            {
-                respObj = resp.body();
+            if(resp == null) return new IBorrower[0];
 
-                if(respObj == null) return null;
+            if(resp.statusCode() != 200) return new IBorrower[0];
 
-                respJson = respObj.toString();
+            respObj = resp.body();
 
-                if(respJson.isEmpty()) return null;
+            if(respObj == null) return null;
 
-                respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
+            respJson = respObj.toString();
 
-                if(respBorrowerRead == null) return null;
+            if(respJson.isEmpty()) return null;
 
-                tempGlobalResponseCode = respBorrowerRead.getGlobalResponseCode();
+            respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
 
-                if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
+            if(respBorrowerRead == null) return null;
 
-                if(respBorrowerRead.getBorrowers() == null) return null;
+            if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
 
-                return respBorrowerRead.getBorrowers();
-            }
+            if(respBorrowerRead.getBorrowers() == null) return null;
 
-            return null;
+            return respBorrowerRead.getBorrowers();
         }
         catch(Exception e)
         {
@@ -242,7 +232,6 @@ public class BorrowerConsumer implements IBorrowerRepository
     public boolean updateBorrower(IBorrower borrower)
     {
         Objects.requireNonNull(borrower);
-        tempGlobalResponseCode = -1;
 
         int id = borrower.getId();
 
@@ -281,26 +270,23 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             resp = client.send(req, handl);
 
-            if(resp.statusCode() == 200)
-            {
-                respObj = resp.body();
+            if(resp == null) return false;
 
-                if(respObj == null) return false;
+            if(resp.statusCode() != 200) return false;
 
-                respJson = respObj.toString();
+            respObj = resp.body();
 
-                if(respJson.isEmpty()) return false;
+            if(respObj == null) return false;
 
-                respBorrowerUpdate = gson.fromJson(respJson, ResponseDTOBorrowerUpdate.class);
+            respJson = respObj.toString();
 
-                if(respBorrowerUpdate == null) return false;
+            if(respJson.isEmpty()) return false;
 
-                tempGlobalResponseCode = respBorrowerUpdate.getGlobalResponseCode();
+            respBorrowerUpdate = gson.fromJson(respJson, ResponseDTOBorrowerUpdate.class);
 
-                return respBorrowerUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_BORROWER_SUCCESS.ordinal();
-            }
+            if(respBorrowerUpdate == null) return false;
 
-            return false;
+            return respBorrowerUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_BORROWER_SUCCESS.ordinal();
         }
         catch(Exception e)
         {
@@ -312,8 +298,6 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
-        tempGlobalResponseCode = -1;
-
         String borrowerActionURI = authority + "/borrower/delete/";
         URI uri = URI.create(borrowerActionURI);
 
@@ -335,26 +319,23 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             resp = client.send(req, handl);
 
-            if(resp.statusCode() == 200)
-            {
-                respObj = resp.body();
+            if(resp == null) return false;
 
-                if(respObj == null) return false;
+            if(resp.statusCode() != 200) return false;
 
-                respJson = respObj.toString();
+            respObj = resp.body();
 
-                if(respJson.isEmpty()) return false;
+            if(respObj == null) return false;
 
-                respBorrowerDelete = gson.fromJson(respJson, ResponseDTOBorrowerDelete.class);
+            respJson = respObj.toString();
 
-                if(respBorrowerDelete == null) return false;
+            if(respJson.isEmpty()) return false;
 
-                tempGlobalResponseCode = respBorrowerDelete.getGlobalResponseCode();
+            respBorrowerDelete = gson.fromJson(respJson, ResponseDTOBorrowerDelete.class);
 
-                return respBorrowerDelete.getGlobalResponseCode() == GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal();
-            }
+            if(respBorrowerDelete == null) return false;
 
-            return false;
+            return respBorrowerDelete.getGlobalResponseCode() == GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal();
         }
         catch(Exception e)
         {
