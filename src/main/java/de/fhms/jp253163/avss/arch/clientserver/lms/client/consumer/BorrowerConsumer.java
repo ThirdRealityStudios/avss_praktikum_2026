@@ -3,7 +3,6 @@ package de.fhms.jp253163.avss.arch.clientserver.lms.client.consumer;
 import com.google.gson.Gson;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerDelete;
@@ -12,7 +11,6 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.d
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerDelete;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerDelete;
@@ -28,6 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -59,10 +58,10 @@ public class BorrowerConsumer implements IBorrowerRepository
 
     @Override
     public IBorrower createBorrower(String firstname, String lastname, LocalDate birthday, IResidentialAddress address, double schufaScore) {
-        Objects.requireNonNull(firstname);
-        Objects.requireNonNull(lastname);
-        Objects.requireNonNull(birthday);
-        Objects.requireNonNull(address);
+        if(firstname == null) return null;
+        if(lastname == null) return null;
+        if(birthday == null) return null;
+        if(address == null) return null;
 
         int day = birthday.getDayOfMonth();
         int month = birthday.getMonthValue();
@@ -246,7 +245,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean updateBorrower(IBorrower borrower)
     {
-        Objects.requireNonNull(borrower);
+        if(borrower == null) return false;
 
         int id = borrower.getId();
 
@@ -381,6 +380,12 @@ public class BorrowerConsumer implements IBorrowerRepository
 
     private boolean isBorrowerCreatable(String firstname, String lastname, int day, int month, int year, String street, String no, String place, int zip, double schufaScore)
     {
+        if(firstname == null) return false;
+        if(lastname == null) return false;
+        if(street == null) return false;
+        if(no == null) return false;
+        if(place == null) return false;
+
         IBorrower borrower = null;
         LocalDate birthday = null;
         IResidentialAddress address = null;
@@ -412,12 +417,16 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidFirstnameForCreation(String firstname)
     {
+        if(firstname == null) return false;
+
         return isBorrowerCreatable(firstname, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidLastnameForCreation(String lastname)
     {
+        if(lastname == null) return false;
+
         return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, lastname, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
@@ -442,18 +451,24 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidStreetForCreation(String street)
     {
+        if(street == null) return false;
+
         return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, street, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidNoForCreation(String no)
     {
+        if(no == null) return false;
+
         return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, no, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidPlaceForCreation(String place)
     {
+        if(place == null) return false;
+
         return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, place, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
@@ -477,6 +492,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidFirstnameForUpdate(String firstname)
     {
+        if(firstname == null) return false;
+
         IBorrower sample = sampleBorrower();
         boolean updatable = false;
 
@@ -494,6 +511,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidLastnameForUpdate(String lastname)
     {
+        if(lastname == null) return false;
+
         IBorrower sample = sampleBorrower();
         boolean updatable = false;
 
@@ -514,8 +533,17 @@ public class BorrowerConsumer implements IBorrowerRepository
         IBorrower sample = sampleBorrower();
         int currentMonth = sample.getDateOfBirth().getMonthValue();
         int currentYear = sample.getDateOfBirth().getYear();
-        LocalDate updatedDate = LocalDate.of(currentYear, currentMonth, day);
+        LocalDate updatedDate = null;
         boolean updatable = false;
+
+        try
+        {
+            updatedDate = LocalDate.of(currentYear, currentMonth, day);
+        }
+        catch (DateTimeException exc)
+        {
+            return false;
+        }
 
         if(!sample.setDateOfBirth(updatedDate))
             return false;
@@ -534,8 +562,17 @@ public class BorrowerConsumer implements IBorrowerRepository
         IBorrower sample = sampleBorrower();
         int currentDay = sample.getDateOfBirth().getDayOfMonth();
         int currentYear = sample.getDateOfBirth().getYear();
-        LocalDate updatedDate = LocalDate.of(currentYear, month, currentDay);
+        LocalDate updatedDate = null;
         boolean updatable = false;
+
+        try
+        {
+            updatedDate = LocalDate.of(currentYear, month, currentDay);
+        }
+        catch (NumberFormatException exc)
+        {
+            return false;
+        }
 
         if(!sample.setDateOfBirth(updatedDate))
             return false;
@@ -580,6 +617,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidStreetForUpdate(String street)
     {
+        if(street == null) return false;
+
         IBorrower sample = sampleBorrower();
         IResidentialAddress updatedAddress = sample.getResidentialAddress();
         boolean updatable = false;
@@ -598,6 +637,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidNoForUpdate(String no)
     {
+        if(no == null) return false;
+
         IBorrower sample = sampleBorrower();
         IResidentialAddress updatedAddress = sample.getResidentialAddress();
         boolean updatable = false;
@@ -616,6 +657,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean isValidPlaceForUpdate(String place)
     {
+        if(place == null) return false;
+
         IBorrower sample = sampleBorrower();
         IResidentialAddress updatedAddress = sample.getResidentialAddress();
         boolean updatable = false;
