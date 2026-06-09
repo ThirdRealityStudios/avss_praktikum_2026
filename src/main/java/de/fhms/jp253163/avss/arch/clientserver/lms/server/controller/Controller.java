@@ -40,6 +40,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.beans.Encoder;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.BindException;
@@ -110,10 +111,12 @@ public class Controller implements IController
         Objects.requireNonNull(exchange);
         Objects.requireNonNull(responseData);
 
-        exchange.sendResponseHeaders(responseCode, responseData.length());
+        byte[] byteCode = responseData.getBytes();
+
+        exchange.sendResponseHeaders(responseCode, byteCode.length);
 
         OutputStream outputStream = exchange.getResponseBody();
-        outputStream.write(responseData.getBytes());
+        outputStream.write(byteCode);
         outputStream.close();
     }
 
