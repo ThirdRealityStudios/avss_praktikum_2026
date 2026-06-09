@@ -787,29 +787,50 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
+                System.out.println("Got incoming deletion request.");
+
                 IRequestDTOLoanDelete obj = gson.fromJson(body, RequestDTOLoanDelete.class);
+
+                System.out.println("Could parse request body to JSON (OK)");
 
                 if(obj == null) // E.g. called delete action but not gave deletion data
                 {
+                    System.out.println("Parsing failed (ERROR)");
+
+                    System.out.println("Sending response to client now:\n\n");
+
                     respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_NO_SELECTED_DATASET);
                     json = gson.toJson(respD);
+                    System.out.println(json+"\n\n");
                     response(exchange, 400, json);
+
+                    System.out.println("Exiting server-side loan deletion now...");
                     return;
                 }
 
                 id = obj.getLoanID();
+                System.out.println("Loan should be deleted with ID: " + id);
 
                 if(loanRepository.deleteLoan(id))
                 {
+                    System.out.println("Deletion was successful (OK)");
+
+                    System.out.println("Sending response to client now:\n\n");
                     respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_SUCCESS);
                     json = gson.toJson(respD);
+                    System.out.println(json+"\n\n");
                     response(exchange, 200, json);
                     return;
                 }
                 else
                 {
+                    System.out.println("Database not satisfied with given Loan ID, deletion failed! (ERROR)");
+
+                    System.out.println("Sending response (404) to client now:\n\n");
                     respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST);
                     json = gson.toJson(respD);
+                    System.out.println(json+"\n\n");
+
                     response(exchange, 404, json);
                     return;
                 }
