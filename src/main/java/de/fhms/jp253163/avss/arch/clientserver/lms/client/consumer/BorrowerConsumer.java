@@ -43,6 +43,9 @@ public class BorrowerConsumer implements IBorrowerRepository
     private HttpClient client;
     private String authority;
 
+    // For between CRUD actions and field validation logic used.
+    private int tempGlobalResponseCodeCode = -1;
+
     public BorrowerConsumer(Gson gson, HttpClient client, String authority) throws IllegalArgumentException
     {
         Objects.requireNonNull(gson);
@@ -62,6 +65,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         Objects.requireNonNull(lastname);
         Objects.requireNonNull(birthday);
         Objects.requireNonNull(address);
+        tempGlobalResponseCodeCode = -1;
 
         int day = birthday.getDayOfMonth();
         int month = birthday.getMonthValue();
@@ -93,21 +97,25 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             resp = client.send(req, handl);
 
-            if(resp.statusCode() == 200)
-            {
-                respObj = resp.body();
+            if(resp == null) return null;
 
-                if(respObj == null) return null;
-                respJson = respObj.toString();
-                respBorrowerCreate = gson.fromJson(respJson, ResponseDTOBorrowerCreate.class);
+            respObj = resp.body();
 
-                if(respBorrowerCreate == null) return null;
-                if(respBorrowerCreate.getGlobalResponseCode() != GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS.ordinal()) return null;
+            if(respObj == null) return null;
 
-                return respBorrowerCreate.getBorrower();
-            }
+            respJson = respObj.toString();
 
-            return null;
+            if(respJson.isEmpty()) return null;
+
+            respBorrowerCreate = gson.fromJson(respJson, ResponseDTOBorrowerCreate.class);
+
+            if(respBorrowerCreate == null) return null;
+
+            tempGlobalResponseCodeCode = respBorrowerCreate.getGlobalResponseCode();
+
+            if(respBorrowerCreate.getGlobalResponseCode() != GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS.ordinal()) return null;
+
+            return respBorrowerCreate.getBorrower();
         }
         catch(Exception e)
         {
@@ -119,6 +127,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower readBorrower(int id)
     {
+        tempGlobalResponseCodeCode = -1;
+
         String borrowerActionURI = authority + "/borrower/read/";
         URI uri = URI.create(borrowerActionURI);
 
@@ -140,26 +150,30 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             resp = client.send(req, handl);
 
-            if(resp.statusCode() == 200)
-            {
-                respObj = resp.body();
+            respObj = resp.body();
 
-                if(respObj == null) return null;
-                respJson = respObj.toString();
-                respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
+            if(respObj == null) return null;
 
-                if(respBorrowerRead == null) return null;
-                if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
-                if(respBorrowerRead.getBorrowers() == null || respBorrowerRead.getBorrowers().length != 1) return null;
+            respJson = respObj.toString();
 
-                return respBorrowerRead.getBorrowers()[0];
-            }
+            if(respJson.isEmpty()) return null;
 
-            return null;
+            respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
+
+            if(respBorrowerRead == null) return null;
+
+            tempGlobalResponseCodeCode = respBorrowerRead.getGlobalResponseCode();
+
+            if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
+
+            if(respBorrowerRead.getBorrowers() == null || respBorrowerRead.getBorrowers().length != 1) return null;
+
+            return respBorrowerRead.getBorrowers()[0];
         }
         catch(Exception e)
         {
             e.printStackTrace();
+
             return null;
         }
     }
@@ -167,6 +181,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower[] readAllBorrowers()
     {
+        tempGlobalResponseCodeCode = -1;
+
         String borrowerActionURI = authority + "/borrower/read/";
         URI uri = URI.create(borrowerActionURI);
 
@@ -193,11 +209,19 @@ public class BorrowerConsumer implements IBorrowerRepository
                 respObj = resp.body();
 
                 if(respObj == null) return null;
+
                 respJson = respObj.toString();
+
+                if(respJson.isEmpty()) return null;
+
                 respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
 
                 if(respBorrowerRead == null) return null;
+
+                tempGlobalResponseCodeCode = respBorrowerRead.getGlobalResponseCode();
+
                 if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
+
                 if(respBorrowerRead.getBorrowers() == null) return null;
 
                 return respBorrowerRead.getBorrowers();
@@ -208,6 +232,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         catch(Exception e)
         {
             e.printStackTrace();
+
             return null;
         }
     }
@@ -216,6 +241,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     public boolean updateBorrower(IBorrower borrower)
     {
         Objects.requireNonNull(borrower);
+        tempGlobalResponseCodeCode = -1;
 
         int id = borrower.getId();
 
@@ -259,10 +285,16 @@ public class BorrowerConsumer implements IBorrowerRepository
                 respObj = resp.body();
 
                 if(respObj == null) return false;
+
                 respJson = respObj.toString();
+
+                if(respJson.isEmpty()) return false;
+
                 respBorrowerUpdate = gson.fromJson(respJson, ResponseDTOBorrowerUpdate.class);
 
                 if(respBorrowerUpdate == null) return false;
+
+                tempGlobalResponseCodeCode = respBorrowerUpdate.getGlobalResponseCode();
 
                 return respBorrowerUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_BORROWER_SUCCESS.ordinal();
             }
@@ -279,6 +311,8 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
+        tempGlobalResponseCodeCode = -1;
+
         String borrowerActionURI = authority + "/borrower/delete/";
         URI uri = URI.create(borrowerActionURI);
 
@@ -305,10 +339,16 @@ public class BorrowerConsumer implements IBorrowerRepository
                 respObj = resp.body();
 
                 if(respObj == null) return false;
+
                 respJson = respObj.toString();
+
+                if(respJson.isEmpty()) return false;
+
                 respBorrowerDelete = gson.fromJson(respJson, ResponseDTOBorrowerDelete.class);
 
                 if(respBorrowerDelete == null) return false;
+
+                tempGlobalResponseCodeCode = respBorrowerDelete.getGlobalResponseCode();
 
                 return respBorrowerDelete.getGlobalResponseCode() == GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal();
             }
@@ -328,15 +368,28 @@ public class BorrowerConsumer implements IBorrowerRepository
         LocalDate sampleBirthday = LocalDate.of(IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_DAY_OF_BIRTH);
         IResidentialAddress address = new ResidentialAddress(IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_PLACE);
 
-        createBorrower(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, sampleBirthday, address, IBorrower.EXAMPLE_SCHUFA_SCORE);
+        // the wrong value will prevent the creation logic to persistently create a domain object (for efficiency reasons)
+        // It is only about the GlobalResponseCode the CRUD function creates here in between.
+        String wrongValue = "";
 
-        return false;
+        createBorrower(firstname, wrongValue, sampleBirthday, address, IBorrower.EXAMPLE_SCHUFA_SCORE);
+
+        return tempGlobalResponseCodeCode != GlobalResponseCode.CREATE_BORROWER_INVALID_FIRSTNAME.ordinal();
     }
 
     @Override
     public boolean isValidLastnameForCreation(String lastname)
     {
-        return false;
+        LocalDate sampleBirthday = LocalDate.of(IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_DAY_OF_BIRTH);
+        IResidentialAddress address = new ResidentialAddress(IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_PLACE);
+
+        // the wrong value will prevent the creation logic to persistently create a domain object (for efficiency reasons)
+        // It is only about the GlobalResponseCode the CRUD function creates here in between.
+        String wrongValue = "";
+
+        createBorrower(IBorrower.EXAMPLE_FIRSTNAME, wrongValue, sampleBirthday, address, IBorrower.EXAMPLE_SCHUFA_SCORE);
+
+        return tempGlobalResponseCodeCode != GlobalResponseCode.CREATE_BORROWER_INVALID_FIRSTNAME.ordinal();
     }
 
     @Override
