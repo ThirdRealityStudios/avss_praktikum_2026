@@ -8,22 +8,26 @@ import java.util.Objects;
 
 public class ResponseDTOBorrowerRead implements IResponseDTOBorrowerRead
 {
-    private IBorrower borrower;
+    private IBorrower[] borrowers;
     private int globalResponseCode;
 
-    public ResponseDTOBorrowerRead(IBorrower borrower, GlobalResponseCode code)
+    /**
+     * @param borrowers MUST be NOT null! At least an empty array is expected.
+     * @param code
+     */
+    public ResponseDTOBorrowerRead(IBorrower[] borrowers, GlobalResponseCode code)
     {
-        Objects.requireNonNull(borrower);
+        Objects.requireNonNull(borrowers);
         Objects.requireNonNull(code);
 
-        this.borrower = borrower;
+        this.borrowers = borrowers;
         this.globalResponseCode = code.ordinal();
     }
 
     @Override
-    public IBorrower getBorrower()
+    public IBorrower[] getBorrowers()
     {
-        return borrower;
+        return borrowers;
     }
 
     @Override

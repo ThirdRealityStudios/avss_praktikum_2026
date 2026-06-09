@@ -11,9 +11,12 @@ public class ResponseDTOLoanCreate implements IResponseDTOLoanCreate
     private ILoan loan;
     private int globalResponseCode;
 
+    /**
+     * @param loan Can be null if loan creation failed.
+     * @param code
+     */
     public ResponseDTOLoanCreate(ILoan loan, GlobalResponseCode code)
     {
-        Objects.requireNonNull(loan);
         Objects.requireNonNull(code);
 
         this.loan = loan;

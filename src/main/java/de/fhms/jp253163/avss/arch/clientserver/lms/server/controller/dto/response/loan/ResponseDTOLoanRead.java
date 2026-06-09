@@ -8,22 +8,26 @@ import java.util.Objects;
 
 public class ResponseDTOLoanRead implements IResponseDTOLoanRead
 {
-    private ILoan loan;
+    private ILoan[] loans;
     private int globalResponseCode;
 
-    public ResponseDTOLoanRead(ILoan loan, GlobalResponseCode code)
+    /**
+     * @param loans MUST be NOT null! At least an empty array is expected.
+     * @param code
+     */
+    public ResponseDTOLoanRead(ILoan[] loans, GlobalResponseCode code)
     {
-        Objects.requireNonNull(loan);
+        Objects.requireNonNull(loans);
         Objects.requireNonNull(code);
 
-        this.loan = loan;
+        this.loans = loans;
         this.globalResponseCode = code.ordinal();
     }
 
     @Override
-    public ILoan getLoan()
+    public ILoan[] getLoans()
     {
-        return loan;
+        return loans;
     }
 
     @Override

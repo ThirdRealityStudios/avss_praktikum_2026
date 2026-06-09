@@ -11,9 +11,12 @@ public class ResponseDTOBorrowerCreate implements IResponseDTOBorrowerCreate
     private IBorrower borrower;
     private int globalResponseCode;
 
+    /**
+     * @param borrower null allowed if creation failed.
+     * @param code
+     */
     public ResponseDTOBorrowerCreate(IBorrower borrower, GlobalResponseCode code)
     {
-        Objects.requireNonNull(borrower);
         Objects.requireNonNull(code);
 
         this.borrower = borrower;

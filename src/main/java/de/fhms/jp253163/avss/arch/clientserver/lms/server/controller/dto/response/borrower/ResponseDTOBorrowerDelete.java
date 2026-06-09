@@ -8,15 +8,12 @@ import java.util.Objects;
 
 public class ResponseDTOBorrowerDelete implements IResponseDTOBorrowerDelete
 {
-    private IBorrower borrower;
     private int globalResponseCode;
 
-    public ResponseDTOBorrowerDelete(IBorrower borrower, GlobalResponseCode code)
+    public ResponseDTOBorrowerDelete(GlobalResponseCode code)
     {
-        Objects.requireNonNull(borrower);
         Objects.requireNonNull(code);
 
-        this.borrower = borrower;
         this.globalResponseCode = code.ordinal();
     }
 

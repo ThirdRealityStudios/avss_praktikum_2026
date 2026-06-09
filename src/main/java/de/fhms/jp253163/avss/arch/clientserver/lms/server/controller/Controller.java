@@ -6,12 +6,19 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanCreate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.loan.IRequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.borrower.IResponseDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.response.loan.IResponseDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.GlobalResponseCode;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.net.uri.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower.RequestDTOBorrowerCreate;
@@ -21,7 +28,13 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanDelete;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.loan.RequestDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.borrower.ResponseDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanDelete;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
@@ -422,9 +435,11 @@ public class Controller implements IController
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
 
-                borrowers = new IBorrower[]{ borrowerRepository.createBorrower(firstname, lastname, birthday, address, 0.9d) };
+                borrower = borrowerRepository.createBorrower(firstname, lastname, birthday, address, 0.9d);
 
-                response(exchange, 200, gson.toJson(borrowers));
+                IResponseDTOBorrowerCreate resp = new ResponseDTOBorrowerCreate(borrower, GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS);
+                String json = gson.toJson(resp);
+                response(exchange, 200, gson.toJson(json));
                 return;
             }
             else if(action.getName().equalsIgnoreCase("update"))
@@ -471,7 +486,9 @@ public class Controller implements IController
 
                 if(borrowerRepository.updateBorrower(borrower))
                 {
-                    response(exchange, 200, gson.toJson(borrowers));
+                    IResponseDTOBorrowerUpdate resp = new ResponseDTOBorrowerUpdate(GlobalResponseCode.UPDATE_BORROWER_SUCCESS);
+                    String json = gson.toJson(resp);
+                    response(exchange, 200, gson.toJson(json));
                     return;
                 }
                 else
@@ -484,9 +501,15 @@ public class Controller implements IController
             {
                 IRequestDTOBorrowerDelete obj = gson.fromJson(body, RequestDTOBorrowerDelete.class);
 
+                String json = null;
+                IResponseDTOBorrowerDelete resp = null;
+
                 if(obj == null)
                 {
-                    response(exchange, 400, GlobalResponseCode.DELETE_BORROWER_ERROR.ordinal()+"");
+                    resp = new ResponseDTOBorrowerDelete(GlobalResponseCode.DELETE_BORROWER_ERROR);
+                    json = gson.toJson(resp);
+
+                    response(exchange, 400, json);
                     return;
                 }
 
@@ -494,12 +517,16 @@ public class Controller implements IController
 
                 if(borrowerRepository.deleteBorrower(id))
                 {
-                    response(exchange, 200, GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal()+"");
+                    resp = new ResponseDTOBorrowerDelete(GlobalResponseCode.DELETE_BORROWER_SUCCESS);
+                    json = gson.toJson(resp);
+                    response(exchange, 200, json);
                     return;
                 }
                 else
                 {
-                    response(exchange, 404, GlobalResponseCode.DELETE_BORROWER_ERROR.ordinal()+"");
+                    resp = new ResponseDTOBorrowerDelete(GlobalResponseCode.DELETE_BORROWER_ERROR);
+                    json = gson.toJson(resp);
+                    response(exchange, 404, json);
                     return;
                 }
             }
@@ -515,20 +542,24 @@ public class Controller implements IController
     @Override
     public void getBorrower(HttpExchange exchange, Action action)
     {
+        String json;
+        IResponseDTOBorrowerRead resp;
+
         try
         {
             boolean isInvalidID = action.getValue() == null || !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
 
             if(isInvalidID)
             {
-                response(exchange, 400, GlobalResponseCode.READ_BORROWER_INVALID_REQUEST.ordinal()+"");
+                resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_INVALID_REQUEST);
+                json = gson.toJson(resp);
+                response(exchange, 400, json);
                 return;
             }
 
             int id = Integer.parseInt(action.getValue());
 
             IBorrower[] borrowers = null;
-            String bodySendable = null;
 
             if(id == -1)
             {
@@ -536,12 +567,15 @@ public class Controller implements IController
 
                 if(borrowers == null || borrowers.length == 0)
                 {
-                    response(exchange, 404, GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE.ordinal()+"");
+                    resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE);
+                    json = gson.toJson(resp);
+                    response(exchange, 404, json);
                     return;
                 }
 
-                bodySendable = gson.toJson(borrowers);
-                response(exchange, 200, bodySendable);
+                resp = new ResponseDTOBorrowerRead(borrowers, GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS);
+                json = gson.toJson(resp);
+                response(exchange, 200, json);
                 return;
             }
             else
@@ -550,12 +584,15 @@ public class Controller implements IController
 
                 if(borrowers[0] == null)
                 {
-                    response(exchange, 404, GlobalResponseCode.READ_BORROWER_NOT_FOUND.ordinal()+"");
+                    resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_NOT_FOUND);
+                    json = gson.toJson(resp);
+                    response(exchange, 404, json);
                     return;
                 }
 
-                bodySendable = gson.toJson(borrowers);
-                response(exchange, 200, bodySendable);
+                resp = new ResponseDTOBorrowerRead(borrowers, GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS);
+                json = gson.toJson(resp);
+                response(exchange, 200, json);
                 return;
             }
         }
@@ -565,7 +602,9 @@ public class Controller implements IController
 
             try
             {
-                response(exchange, 400, GlobalResponseCode.READ_BORROWER_INVALID_REQUEST.ordinal()+"");
+                resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_INVALID_REQUEST);
+                json = gson.toJson(resp);
+                response(exchange, 400, json);
                 return;
             }
             catch(Exception e1)
@@ -578,36 +617,50 @@ public class Controller implements IController
 
     private boolean abortOnInvalidLoanBaseData(HttpExchange exchange, boolean isUpdate, int borrower, double amount, double interestRate, int term) throws IOException
     {
+        String json;
+        IResponseDTOLoanCreate respC;
+        IResponseDTOLoanUpdate respU;
+
         if(isUpdate)
         {
             if(!loanRepository.isValidBorrowerIDForUpdate(borrower))
             {
-                response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_INVALID_BORROWER_ID.ordinal()+"");
+                respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_INVALID_BORROWER_ID);
+                json = gson.toJson(respU);
+                response(exchange, 400, json);
             }
         }
         else
         {
             if(!loanRepository.isValidBorrowerIDForCreation(borrower))
             {
-                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_BORROWER_ID.ordinal()+"");
+                respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_INVALID_BORROWER_ID);
+                json = gson.toJson(respC);
+                response(exchange, 400, json);
                 return true;
             }
 
             if(!loanRepository.isValidAmountForCreation(amount))
             {
-                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_AMOUNT.ordinal()+"");
+                respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_INVALID_AMOUNT);
+                json = gson.toJson(respC);
+                response(exchange, 400, json);
                 return true;
             }
 
             if(!loanRepository.isValidInterestRateForCreation(interestRate))
             {
-                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_INTEREST_RATE.ordinal()+"");
+                respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_INVALID_INTEREST_RATE);
+                json = gson.toJson(respC);
+                response(exchange, 400, json);
                 return true;
             }
 
             if(!loanRepository.isValidTermForCreation(term))
             {
-                response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_TERM.ordinal()+"");
+                respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_INVALID_TERM);
+                json = gson.toJson(respC);
+                response(exchange, 400, json);
                 return true;
             }
         }
@@ -630,6 +683,12 @@ public class Controller implements IController
         ILoan[] loans = null;
         ILoan loan = null;
 
+        IResponseDTOLoanCreate respC;
+        IResponseDTOLoanRead respR;
+        IResponseDTOLoanUpdate respU;
+        IResponseDTOLoanDelete respD;
+        String json;
+
         try
         {
             if(action.getName().equalsIgnoreCase("create"))
@@ -638,7 +697,9 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called create action but not gave new dataset information in body
                 {
-                    response(exchange, 400, GlobalResponseCode.CREATE_LOAN_INVALID_CREATION_REQUEST.ordinal()+"");
+                    respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_INVALID_CREATION_REQUEST);
+                    json = gson.toJson(respC);
+                    response(exchange, 400, json);
                     return;
                 }
 
@@ -650,15 +711,19 @@ public class Controller implements IController
                 if(abortOnInvalidLoanBaseData(exchange, false, borrower, amount, interestRate, term))
                     return;
 
-                loans = new ILoan[]{ loanRepository.createLoan(borrower, amount, interestRate, term) };
+                loan = loanRepository.createLoan(borrower, amount, interestRate, term);
 
-                if(loans[0] == null)
+                if(loan == null)
                 {
-                    response(exchange, 400, GlobalResponseCode.CREATE_LOAN_CREATION_ERROR.ordinal()+"");
+                    respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_CREATION_ERROR);
+                    json = gson.toJson(respC);
+                    response(exchange, 400, json);
                     return;
                 }
 
-                response(exchange, 200, gson.toJson(loans));
+                respC = new ResponseDTOLoanCreate(loan, GlobalResponseCode.CREATE_LOAN_CREATION_SUCCESS);
+                json = gson.toJson(respC);
+                response(exchange, 200, json);
                 return;
             }
             else if(action.getName().equalsIgnoreCase("update"))
@@ -667,7 +732,9 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called update action but not gave update data
                 {
-                    response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_NO_SELECTED_DATASET.ordinal()+"");
+                    respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_NO_SELECTED_DATASET);
+                    json = gson.toJson(respU);
+                    response(exchange, 400, json);
                     return;
                 }
 
@@ -675,7 +742,9 @@ public class Controller implements IController
 
                 if(loan == null)
                 {
-                    response(exchange, 404, GlobalResponseCode.UPDATE_LOAN_NOT_FOUND.ordinal()+"");
+                    respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_NOT_FOUND);
+                    json = gson.toJson(respU);
+                    response(exchange, 404, json);
                     return;
                 }
 
@@ -689,18 +758,24 @@ public class Controller implements IController
 
                 if(obj.isBookInstallmentWanted() && !loanUpdated.payInstallment())
                 {
-                    response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_ERROR.ordinal()+"");
+                    respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_ERROR);
+                    json = gson.toJson(respU);
+                    response(exchange, 400, json);
                     return;
                 }
 
                 if(loanRepository.updateLoan(loan))
                 {
-                    response(exchange, 200, GlobalResponseCode.UPDATE_LOAN_SUCCESS.ordinal()+"");
+                    respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_SUCCESS);
+                    json = gson.toJson(respU);
+                    response(exchange, 200, json);
                     return;
                 }
                 else
                 {
-                    response(exchange, 400, GlobalResponseCode.UPDATE_LOAN_ERROR.ordinal()+"");
+                    respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_ERROR);
+                    json = gson.toJson(respU);
+                    response(exchange, 400, json);
                     return;
                 }
             }
@@ -710,7 +785,9 @@ public class Controller implements IController
 
                 if(obj == null) // E.g. called delete action but not gave deletion data
                 {
-                    response(exchange, 400, GlobalResponseCode.DELETE_LOAN_NO_SELECTED_DATASET.ordinal()+"");
+                    respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_NO_SELECTED_DATASET);
+                    json = gson.toJson(respD);
+                    response(exchange, 400, json);
                     return;
                 }
 
@@ -718,12 +795,16 @@ public class Controller implements IController
 
                 if(loanRepository.deleteLoan(id))
                 {
-                    response(exchange, 200, GlobalResponseCode.DELETE_LOAN_SUCCESS.ordinal()+"");
+                    respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_SUCCESS);
+                    json = gson.toJson(respD);
+                    response(exchange, 200, json);
                     return;
                 }
                 else
                 {
-                    response(exchange, 404, GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST.ordinal()+"");
+                    respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST);
+                    json = gson.toJson(respD);
+                    response(exchange, 404, json);
                     return;
                 }
             }
@@ -753,33 +834,39 @@ public class Controller implements IController
     @Override
     public void getLoan(HttpExchange exchange, Action action)
     {
+        String json;
+        IResponseDTOLoanRead resp;
+
         try
         {
             boolean isInvalidID = action.getValue() == null || !StringUtils.isNumeric(action.getValue()) && !action.getValue().equalsIgnoreCase("-1");
 
             if(isInvalidID)
             {
-                response(exchange, 400, GlobalResponseCode.READ_LOAN_INVALID_REQUEST.ordinal()+"");
+                resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_INVALID_REQUEST);
+                json = gson.toJson(resp);
+                response(exchange, 400, json);
                 return;
             }
 
             int id = Integer.parseInt(action.getValue());
 
             ILoan[] loans = null;
-            String sendableBody = null;
-
             if(id == -1)
             {
                 loans = loanRepository.readAllLoans();
 
                 if(loans == null || loans.length == 0)
                 {
-                    response(exchange, 404, GlobalResponseCode.READ_LOAN_EMPTY_DATABASE.ordinal()+"");
+                    resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_EMPTY_DATABASE);
+                    json = gson.toJson(resp);
+                    response(exchange, 404, json);
                     return;
                 }
 
-                sendableBody = gson.toJson(loans);
-                response(exchange, 200, sendableBody);
+                resp = new ResponseDTOLoanRead(loans, GlobalResponseCode.READ_LOAN_FOUND_SUCCESS);
+                json = gson.toJson(resp);
+                response(exchange, 200, json);
                 return;
             }
             else
@@ -788,12 +875,15 @@ public class Controller implements IController
 
                 if(loans[0] == null)
                 {
-                    response(exchange, 404, GlobalResponseCode.READ_LOAN_NOT_FOUND.ordinal()+"");
+                    resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_NOT_FOUND);
+                    json = gson.toJson(resp);
+                    response(exchange, 404, json);
                     return;
                 }
 
-                sendableBody = gson.toJson(loans);
-                response(exchange, 200, sendableBody);
+                resp = new ResponseDTOLoanRead(loans, GlobalResponseCode.READ_LOAN_FOUND_SUCCESS);
+                json = gson.toJson(resp);
+                response(exchange, 200, json);
                 return;
             }
         }
@@ -803,7 +893,9 @@ public class Controller implements IController
 
             try
             {
-                response(exchange, 400, "Bad Request");
+                resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_INVALID_REQUEST);
+                json = gson.toJson(resp);
+                response(exchange, 400, json);
                 return;
             }
             catch (Exception e1)

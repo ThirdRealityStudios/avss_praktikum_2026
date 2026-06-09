@@ -5,9 +5,9 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 public interface IResponseDTOLoanRead
 {
     /**
-     * @return null (creation failed) or the created object.
+     * @return null (creation failed) or the read object(s).
      */
-    public ILoan getLoan();
+    public ILoan[] getLoans();
 
     /**
      * @return Ordinal of the corresponding enum in GlobalResponseCode.
