@@ -233,7 +233,18 @@ public class LoanConsumer implements ILoanRepository
         String loanActionURI = authority + "/loan/update/";
         URI uri = URI.create(loanActionURI);
 
-        IRequestDTOLoanUpdate loanUpdateDTO = new RequestDTOLoanUpdate(id, borrower, false);
+        boolean bookInstallment = false;
+
+        // Determine differences of remaining balance (compare client and server dataset version)
+        // to see if it was modified (after the clicking the button "Book Installment" on GUI e.g.).
+        // Version comparison is only needed in this special case because the server
+        // decides here between clicking the "Book Installment" button action and between
+        // changes of other values (via the text user fields normally).
+        ILoan serverLoanVersion = readLoan(id);
+        if(serverLoanVersion == null) return false;
+        bookInstallment = serverLoanVersion.getRemainingBalance() != loan.getRemainingBalance();
+
+        IRequestDTOLoanUpdate loanUpdateDTO = new RequestDTOLoanUpdate(id, borrower, bookInstallment);
 
         String json = gson.toJson(loanUpdateDTO);
 
