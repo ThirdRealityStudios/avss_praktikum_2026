@@ -334,7 +334,10 @@ public class LoanConsumer implements ILoanRepository
             System.out.println("Got response code from server: " + resp.statusCode());
 
             if(resp.statusCode() != 200)
+            {
+                System.out.println("Exiting loan deletion due to bad response code...");
                 return false;
+            }
 
             respObj = resp.body();
 
