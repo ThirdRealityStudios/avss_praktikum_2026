@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.clientserver.lms;
+package de.fhms.jp253163.avss.arch.clientserver.lms.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,11 +8,7 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.Presenter;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.IView;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.SwingView;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.data.IJsonSQLService;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.data.JsonSQLService;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.*;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Borrower;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.Loan;
 
 import javax.swing.*;
 import java.io.File;
