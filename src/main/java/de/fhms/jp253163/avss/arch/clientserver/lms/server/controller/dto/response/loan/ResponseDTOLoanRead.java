@@ -10,19 +10,17 @@ import java.util.Objects;
 
 public class ResponseDTOLoanRead implements IResponseDTOLoanRead
 {
-    private ILoan[] loans;
+    private Loan[] loans;
     private int globalResponseCode;
 
     /**
      * @param loans MUST be NOT null! At least an empty array is expected.
      * @param code
      */
-    public ResponseDTOLoanRead(ILoan[] loans, GlobalResponseCode code)
+    public ResponseDTOLoanRead(Loan[] loans, GlobalResponseCode code)
     {
         Objects.requireNonNull(loans);
         Objects.requireNonNull(code);
-
-        if(!(loans instanceof Loan[])) throw new IllegalArgumentException("loans not a supported ILoan[] instance");
 
         this.loans = loans;
         this.globalResponseCode = code.ordinal();

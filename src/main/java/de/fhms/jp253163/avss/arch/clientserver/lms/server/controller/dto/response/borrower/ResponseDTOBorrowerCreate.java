@@ -16,13 +16,11 @@ public class ResponseDTOBorrowerCreate implements IResponseDTOBorrowerCreate
      * @param borrower null allowed if creation failed.
      * @param code
      */
-    public ResponseDTOBorrowerCreate(IBorrower borrower, GlobalResponseCode code)
+    public ResponseDTOBorrowerCreate(Borrower borrower, GlobalResponseCode code)
     {
         Objects.requireNonNull(code);
 
-        if(borrower != null && !(borrower instanceof Borrower)) throw new IllegalArgumentException("borrower not a supported IBorrower instance");
-
-        this.borrower = (Borrower) borrower;
+        this.borrower = borrower;
         this.globalResponseCode = code.ordinal();
     }
 

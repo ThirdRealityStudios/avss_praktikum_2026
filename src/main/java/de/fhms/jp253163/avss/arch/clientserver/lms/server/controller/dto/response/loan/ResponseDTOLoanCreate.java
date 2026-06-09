@@ -17,13 +17,11 @@ public class ResponseDTOLoanCreate implements IResponseDTOLoanCreate
      * @param loan Can be null if loan creation failed.
      * @param code
      */
-    public ResponseDTOLoanCreate(ILoan loan, GlobalResponseCode code)
+    public ResponseDTOLoanCreate(Loan loan, GlobalResponseCode code)
     {
         Objects.requireNonNull(code);
 
-        if(loan != null && !(loan instanceof Loan)) throw new IllegalArgumentException("loan not a supported ILoan instance");
-
-        this.loan = (Loan) loan;
+        this.loan = loan;
         this.globalResponseCode = code.ordinal();
     }
 

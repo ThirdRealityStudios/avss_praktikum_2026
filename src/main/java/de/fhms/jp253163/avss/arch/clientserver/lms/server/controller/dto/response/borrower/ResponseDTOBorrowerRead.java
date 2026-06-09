@@ -16,14 +16,12 @@ public class ResponseDTOBorrowerRead implements IResponseDTOBorrowerRead
      * @param borrowers MUST be NOT null! At least an empty array is expected.
      * @param code
      */
-    public ResponseDTOBorrowerRead(IBorrower[] borrowers, GlobalResponseCode code)
+    public ResponseDTOBorrowerRead(Borrower[] borrowers, GlobalResponseCode code)
     {
         Objects.requireNonNull(borrowers);
         Objects.requireNonNull(code);
 
-        if(!(borrowers instanceof Borrower[])) throw new IllegalArgumentException("borrowers not a supported IBorrower[] instance");
-
-        this.borrowers = (Borrower[]) borrowers;
+        this.borrowers = borrowers;
         this.globalResponseCode = code.ordinal();
     }
 
