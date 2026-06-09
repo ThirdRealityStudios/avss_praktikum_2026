@@ -325,28 +325,50 @@ public class LoanConsumer implements ILoanRepository
         {
             resp = client.send(req, handl);
 
-            if(resp == null) return false;
+            if(resp == null)
+            {
+                System.out.println("Got NO RESPONSE from server");
+                return false;
+            }
+
+            System.out.println("Got response code from server: " + resp.statusCode());
 
             if(resp.statusCode() != 200)
                 return false;
 
             respObj = resp.body();
 
-            if(respObj == null) return false;
+            if(respObj == null)
+            {
+                System.out.println("Got NO response BODY from server");
+                return false;
+            }
 
             respBytes = resp.body().getBytes();
 
-            if(respBytes.length == 0) return false;
+            if(respBytes.length == 0)
+            {
+                System.out.println("Got EMPTY response BODY from server (code point 0)");
+                return false;
+            }
 
             respJson = new String(respBytes, StandardCharsets.UTF_8);
 
-            if(respJson.isEmpty()) return false;
+            if(respJson.isEmpty())
+            {
+                System.out.println("Got EMPTY response BODY from server (code point 1)");
+                return false;
+            }
 
-            System.out.println("Got response from server:\n\n"+respJson+"\n\n");
+            System.out.println("Got the following body from server:\n\n"+respJson+"\n\n");
 
             respLoanDelete = gson.fromJson(respJson, ResponseDTOLoanDelete.class);
 
-            if(respLoanDelete == null) return false;
+            if(respLoanDelete == null)
+            {
+                System.out.println("Cannot parse body to JSON from response!");
+                return false;
+            }
 
             return respLoanDelete.getGlobalResponseCode() == GlobalResponseCode.DELETE_LOAN_SUCCESS.ordinal();
         }
