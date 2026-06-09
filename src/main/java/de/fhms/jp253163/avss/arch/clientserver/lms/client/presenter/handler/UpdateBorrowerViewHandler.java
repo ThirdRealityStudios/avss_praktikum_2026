@@ -1,12 +1,12 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IRequestDTOBorrowerUpdate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.IUpdateBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.dto.RequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.IBorrowerRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IResidentialAddress;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;

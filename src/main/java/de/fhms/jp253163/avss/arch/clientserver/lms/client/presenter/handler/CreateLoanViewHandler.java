@@ -1,12 +1,10 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanCreate;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.ICreateLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IRequestDTOLoanCreate;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.ICreateLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.dto.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
 
 public class CreateLoanViewHandler implements ICreateLoanViewHandler
 {

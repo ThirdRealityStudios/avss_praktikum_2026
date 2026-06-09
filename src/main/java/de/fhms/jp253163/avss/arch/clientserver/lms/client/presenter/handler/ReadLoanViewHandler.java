@@ -1,12 +1,12 @@
 package de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.ILoan;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOLoanSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOLoanRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadLoanViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.DTOLoanSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IDTOLoanSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IRequestDTOLoanRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.IReadLoanViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.dto.DTOLoanSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 
 import java.util.ArrayList;
 
