@@ -220,7 +220,7 @@ public class LoanDatabaseRepository implements ILoanRepository
         ILoan loan = null;
         IBorrower borrower = null;
 
-        loan = readLoan(id);
+        loan = readLoan(id); // TODO Examine function
 
         if(loan == null)
         {
