@@ -44,6 +44,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -90,6 +91,7 @@ public class LoanConsumer implements ILoanRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOLoanCreate respLoanCreate = null;
 
@@ -105,7 +107,11 @@ public class LoanConsumer implements ILoanRepository
 
             if(respObj == null) return null;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return null;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return null;
 
@@ -120,6 +126,7 @@ public class LoanConsumer implements ILoanRepository
         catch(Exception e)
         {
             e.printStackTrace();
+
             return null;
         }
     }
@@ -141,6 +148,7 @@ public class LoanConsumer implements ILoanRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOLoanRead respLoanRead = null;
 
@@ -156,7 +164,11 @@ public class LoanConsumer implements ILoanRepository
 
             if(respObj == null) return null;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return null;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return null;
 
@@ -195,6 +207,7 @@ public class LoanConsumer implements ILoanRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOLoanRead respLoanRead = null;
 
@@ -208,19 +221,23 @@ public class LoanConsumer implements ILoanRepository
 
             respObj = resp.body();
 
-            if(respObj == null) return null;
+            if(respObj == null) return new ILoan[0];
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
 
-            if(respJson.isEmpty()) return null;
+            if(respBytes.length == 0) return new ILoan[0];
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
+
+            if(respJson.isEmpty()) return new ILoan[0];
 
             respLoanRead = gson.fromJson(respJson, ResponseDTOLoanRead.class);
 
-            if(respLoanRead == null) return null;
+            if(respLoanRead == null) return new ILoan[0];
 
-            if(respLoanRead.getGlobalResponseCode() != GlobalResponseCode.READ_LOAN_FOUND_SUCCESS.ordinal()) return null;
+            if(respLoanRead.getGlobalResponseCode() != GlobalResponseCode.READ_LOAN_FOUND_SUCCESS.ordinal()) return new ILoan[0];
 
-            if(respLoanRead.getLoans() == null) return null;
+            if(respLoanRead.getLoans() == null) return new ILoan[0];
 
             return respLoanRead.getLoans();
         }
@@ -228,7 +245,7 @@ public class LoanConsumer implements ILoanRepository
         {
             e.printStackTrace();
 
-            return null;
+            return new ILoan[0];
         }
     }
 
@@ -255,6 +272,7 @@ public class LoanConsumer implements ILoanRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOLoanUpdate respLoanUpdate = null;
 
@@ -270,7 +288,11 @@ public class LoanConsumer implements ILoanRepository
 
             if(respObj == null) return false;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return false;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return false;
 
@@ -305,6 +327,7 @@ public class LoanConsumer implements ILoanRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOLoanDelete respLoanDelete = null;
 
@@ -320,7 +343,11 @@ public class LoanConsumer implements ILoanRepository
 
             if(respObj == null) return false;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return false;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return false;
 

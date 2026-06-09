@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -85,7 +86,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         HttpResponse.BodyHandler<String> handl = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> resp = null;
 
-        Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOBorrowerCreate respBorrowerCreate = null;
 
@@ -97,11 +98,13 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(resp.statusCode() != 200) return null;
 
-            respObj = resp.body();
+            if(resp.body() == null) return null;
 
-            if(respObj == null) return null;
+            respBytes = resp.body().getBytes();
 
-            respJson = respObj.toString();
+            if(respBytes.length == 0) return null;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return null;
 
@@ -137,6 +140,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOBorrowerRead respBorrowerRead = null;
 
@@ -152,7 +156,11 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(respObj == null) return null;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return null;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return null;
 
@@ -191,6 +199,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOBorrowerRead respBorrowerRead = null;
 
@@ -204,19 +213,23 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             respObj = resp.body();
 
-            if(respObj == null) return null;
+            if(respObj == null) return new IBorrower[0];
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
 
-            if(respJson.isEmpty()) return null;
+            if(respBytes.length == 0) return new IBorrower[0];
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
+
+            if(respJson.isEmpty()) return new IBorrower[0];
 
             respBorrowerRead = gson.fromJson(respJson, ResponseDTOBorrowerRead.class);
 
-            if(respBorrowerRead == null) return null;
+            if(respBorrowerRead == null) return new IBorrower[0];
 
-            if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
+            if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return new IBorrower[0];
 
-            if(respBorrowerRead.getBorrowers() == null) return null;
+            if(respBorrowerRead.getBorrowers() == null) return new IBorrower[0];
 
             return respBorrowerRead.getBorrowers();
         }
@@ -224,7 +237,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         {
             e.printStackTrace();
 
-            return null;
+            return new IBorrower[0];
         }
     }
 
@@ -263,6 +276,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOBorrowerUpdate respBorrowerUpdate = null;
 
@@ -278,7 +292,11 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(respObj == null) return false;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return false;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return false;
 
@@ -312,6 +330,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         HttpResponse<String> resp = null;
 
         Object respObj = null;
+        byte[] respBytes = null;
         String respJson = null;
         IResponseDTOBorrowerDelete respBorrowerDelete = null;
 
@@ -327,7 +346,11 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(respObj == null) return false;
 
-            respJson = respObj.toString();
+            respBytes = resp.body().getBytes();
+
+            if(respBytes.length == 0) return false;
+
+            respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return false;
 
