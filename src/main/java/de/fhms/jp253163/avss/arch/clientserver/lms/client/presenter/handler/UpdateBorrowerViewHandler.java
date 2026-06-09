@@ -1,9 +1,9 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
+package de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler;
 
 import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IResidentialAddress;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.IPresenter;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerUpdate;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IUpdateBorrowerViewHandler;
 import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.RequestDTOBorrowerRead;

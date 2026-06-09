@@ -1,12 +1,12 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter.handler;
+package de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler;
 
-import de.fhms.jp253163.avss.arch.mvp.lms.model.IBorrowerRepository;
-import de.fhms.jp253163.avss.arch.mvp.lms.model.data.IBorrower;
-import de.fhms.jp253163.avss.arch.mvp.lms.presenter.IPresenter;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IDTOBorrowerSet;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.dto.IRequestDTOBorrowerRead;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.contracts.handler.IReadBorrowerViewHandler;
-import de.fhms.jp253163.avss.arch.mvp.lms.view.dto.DTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IDTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.dto.IRequestDTOBorrowerRead;
+import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.IReadBorrowerViewHandler;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.DTOBorrowerSet;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.*;
 
 import java.util.ArrayList;
 

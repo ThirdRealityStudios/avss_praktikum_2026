@@ -1,8 +1,9 @@
-package de.fhms.jp253163.avss.arch.mvp.lms.presenter;
+package de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter;
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.IView;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.view.contracts.handler.*;
 import de.fhms.jp253163.avss.arch.clientserver.lms.client.presenter.handler.*;
+import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.*;
 
 public class Presenter implements IPresenter
 {
