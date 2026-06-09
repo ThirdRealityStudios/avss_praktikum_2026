@@ -223,10 +223,18 @@ public class LoanDatabaseRepository implements ILoanRepository
         loan = readLoan(id);
 
         if(loan == null)
+        {
+            System.out.println("Model: No loan exists to delete with ID: " + id);
+            System.out.println("Model: Hence, exiting... (returning 'unsuccessful')");
             return false; // Loan not found in the system. Is this an error?
+        }
+
+        System.out.println("Model: FOUND loan to delete with ID: " + id);
 
         if(loan.getRemainingBalance() < 0.01) // It is legitimate to delete the loan (paid off)
         {
+            System.out.println("Model: Loan paid off.");
+
             borrower = borrowerRepository.readBorrower(loan.getBorrower());
 
             if(borrower == null)
@@ -246,6 +254,7 @@ public class LoanDatabaseRepository implements ILoanRepository
         }
         else
         {
+            System.out.println("Model: Loan has still something to pay off.");
             return false; // Still something left pay off from the borrower (at least 1 cent).
         }
     }
