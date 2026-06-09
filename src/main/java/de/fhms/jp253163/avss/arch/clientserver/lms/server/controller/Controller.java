@@ -408,8 +408,8 @@ public class Controller implements IController
         double schufaScore = -1;
         int[] loans = null;
 
-        IBorrower[] borrowers = null;
-        IBorrower borrower = null;
+        Borrower[] borrowers = null;
+        Borrower borrower = null;
 
         try
         {
@@ -439,7 +439,7 @@ public class Controller implements IController
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
 
-                borrower = borrowerRepository.createBorrower(firstname, lastname, birthday, address, 0.9d);
+                borrower = (Borrower) borrowerRepository.createBorrower(firstname, lastname, birthday, address, 0.9d);
 
                 IResponseDTOBorrowerCreate resp = new ResponseDTOBorrowerCreate(borrower, GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS);
                 String json = gson.toJson(resp);
@@ -474,7 +474,7 @@ public class Controller implements IController
 
                 address = new ResidentialAddress(obj.getStreet(), obj.getNo(), obj.getZip(), obj.getPlace());
 
-                borrower = borrowerRepository.readBorrower(id);
+                borrower = (Borrower) borrowerRepository.readBorrower(id);
                 loans = obj.getLoans();
 
                 if(borrower == null)
@@ -555,7 +555,7 @@ public class Controller implements IController
 
             if(isInvalidID)
             {
-                resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_INVALID_REQUEST);
+                resp = new ResponseDTOBorrowerRead(new Borrower[0], GlobalResponseCode.READ_BORROWER_INVALID_REQUEST);
                 json = gson.toJson(resp);
                 response(exchange, 400, json);
                 return;
@@ -563,15 +563,15 @@ public class Controller implements IController
 
             int id = Integer.parseInt(action.getValue());
 
-            IBorrower[] borrowers = null;
+            Borrower[] borrowers = null;
 
             if(id == -1)
             {
-                borrowers = borrowerRepository.readAllBorrowers();
+                borrowers = (Borrower[]) borrowerRepository.readAllBorrowers();
 
                 if(borrowers == null || borrowers.length == 0)
                 {
-                    resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE);
+                    resp = new ResponseDTOBorrowerRead(new Borrower[0], GlobalResponseCode.READ_BORROWER_EMPTY_DATABASE);
                     json = gson.toJson(resp);
                     response(exchange, 404, json);
                     return;
@@ -584,11 +584,11 @@ public class Controller implements IController
             }
             else
             {
-                borrowers = new IBorrower[]{ borrowerRepository.readBorrower(id) };
+                borrowers = new Borrower[]{ (Borrower) borrowerRepository.readBorrower(id) };
 
                 if(borrowers[0] == null)
                 {
-                    resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_NOT_FOUND);
+                    resp = new ResponseDTOBorrowerRead(new Borrower[0], GlobalResponseCode.READ_BORROWER_NOT_FOUND);
                     json = gson.toJson(resp);
                     response(exchange, 404, json);
                     return;
@@ -606,7 +606,7 @@ public class Controller implements IController
 
             try
             {
-                resp = new ResponseDTOBorrowerRead(new IBorrower[0], GlobalResponseCode.READ_BORROWER_INVALID_REQUEST);
+                resp = new ResponseDTOBorrowerRead(new Borrower[0], GlobalResponseCode.READ_BORROWER_INVALID_REQUEST);
                 json = gson.toJson(resp);
                 response(exchange, 400, json);
                 return;
@@ -684,8 +684,8 @@ public class Controller implements IController
         double interestRate = -1;
         int term = -1;
 
-        ILoan[] loans = null;
-        ILoan loan = null;
+        Loan[] loans = null;
+        Loan loan = null;
 
         IResponseDTOLoanCreate respC;
         IResponseDTOLoanRead respR;
@@ -715,7 +715,7 @@ public class Controller implements IController
                 if(abortOnInvalidLoanBaseData(exchange, false, borrower, amount, interestRate, term))
                     return;
 
-                loan = loanRepository.createLoan(borrower, amount, interestRate, term);
+                loan = (Loan) loanRepository.createLoan(borrower, amount, interestRate, term);
 
                 if(loan == null)
                 {
@@ -742,7 +742,7 @@ public class Controller implements IController
                     return;
                 }
 
-                loan = loanRepository.readLoan(obj.getLoanID());
+                loan = (Loan) loanRepository.readLoan(obj.getLoanID());
 
                 if(loan == null)
                 {
@@ -758,7 +758,7 @@ public class Controller implements IController
                 if(abortOnInvalidLoanBaseData(exchange, true, borrower, amount, interestRate, term))
                     return;
 
-                ILoan loanUpdated = new Loan(id, loan.getAmount(), loan.getInterestRate(), loan.getTerm(), borrower);
+                Loan loanUpdated = new Loan(id, loan.getAmount(), loan.getInterestRate(), loan.getTerm(), borrower);
 
                 if(obj.isBookInstallmentWanted() && !loanUpdated.payInstallment())
                 {
@@ -847,7 +847,7 @@ public class Controller implements IController
 
             if(isInvalidID)
             {
-                resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_INVALID_REQUEST);
+                resp = new ResponseDTOLoanRead(new Loan[0], GlobalResponseCode.READ_LOAN_INVALID_REQUEST);
                 json = gson.toJson(resp);
                 response(exchange, 400, json);
                 return;
@@ -855,14 +855,14 @@ public class Controller implements IController
 
             int id = Integer.parseInt(action.getValue());
 
-            ILoan[] loans = null;
+            Loan[] loans = null;
             if(id == -1)
             {
-                loans = loanRepository.readAllLoans();
+                loans = (Loan[]) loanRepository.readAllLoans();
 
                 if(loans == null || loans.length == 0)
                 {
-                    resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_EMPTY_DATABASE);
+                    resp = new ResponseDTOLoanRead(new Loan[0], GlobalResponseCode.READ_LOAN_EMPTY_DATABASE);
                     json = gson.toJson(resp);
                     response(exchange, 404, json);
                     return;
@@ -875,11 +875,11 @@ public class Controller implements IController
             }
             else
             {
-                loans = new ILoan[]{ loanRepository.readLoan(id) };
+                loans = new Loan[]{ (Loan) loanRepository.readLoan(id) };
 
                 if(loans[0] == null)
                 {
-                    resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_NOT_FOUND);
+                    resp = new ResponseDTOLoanRead(new Loan[0], GlobalResponseCode.READ_LOAN_NOT_FOUND);
                     json = gson.toJson(resp);
                     response(exchange, 404, json);
                     return;
@@ -897,7 +897,7 @@ public class Controller implements IController
 
             try
             {
-                resp = new ResponseDTOLoanRead(new ILoan[0], GlobalResponseCode.READ_LOAN_INVALID_REQUEST);
+                resp = new ResponseDTOLoanRead(new Loan[0], GlobalResponseCode.READ_LOAN_INVALID_REQUEST);
                 json = gson.toJson(resp);
                 response(exchange, 400, json);
                 return;
