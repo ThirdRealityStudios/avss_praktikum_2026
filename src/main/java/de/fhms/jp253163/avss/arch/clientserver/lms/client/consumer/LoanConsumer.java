@@ -303,15 +303,15 @@ public class LoanConsumer implements ILoanRepository
 
         String json = gson.toJson(loanDeleteDTO);
 
-        if(!json.isEmpty())
+        if(json.isEmpty())
         {
-            System.out.println("Trying to send request to server:\n\n"+json+"\n\n");
+            System.out.println("Trying to send EMPTY (BODY) request to server!");
 
             return false;
         }
         else
         {
-            System.out.println("Trying to send EMPTY (BODY) request to server!");
+            System.out.println("Trying to send request to server:\n\n"+json+"\n\n");
         }
 
         HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
