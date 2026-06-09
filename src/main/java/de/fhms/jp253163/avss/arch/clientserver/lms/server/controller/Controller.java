@@ -769,7 +769,7 @@ public class Controller implements IController
                     return;
                 }
 
-                if(loanRepository.updateLoan(loan))
+                if(loanRepository.updateLoan(loanUpdated))
                 {
                     respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_SUCCESS);
                     json = gson.toJson(respU);
