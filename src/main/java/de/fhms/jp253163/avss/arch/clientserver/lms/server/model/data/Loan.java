@@ -183,7 +183,7 @@ public class Loan implements ILoan
     @Override
     public boolean setRemainingBalance(double remainingBalance)
     {
-        if(remainingBalance >= 0 && this.remainingBalance == -1 || remainingBalance < this.remainingBalance)
+        if(remainingBalance >= 0 && this.remainingBalance == -1 || remainingBalance < this.remainingBalance && this.remainingBalance >= 0)
         {
             if(remainingBalance < 0) remainingBalance = 0;
 
