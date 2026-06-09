@@ -38,10 +38,10 @@ public class Main
                 return;
             }
 
-            IBorrowerRepository borrowerConsumer = new BorrowerConsumer(gson, client, authority);
-            ILoanRepository loanConsumer = new LoanConsumer(gson, client, authority);
+            IBorrowerRepository borrowerRepo = new BorrowerConsumer(gson, client, authority);
+            ILoanRepository loanRepo = new LoanConsumer((BorrowerConsumer) borrowerRepo, gson, client, authority);
 
-            IPresenter presenter = new Presenter(view, borrowerConsumer, loanConsumer);
+            IPresenter presenter = new Presenter(view, borrowerRepo, loanRepo);
             presenter.setView(view);
 
             view.start();
