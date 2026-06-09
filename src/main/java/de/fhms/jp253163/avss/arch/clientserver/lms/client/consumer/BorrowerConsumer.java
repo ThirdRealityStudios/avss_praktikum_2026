@@ -463,63 +463,199 @@ public class BorrowerConsumer implements IBorrowerRepository
         return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, schufaScore);
     }
 
+    private IBorrower sampleBorrower()
+    {
+        return createBorrower(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, sampleBirthday(), sampleAddress(), 0.9d);
+    }
+
     @Override
     public boolean isValidFirstnameForUpdate(String firstname)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        boolean updatable = false;
+
+        if(!sample.setFirstname(firstname))
+            return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidLastnameForUpdate(String lastname)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        boolean updatable = false;
+
+        if(!sample.setLastname(lastname))
+            return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidDayOfBirthForUpdate(int day)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        int currentMonth = sample.getDateOfBirth().getMonthValue();
+        int currentYear = sample.getDateOfBirth().getYear();
+        LocalDate updatedDate = LocalDate.of(currentYear, currentMonth, day);
+        boolean updatable = false;
+
+        if(!sample.setDateOfBirth(updatedDate))
+            return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidMonthOfBirthForUpdate(int month)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        int currentDay = sample.getDateOfBirth().getDayOfMonth();
+        int currentYear = sample.getDateOfBirth().getYear();
+        LocalDate updatedDate = LocalDate.of(currentYear, month, currentDay);
+        boolean updatable = false;
+
+        if(!sample.setDateOfBirth(updatedDate))
+            return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidYearOfBirthForUpdate(int year)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        int currentDay = sample.getDateOfBirth().getDayOfMonth();
+        int currentMonth = sample.getDateOfBirth().getMonthValue();
+        LocalDate updatedDate = null;
+        boolean updatable = false;
+
+        try
+        {
+            updatedDate = LocalDate.of(year, currentMonth, currentDay);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        if(!sample.setDateOfBirth(updatedDate))
+            return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidStreetForUpdate(String street)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        IResidentialAddress updatedAddress = sample.getResidentialAddress();
+        boolean updatable = false;
+
+        if(!updatedAddress.setStreet(street)) return false;
+        if(!sample.setResidentialAddress(updatedAddress)) return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidNoForUpdate(String no)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        IResidentialAddress updatedAddress = sample.getResidentialAddress();
+        boolean updatable = false;
+
+        if(!updatedAddress.setNo(no)) return false;
+        if(!sample.setResidentialAddress(updatedAddress)) return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidPlaceForUpdate(String place)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        IResidentialAddress updatedAddress = sample.getResidentialAddress();
+        boolean updatable = false;
+
+        if(!updatedAddress.setPlace(place)) return false;
+        if(!sample.setResidentialAddress(updatedAddress)) return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidZipForUpdate(int zip)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        IResidentialAddress updatedAddress = sample.getResidentialAddress();
+        boolean updatable = false;
+
+        if(!updatedAddress.setZip(zip)) return false;
+        if(!sample.setResidentialAddress(updatedAddress)) return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 
     @Override
     public boolean isValidSchufaScoreForUpdate(double schufaScore)
     {
-        return false;
+        IBorrower sample = sampleBorrower();
+        boolean updatable = false;
+
+        if(!sample.setSchufaScore(schufaScore)) return false;
+
+        updatable = updateBorrower(sample);
+
+        // Delete created test object again from server (don't care if successful)
+        deleteBorrower(sample.getId());
+
+        return updatable;
     }
 }
