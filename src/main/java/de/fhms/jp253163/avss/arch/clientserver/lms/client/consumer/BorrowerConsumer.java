@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -44,7 +45,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     private String authority;
 
     // For between CRUD actions and field validation logic used.
-    private int tempGlobalResponseCodeCode = -1;
+    private int tempGlobalResponseCode = -1;
 
     public BorrowerConsumer(Gson gson, HttpClient client, String authority) throws IllegalArgumentException
     {
@@ -65,7 +66,7 @@ public class BorrowerConsumer implements IBorrowerRepository
         Objects.requireNonNull(lastname);
         Objects.requireNonNull(birthday);
         Objects.requireNonNull(address);
-        tempGlobalResponseCodeCode = -1;
+        tempGlobalResponseCode = -1;
 
         int day = birthday.getDayOfMonth();
         int month = birthday.getMonthValue();
@@ -111,7 +112,7 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(respBorrowerCreate == null) return null;
 
-            tempGlobalResponseCodeCode = respBorrowerCreate.getGlobalResponseCode();
+            tempGlobalResponseCode = respBorrowerCreate.getGlobalResponseCode();
 
             if(respBorrowerCreate.getGlobalResponseCode() != GlobalResponseCode.CREATE_BORROWER_CREATION_SUCCESS.ordinal()) return null;
 
@@ -127,7 +128,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower readBorrower(int id)
     {
-        tempGlobalResponseCodeCode = -1;
+        tempGlobalResponseCode = -1;
 
         String borrowerActionURI = authority + "/borrower/read/";
         URI uri = URI.create(borrowerActionURI);
@@ -162,7 +163,7 @@ public class BorrowerConsumer implements IBorrowerRepository
 
             if(respBorrowerRead == null) return null;
 
-            tempGlobalResponseCodeCode = respBorrowerRead.getGlobalResponseCode();
+            tempGlobalResponseCode = respBorrowerRead.getGlobalResponseCode();
 
             if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
 
@@ -181,7 +182,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public IBorrower[] readAllBorrowers()
     {
-        tempGlobalResponseCodeCode = -1;
+        tempGlobalResponseCode = -1;
 
         String borrowerActionURI = authority + "/borrower/read/";
         URI uri = URI.create(borrowerActionURI);
@@ -218,7 +219,7 @@ public class BorrowerConsumer implements IBorrowerRepository
 
                 if(respBorrowerRead == null) return null;
 
-                tempGlobalResponseCodeCode = respBorrowerRead.getGlobalResponseCode();
+                tempGlobalResponseCode = respBorrowerRead.getGlobalResponseCode();
 
                 if(respBorrowerRead.getGlobalResponseCode() != GlobalResponseCode.READ_BORROWER_FOUND_SUCCESS.ordinal()) return null;
 
@@ -241,7 +242,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     public boolean updateBorrower(IBorrower borrower)
     {
         Objects.requireNonNull(borrower);
-        tempGlobalResponseCodeCode = -1;
+        tempGlobalResponseCode = -1;
 
         int id = borrower.getId();
 
@@ -294,7 +295,7 @@ public class BorrowerConsumer implements IBorrowerRepository
 
                 if(respBorrowerUpdate == null) return false;
 
-                tempGlobalResponseCodeCode = respBorrowerUpdate.getGlobalResponseCode();
+                tempGlobalResponseCode = respBorrowerUpdate.getGlobalResponseCode();
 
                 return respBorrowerUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_BORROWER_SUCCESS.ordinal();
             }
@@ -311,7 +312,7 @@ public class BorrowerConsumer implements IBorrowerRepository
     @Override
     public boolean deleteBorrower(int id)
     {
-        tempGlobalResponseCodeCode = -1;
+        tempGlobalResponseCode = -1;
 
         String borrowerActionURI = authority + "/borrower/delete/";
         URI uri = URI.create(borrowerActionURI);
@@ -348,7 +349,7 @@ public class BorrowerConsumer implements IBorrowerRepository
 
                 if(respBorrowerDelete == null) return false;
 
-                tempGlobalResponseCodeCode = respBorrowerDelete.getGlobalResponseCode();
+                tempGlobalResponseCode = respBorrowerDelete.getGlobalResponseCode();
 
                 return respBorrowerDelete.getGlobalResponseCode() == GlobalResponseCode.DELETE_BORROWER_SUCCESS.ordinal();
             }
@@ -362,82 +363,104 @@ public class BorrowerConsumer implements IBorrowerRepository
         }
     }
 
+    private LocalDate sampleBirthday()
+    {
+        return LocalDate.of(IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_DAY_OF_BIRTH);
+    }
+
+    private IResidentialAddress sampleAddress()
+    {
+        return new ResidentialAddress(IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_PLACE);
+    }
+
+    private boolean isBorrowerCreatable(String firstname, String lastname, int day, int month, int year, String street, String no, String place, int zip, double schufaScore)
+    {
+        IBorrower borrower = null;
+        LocalDate birthday = null;
+        IResidentialAddress address = null;
+
+        try
+        {
+            birthday = LocalDate.of(year, month, day);
+            address = new ResidentialAddress(street, no, zip, place);
+
+            borrower = createBorrower(firstname, lastname, birthday, address, schufaScore);
+
+            if(borrower == null) return false;
+
+            deleteBorrower(borrower.getId());
+
+            return true;
+        }
+        catch(Exception exc)
+        {
+
+        }
+
+        if(borrower != null)
+            deleteBorrower(borrower.getId());
+
+        return false;
+    }
+
     @Override
     public boolean isValidFirstnameForCreation(String firstname)
     {
-        LocalDate sampleBirthday = LocalDate.of(IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_DAY_OF_BIRTH);
-        IResidentialAddress address = new ResidentialAddress(IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_PLACE);
-
-        // the wrong value will prevent the creation logic to persistently create a domain object (for efficiency reasons)
-        // It is only about the GlobalResponseCode the CRUD function creates here in between.
-        String wrongValue = "";
-
-        createBorrower(firstname, wrongValue, sampleBirthday, address, IBorrower.EXAMPLE_SCHUFA_SCORE);
-
-        return tempGlobalResponseCodeCode != GlobalResponseCode.CREATE_BORROWER_INVALID_FIRSTNAME.ordinal();
+        return isBorrowerCreatable(firstname, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidLastnameForCreation(String lastname)
     {
-        LocalDate sampleBirthday = LocalDate.of(IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_DAY_OF_BIRTH);
-        IResidentialAddress address = new ResidentialAddress(IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_PLACE);
-
-        // the wrong value will prevent the creation logic to persistently create a domain object (for efficiency reasons)
-        // It is only about the GlobalResponseCode the CRUD function creates here in between.
-        String wrongValue = "";
-
-        createBorrower(IBorrower.EXAMPLE_FIRSTNAME, wrongValue, sampleBirthday, address, IBorrower.EXAMPLE_SCHUFA_SCORE);
-
-        return tempGlobalResponseCodeCode != GlobalResponseCode.CREATE_BORROWER_INVALID_FIRSTNAME.ordinal();
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, lastname, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidDayOfBirthForCreation(int day)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, day, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidMonthOfBirthForCreation(int month)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, month, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidYearOfBirthForCreation(int year)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, year, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidStreetForCreation(String street)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, street, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidNoForCreation(String no)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, no, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidPlaceForCreation(String place)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, place, IBorrower.EXAMPLE_ZIP, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidZipForCreation(int zip)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, zip, IBorrower.EXAMPLE_SCHUFA_SCORE);
     }
 
     @Override
     public boolean isValidSchufaScoreForCreation(double schufaScore)
     {
-        return false;
+        return isBorrowerCreatable(IBorrower.EXAMPLE_FIRSTNAME, IBorrower.EXAMPLE_LASTNAME, IBorrower.EXAMPLE_DAY_OF_BIRTH, IBorrower.EXAMPLE_MONTH_OF_BIRTH, IBorrower.EXAMPLE_YEAR_OF_BIRTH, IBorrower.EXAMPLE_STREET, IBorrower.EXAMPLE_NO, IBorrower.EXAMPLE_PLACE, IBorrower.EXAMPLE_ZIP, schufaScore);
     }
 
     @Override
