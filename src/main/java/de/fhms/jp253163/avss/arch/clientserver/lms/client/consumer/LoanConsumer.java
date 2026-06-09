@@ -320,7 +320,6 @@ public class LoanConsumer implements ILoanRepository
 
             if(resp == null) return false;
 
-            if(resp.statusCode() != 200) return false;
 
             respObj = resp.body();
 
@@ -333,6 +332,13 @@ public class LoanConsumer implements ILoanRepository
             respJson = new String(respBytes, StandardCharsets.UTF_8);
 
             if(respJson.isEmpty()) return false;
+
+            if(resp.statusCode() != 200)
+            {
+                System.out.println("Got bad response from server:\n\n"+respJson+"\n\n");
+
+                return false;
+            }
 
             respLoanDelete = gson.fromJson(respJson, ResponseDTOLoanDelete.class);
 
