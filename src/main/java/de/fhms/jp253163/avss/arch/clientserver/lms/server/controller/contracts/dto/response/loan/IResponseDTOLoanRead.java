@@ -7,7 +7,7 @@ public interface IResponseDTOLoanRead
     /**
      * @return null (creation failed) or the created object.
      */
-    public ILoan getBorrower();
+    public ILoan getLoan();
 
     /**
      * @return Ordinal of the corresponding enum in GlobalResponseCode.

@@ -1,4 +1,4 @@
-package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto;
+package de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.request.borrower;
 
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.contracts.dto.request.borrower.IRequestDTOBorrowerCreate;
 
