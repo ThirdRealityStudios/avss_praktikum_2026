@@ -402,7 +402,12 @@ public class LoanConsumer implements ILoanRepository
         boolean updatable = false;
 
         if(!sample.setBorrower(borrower))
+        {
+            while(sample.payInstallment()); // clear remaining balances to enable deletion
+            deleteLoan(sample.getId());
+
             return false;
+        }
 
         updatable = updateLoan(sample);
 
