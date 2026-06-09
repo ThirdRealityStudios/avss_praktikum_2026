@@ -811,6 +811,19 @@ public class Controller implements IController
                 id = obj.getLoanID();
                 System.out.println("Loan should be deleted with ID: " + id);
 
+                if(loanRepository.readLoan(id) == null) // does loan not exist? = 404
+                {
+                    System.out.println("Database not satisfied with given Loan ID, deletion failed! (ERROR)");
+
+                    System.out.println("Sending response (404) to client now:\n\n");
+                    respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST);
+                    json = gson.toJson(respD);
+                    System.out.println(json+"\n\n");
+
+                    response(exchange, 404, json);
+                    return;
+                }
+
                 if(loanRepository.deleteLoan(id))
                 {
                     System.out.println("Deletion was successful (OK)");
@@ -822,16 +835,16 @@ public class Controller implements IController
                     response(exchange, 200, json);
                     return;
                 }
-                else
+                else // most likely loan not paid completely because 404 is yet checked before
                 {
-                    System.out.println("Database not satisfied with given Loan ID, deletion failed! (ERROR)");
+                    System.out.println("Database knows that loan but deletion denied!");
 
-                    System.out.println("Sending response (404) to client now:\n\n");
-                    respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_INVALID_REQUEST);
+                    System.out.println("Sending response (400) to client now:\n\n");
+                    respD = new ResponseDTOLoanDelete(GlobalResponseCode.DELETE_LOAN_NOT_PAID);
                     json = gson.toJson(respD);
                     System.out.println(json+"\n\n");
 
-                    response(exchange, 404, json);
+                    response(exchange, 400, json);
                     return;
                 }
             }
