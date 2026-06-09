@@ -751,6 +751,9 @@ public class Controller implements IController
                     return;
                 }
 
+                // Now loan officially exists after requesting it to update (so now sure)
+
+                id = obj.getLoanID();
                 borrower = obj.isBookInstallmentWanted() ? loan.getBorrower() : obj.getBorrowerID();
 
                 // Will only check if "borrower" above is as it should be. The others are ignored.
