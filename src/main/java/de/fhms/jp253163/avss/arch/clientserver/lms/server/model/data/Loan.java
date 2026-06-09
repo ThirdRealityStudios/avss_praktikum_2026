@@ -16,22 +16,22 @@ public class Loan implements ILoan
 
     public Loan(int id, double amount, double interestRate, int term, int borrower) throws IllegalArgumentException
     {
-        IllegalArgumentException defaultException = new IllegalArgumentException("Given argument is invalid, null or has invalid format.");
+        if(!setId(id))
+            throw new IllegalArgumentException("caused by 'id': " + id);
+        if(!setAmount(amount))
+            throw new IllegalArgumentException("caused by 'amount': " + amount);
+        if(!setInterestRate(interestRate))
+            throw new IllegalArgumentException("caused by 'interestRate': " + interestRate);
+        if(!setTerm(term))
+            throw new IllegalArgumentException("caused by 'term': " + term);
+        if(!setBorrower(borrower))
+            throw new IllegalArgumentException("caused by 'borrower': " + borrower);
 
-        if(!setId(id) ||
-            !setAmount(amount) ||
-            !setInterestRate(interestRate) ||
-            !setTerm(term) ||
-            !setBorrower(borrower))
-        {
-            throw defaultException;
-        }
+        double totalPayAmount = amount + getTotalInterest();
 
         // Determine the total amount to pay from the borrower.
-        if(!setRemainingBalance(amount + getTotalInterest()))
-        {
-            throw defaultException;
-        }
+        if(!setRemainingBalance(totalPayAmount))
+            throw new IllegalArgumentException("caused by locally declared 'totalPayAmount': " + totalPayAmount);
     }
 
     @Override
