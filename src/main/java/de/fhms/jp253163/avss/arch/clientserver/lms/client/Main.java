@@ -27,7 +27,7 @@ public class Main
 
         HttpClient client = HttpClient.newHttpClient();
 
-        String authority = "localhost";
+        String authority = "http://localhost";
 
         try
         {
