@@ -185,6 +185,8 @@ public class Loan implements ILoan
     {
         if(remainingBalance >= 0 && this.remainingBalance == -1 || remainingBalance < this.remainingBalance)
         {
+            if(remainingBalance < 0) remainingBalance = 0;
+
             this.remainingBalance = remainingBalance;
 
             return true;
