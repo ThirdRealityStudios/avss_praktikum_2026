@@ -10,6 +10,14 @@ It does instead establish a HTTP connection to the server,
 including the real business logic which takes the final decisions in the end
 (e.g. whether to create a new borrower domain object persistently in DB or not).
 
+## Debug Logs For Better Understanding / Study Project
+
+This Client application contains debug logs (e.g. "Creating request to server with the following Json body...")
+beause this project exists to understand HOW the client-server architecture works.
+It is there for learning and such (although my implementation is probably not perfect - but so far bug free for normal use).
+It demonstrates how you could implement a client-server application;
+not how you would create it for production in econonic scales or for businesses.
+
 ## Docker + MySQL Setup
 
 | Purpose | Docker Command | Example Output |
