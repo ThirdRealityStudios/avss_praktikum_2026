@@ -222,7 +222,8 @@ public class LoanDatabaseRepository implements ILoanRepository
             {
                 // Loan file found, so update it.
 
-                System.out.println("Server model - updateLoan(): found loan in database and now writing changes via Json SQL Service (OK)");
+                System.out.println("Server model - updateLoan(): found loan in database and now writing changes via Json SQL Service (OK):\n\n");
+                System.out.println(loan.toString()+"\n\n");
                 return jsonSQLService.save(currentID, loan);
             }
         }
