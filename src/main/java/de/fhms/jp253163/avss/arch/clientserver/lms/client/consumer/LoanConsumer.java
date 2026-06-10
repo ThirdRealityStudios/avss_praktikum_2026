@@ -336,6 +336,8 @@ public class LoanConsumer implements ILoanRepository
                 return false;
             }
 
+            System.out.println("Client consumer - got HTTP response with following JSON:\n\n"+respJson+"\n\n");
+
             respLoanUpdate = gson.fromJson(respJson, ResponseDTOLoanUpdate.class);
 
             if(respLoanUpdate == null)
