@@ -532,9 +532,8 @@ public class LoanConsumer implements ILoanRepository
         do
         {
             updatedLoanServerVersion = readLoan(loan.getId());
-            updatedLoanServerVersion.payInstallment();
         }
-        while(updateLoan(updatedLoanServerVersion));
+        while(updatedLoanServerVersion.payInstallment() && updateLoan(updatedLoanServerVersion));
 
         if(!deleteLoan(loan.getId()))
             System.out.println("Force deletion failed for loan:\n\n"+loan.toString()+"\n\n");
