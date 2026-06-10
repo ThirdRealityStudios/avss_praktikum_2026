@@ -1,7 +1,8 @@
-# Praktikum SS 2026 Termin 2 (Application Tier Component = Logik)
+# Praktikum SS 2026 Termin 4 No 1 (ModelConsumer)
 
-Contains the business logic and business data objects for run-time.
-The same as in appointment 1 mostly because coincidently implemented layered architecture there yet.
+Kinda "simulates" business logic which the server does actually.
+So the ModelConsumer acts as an exchange between the Client presenter and Server model
+together with the Server controller (which handles the HTTP communication with the Client).
 
 ## GitLab Token For IDE Use
 
