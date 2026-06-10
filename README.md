@@ -1,10 +1,7 @@
-# Praktikum SS 2026 Termin 3 (Infrastructure Component = DateiSpeicher)
+# Praktikum SS 2026 Termin 4 No 1 (Infrastructure / Data Component = Json SQL Database "Adapter")
 
-Contains the persistent data access logic,
-including serialization.
-So it is mostly the same as the Data Tier in appointment 1 and 2 because DateiSpeicher is infrastructure.
-It is not directly part of MVP pattern but ofc necessary.
-Model component will use this here.
+Contains the persistent data access to MySQL DB for the server subsystem,
+including Json serialization.
 
 ## GitLab Token For IDE Use
 
