@@ -21,6 +21,21 @@ It is there for learning and such (although my implementation is probably not pe
 It demonstrates how you could implement a client-server application;
 not how you would create it for production in econonic scales or for businesses.
 
+## How To Execute
+
+(Compile with IntelliJ e.g. and) open console to enter:
+
+`java -jar "myExecutableServer.jar"`
+
+With the given .jar file,
+there is no need to compile and such if you only want to demonstrate the code fast.
+
+Make sure,
+you use Docker e.g. to setup a MySQL DB on locahost with ports 3306:3306.
+
+On browser,
+you can access the app via localhost:80 (normal web server port actually)
+
 ## Docker + MySQL Setup
 
 | Purpose | Docker Command | Example Output |
