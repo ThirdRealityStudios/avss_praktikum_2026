@@ -224,9 +224,15 @@ public class LoanConsumer implements ILoanRepository
     @Override
     public boolean updateLoan(ILoan loan)
     {
-        if(loan == null) return false;
+        System.out.println("Requesting loan update...");
+        if(loan == null)
+        {
+            System.out.println("But no updatable domain object given (exiting)....");
+            return false;
+        }
 
         int id = loan.getId();
+        System.out.println("Loan to update has ID: " + id);
 
         int borrower = loan.getBorrower();
 
@@ -241,12 +247,20 @@ public class LoanConsumer implements ILoanRepository
         // decides here between clicking the "Book Installment" button action and between
         // changes of other values (via the text user fields normally).
         ILoan serverLoanVersion = readLoan(id);
-        if(serverLoanVersion == null) return false;
+        if(serverLoanVersion == null)
+        {
+            System.out.println("Loan not found (HTTP server query failed), exiting...");
+            return false;
+        }
+        System.out.println("Loan found via HTTP server query (OK)");
+
         bookInstallment = serverLoanVersion.getRemainingBalance() != loan.getRemainingBalance() || serverLoanVersion.getRemainingTerm() != loan.getRemainingTerm();
+        System.out.println("Loan modified: " + bookInstallment);
 
         IRequestDTOLoanUpdate loanUpdateDTO = new RequestDTOLoanUpdate(id, borrower, bookInstallment);
 
         String json = gson.toJson(loanUpdateDTO);
+        System.out.println("Creating update request:\n\n" + json + "\n\n");
 
         HttpRequest.BodyPublisher pub = HttpRequest.BodyPublishers.ofString(json);
         HttpRequest req = HttpRequest.newBuilder().POST(pub).uri(uri).build();
@@ -261,29 +275,58 @@ public class LoanConsumer implements ILoanRepository
 
         try
         {
+            System.out.println("Sending update HTTP request now...");
             resp = client.send(req, handl);
 
-            if(resp == null) return false;
+            if(resp == null)
+            {
+                System.out.println("Got no response back (null, ERROR). Exiting...");
+                return false;
+            }
 
-            if(resp.statusCode() != 200) return false;
+            if(resp.statusCode() != 200)
+            {
+                System.out.println("Got no success back (response code is NOT 200, ERROR). Exiting...");
+                return false;
+            }
 
             respObj = resp.body();
 
-            if(respObj == null) return false;
+            if(respObj == null)
+            {
+                System.out.println("Got NO response BODY back (null, ERROR). Exiting...");
+                return false;
+            }
 
             respBytes = resp.body().getBytes();
 
-            if(respBytes.length == 0) return false;
+            if(respBytes.length == 0)
+            {
+                System.out.println("Got EMPTY response BODY back (ERROR). Exiting...");
+                return false;
+            }
 
             respJson = new String(respBytes, StandardCharsets.UTF_8);
 
-            if(respJson.isEmpty()) return false;
+            if(respJson.isEmpty())
+            {
+                System.out.println("Parsed EMPTY UTF-8 response BODY (ERROR). Exiting...");
+                return false;
+            }
 
             respLoanUpdate = gson.fromJson(respJson, ResponseDTOLoanUpdate.class);
 
-            if(respLoanUpdate == null) return false;
+            if(respLoanUpdate == null)
+            {
+                System.out.println("Could not parse BODY to JSON (ERROR). Exiting...");
+                return false;
+            }
 
-            return respLoanUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_LOAN_SUCCESS.ordinal();
+            boolean globalResponseCodeSuccess = respLoanUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_LOAN_SUCCESS.ordinal();
+
+            System.out.println("Global response code (business code) status ok?: " + globalResponseCodeSuccess);
+
+            return globalResponseCodeSuccess;
         }
         catch(Exception e)
         {
