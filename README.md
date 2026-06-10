@@ -1,16 +1,17 @@
-# Praktikum SS 2026 Termin 3 No 2 (LMS With GUI)
+# Praktikum SS 2026 Termin 4 No 1 (Client / Server - Here Server Implementation!)
 
 ## About
 
-Goal is it turn the appointment 2 architecture into an MVP architecture
-(but with GUI in the 2nd exercise)
+Goal is it turn the appointment 3 architecture into a "hybrid" MVC architecture
+to implement a server (in this case).
+Look at the other repository on Git
+(there you can find the Client implementation - a little bit different architecture than the server version of course).
 
 ## Result
 
 Seems to be ok at least imo.
-It works with MySQL driver,
-no SQL errors.
-File service easy replacable by database service at all.
+It works with MySQL driver and HTTP requests as well as responses,
+no critical errors or exceptions so far after brief testing.
 
 ## Docker + MySQL Setup
 
