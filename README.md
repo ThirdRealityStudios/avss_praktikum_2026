@@ -13,6 +13,14 @@ Seems to be ok at least imo.
 It works with MySQL driver and HTTP requests as well as responses,
 no critical errors or exceptions so far after brief testing.
 
+## Debug Logs For Better Understanding / Study Project
+
+This Server application contains debug logs (e.g. "Responding to client with the following Json response body...")
+beause this project exists to understand HOW the client-server architecture works.
+It is there for learning and such (although my implementation is probably not perfect - but so far bug free for normal use).
+It demonstrates how you could implement a client-server application;
+not how you would create it for production in econonic scales or for businesses.
+
 ## Docker + MySQL Setup
 
 | Purpose | Docker Command | Example Output |
