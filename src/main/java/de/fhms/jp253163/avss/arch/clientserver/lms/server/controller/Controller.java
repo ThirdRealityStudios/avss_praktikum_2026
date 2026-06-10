@@ -731,13 +731,24 @@ public class Controller implements IController
             }
             else if(action.getName().equalsIgnoreCase("update"))
             {
+                System.out.println("Got incoming UPDATE request.");
+
                 IRequestDTOLoanUpdate obj = gson.fromJson(body, RequestDTOLoanUpdate.class);
+
+                System.out.println("Could parse request body to JSON (OK)");
 
                 if(obj == null) // E.g. called update action but not gave update data
                 {
+                    System.out.println("Parsing failed (ERROR)");
+
+                    System.out.println("Sending response to client now:\n\n");
+
                     respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_NO_SELECTED_DATASET);
                     json = gson.toJson(respU);
+                    System.out.println(json + "\n\n");
                     response(exchange, 400, json);
+
+                    System.out.println("Exiting server-side loan update now...");
                     return;
                 }
 
@@ -745,8 +756,13 @@ public class Controller implements IController
 
                 if(loan == null)
                 {
+                    System.out.println("Database did not found Loan with ID "+obj.getLoanID()+", update failed! (ERROR)");
+
+                    System.out.println("Sending response (404) to client now:\n\n");
                     respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_NOT_FOUND);
                     json = gson.toJson(respU);
+                    System.out.println(json+"\n\n");
+
                     response(exchange, 404, json);
                     return;
                 }
@@ -772,22 +788,34 @@ public class Controller implements IController
 
                 if(loanRepository.updateLoan(loanUpdated))
                 {
+                    System.out.println("Update was successful, according to server Model (OK)");
+
+                    System.out.println("Sending response to client now:\n\n");
+
                     respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_SUCCESS);
                     json = gson.toJson(respU);
+
+                    System.out.println(json+"\n\n");
+
                     response(exchange, 200, json);
                     return;
                 }
                 else
                 {
+                    System.out.println("Update failed, according to server Model (ERROR).\nResponding to client with:\n\n");
+
                     respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_ERROR);
                     json = gson.toJson(respU);
+
+                    System.out.println(json + "\n\n");
+
                     response(exchange, 400, json);
                     return;
                 }
             }
             else if(action.getName().equalsIgnoreCase("delete"))
             {
-                System.out.println("Got incoming deletion request.");
+                System.out.println("Got incoming DELETE request.");
 
                 IRequestDTOLoanDelete obj = gson.fromJson(body, RequestDTOLoanDelete.class);
 
