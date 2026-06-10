@@ -776,6 +776,8 @@ public class Controller implements IController
                     return;
 
                 Loan loanUpdated = new Loan(serverVersionLoan.getId(), serverVersionLoan.getAmount(), serverVersionLoan.getInterestRate(), serverVersionLoan.getTerm(), borrower);
+                loanUpdated.setRemainingBalance(serverVersionLoan.getRemainingBalance());
+                loanUpdated.setRemainingTerm(serverVersionLoan.getRemainingTerm());
 
                 if(obj.isBookInstallmentWanted() && !loanUpdated.payInstallment())
                 {
