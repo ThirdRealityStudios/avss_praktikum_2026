@@ -348,7 +348,7 @@ public class LoanConsumer implements ILoanRepository
 
             boolean globalResponseCodeSuccess = respLoanUpdate.getGlobalResponseCode() == GlobalResponseCode.UPDATE_LOAN_SUCCESS.ordinal();
 
-            System.out.println("Global response code (business code) status ok?: " + globalResponseCodeSuccess);
+            System.out.println("Global response code (business code) status ok?: " + globalResponseCodeSuccess + " (" + respLoanUpdate.getGlobalResponseCode() + ")");
 
             return globalResponseCodeSuccess;
         }
