@@ -18,6 +18,18 @@ It is there for learning and such (although my implementation is probably not pe
 It demonstrates how you could implement a client-server application;
 not how you would create it for production in econonic scales or for businesses.
 
+## How To Execute
+
+(Compile with IntelliJ e.g. and) open console to enter:
+
+`java -jar "myExecutableClient.jar"`
+
+With the yet given .jar file on this GitHub repo,
+there is no need to compile and such if you only want to demonstrate the code fast.
+
+Make sure,
+the server deployable is running yet (look at the repo for instructions).
+
 ## Docker + MySQL Setup
 
 | Purpose | Docker Command | Example Output |
