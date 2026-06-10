@@ -509,13 +509,26 @@ public class LoanConsumer implements ILoanRepository
         return createLoan(ILoan.EXAMPLE_BORROWER, ILoan.EXAMPLE_AMOUNT, ILoan.EXAMPLE_INTEREST_RATE, ILoan.EXAMPLE_TERM);
     }
 
+    /**
+     * @param loan Must provided. Cannot be null!!
+     */
     private void forceDelete(ILoan loan)
     {
-        loan.setRemainingBalance(0); // clear remaining balances to enable deletion
-        loan.setRemainingTerm(0);
+        Objects.requireNonNull(loan);
+
+        ILoan updatedLoanServerVersion = null;
+
+        do
+        {
+            updatedLoanServerVersion = readLoan(loan.getId());
+            updatedLoanServerVersion.payInstallment();
+        }
+        while(updateLoan(updatedLoanServerVersion));
 
         if(!deleteLoan(loan.getId()))
             System.out.println("Force deletion failed for loan:\n\n"+loan.toString()+"\n\n");
+        else
+            System.out.println("Force deletion successful for loan ID: " + loan.getId());
     }
 
     @Override
