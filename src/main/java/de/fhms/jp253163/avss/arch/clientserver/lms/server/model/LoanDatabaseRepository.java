@@ -158,43 +158,58 @@ public class LoanDatabaseRepository implements ILoanRepository
         oldLoan = readLoan(loan.getId());
 
         if(oldLoan == null)
+        {
+            System.out.println("Server model - updateLoan(): cannot find loan with ID " + loan.getId());
             return false; // Loan not known to the system, so update denied.
+        }
 
         oldBorrower = borrowerRepository.readBorrower(oldLoan.getBorrower());
 
         if(oldBorrower == null)
+        {
+            System.out.println("Server model - updateLoan(): cannot find the associated borrower with ID " + oldLoan.getBorrower());
             return false; // Borrower of the loan can't be found, so update denied.
+        }
 
         if(loan.getBorrower() != oldLoan.getBorrower())
         {
+            System.out.println("Server model - updateLoan(): borrower seems to have changed, so updating it now...");
+
             // See if the new borrower even exists (e.g. if your dad wants to pay your loan instead - but he needs to be known to the system first)
             newBorrower = borrowerRepository.readBorrower(loan.getBorrower());
 
             if(newBorrower == null)
+            {
+                System.out.println("Server model - updateLoan(): the new / changed borrower does not exist in our system (update denied)");
                 return false; // New borrower does not exist in the system, so update denied.
+            }
 
             // From this point, all borrowers do exist in the system or are valid.
 
             // Take away the loan from the old current borrower
             if(!oldBorrower.setLoans( ArrayUtils.removeAllOccurrences(oldBorrower.getLoans(), loan.getId()) ))
             {
+                System.out.println("Server model - updateLoan(): cannot remove the loan from its previous borrower to change the ownership (update failed)");
                 return false; // Could not remove the loan from the old borrower; in order to give the payment responsibility to a new borrower.
             }
 
             if(!borrowerRepository.updateBorrower(oldBorrower))
             {
+                System.out.println("Server model - updateLoan(): cannot update the removed ownership of the previous borrower in database (failed)");
                 return false; // Could not update the old borrower, persistently seen.
             }
 
             // Then give the taken away loan to the actual new borrower (who should pay instead)
             if(!newBorrower.setLoans( ArrayUtils.add(newBorrower.getLoans(), loan.getId()) ))
             {
+                System.out.println("Server model - updateLoan(): cannot write the loan to its new borrower (update failed)");
                 return false; // Could not add the loan to the new borrower (which should pay the loan instead of the old borrower).
             }
 
             // Save again
             if(!borrowerRepository.updateBorrower(newBorrower))
             {
+                System.out.println("Server model - updateLoan(): cannot access or update the changed borrower in our database (failed)");
                 return false; // Could not physically or persistently write the changes to the hard-disk.
             }
         }
@@ -207,10 +222,12 @@ public class LoanDatabaseRepository implements ILoanRepository
             {
                 // Loan file found, so update it.
 
+                System.out.println("Server model - updateLoan(): found loan in database and now writing changes via Json SQL Service (OK)");
                 return jsonSQLService.save(currentID, loan);
             }
         }
 
+        System.out.println("Server model - updateLoan(): could not find or write changes to loan via Json SQL Service (Error)");
         return false;
     }
 
