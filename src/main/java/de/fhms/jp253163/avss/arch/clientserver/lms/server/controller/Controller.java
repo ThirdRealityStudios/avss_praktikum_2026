@@ -684,7 +684,7 @@ public class Controller implements IController
         int term = -1;
 
         Loan[] loans = null;
-        Loan loan = null;
+        Loan serverVersionLoan = null;
 
         IResponseDTOLoanCreate respC;
         IResponseDTOLoanRead respR;
@@ -714,9 +714,9 @@ public class Controller implements IController
                 if(abortOnInvalidLoanBaseData(exchange, false, borrower, amount, interestRate, term))
                     return;
 
-                loan = (Loan) loanRepository.createLoan(borrower, amount, interestRate, term);
+                serverVersionLoan = (Loan) loanRepository.createLoan(borrower, amount, interestRate, term);
 
-                if(loan == null)
+                if(serverVersionLoan == null)
                 {
                     respC = new ResponseDTOLoanCreate(null, GlobalResponseCode.CREATE_LOAN_CREATION_ERROR);
                     json = gson.toJson(respC);
@@ -724,7 +724,7 @@ public class Controller implements IController
                     return;
                 }
 
-                respC = new ResponseDTOLoanCreate(loan, GlobalResponseCode.CREATE_LOAN_CREATION_SUCCESS);
+                respC = new ResponseDTOLoanCreate(serverVersionLoan, GlobalResponseCode.CREATE_LOAN_CREATION_SUCCESS);
                 json = gson.toJson(respC);
                 response(exchange, 200, json);
                 return;
@@ -752,9 +752,9 @@ public class Controller implements IController
                     return;
                 }
 
-                loan = (Loan) loanRepository.readLoan(obj.getLoanID());
+                serverVersionLoan = (Loan) loanRepository.readLoan(obj.getLoanID());
 
-                if(loan == null)
+                if(serverVersionLoan == null)
                 {
                     System.out.println("Database did not found Loan with ID "+obj.getLoanID()+", update failed! (ERROR)");
 
@@ -769,19 +769,23 @@ public class Controller implements IController
 
                 // Now loan officially exists after requesting it to update (so now sure)
 
-                id = obj.getLoanID();
-                borrower = obj.isBookInstallmentWanted() ? loan.getBorrower() : obj.getBorrowerID();
+                borrower = obj.isBookInstallmentWanted() ? serverVersionLoan.getBorrower() : obj.getBorrowerID();
 
                 // Will only check if "borrower" above is as it should be. The others are ignored.
                 if(abortOnInvalidLoanBaseData(exchange, true, borrower, amount, interestRate, term))
                     return;
 
-                Loan loanUpdated = new Loan(id, loan.getAmount(), loan.getInterestRate(), loan.getTerm(), borrower);
+                Loan loanUpdated = new Loan(serverVersionLoan.getId(), serverVersionLoan.getAmount(), serverVersionLoan.getInterestRate(), serverVersionLoan.getTerm(), borrower);
 
                 if(obj.isBookInstallmentWanted() && !loanUpdated.payInstallment())
                 {
+                    System.out.println("Cannot book installment on loaded server LOAN object.\nSending the following response:\n\n");
+
                     respU = new ResponseDTOLoanUpdate(GlobalResponseCode.UPDATE_LOAN_ERROR);
                     json = gson.toJson(respU);
+
+                    System.out.println(json);
+
                     response(exchange, 400, json);
                     return;
                 }
