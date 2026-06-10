@@ -17,7 +17,6 @@ import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.respons
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanRead;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.controller.dto.response.loan.ResponseDTOLoanUpdate;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.ILoanRepository;
-import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.IBorrower;
 import de.fhms.jp253163.avss.arch.clientserver.lms.server.model.data.ILoan;
 
 import java.net.URI;
@@ -221,6 +220,45 @@ public class LoanConsumer implements ILoanRepository
         }
     }
 
+    /**
+     * The server only accepts one installment booking (fixed) per HTTP request.
+     * Hence,
+     * you cannot completely set the remaining balance directly to zero.
+     * The server will ignore it.
+     * The server only wants to know whether there should be an
+     * installment booking or not.
+     * Or if you want to update other loan details
+     * (like the borrower ID - but not important for this function call!).
+     *
+     * @param clientSideModified The modified version on your client.
+     * @return True if a modification of the remaining balance or term could be determined = server do pay an installment!
+     */
+    private boolean isPayInstallmentRequestedForServerSide(ILoan clientSideModified)
+    {
+        /**
+         * The untouched server version of that loan (before update e.g.). You might want to call readLoan(..) for that maybe.
+         */
+        ILoan serverOriginal = readLoan(clientSideModified.getId());
+
+        if(serverOriginal == null)
+        {
+            System.out.println("Client consumer: Server not having loan with ID "+clientSideModified.getId()+" (ERROR)");
+            System.out.println("Hence, exiting... (cannot determine whether loan was modified to request pay installment for server or not)");
+            return false;
+        }
+
+        boolean bookInstallment = false;
+
+        bookInstallment = serverOriginal.getRemainingBalance() != clientSideModified.getRemainingBalance() || serverOriginal.getRemainingTerm() != clientSideModified.getRemainingTerm();
+
+        if(bookInstallment)
+            System.out.println("Client consumer requests server to pay installment for loan with ID: " + clientSideModified.getId());
+        else
+            System.out.println("Client does NOT request server to pay installment for loan with ID: " + clientSideModified.getId());
+
+        return bookInstallment;
+    }
+
     @Override
     public boolean updateLoan(ILoan loan)
     {
@@ -239,25 +277,9 @@ public class LoanConsumer implements ILoanRepository
         String loanActionURI = authority + "/loan/update/";
         URI uri = URI.create(loanActionURI);
 
-        boolean bookInstallment = false;
-
-        // Determine differences of remaining balance (compare client and server dataset version)
-        // to see if it was modified (after the clicking the button "Book Installment" on GUI e.g.).
-        // Version comparison is only needed in this special case because the server
-        // decides here between clicking the "Book Installment" button action and between
-        // changes of other values (via the text user fields normally).
-        ILoan serverLoanVersion = readLoan(id);
-        if(serverLoanVersion == null)
-        {
-            System.out.println("Loan not found (HTTP server query failed), exiting...");
-            return false;
-        }
         System.out.println("Loan found via HTTP server query (OK)");
 
-        bookInstallment = serverLoanVersion.getRemainingBalance() != loan.getRemainingBalance() || serverLoanVersion.getRemainingTerm() != loan.getRemainingTerm();
-        System.out.println("Loan modified: " + bookInstallment);
-
-        IRequestDTOLoanUpdate loanUpdateDTO = new RequestDTOLoanUpdate(id, borrower, bookInstallment);
+        IRequestDTOLoanUpdate loanUpdateDTO = new RequestDTOLoanUpdate(id, borrower, isPayInstallmentRequestedForServerSide(loan));
 
         String json = gson.toJson(loanUpdateDTO);
         System.out.println("Creating update request:\n\n" + json + "\n\n");
