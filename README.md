@@ -1,7 +1,6 @@
-# Praktikum SS 2026 Termin 2 (Application Tier Component = Logik)
+# Praktikum SS 2026 Termin 4 No 1 (Server Model Component = Logik)
 
-Contains the business logic and business data objects for run-time.
-The same as in appointment 1 mostly because coincidently implemented layered architecture there yet.
+Contains the business logic and business data objects for server run-time.
 
 ## GitLab Token For IDE Use
 
