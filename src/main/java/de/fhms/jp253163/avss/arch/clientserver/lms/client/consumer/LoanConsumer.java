@@ -518,6 +518,17 @@ public class LoanConsumer implements ILoanRepository
 
         ILoan updatedLoanServerVersion = null;
 
+        // "Clear" all remaining balances and remaining terms,
+        // sending as many HTTP request as needed.
+        // This is,
+        // because the server only accepts one installment payment per HTTP request.
+        // You also cannot pay more than fixed installment rate per HTTP request.
+        // So, the installment amount cannot be chosen by the client.
+        // The server will only accept its own way of paying of the installment.
+        // The server will know that an installment payment is requested
+        // because the client prepares the HTTP request correctly
+        // (like: there is a difference between the server and client version -
+        //  judging by the remaining balance and remaining term - so please server, do pay an installment)
         do
         {
             updatedLoanServerVersion = readLoan(loan.getId());
